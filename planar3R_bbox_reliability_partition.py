@@ -3,6 +3,7 @@ import argparse
 
 import matplotlib.pyplot as plt
 import numpy as np
+from matplotlib.patches import Rectangle
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 
 from helper_functions import normalize_and_map_colors, reliability_computation
@@ -11,9 +12,9 @@ from planar3R_two_point_ssm_views import compute_ssms_for_target
 
 TARGET_POINT = (1.5, 1.5)
 
-R1 = 2.0 / 3.0
-R2 = 2.0 / 3.0
-R3 = 2.0 / 3.0
+R1 = 0.7
+R2 = 0.5
+R3 = 0.3
 
 
 def build_reliability_lookup(r1, r2, r3):
@@ -158,6 +159,75 @@ def plot_branch_partition(ax, ssm, bounds, regions, branch_label, color_lookup):
     ax.set_zlim(-np.pi, np.pi)
 
 
+def projected_region_cells(regions, axis_pair):
+    cells = {}
+    for region in regions:
+        key = (
+            region["lower"][axis_pair[0]],
+            region["upper"][axis_pair[0]],
+            region["lower"][axis_pair[1]],
+            region["upper"][axis_pair[1]],
+        )
+        cells[key] = max(cells.get(key, 0.0), region["reliability"])
+    return cells
+
+
+def plot_projected_partition(ax, ssm, regions, axis_pair, axis_labels, color_lookup):
+    cells = projected_region_cells(regions, axis_pair)
+
+    for (x0, x1, y0, y1), reliability in cells.items():
+        ax.add_patch(
+            Rectangle(
+                (x0, y0),
+                x1 - x0,
+                y1 - y0,
+                facecolor=color_lookup[reliability],
+                edgecolor="black",
+                linewidth=0.35,
+                alpha=1.0,
+            )
+        )
+
+    ax.plot(
+        ssm[:, axis_pair[0]],
+        ssm[:, axis_pair[1]],
+        color="black",
+        linewidth=1.8,
+    )
+    ax.set_xlabel(axis_labels[0])
+    ax.set_ylabel(axis_labels[1])
+    ax.set_xlim(-np.pi, np.pi)
+    ax.set_ylim(-np.pi, np.pi)
+    ax.set_aspect("equal", adjustable="box")
+    ax.set_xticks([-np.pi, -np.pi / 2.0, 0.0, np.pi / 2.0, np.pi])
+    ax.set_yticks([-np.pi, -np.pi / 2.0, 0.0, np.pi / 2.0, np.pi])
+    ax.grid(False)
+
+
+def plot_branch_2d_projections(branch_data, color_lookup, sm, target):
+    axis_specs = [
+        ((0, 1), ("theta 1 [rad]", "theta 2 [rad]"), "theta1-theta2"),
+        ((1, 2), ("theta 2 [rad]", "theta 3 [rad]"), "theta2-theta3"),
+        ((0, 2), ("theta 1 [rad]", "theta 3 [rad]"), "theta1-theta3"),
+    ]
+
+    for branch_index, (ssm, _, regions) in enumerate(branch_data, start=1):
+        fig, axes = plt.subplots(1, 3, figsize=(15.5, 5))
+        for ax, (axis_pair, axis_labels, title) in zip(axes, axis_specs):
+            plot_projected_partition(ax, ssm, regions, axis_pair, axis_labels, color_lookup)
+            ax.set_title(title)
+
+        fig.suptitle(
+            f"2D Reliability Projections, Branch {branch_index} at "
+            f"({target[0]:.3f}, {target[1]:.3f})"
+        )
+        fig.subplots_adjust(left=0.05, right=0.86, bottom=0.12, top=0.86, wspace=0.28)
+        cbar_ax = fig.add_axes([0.90, 0.20, 0.018, 0.60])
+        cbar = fig.colorbar(sm, cax=cbar_ax)
+        cbar.set_label("Reliability")
+        cbar.set_ticks(np.arange(0.0, 1.1, 0.1))
+
+
 def parse_args():
     parser = argparse.ArgumentParser(
         description=(
@@ -203,6 +273,8 @@ def main():
     cbar = fig.colorbar(sm, cax=cbar_ax)
     cbar.set_label("Reliability")
     cbar.set_ticks(np.arange(0.0, 1.1, 0.1))
+
+    plot_branch_2d_projections(branch_data, color_lookup, sm, (x, y))
     plt.show()
 
 
