@@ -14,12 +14,31 @@ from pydrake.solvers import (
 from gcs.base import BaseGCS
 
 
-BindingCost = getattr(drake_solvers, "Binding𝓣Cost𝓤")
-BindingConstraint = getattr(drake_solvers, "Binding𝓣Constraint𝓤")
+def _typed_binding(*candidate_names):
+    for name in candidate_names:
+        if hasattr(drake_solvers, name):
+            return getattr(drake_solvers, name)
+    raise AttributeError(f"Could not find Drake typed Binding in {candidate_names}.")
+
+
+try:
+    BindingCost = drake_solvers.Binding[drake_solvers.Cost]
+    BindingConstraint = drake_solvers.Binding[drake_solvers.Constraint]
+except (AttributeError, TypeError, KeyError):
+    # Compatibility with the older Drake bindings used by previous runs.
+    BindingCost = _typed_binding("Binding𝓣Cost𝓤", "_TemporaryName_N5drake7solvers7BindingINS0_4CostEEE")
+    BindingConstraint = _typed_binding("Binding𝓣Constraint𝓤", "_TemporaryName_N5drake7solvers7BindingINS0_10ConstraintEEE")
 
 
 class LinearGCS(BaseGCS):
-    def __init__(self, regions, edges=None, path_weights=None, full_dim_overlap=False):
+    def __init__(
+        self,
+        regions,
+        edges=None,
+        path_weights=None,
+        full_dim_overlap=False,
+        vertex_cost_weights=None,
+    ):
         BaseGCS.__init__(self, regions)
 
         if path_weights is None:
@@ -27,10 +46,15 @@ class LinearGCS(BaseGCS):
         elif isinstance(path_weights, float) or isinstance(path_weights, int):
             path_weights = path_weights * np.ones(self.dimension)
         assert len(path_weights) == self.dimension
+        self.path_weights = np.asarray(path_weights, dtype=float)
 
         self.edge_cost = L2NormCost(
             np.hstack((np.diag(-path_weights), np.diag(path_weights))),
             np.zeros(self.dimension))
+        if vertex_cost_weights is None:
+            vertex_cost_weights = np.ones(len(self.regions))
+        self.vertex_cost_weights = np.asarray(vertex_cost_weights, dtype=float)
+        assert len(self.vertex_cost_weights) == len(self.regions)
 
         for i, r in enumerate(self.regions):
             self.gcs.AddVertex(r, name = self.names[i] if not self.names is None else '')
@@ -46,9 +70,16 @@ class LinearGCS(BaseGCS):
             u = vertices[ii]
             v = vertices[jj]
             edge = self.gcs.AddEdge(u, v, f"({u.name()}, {v.name()})")
+            weighted_edge_cost = L2NormCost(
+                np.hstack((
+                    np.diag(-self.path_weights * self.vertex_cost_weights[ii]),
+                    np.diag(self.path_weights * self.vertex_cost_weights[ii]),
+                )),
+                np.zeros(self.dimension)
+            )
 
             edge.AddCost(BindingCost(
-                self.edge_cost, np.append(u.x(), v.x())))
+                weighted_edge_cost, np.append(u.x(), v.x())))
 
             # Constrain point in v to be in u
             edge.AddConstraint(BindingConstraint(
@@ -65,8 +96,17 @@ class LinearGCS(BaseGCS):
                 edge.AddConstraint(edge.xu()[jj] == edge.xv()[jj])
 
         for edge in target_edges:
+            source_name = edge.u().name()
+            source_index = self.names.index(source_name)
+            weighted_edge_cost = L2NormCost(
+                np.hstack((
+                    np.diag(-self.path_weights * self.vertex_cost_weights[source_index]),
+                    np.diag(self.path_weights * self.vertex_cost_weights[source_index]),
+                )),
+                np.zeros(self.dimension)
+            )
             edge.AddCost(BindingCost(
-                self.edge_cost, np.append(edge.xu(), edge.xv())))
+                weighted_edge_cost, np.append(edge.xu(), edge.xv())))
 
 
     def SolvePath(self, rounding=False, verbose=False, preprocessing=False):

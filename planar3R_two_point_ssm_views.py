@@ -28,6 +28,22 @@ def angular_distance(theta_a, theta_b):
     return np.linalg.norm(wrap_to_pi(theta_a - theta_b))
 
 
+def refine_ik_configuration(q, x, y, tolerance=1e-8, max_steps=50):
+    """Remove task-space drift from a sampled SSM configuration."""
+    q = np.asarray(q, dtype=float).reshape(3, 1).copy()
+    target = np.asarray([x, y], dtype=float).reshape(2, 1)
+    for _ in range(max_steps):
+        error = target - forward_kinematics_3R(q, L)
+        if np.linalg.norm(error) <= tolerance:
+            return wrap_to_pi(q).reshape(3)
+        correction = np.linalg.pinv(Jacobian_3R(q, L)) @ error
+        norm = np.linalg.norm(correction)
+        if norm > 0.1:
+            correction *= 0.1 / norm
+        q = wrap_to_pi(q + correction)
+    return None
+
+
 def solve_ik_dls(x_target, rng):
     q = rng.uniform(low=-np.pi, high=np.pi, size=(3, 1))
     error_threshold = 1e-6

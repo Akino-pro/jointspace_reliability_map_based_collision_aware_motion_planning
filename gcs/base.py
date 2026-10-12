@@ -201,6 +201,22 @@ class BaseGCS:
         self.options.preprocessing = preprocessing
         self.options.max_rounded_paths = 0
 
+        if rounding and not self.rounding_fn:
+            # Drake can solve the relaxation and round it in a single call.
+            # Re-solving the full relaxation before native rounding duplicates
+            # the most expensive operation on overlapping IRIS graphs.
+            self.options.max_rounded_paths = 10
+            result = self.gcs.SolveShortestPath(self.source, self.target, self.options)
+            if not result.is_success():
+                return None, None, {"rounded_results": [result]}
+            path = MipPathExtraction(self.gcs, result, self.source, self.target)[0]
+            results_dict.update({
+                "best_path": path, "best_result": result,
+                "rounded_results": [result], "rounded_cost": result.get_optimal_cost(),
+                "rounded_solver_time": solver_time(result),
+            })
+            return path, result, results_dict
+
         result = self.gcs.SolveShortestPath(self.source, self.target, self.options)
 
         if rounding:
