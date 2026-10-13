@@ -1,0 +1,61 @@
+{
+  "success": false,
+  "failed_joint": 3,
+  "locked_angle": -1.2375903668686903,
+  "failure_configuration": [
+    -2.972349782093813,
+    -2.26926174311021,
+    -1.2375903668686903
+  ],
+  "goal_point": [
+    1.5,
+    1.5
+  ],
+  "active_joints": [
+    1,
+    2
+  ],
+  "iris_checkpoint": "planar3R_iris_regions.npz",
+  "cost_type": "active_joint_space_euclidean_length",
+  "gcs_solve_calls": 0,
+  "link_lengths": [
+    1,
+    1,
+    1
+  ],
+  "obstacles": [
+    {
+      "center": [
+        0.75,
+        0.75
+      ],
+      "radius": 0.15,
+      "type": "circle"
+    }
+  ],
+  "link_radius": 0.02,
+  "ik_solutions": [
+    [
+      -0.05014681454812031,
+      1.9269855525091764,
+      -1.2375903668686903
+    ],
+    [
+      1.6209431413430169,
+      -0.6893951856404859,
+      -1.2375903668686903
+    ]
+  ],
+  "collision_free_ik_solutions": [
+    [
+      1.6209431413430169,
+      -0.6893951856404859,
+      -1.2375903668686903
+    ]
+  ],
+  "slice_region_count": 4,
+  "connected_goal_count": 0,
+  "status": "no_path_in_iris_coverage",
+  "message": "No collision-free path connects the endpoints within current IRIS coverage; planning stopped without generating additional regions.",
+  "total_seconds": 0.01571635099999824
+}

@@ -30,15 +30,16 @@ class ReliablePolytope:
 
 def interior_point(A, b, min_radius=1e-8):
     """Chebyshev LP; discard empty and numerically flat intersection cells."""
+    dimension = A.shape[1]
     result = linprog(
-        [0.0, 0.0, 0.0, -1.0],
+        [0.0] * dimension + [-1.0],
         A_ub=np.column_stack((A, np.linalg.norm(A, axis=1))),
         b_ub=b,
-        bounds=[(None, None)] * 3 + [(0.0, None)],
+        bounds=[(None, None)] * dimension + [(0.0, None)],
         method="highs",
     )
-    if result.success and result.x[3] > min_radius:
-        return result.x[:3]
+    if result.success and result.x[dimension] > min_radius:
+        return result.x[:dimension]
     return None
 
 
@@ -70,11 +71,12 @@ def polytope_adjacency(regions):
     for i, first in enumerate(regions):
         for j in range(i + 1, len(regions)):
             second = regions[j]
+            dimension = first.A.shape[1]
             result = linprog(
-                np.zeros(3),
+                np.zeros(dimension),
                 A_ub=np.vstack((first.A, second.A)),
                 b_ub=np.concatenate((first.b, second.b)),
-                bounds=[(None, None)] * 3,
+                bounds=[(None, None)] * dimension,
                 method="highs",
             )
             if result.success:

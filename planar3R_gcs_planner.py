@@ -66,19 +66,34 @@ def parse_args():
     parser.add_argument("--reliability-epsilon", type=float, default=RELIABILITY_EPSILON)
     parser.add_argument("--min-reliability", type=float, default=0.0)
     parser.add_argument("--seed", type=int, default=0)
+    parser.add_argument("--joint-lower", nargs=3, type=float,
+                        help="Pre-failure artificial lower limits in radians; released after failure")
+    parser.add_argument("--joint-upper", nargs=3, type=float,
+                        help="Pre-failure artificial upper limits in radians; released after failure")
     return parser.parse_args()
 
 
 def main():
-    from planar3R_iris_gcs_planner import plan_with_iris_gcs
+    from planar3R_iris_gcs_planner import PlanningStopped, plan_with_iris_gcs
 
     args = parse_args()
-    result = plan_with_iris_gcs(
-        (args.sx, args.sy), (args.gx, args.gy), OBSTACLES, args.iris_regions,
-        reliability_source=args.reliability_source, min_reliability=args.min_reliability,
-        seed=args.seed, candidate_limit=args.candidate_limit,
-        reliability_epsilon=args.reliability_epsilon, rounding=not args.no_rounding,
-    )
+    try:
+        result = plan_with_iris_gcs(
+            (args.sx, args.sy), (args.gx, args.gy), OBSTACLES, args.iris_regions,
+            reliability_source=args.reliability_source, min_reliability=args.min_reliability,
+            seed=args.seed, candidate_limit=args.candidate_limit,
+            reliability_epsilon=args.reliability_epsilon, rounding=not args.no_rounding,
+            artificial_lower=args.joint_lower, artificial_upper=args.joint_upper,
+        )
+    except PlanningStopped as exc:
+        Path(args.output).write_text(json.dumps(exc.report, indent=2), encoding="utf-8")
+        print(json.dumps(exc.report, indent=2))
+        raise SystemExit(1)
+    except (ValueError, RuntimeError) as exc:
+        report = {"success": False, "status": "planning_failed", "message": str(exc)}
+        Path(args.output).write_text(json.dumps(report, indent=2), encoding="utf-8")
+        print(json.dumps(report, indent=2))
+        raise SystemExit(1)
     print(f"safe regions: {len(result['regions'])}")
     print(f"planning seconds: {result['total_seconds']:.3f}")
     print(f"gcs cost: {result['cost']:.6f}")
@@ -89,6 +104,7 @@ def main():
         print(f"  [{q[0]: .4f}, {q[1]: .4f}, {q[2]: .4f}]")
     report = {
         "region_source": "iris", "planner": "drake",
+        "success": True, "status": "success",
         "start_point": [args.sx, args.sy], "goal_point": [args.gx, args.gy],
         "link_lengths": list(L), "obstacles": OBSTACLES,
         "region_count": len(result["regions"]), "waypoints": result["waypoints"].tolist(),
@@ -96,7 +112,7 @@ def main():
     }
     for name in ("cost", "statistics", "solve_seconds", "total_seconds", "collision_samples",
                  "endpoint_error", "reliability_branch", "start_candidate_count", "goal_candidate_count",
-                 "iris_checkpoint", "iris_options"):
+                 "iris_checkpoint", "iris_options", "artificial_joint_limits", "gcs_solve_calls"):
         report[name] = result[name]
     Path(args.output).write_text(json.dumps(report, indent=2), encoding="utf-8")
     print(f"saved {args.output}")

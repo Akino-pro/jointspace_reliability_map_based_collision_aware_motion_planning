@@ -1,36 +1,60 @@
 # Planar 3R reliability-aware motion planning
 
-平面三关节机械臂的可靠性运动规划实验。当前规划工作流为：
+An experimental reliability-aware motion planner for a planar three-joint robot.
+The current pre-failure workflow is:
 
 ```text
-IRIS 无碰撞多面体 → 可靠性分区求交 → 连通性筛选 → GCS 路径 → 独立碰撞/端点检查
+Collision-free IRIS polytopes -> reliability intersections -> connectivity filtering -> GCS path -> collision and endpoint checks
 ```
 
-默认连杆长度为 `[1,1,1]`，起点 `(0.5,0.5)`，终点 `(1.5,1.5)`；障碍物为中心 `(0.75,0.75)`、半径 `0.15` 的圆。规划器使用的关节可靠度为 `0.7、0.5、0.3`。
+The default link lengths are `[1,1,1]`, with start position `(0.5,0.5)` and goal
+position `(1.5,1.5)`. The obstacle is a circle centered at `(0.75,0.75)` with
+radius `0.15`. The planner uses joint reliabilities `0.7`, `0.5`, and `0.3`.
 
-## 主要文件
+## Main files
 
-| 文件 | 用途 |
+| File | Purpose |
 | --- | --- |
-| `planar3R_drake_iris.py` | IRIS 区域生成及断点续跑 |
-| `planar3R_iris_regions.py` | 缓存读写、可靠性求交和多面体邻接 |
-| `planar3R_gcs_planner.py` | 主入口、场景及可靠性定义、JSON 输出 |
-| `planar3R_iris_gcs_planner.py` | GCS 求解、候选筛选和路径验证 |
-| `planar3R_validate_iris.py` | 区域内部独立抽样验证 |
-| `planar3R_collision.py` | 正运动学连杆几何及解析碰撞检查 |
-| `planar3R_two_point_ssm_views.py` | IK、SSM 跟踪、端点校正和绘图 |
-| `planar3R_bbox_reliability_partition.py` | SSM 包围盒可靠性分区及绘图 |
-| `gcs/` | Drake GCS 封装 |
-| `Dockerfile.drake` | 可重建的 Docker 运行环境 |
-| `tests/test_iris_regions.py` | 几何、缓存、候选选择和 Drake 集成测试 |
+| `planar3R_drake_iris.py` | IRIS region generation and checkpoint resume |
+| `planar3R_iris_regions.py` | Checkpoint I/O, reliability intersections, and polytope adjacency |
+| `planar3R_gcs_planner.py` | Main entry point, scene and reliability definitions, and JSON output |
+| `planar3R_iris_gcs_planner.py` | GCS solving, candidate selection, and path validation |
+| `planar3R_validate_iris.py` | Independent sampling of region interiors |
+| `planar3R_post_failure_planner.py` | 2D GCS replanning after one planar 3R joint locks |
+| `planar3R_joint_limits.py` | Artificial joint limits, bounded IK preflight, and convex region clipping |
+| `planar3R_collision.py` | Forward-kinematic link geometry and analytic collision checks |
+| `planar3R_two_point_ssm_views.py` | IK, SSM tracing, endpoint refinement, and visualization |
+| `planar3R_bbox_reliability_partition.py` | SSM bounding-box reliability partitions and visualization |
+| `gcs/` | Drake GCS wrappers |
+| `Dockerfile.drake` | Reproducible Docker runtime |
+| `tests/` | Pre-failure and post-failure geometry, termination, and Drake integration tests |
 
-其他可靠性地图与动画脚本保留作独立研究/历史展示。网格路径规划和 fallback 已删除。
+Other reliability-map and animation scripts remain available for independent
+research and historical visualization. Grid-based planning and the fallback
+planner have been removed.
 
-## 当前状态和运行
+Single-joint locked-failure replanning uses 2D slices of the original IRIS regions
+and a pure joint-space path-length objective. It stops and reports immediately
+if the goal is unreachable, all goal configurations collide, or the current
+coverage has no connecting path. See [POST_FAILURE_WORKFLOW.md](POST_FAILURE_WORKFLOW.md).
 
-详见 [IRIS_WORKFLOW.md](IRIS_WORKFLOW.md)。当前缓存包含 6 个加强参数生成的 IRIS 区域，30,000 个内部抽样未检测到碰撞。`iris_path.json` 是旧参数的成功路径报告，已标记；新缓存的完整规划待下一轮运行。
+Optional artificial pre-failure limits are set with `--joint-lower` and
+`--joint-upper`. They restrict IK candidates, convex regions, and the entire
+pre-failure path, and are released after a failure. Goals outside the resulting
+workspace are rejected before GCS. See [ARTIFICIAL_JOINT_LIMITS.md](ARTIFICIAL_JOINT_LIMITS.md).
 
-在已配置的容器中：
+## Current status and execution
+
+See [IRIS_WORKFLOW.md](IRIS_WORKFLOW.md) for details. The current checkpoint
+contains six IRIS regions generated with stronger numerical verification
+settings. No collisions were detected in 30,000 sampled interior configurations.
+The full planning run completed on 2026-10-13: reliability intersections produced
+82 regions, connectivity filtering retained 43 regions, and total planning time
+was approximately 30.3 seconds. The latest result is in `iris_path.json`.
+Collision checks passed for 668 sampled path configurations, with endpoint error
+approximately `2.94e-13`.
+
+Using the configured container:
 
 ```powershell
 docker start planar3r-iris-validation
@@ -38,4 +62,6 @@ docker exec planar3r-iris-validation /usr/bin/python3 planar3R_gcs_planner.py
 docker stop planar3r-iris-validation
 ```
 
-IRIS 的碰撞认证和独立检查均为数值方法；未检测到碰撞不代表严格连续证明。当前模型不检查机械臂自碰撞。
+IRIS collision verification and independent checks are numerical. Detecting no
+collisions does not establish a strict continuous collision-free certificate.
+The current model does not check robot self-collision.
