@@ -30,13 +30,13 @@ docker exec planar3r-iris-validation /usr/bin/python3 planar3R_post_failure_plan
 The default output is `post_failure_path.json`; use `--output` to change it.
 Success returns exit code 0 and failure returns 1. Failures also produce JSON
 containing `status`, the reason, and `gcs_solve_calls`. `--failed-joint` accepts
-exactly one of 1, 2, or 3. Joint ranges remain `[-pi,pi]`; the planner does not
-automatically cross the angular chart boundary.
-
-Any `artificial_joint_limits` recorded by a pre-failure path are released here.
-Replanning always slices the original full-range IRIS regions, not the clipped
-pre-failure regions. Reports include `artificial_limits_released: true` and the
-physical joint limits. See [ARTIFICIAL_JOINT_LIMITS.md](ARTIFICIAL_JOINT_LIMITS.md).
+exactly one of 1, 2, or 3. Joints are assumed to have no mechanical angle stops.
+Finite failure angles outside `[-pi,pi]` are mapped to the cached periodic
+coordinate chart internally; their winding offsets are restored in reported IK
+solutions and output paths. The supplied locked angle remains exactly fixed.
+Replanning slices the original IRIS regions with no additional angular clipping.
+The current graph does not connect opposite chart boundaries, so periodic route
+coverage remains incomplete.
 
 ## Workflow
 
@@ -46,7 +46,7 @@ physical joint limits. See [ARTIFICIAL_JOINT_LIMITS.md](ARTIFICIAL_JOINT_LIMITS.
 4. Substitute the locked angle into each original collision-free IRIS region to obtain 2D halfspaces: `A_active u <= b - A_locked alpha`. Reliability-partitioned regions are not used.
 5. Check connectivity between the failure state and valid goals in the current slice graph. Stop immediately if none are connected.
 6. Include all connected goals in one GCS solve. All region weights are 1; the cost is Euclidean path length in the two active joints' configuration space. A zero-cost dummy sink selects an IK goal and does not represent physical motion.
-7. Reconstruct the 3D joint path with the locked joint fixed throughout, then check endpoints, joint ranges, and path collisions.
+7. Reconstruct the 3D joint path with the locked joint fixed throughout, restore supplied angle windings, and check endpoints and path collisions.
 
 ## Termination statuses
 
@@ -74,7 +74,7 @@ proofs. Robot self-collision policy is unchanged from the pre-failure workflow.
 
 ## Completed validation
 
-- All 23 tests passed in Docker. Integration tests cover all three possible locked joints and verify selection of the shorter goal in one solve, the length objective, and preservation of the locked angle.
+- All 24 tests passed in Docker. Integration tests cover all three possible locked joints and verify selection of the shorter goal in one solve, the length objective, preservation of the locked angle, and input/output winding offsets for unrestricted angles.
 - At the current pre-failure path's start: locking joint 1 or 2 reports an unreachable goal; locking joint 3 reports no connecting path within current coverage. None of these three cases called GCS. Reports are `post_failure_joint1.json`, `post_failure_joint2.json`, and `post_failure_path.json`.
 - The explicit `--q` example above is an artificially constructed near-goal failure state, not a waypoint sampled from the pre-failure path. With joint 3 locked, it reaches the goal using two 2D regions and one GCS call. Path length is approximately 0.05 rad, endpoint error is approximately `7.86e-15`, and sampled collision checks pass. The report is `post_failure_success.json`.
 

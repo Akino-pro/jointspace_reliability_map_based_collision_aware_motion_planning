@@ -66,10 +66,6 @@ def parse_args():
     parser.add_argument("--reliability-epsilon", type=float, default=RELIABILITY_EPSILON)
     parser.add_argument("--min-reliability", type=float, default=0.0)
     parser.add_argument("--seed", type=int, default=0)
-    parser.add_argument("--joint-lower", nargs=3, type=float,
-                        help="Pre-failure artificial lower limits in radians; released after failure")
-    parser.add_argument("--joint-upper", nargs=3, type=float,
-                        help="Pre-failure artificial upper limits in radians; released after failure")
     return parser.parse_args()
 
 
@@ -83,7 +79,6 @@ def main():
             reliability_source=args.reliability_source, min_reliability=args.min_reliability,
             seed=args.seed, candidate_limit=args.candidate_limit,
             reliability_epsilon=args.reliability_epsilon, rounding=not args.no_rounding,
-            artificial_lower=args.joint_lower, artificial_upper=args.joint_upper,
         )
     except PlanningStopped as exc:
         Path(args.output).write_text(json.dumps(exc.report, indent=2), encoding="utf-8")
@@ -112,7 +107,7 @@ def main():
     }
     for name in ("cost", "statistics", "solve_seconds", "total_seconds", "collision_samples",
                  "endpoint_error", "reliability_branch", "start_candidate_count", "goal_candidate_count",
-                 "iris_checkpoint", "iris_options", "artificial_joint_limits", "gcs_solve_calls"):
+                 "iris_checkpoint", "iris_options", "gcs_solve_calls"):
         report[name] = result[name]
     Path(args.output).write_text(json.dumps(report, indent=2), encoding="utf-8")
     print(f"saved {args.output}")

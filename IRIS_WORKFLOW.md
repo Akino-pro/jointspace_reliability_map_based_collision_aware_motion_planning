@@ -37,12 +37,12 @@ pair, and writes `iris_path.json`. Use `--candidate-limit 3` to consider more
 combinations at additional runtime cost. `--sx/--sy/--gx/--gy` set workspace
 endpoints; `--reliability-source start|goal|none` selects the partition source.
 
-Use `--joint-lower q1 q2 q3 --joint-upper q1 q2 q3` to impose an artificial
-pre-failure joint-space box. The original full-range checkpoint is retained;
-regions are clipped at planning time, and post-failure replanning releases these
-artificial constraints. An outside-workspace goal is rejected during preflight
-without calling GCS. Examples and reachability statuses are documented in
-[ARTIFICIAL_JOINT_LIMITS.md](ARTIFICIAL_JOINT_LIMITS.md).
+The current robot is assumed to have unrestricted revolute joints. No extra
+joint-angle box is imposed on endpoints, regions, or paths. The IRIS checkpoint
+uses `[-pi,pi]^3` as a finite coordinate chart for periodic angles, not as a
+mechanical limit. Opposite chart boundaries are not connected in the current
+graph. Workspace endpoints outside the robot's radial reach are rejected before
+SSM tracing or GCS construction.
 
 Resume generation, reusing completed seeds without overwriting a checkpoint
 whose settings do not match:

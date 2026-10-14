@@ -131,6 +131,20 @@ class PostFailureTests(unittest.TestCase):
             plan_after_failure([0, 0, 0], [1, 2], [1, 1], self.cache)
 
     @unittest.skipUnless(HAS_DRAKE, "Requires robotics Drake bindings")
+    def test_unrestricted_input_angles_preserve_windings_and_locked_angle(self):
+        canonical = np.array([0.4, -0.8, 0.7])
+        start = canonical + np.array([2 * np.pi, -2 * np.pi, 4 * np.pi])
+        target = link_points([0.5, -0.75, 0.7])[-1]
+        report = plan_after_failure(start, 3, target, self.cache)
+        self.assertTrue(report["success"], report)
+        path = np.asarray(report["waypoints"])
+        np.testing.assert_allclose(path[0], start, atol=1e-6)
+        np.testing.assert_array_equal(path[:, 2], np.full(len(path), start[2]))
+        self.assertEqual(report["locked_angle"], start[2])
+        self.assertGreater(path[-1, 0], np.pi)
+        self.assertLess(report["endpoint_error"], 1e-6)
+
+    @unittest.skipUnless(HAS_DRAKE, "Requires robotics Drake bindings")
     def test_one_gcs_solve_selects_nearest_goal_with_unit_length_cost(self):
         start = np.array([0.4, -0.8, 0.7])
         for joint in (1, 2, 3):

@@ -132,18 +132,26 @@ def plan_after_failure(q_failure, failed_joint, goal_point,
     q_failure = np.asarray(q_failure, dtype=float)
     goal = np.asarray(goal_point, dtype=float)
     if (failed_joint not in (1, 2, 3) or q_failure.shape != (3,) or goal.shape != (2,)
-            or not np.all(np.isfinite(q_failure)) or not np.all(np.isfinite(goal))
-            or np.any(np.abs(q_failure) > np.pi)):
-        raise ValueError("Use one failed joint (1..3), three finite angles in [-pi,pi], and a 2D target")
+            or not np.all(np.isfinite(q_failure)) or not np.all(np.isfinite(goal))):
+        raise ValueError("Use one failed joint (1..3), three finite angles in radians, and a 2D target")
+    supplied_configuration = q_failure.copy()
+    # Revolute joints have no physical angle stops. Use the cached coordinate
+    # chart internally, then restore each supplied winding number in the output.
+    outside_chart = np.abs(q_failure) > np.pi
+    q_failure = np.where(outside_chart, wrap_to_pi(q_failure), q_failure)
+    positive_boundary = outside_chart & (supplied_configuration > 0) & np.isclose(q_failure, -np.pi, atol=1e-12, rtol=0)
+    q_failure[positive_boundary] = np.pi
+    winding_offsets = supplied_configuration - q_failure
     locked = failed_joint - 1
     active = [i for i in range(3) if i != locked]
     angle = float(q_failure[locked])
-    report = {"success": False, "failed_joint": failed_joint, "locked_angle": angle,
-              "failure_configuration": q_failure.tolist(), "goal_point": goal.tolist(),
+    report = {"success": False, "failed_joint": failed_joint,
+              "locked_angle": float(supplied_configuration[locked]),
+              "failure_configuration": supplied_configuration.tolist(), "goal_point": goal.tolist(),
               "active_joints": [i + 1 for i in active], "iris_checkpoint": str(checkpoint_path),
               "cost_type": "active_joint_space_euclidean_length", "gcs_solve_calls": 0,
-              "artificial_limits_released": True,
-              "physical_joint_limits": {"lower": [-np.pi] * 3, "upper": [np.pi] * 3}}
+              "planning_chart_configuration": q_failure.tolist(),
+              "angle_winding_offsets": winding_offsets.tolist()}
 
     def finish(status, message, **values):
         report.update(status=status, message=message, total_seconds=time.perf_counter() - started, **values)
@@ -159,15 +167,15 @@ def plan_after_failure(q_failure, failed_joint, goal_point,
         return finish("start_in_collision", "The robot configuration at failure is in collision; planning stopped.")
     if np.linalg.norm(link_points(q_failure)[-1] - goal) <= 1e-8:
         return finish("success", "The failure configuration is already at the goal.", success=True,
-                      waypoints=[q_failure.tolist()], path_length=0.0, cost=0.0, endpoint_error=0.0)
+                      waypoints=[supplied_configuration.tolist()], path_length=0.0, cost=0.0, endpoint_error=0.0)
     solutions, degenerate = locked_joint_ik(goal, failed_joint, angle)
-    report["ik_solutions"] = [q.tolist() for q in solutions]
+    report["ik_solutions"] = [(q + winding_offsets).tolist() for q in solutions]
     if degenerate:
         return finish("unsupported_degenerate_ik", "Degenerate kinematics produce a continuous goal set; discrete-goal planning does not support it, so planning stopped.")
     if not solutions:
         return finish("unreachable", "The goal position is unreachable with the joint locked; planning stopped.")
     safe_goals = [q for q in solutions if is_collision_free(q, obstacles, link_radius=link_radius)]
-    report["collision_free_ik_solutions"] = [q.tolist() for q in safe_goals]
+    report["collision_free_ik_solutions"] = [(q + winding_offsets).tolist() for q in safe_goals]
     if not safe_goals:
         return finish("all_goals_in_collision", "All goal IK solutions are in collision; planning stopped.")
     regions = slice_regions(originals, failed_joint, angle)
@@ -207,14 +215,13 @@ def plan_after_failure(q_failure, failed_joint, goal_point,
     if (u_path.ndim != 2 or u_path.shape[1] != 2 or len(u_path) < 2
             or not np.all(np.isfinite(u_path))):
         return finish("path_validation_failed", "GCS returned a path with invalid dimensions or values; planning stopped without retrying.")
-    q_path = np.tile(q_failure, (len(u_path), 1))
-    q_path[:, active] = u_path
+    q_path = np.tile(supplied_configuration, (len(u_path), 1))
+    q_path[:, active] = u_path + winding_offsets[active]
     from planar3R_iris_gcs_planner import validate_joint_path
     collision_free, samples = validate_joint_path(q_path, obstacles, link_radius)
     endpoint_error = float(np.linalg.norm(link_points(q_path[-1])[-1] - goal))
-    if (not collision_free or endpoint_error > 1e-6 or np.linalg.norm(q_path[0] - q_failure) > 1e-6
-            or np.any(np.abs(q_path) > np.pi + 1e-7)):
-        return finish("path_validation_failed", "The path failed collision, endpoint, or joint-range checks; planning stopped without retrying.")
+    if not collision_free or endpoint_error > 1e-6 or np.linalg.norm(q_path[0] - supplied_configuration) > 1e-6:
+        return finish("path_validation_failed", "The path failed collision or endpoint checks; planning stopped without retrying.")
     length = float(np.sum(np.linalg.norm(np.diff(u_path, axis=0), axis=1)))
     return finish("success", "Post-failure planning succeeded; the locked joint remains fixed throughout the path.", success=True,
                   waypoints=q_path.tolist(), path_length=length, cost=cost,

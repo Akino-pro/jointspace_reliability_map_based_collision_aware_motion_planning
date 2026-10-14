@@ -11,9 +11,6 @@ from planar3R_iris_regions import (
     polytope_adjacency,
     split_iris_regions,
 )
-from planar3R_joint_limits import (
-    clip_regions_to_joint_limits, find_limited_ik, validate_joint_limits, within_joint_limits,
-)
 
 
 class PlanningStopped(RuntimeError):
@@ -76,7 +73,6 @@ def plan_with_iris_gcs(
     start_point, goal_point, obstacles, checkpoint_path,
     reliability_source="goal", min_reliability=0.0, seed=0,
     candidate_limit=3, reliability_epsilon=0.01, rounding=True,
-    artificial_lower=None, artificial_upper=None,
 ):
     from planar3R_gcs_planner import (
         reliability_cost_weight,
@@ -87,23 +83,22 @@ def plan_with_iris_gcs(
     if candidate_limit < 1:
         raise ValueError("candidate_limit must be positive.")
     started = time.perf_counter()
-    lower, upper = validate_joint_limits(artificial_lower, artificial_upper)
-    limits = {"lower": lower.tolist(), "upper": upper.tolist()}
-    witnesses = {}
-    # Test the goal first: an outside-workspace target never enters SSM or GCS.
+    # With unrestricted revolute joints, radial reachability follows the
+    # polygon inequality. No artificial joint-angle box is imposed.
+    reach = float(sum(L))
+    inner_radius = max(0.0, 2.0 * max(L) - reach)
     for name, point in (("goal", goal_point), ("start", start_point)):
-        q, status = find_limited_ik(point, lower, upper)
-        if status != "reachable":
-            message = (f"The {name} position is unreachable within the artificial joint limits; planning stopped."
-                       if status == "unreachable" else
-                       f"The {name} reachability could not be resolved within the bounded IK search; planning stopped.")
+        point_array = np.asarray(point, dtype=float)
+        if point_array.shape != (2,) or not np.all(np.isfinite(point_array)):
+            raise ValueError("Workspace endpoints must be finite 2D positions")
+        radius = np.linalg.norm(point_array)
+        if radius > reach + 1e-10 or radius < inner_radius - 1e-10:
             raise PlanningStopped({
-                "success": False, "status": f"{name}_unreachable" if status == "unreachable" else "reachability_unresolved",
-                "message": message, "start_point": list(start_point), "goal_point": list(goal_point),
-                "artificial_joint_limits": limits, "gcs_solve_calls": 0,
+                "success": False, "status": f"{name}_unreachable",
+                "message": f"The {name} position is outside the robot's reachable workspace; planning stopped.",
+                "start_point": list(start_point), "goal_point": list(goal_point), "gcs_solve_calls": 0,
                 "total_seconds": time.perf_counter() - started,
             })
-        witnesses[name] = q
     original, metadata = load_iris_checkpoint(checkpoint_path)
     model = metadata.get("model", {})
     if model.get("link_lengths") != list(L) or model.get("obstacles") != [
@@ -112,8 +107,6 @@ def plan_with_iris_gcs(
     ]:
         raise ValueError("IRIS checkpoint geometry does not match the current planning scene.")
     link_radius = float(model["link_radius"])
-    if artificial_lower is not None:
-        original = clip_regions_to_joint_limits(original, lower, upper)
     partition_sets = reliability_region_sets_from_source(
         reliability_source, start_point, goal_point, seed
     )
@@ -121,14 +114,6 @@ def plan_with_iris_gcs(
               if is_collision_free(q, obstacles, link_radius=link_radius)]
     goals = [q for q in ssm_candidate_points(*goal_point, obstacles, seed=seed + 1)
              if is_collision_free(q, obstacles, link_radius=link_radius)]
-    starts = [q for q in starts if within_joint_limits(q, lower, upper)]
-    goals = [q for q in goals if within_joint_limits(q, lower, upper)]
-    # A narrow artificial box may contain valid IK missed by sparse SSM sampling.
-    for name, candidates in (("start", starts), ("goal", goals)):
-        q = witnesses[name]
-        if is_collision_free(q, obstacles, link_radius=link_radius):
-            if not any(np.linalg.norm(q - old) < 1e-7 for old in candidates):
-                candidates.append(q)
     best, failures, statistics = None, [], []
     solve_calls = 0
 
@@ -207,7 +192,7 @@ def plan_with_iris_gcs(
                         np.linalg.norm(link_points(waypoints[0])[-1] - start_point),
                         np.linalg.norm(link_points(waypoints[-1])[-1] - goal_point),
                     )
-                    if not collision_free or endpoint_error > 1e-4 or not within_joint_limits(waypoints, lower, upper, 1e-7):
+                    if not collision_free or endpoint_error > 1e-4:
                         failures.append(f"Independent path check failed: collision_free={collision_free}, "
                                         f"endpoint_error={endpoint_error}")
                         continue
@@ -234,7 +219,6 @@ def plan_with_iris_gcs(
     best["statistics"] = statistics
     best["success"] = True
     best["status"] = "success"
-    best["artificial_joint_limits"] = limits
     best["gcs_solve_calls"] = solve_calls
     best["iris_checkpoint"] = str(checkpoint_path)
     best["iris_options"] = metadata.get("options")

@@ -21,7 +21,6 @@ radius `0.15`. The planner uses joint reliabilities `0.7`, `0.5`, and `0.3`.
 | `planar3R_iris_gcs_planner.py` | GCS solving, candidate selection, and path validation |
 | `planar3R_validate_iris.py` | Independent sampling of region interiors |
 | `planar3R_post_failure_planner.py` | 2D GCS replanning after one planar 3R joint locks |
-| `planar3R_joint_limits.py` | Artificial joint limits, bounded IK preflight, and convex region clipping |
 | `planar3R_collision.py` | Forward-kinematic link geometry and analytic collision checks |
 | `planar3R_two_point_ssm_views.py` | IK, SSM tracing, endpoint refinement, and visualization |
 | `planar3R_bbox_reliability_partition.py` | SSM bounding-box reliability partitions and visualization |
@@ -38,10 +37,11 @@ and a pure joint-space path-length objective. It stops and reports immediately
 if the goal is unreachable, all goal configurations collide, or the current
 coverage has no connecting path. See [POST_FAILURE_WORKFLOW.md](POST_FAILURE_WORKFLOW.md).
 
-Optional artificial pre-failure limits are set with `--joint-lower` and
-`--joint-upper`. They restrict IK candidates, convex regions, and the entire
-pre-failure path, and are released after a failure. Goals outside the resulting
-workspace are rejected before GCS. See [ARTIFICIAL_JOINT_LIMITS.md](ARTIFICIAL_JOINT_LIMITS.md).
+Revolute joints are assumed to have no mechanical angle limits. Both workflows
+use the original IRIS regions without additional joint-angle clipping. The
+cached IRIS model uses `[-pi,pi]^3` as a coordinate chart for periodic angles;
+connections across opposite chart boundaries are not yet implemented. Thus the
+current graph does not cover every possible periodic route.
 
 ## Current status and execution
 
