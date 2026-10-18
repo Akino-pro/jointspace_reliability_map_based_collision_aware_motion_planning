@@ -1,0 +1,501 @@
+PROJECT AND CONVERSATION HANDOFF
+Updated: 2026-10-18
+Language: English, following the user's instruction that project documentation be in English.
+
+PURPOSE AND SCOPE
+This file summarizes the available conversation about this project so that work can
+continue on another device or in another conversation. It is a technical summary,
+not a verbatim transcript. Historical implementation and benchmark details below
+were recorded during earlier work; they were not all rerun when writing this file.
+The latest request was documentation only. No planner code was changed for it.
+
+1. USER INTENT AND WORKING PREFERENCES
+
+- The project concerns collision-aware motion planning with joint reliability,
+  Graphs of Convex Sets (GCS), and robot self-motion manifolds (SSMs).
+- Replace the expensive grid-based region construction with fewer IRIS-generated
+  convex collision-free regions, then use reliability partitioning and GCS.
+- Do not run the old grid workflow: it was already tried, was slow, and generated
+  too many regions. The active grid implementation was removed earlier.
+- The user manually uploads to GitHub. Do not infer authorization to commit,
+  push, publish, or send messages to other people.
+- All project explanations/documentation should be in English. Conversation with
+  the user is primarily Chinese.
+- During theory discussions, do not change implementation unless requested.
+- Stop and report when a task is unreachable or the represented planning problem
+  has no path; do not silently change the task or keep retrying other problems.
+- Distinguish physical impossibility from missing coverage in the available IRIS
+  regions. Failure in a finite region graph does not prove global impossibility.
+
+2. PROJECT LOCATION AND EXECUTION ENVIRONMENT
+
+Workspace:
+  D:\新建文件夹\jointspace_reliability_map_based_collision_aware_motion_planning
+
+Official/reference GCS checkout supplied by the user:
+  D:\gcs-science-robotics
+
+The robotics workflow uses Docker. Earlier host Python inspection found a
+non-robotics package named pydrake; do not assume host imports provide Drake.
+
+Previously configured Docker environment:
+- Image: robotlocomotion/drake:latest
+- Recorded image digest:
+  sha256:d19e6faecd814b04140ab381602c8d43bed1bc9db32a7885e4afb3169cd646a2
+- Recorded Drake version: 0.0.20260601
+- Persistent container: planar3r-iris-validation
+- Workspace mounted at /workspace
+- Python: /usr/bin/python3, version 3.12 in the container
+- PYTHONPATH: /opt/drake/lib/python3.12/site-packages
+- MPLBACKEND: Agg
+- Dockerfile.drake records the environment/dependency setup.
+- Earlier dependencies included scipy, networkx, shapely, and trimesh 5.1.1.
+- If necessary, start Docker Desktop, then start the existing container.
+  Do not assume that container exists on another device.
+- The container was stopped after the last recorded test run. This is historical
+  state, not a fresh runtime check on the date of this file.
+
+In the original IDE environment, consult the python-tools skill and its
+get_python_environment preflight before any Python toolchain command.
+
+3. ROBOT, TASK, AND COST ASSUMPTIONS
+
+Current example robot:
+- Planar 3R serial arm, link lengths [1, 1, 1].
+- Task specifies end-effector position (x, y), not end-effector orientation.
+- Generic redundancy is one dimension: IK solutions form SSM curves in 3D joint
+  configuration space. There may be multiple branches and singular cases.
+- Example start workspace position: (0.5, 0.5).
+- Example goal workspace position: (1.5, 1.5).
+- Example circular obstacle: center (0.75, 0.75), radius 0.15.
+- Collision link radius: 0.02.
+- Example joint reliabilities: [0.7, 0.5, 0.3].
+
+Artificial joint limits:
+- Artificial pre-failure limits were previously implemented and tested.
+- The user later explicitly requested their removal and asked to assume no
+  mechanical angle restrictions for now. They were removed from the active flow.
+- Files for that feature, its tests, examples, and dedicated documentation were
+  removed. Do not reintroduce it without a new request.
+- Internally, IRIS still uses a finite angular chart [-pi, pi]^3. The current
+  graph does not connect opposite periodic chart boundaries. This is a coverage
+  limitation, not a physical joint limit.
+- Any future hull/SSM construction must account for periodic angle coordinates.
+  For example, +179 and -179 degrees are close physically, but an ordinary hull
+  of these values crosses zero unless angles are first represented consistently.
+
+Reliability and cost:
+- The recorded pre-failure implementation uses region-weighted joint-space
+  Euclidean length, with weight (epsilon + 1 - R), where R is region reliability.
+- The user's theoretical discussion sometimes called the cost 'length times
+  reliability' and assumed terminal-region weight 1. Do not silently equate this
+  shorthand with the recorded implementation's formula.
+- Constant positive weight reduces local optimization to Euclidean length, up
+  to scaling. It does not make independently optimized path pieces globally
+  optimal after concatenation.
+- Collision freedom alone, or membership in an SSM bounding box, does not prove
+  reliability 1. Fault reachability and the project's reliability definition
+  require separate justification.
+
+4. PRE-FAILURE IMPLEMENTATION RECORDED IN THIS CONVERSATION
+
+Important files:
+- planar3R_drake_iris.py: robot collision model and IRIS generation; checkpoints
+  numeric halfspaces to NPZ and supports resuming. Base is welded. Full link
+  geometry and obstacle inflation are used. Arm self-collision was filtered in
+  the recorded setup. Updated Drake IrisNp API compatibility was handled.
+- planar3R_iris_regions.py: convex region data, NPZ helpers, reliability-box
+  intersections, and LP-based adjacency. Relevant geometry helpers support 2D
+  as well as 3D for post-failure planning.
+- planar3R_gcs_planner.py: shared scene/SSM helpers and planner CLI. SSMs are
+  sampled, branches are traced, and endpoints are numerically refined by FK.
+- planar3R_iris_gcs_planner.py: reliability-partitioned IRIS/GCS workflow;
+  connected candidate selection and per-branch/per-pair planning. Recorded
+  default candidate_limit is 1, with native GCS rounding up to 10 paths.
+- planar3R_collision.py: collision utilities.
+- planar3R_validate_iris.py: sampled validation of saved IRIS regions.
+- gcs/base.py and gcs/linear.py: GCS solver and cost machinery, updated for the
+  installed Drake API and native rounding/failure handling.
+- README.md and IRIS_WORKFLOW.md: workflow documentation.
+
+Historical saved validation and timing:
+- planar3R_iris_regions.npz contains the recorded 6-region cache.
+- Recorded cumulative IRIS generation time: about 6.41 seconds, using 5
+  iterations, 100 collision checks, and margin 0.02.
+- An earlier, weaker 7-region setup showed sampled collisions and was replaced.
+- Validation of the replacement used 5,000 samples per region, 30,000 total,
+  with zero sampled collisions. This is empirical validation, not a universal
+  proof for all configurations. Report: iris_region_validation.json.
+- Saved pre-failure result: iris_path.json.
+- Recorded successful run: 6 raw regions, 82 partitioned regions, 43 solve
+  vertices and 824 edges; total about 30.325 seconds, solve about 27.36 seconds.
+- Recorded endpoint error: about 2.936e-13; 668 collision validation samples;
+  reported cost about 0.582765.
+- These timings describe that input/cache/environment, not a guaranteed runtime
+  for arbitrary robot parameters, reliability values, or task positions.
+
+Limits of current optimality claims:
+- Finite sampled SSM endpoints do not optimize over every continuous IK solution.
+- Limited IRIS coverage does not represent all free-space routes.
+- Convex relaxation plus rounding is not automatically a globally optimal
+  integer GCS solution.
+- Saved paths can contain near-duplicate waypoints and large coordinate-chart
+  angular segments. Do not silently wrap each segment to a different motion.
+- Some visualization files historically used hard-coded old waypoints rather
+  than the latest result JSON. Check their inputs before relying on a figure.
+
+5. POST-FAILURE REPLANNING ALREADY IMPLEMENTED
+
+Scope: exactly one locked joint of a planar 3R robot; the two others remain usable.
+Files:
+  planar3R_post_failure_planner.py
+  tests/test_post_failure_planner.py
+  POST_FAILURE_WORKFLOW.md
+
+Theory and behavior:
+- Lock the failed joint at its current angle. The remaining kinematics can be
+  solved as an equivalent 2R problem, with appropriate combined links/offsets.
+- Generically there are zero, one, or two physical goal IK solutions. Coordinate
+  aliases and degenerate cases require care; 'always two' is not correct.
+- Degenerate continuous IK solution sets are reported as unsupported rather
+  than incorrectly declared unreachable.
+- Collision checking still uses the original three-link geometry.
+- Slice raw IRIS inequalities at the locked angle to get 2D active-joint cells:
+    A_active u <= b - A_locked * locked_angle.
+- Use ordinary active-joint Euclidean length; no reliability partitioning in
+  this stage, under the assumption that no additional failures are modeled.
+- Multiple goal configurations connect to a zero-cost sink in one GCS solve.
+- Reconstruct output as three joint angles at every waypoint. The failed joint
+  remains exactly at its supplied lock angle; the healthy angles are planned.
+- Arbitrary finite winding angles are accepted. Planning uses canonical chart
+  angles internally, then restores winding offsets in the reported path.
+- Validate FK, start consistency, locked-angle constancy, and collision freedom.
+
+CLI options recorded:
+- --failed-joint 1|2|3 (required)
+- --q <three angles in radians>, or --path iris_path.json --waypoint-index 0
+- --gx and --gy together to override the workspace goal
+- --iris-regions and --output (default post_failure_path.json)
+
+Structured failure statuses include:
+  start_in_collision, unreachable, all_goals_in_collision,
+  no_path_in_iris_coverage, unsupported_degenerate_ik, solver_failed,
+  path_validation_failed, invalid_input.
+No silent task changes, region generation, constraint relaxation, or retry loop.
+
+Recorded examples:
+- post_failure_joint1.json and post_failure_joint2.json: unreachable from the
+  saved pre-failure start for those locks; zero GCS solves.
+- post_failure_path.json: joint 3 locked at that start; a collision-free IK goal
+  exists, but no connected path in the saved IRIS slice; zero GCS solves.
+- post_failure_success.json: constructed near-goal example, not an actual saved
+  pre-failure path waypoint. Start angles:
+  [-0.3182651673106314, 1.8792519611450273, -0.4722077464279502].
+  Joint 3 locks; goal is (1.5, 1.5). Recorded length 0.05, 2 regions, 1 GCS
+  solve, runtime about 0.4 seconds, FK error about 7.86e-15.
+- Last recorded test run after removing artificial limits: all 24 tests passed,
+  including preservation of winding offsets and the exact locked angle.
+
+6. THEORY DISCUSSION: ENDPOINTS ON CONTINUOUS SSMS
+
+Original question:
+Both task positions have infinitely many redundant configurations. Which start
+and goal configurations should GCS choose to minimize the motion cost?
+
+Agreed distinctions:
+- GCS does not require a single fixed goal configuration. A convex target set,
+  or multiple point/convex targets connected to a common sink, can be modeled.
+- A nonlinear SSM is generally nonconvex and cannot simply be treated as one
+  ordinary convex GCS vertex without relaxation or approximation.
+- With no obstacles and pure joint-space Euclidean length, free endpoint
+  selection means minimizing distance between the two SSMs. A known start
+  configuration reduces this to distance from that point to the goal SSM.
+- With obstacles, endpoint and route selection are coupled. With nonconstant
+  reliability weights, Euclidean-nearest endpoints need not minimize cost.
+- Nearest-point projection onto a nonconvex SSM need not be unique.
+- Solving to an SSM bounding box/convex hull, then projecting the endpoint onto
+  the SSM, gives a candidate; it is not generally an exact optimal solution.
+
+Concrete counterexample used in the conversation:
+This is a planar geometric illustration, not a claim that an actual 3R SSM has
+this exact shape. All space is obstacle-free and all cost weights equal 1.
+  Goal curve S: x^2 + y^2 = 1.
+  Convex target C: [-1,1]^2, exactly the curve's bounding box.
+  Known start q0: (2, 0.5).
+The shortest path to C ends at p=(1,0.5), length 1.
+The nearest curve point to p is
+  q_proj=(2/sqrt(5), 1/sqrt(5)) approximately (0.8944,0.4472).
+The true nearest curve point to q0 is
+  q_star=(4/sqrt(17), 1/sqrt(17)) approximately (0.9701,0.2425).
+Costs:
+  q0 -> p -> q_proj: about 1.1180.
+  q0 -> q_proj directly: about 1.1068.
+  q0 -> q_star directly: about 1.0616.
+Thus even replanning directly to the projected configuration does not make that
+configuration optimal. Nearest to p is different from nearest to q0.
+
+7. CENTERS, EROSION, DILATION, AND POSSIBLE NOVELTY
+
+The user proposed collapsing SSM shapes to physical/geometric centers, connecting
+nearby centers, then recovering endpoints by outward growth.
+
+Conclusions and conditions:
+- A general curve's closest pair is not determined by its geometric centers.
+- At smooth regular interior minimizers, the connecting segment must be normal
+  to both curve tangents. A center line need not satisfy this condition.
+- Ordinary erosion followed by dilation is a morphological opening, not in
+  general an inverse operation that exactly restores the original shape.
+- Isotropic equal-distance growth from a point yields a disk/ball, not an
+  arbitrary ellipse. An arbitrary shape needs additional information.
+- A medial-axis transform retains centers AND their radius function; it is
+  related to exact reconstruction by unions of maximal balls.
+- If two disjoint sets really are fixed-radius offsets of center sets,
+    A = C_A (+) B_rA, B = C_B (+) B_rB,
+  then under ordinary Euclidean distance:
+    dist(A,B) = dist(C_A,C_B) - rA - rB.
+  In that special setting, closest centers recover facing closest boundary
+  points. Variable radii require comparing center distance minus BOTH radii;
+  nearest centers alone are insufficient. Direction-dependent growth requires
+  additional geometry as well.
+- Obstacles generally destroy this simple straight-line construction. If the
+  obstacle-free global shortest segment is itself collision-free, it remains
+  optimal for pure length. This does not settle weighted-cost optimality.
+- No novelty claim was established. The basic geometry and center/radius shape
+  representation have substantial prior work. A useful SSM representation,
+  error guarantee, or planning speedup might constitute a contribution, but
+  requires a more systematic literature review and evidence.
+- A generic planar-3R position SSM is a 1D curve in 3D joint space; classical
+  interior medial-axis constructions for filled objects do not transfer to it
+  automatically.
+
+References found during the discussion (not an exhaustive novelty search):
+- Harry Blum, 1967, A Transformation for Extracting New Descriptors of Shape:
+  https://pageperso.lis-lab.fr/~edouard.thiel/rech/1967-blum.pdf
+- Amenta, Choi, Kolluri, 2001, The Power Crust, Unions of Balls, and the Medial
+  Axis Transform:
+  https://escholarship.org/uc/item/41r921h1
+- Topological and spatial analysis of self-motion manifolds for global
+  redundancy resolution in kinematically redundant robots, 2025:
+  https://doi.org/10.1016/j.mechmachtheory.2025.106020
+- An Integrated Approach to Inverse Kinematics and Path Planning for Redundant
+  Manipulators:
+  https://publications.ri.cmu.edu/an-integrated-approach-to-inverse-kinematics-and-path-planning-for-redundant-manipulators
+- Morphological erosion/dilation/opening:
+  https://www.mathworks.com/help/images/morphological-dilation-and-erosion.html
+
+8. LATEST IDEA: TWO-STAGE GCS WITH ADAPTIVE LOCAL SSM ENVELOPES
+
+This is the latest proposed direction. IT HAS NOT BEEN IMPLEMENTED.
+For this discussion the starting configuration q0 is assumed known/fixed.
+
+Confirmed user intent (clarified after the first version of this file):
+Projection selects an estimated best goal CONFIGURATION. It does not append a
+segment to the first GCS path. A SECOND, full GCS solve produces the final path
+between the fixed original start and the selected true SSM configuration.
+
+User's intended construction:
+1. Sample configurations on the goal SSM, for example 300 points.
+2. Choose one global geometric tolerance epsilon. Adaptively split each
+   continuous SSM branch into local ordered groups using this tolerance.
+3. Build small convex envelopes of those local pieces. The same samples can
+   produce different numbers of envelopes for different epsilon values.
+4. Intersect these envelopes with existing convex collision-free IRIS regions.
+5. Use the nonempty intersections as GCS candidate target sets.
+6. FIRST GCS SOLVE: from known q0, jointly select a route and a terminal
+   configuration p in the union of candidate target sets.
+7. GOAL CONFIGURATION ESTIMATION: project p onto the corresponding local true
+   SSM branch to obtain q_hat, an estimated best feasible goal configuration.
+8. SECOND GCS SOLVE: fix q0 and q_hat, and replan the ENTIRE route through the
+   free-region graph. Region sequence and intermediate configurations can
+   change; do not freeze the first route or merely append a projection segment.
+9. Validate and return the second solve's path and its actual cost.
+
+Role of epsilon and the computational tradeoff:
+- The user initially proposed a threshold based on convex-hull boundary distance
+  to the nearest SSM sample. Operationally this must specify how distances over
+  the boundary are aggregated, e.g. a maximum, not just a single minimum.
+- This is a geometric resolution parameter chosen before planning, not an error
+  measured against an already known globally optimal path.
+- Smaller epsilon is intended to create more, tighter local envelopes, improving
+  goal configuration estimation while usually enlarging the FIRST GCS problem
+  and increasing its runtime. The final problem still has one fixed goal q_hat.
+- The user does NOT intend repeated GCS solves over an epsilon sweep until a
+  minimum cost is discovered. Geometric subdivision happens before the first
+  solve; the basic pipeline has TWO GCS solve stages.
+- Geometric grouping/hull calculations have their own cost but do not require
+  solving a GCS problem for every proposed split or every local hull.
+- Finer envelopes are expected to reduce approximation error overall; strict
+  monotonic decrease of final path cost for every epsilon change is not proved.
+- Fixed sampling density places a limit on continuous-SSM accuracy. Smaller
+  epsilon does not replace missing curve information.
+- Boundary-only distance does NOT bound distances of all interior target points
+  to the SSM. A densely sampled unit circle has a polygonal hull whose boundary
+  approaches the samples, while its center remains distance 1 from the circle.
+  GCS can select an interior point. This is a known limitation of the proposed
+  boundary metric, not an agreed requirement to implement a complex certificate.
+- A rigorous bound would control sup_{p in T_i} dist(p,S_i), with appropriate
+  safe local SSM portions S_i and continuous coverage assumptions. Such proof is
+  optional future work, not a prerequisite for testing the heuristic pipeline.
+
+Convex hull facts discussed:
+- One call with 300 points produces ONE hull of all 300 points, not 300 hulls.
+- The hull conv{q_i} consists of all convex combinations of the supplied points.
+  It is the unique smallest convex set containing those points in the chosen
+  Euclidean angular chart.
+- Multiple hulls require partitioning/grouping first, possibly with overlapping
+  sliding windows. Group by continuous branch order, not arbitrary point order.
+- A smaller point count per group alone does not prove a tighter approximation;
+  spatial span, curvature, sampling density, and branch separation matter.
+- A single convex envelope of an entire nonconvex SSM cannot shrink past its
+  convex hull. Multiple local envelopes avoid some of that geometric looseness.
+- Hulls of sampled curve points need not enclose the curve between samples.
+  A chord does not enclose its circular arc. Simply sampling densely does not
+  by itself give a rigorous outer-coverage guarantee.
+- To claim coverage of a continuous SSM, construct certified local outer
+  envelopes, or expand hulls using a justified interpolation/sampling error bound.
+- An unexpanded sample hull can be lower dimensional. Adding artificial
+  thickness changes the target set and must be accounted for in error claims.
+
+Intersection construction:
+  T_ij = C_i intersect R_j,
+where C_i is a local convex outer envelope and R_j an existing convex certified
+collision-free region. Each nonempty T_ij is convex and inherits R_j's collision
+freedom, subject to the validity of that region's collision model/certification.
+- Intersecting cannot create coverage that the original IRIS collection lacked.
+- It can remove colliding SSM portions, which are not valid physical goals.
+- SSM samples being collision-free does not certify their entire convex hull.
+  A hull of points all in the SAME certified convex free region is contained
+  in that region and therefore safe under the same collision model.
+- Collision freedom does not automatically establish reliability 1.
+
+GCS integration:
+- Multiple target sets may be placed in a single graph and connected to a common
+  zero-cost terminal sink; one need not invoke GCS once per local envelope.
+- More targets can increase vertices, edges, solver variables, and runtime even
+  when the top-level solve is invoked once.
+- Graph construction must preserve the intended routes and not introduce
+  uncharged teleportation or shortcut costs through target/sink modeling.
+- Drake VPolytope represents the convex hull of points given as COLUMNS.
+  Conceptually, for configurations of shape (N,3):
+    target_set = VPolytope(configurations.T)
+    target_vertex = gcs.AddVertex(target_set, "target_ssm_hull")
+- HPolyhedron/halfspace representations may better match the existing region
+  workflow, but this design choice has not been implemented or benchmarked.
+- Official API references:
+  https://drake.mit.edu/doxygen_cxx/classdrake_1_1geometry_1_1optimization_1_1_v_polytope.html
+  https://drake.mit.edu/doxygen_cxx/classdrake_1_1geometry_1_1optimization_1_1_graph_of_convex_sets.html
+
+Projection for goal selection and final replanning:
+- Project to the actual continuous SSM, not just to the nearest sampled point,
+  if the claimed endpoint is intended to solve the continuous task.
+- Select a collision-free q_hat on the corresponding branch. At a regular smooth
+  unconstrained closest point, p-q_hat is perpendicular to the SSM tangent.
+  Constrained branch/region endpoints can instead satisfy boundary conditions;
+  perpendicularity alone is not a sufficient test of a global closest point.
+- A convenient restriction is that p and q_hat belong to the same convex free
+  region R_j. This also supplies a safe hypothetical connector if needed for a
+  feasibility or error argument; it is NOT the returned motion.
+- Such a q_hat need not be the globally nearest SSM point. Projection may need to be
+  restricted to the appropriate branch/free-region intersection.
+- Re-run full GCS with the original start q0 and fixed q_hat. The final motion
+  may use a completely different route from the first-stage solution.
+- This removes the specific route penalty caused by directly stitching on a
+  projection segment. It does not prove q_hat is the best goal on the entire SSM.
+- Remaining limitations include approximate goal selection, finite region/chart
+  coverage, path representation, and GCS relaxation/rounding gaps.
+- Validate the final endpoint's FK and the complete path using the original
+  robot geometry. A point inside the hull is not automatically a goal IK state.
+
+9. OPTIONAL ERROR CERTIFICATES AND RELATED WORK
+
+The user wants a practical epsilon-controlled approximation, not an expensive
+search for an unknown optimal path. No prior knowledge of the true optimum is
+required to run the two-stage algorithm. A strict certificate is optional.
+
+For compatible costs and route models:
+  L = exact optimal cost to the union of outer target envelopes.
+  U = cost of the SECOND-stage feasible path ending at true SSM point q_hat.
+  J_star = optimal cost to the true goal SSM in the stated planning model.
+
+If every relevant true goal is covered by the outer target sets AND the relaxed
+route model contains all corresponding admissible original routes, then:
+  L <= J_star <= U.
+Thus U-L bounds suboptimality of that feasible complete path.
+
+For a theoretical comparison only, suppose an exact first-stage optimum ends
+at p and a safe connector to q_hat has length at most delta. If the second-stage
+route model can represent the first route plus that connector, and the second
+stage is solved optimally, it can do no worse than this hypothetical stitched
+route. For unit connector weight:
+  U <= L + delta, and U - J_star <= delta.
+For connector weight bounded above by w_max, use w_max*delta instead.
+The algorithm need not actually construct or return the stitched route.
+
+Important qualifications:
+- Geometric distance to the SSM alone does not guarantee a safe connector.
+  A same-free-region connector bound is stronger than a distance-only bound.
+- Sample hulls that miss continuous SSM points do not justify the claimed lower
+  bound for the full continuous target problem.
+- If GCS uses relaxation and rounding, a rounded feasible route cost is NOT
+  automatically L. Use a valid certified relaxation/solver lower bound, and
+  report the gap to the complete feasible U. A solver/rounding gap adds to the
+  envelope approximation error.
+- Bounds are relative to the represented route model unless full free-space
+  coverage and path representation have also been established.
+- A fixed endpoint path ending exactly on the SSM can certify optimality only
+  when its cost matches a valid lower bound for the same problem.
+- Full pre-failure reliability-weighted costs need their actual weighting and
+  connector costs included; do not transfer unit-weight length claims blindly.
+- A small certified gap can be reported using available valid lower bounds;
+  this does not require an epsilon sweep or knowledge of J_star. A loose gap is
+  not itself evidence that the returned path is poor.
+
+Novelty discussion after the first handoff version:
+- GCS with convex goal sets and continuous endpoint choice is existing work:
+  Shortest Paths in Graphs of Convex Sets:
+  https://groups.csail.mit.edu/robotics-center/public_papers/Marcucci21.pdf
+- A particularly relevant baseline is David von Wrangel and Russ Tedrake,
+  Using Graphs of Convex Sets to Guide Nonconvex Trajectory Optimization (2024).
+  It uses convex surrogates and nonlinear optimization, explicitly discusses
+  task-space endpoint constraints, and jointly considers motion planning/IK:
+  https://groups.csail.mit.edu/robotics-center/public_papers/Wrangel24.pdf
+- Threshold-controlled approximate convex decomposition also predates this
+  proposal. CoACD (2022) controls detail versus convex-component count with a
+  distance-related threshold and considers both boundary and interior error.
+  Its setting is 3D object geometry rather than goal SSM endpoint selection:
+  https://arxiv.org/abs/2205.02961
+  https://colin97.github.io/CoACD/
+- Therefore a global epsilon parameter alone is not established novelty.
+  Potential contribution: an effective adaptive SSM target representation plus
+  two-stage goal selection/replanning, supported by runtime/quality comparisons
+  and, if desired, approximation or convergence results.
+- No exhaustive search established either that this exact two-stage combination
+  already exists or that it is new. Do not claim a first-of-its-kind result.
+
+10. NEXT WORK, ONLY WHEN THE USER REQUESTS IMPLEMENTATION
+
+Potential implementation sequence (not yet authorized by the latest request):
+- Fix the start configuration and reuse the current IRIS cache; do not regenerate
+  a grid or change robot parameters without reason.
+- Inspect current SSM branch sampling/parameterization and angular unwrapping.
+- Define epsilon-driven local grouping, envelope construction, and assumptions.
+- Intersect with free regions and, where relevant, reliability partitions.
+- Build multiple target vertices in one GCS graph and perform the first solve.
+- Project its endpoint to the corresponding feasible true SSM portion to select
+  q_hat, then perform the second full GCS solve with fixed q0 and q_hat.
+- Report the final FK error, collision checks, runtime of each stage, target set
+  count, final path cost, and relevant coverage/solver limits. Lower bounds and
+  gaps may be added if available and valid; rigorous certification is optional.
+- Compare against the current sampled-endpoint workflow on the same scene.
+- Do not add an online repeated epsilon/GCS search unless the user requests it.
+
+CURRENT HANDOFF STATUS
+- The confirmed idea is epsilon-controlled local convex target approximation,
+  first-stage GCS target selection, projection ONLY for goal estimation, and a
+  second full GCS solve between fixed start and estimated goal configurations.
+- It is a proposed approximate method, not a proved global endpoint optimum.
+- No new SSM-envelope planner has been coded during this theory discussion.
+- No fresh experiments were run for this handoff file.
+- The initial handoff creation started from a clean git status. Later updates
+  revise this file; they make no changes to planner code and run no experiments.
+- Documentation-only work; no commit or push was performed.
