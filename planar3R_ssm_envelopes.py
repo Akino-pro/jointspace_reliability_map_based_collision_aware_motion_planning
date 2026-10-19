@@ -1,0 +1,137 @@
+"""Adaptive, chart-local sampled SSM hulls and continuous IK projection.
+
+No Drake dependency. Sample hulls are not certified continuous outer envelopes.
+"""
+
+from dataclasses import dataclass
+
+import numpy as np
+from scipy.optimize import linprog, minimize
+from scipy.spatial import ConvexHull
+
+from planar3R_collision import is_collision_free, link_points
+from planar3R_iris_regions import ReliablePolytope
+
+
+@dataclass
+class LocalEnvelope:
+    samples: np.ndarray
+    polytope: ReliablePolytope
+    branch: int
+    piece: int
+    polyline_distance_bound: float
+
+
+def sample_hull(points):
+    """Exact affine hull halfspaces, including points and lower-dimensional hulls."""
+    points = np.unique(np.asarray(points, dtype=float), axis=0)
+    origin = points[0]
+    _, singular, basis = np.linalg.svd(points - origin, full_matrices=True)
+    rank = int(np.sum(singular > 1e-10))
+    axes = basis[:rank]
+    normal = basis[rank:]
+    A = [*normal, *(-normal)]
+    b = [*(normal @ origin), *(-normal @ origin)]
+    if rank == 1:
+        coordinates = (points - origin) @ axes.T
+        A.extend([axes[0], -axes[0]])
+        b.extend([coordinates.max() + axes[0] @ origin,
+                  -coordinates.min() - axes[0] @ origin])
+    elif rank >= 2:
+        hull = ConvexHull((points - origin) @ axes.T)
+        world = hull.equations[:, :-1] @ axes
+        A.extend(world)
+        b.extend(world @ origin - hull.equations[:, -1])
+    return ReliablePolytope(np.asarray(A).reshape(-1, 3), np.asarray(b))
+
+
+def chord_bound(points):
+    """Bound hull-to-sampled-polyline distance by twice the chord deviation.
+
+    Every hull point is within d of the chord. Continuity of the polyline's
+    axial projection supplies a polyline point within d of each chord point.
+    This says nothing about the unknown continuous curve between samples.
+    """
+    delta = points[-1] - points[0]
+    squared = delta @ delta
+    t = np.zeros(len(points)) if squared < 1e-24 else np.clip(
+        (points - points[0]) @ delta / squared, 0, 1)
+    return float(2 * np.max(np.linalg.norm(points - points[0] - t[:, None] * delta, axis=1)))
+
+
+def build_envelopes(branches, epsilon=0.05, samples_per_branch=300):
+    if not np.isfinite(epsilon) or epsilon <= 0 or samples_per_branch < 2:
+        raise ValueError("Use positive finite geometric epsilon and at least two samples per branch")
+    envelopes = []
+
+    def divide(points, branch, piece):
+        bound = chord_bound(points)
+        if bound <= epsilon or len(points) <= 2:
+            envelopes.append(LocalEnvelope(points, sample_hull(points), branch, piece, bound))
+        else:
+            middle = len(points) // 2
+            divide(points[:middle + 1], branch, piece)
+            divide(points[middle:], branch, piece)
+
+    for branch_index, branch in enumerate(branches):
+        branch = np.asarray(branch, dtype=float)
+        if branch.ndim != 2 or branch.shape[1] != 3 or not np.all(np.isfinite(branch)):
+            raise ValueError("SSM branches must contain finite ordered 3D configurations")
+        if not len(branch):
+            continue
+        # Split BEFORE subsampling; a hull must never bridge a periodic seam.
+        cuts = np.flatnonzero(np.any(np.abs(np.diff(branch, axis=0)) > np.pi, axis=1)) + 1
+        for piece_index, piece in enumerate(np.split(branch, cuts)):
+            count = max(2, int(np.ceil(samples_per_branch * len(piece) / len(branch))))
+            indices = np.unique(np.linspace(0, len(piece) - 1, min(len(piece), count), dtype=int))
+            divide(piece[indices], branch_index, piece_index)
+    return envelopes
+
+
+def intersect_envelopes(envelopes, regions):
+    """Retain feasible intersections, including zero-volume curve/point hulls."""
+    targets = []
+    for envelope_index, envelope in enumerate(envelopes):
+        for region_index, region in enumerate(regions):
+            A = np.vstack((envelope.polytope.A, region.A))
+            b = np.concatenate((envelope.polytope.b, region.b))
+            feasible = linprog(np.zeros(3), A_ub=A, b_ub=b,
+                               bounds=[(None, None)] * 3, method="highs")
+            if feasible.success:
+                targets.append({"polytope": ReliablePolytope(A, b),
+                                "envelope": envelope_index, "region": region_index})
+    return targets
+
+
+def project_to_local_ssm(point, envelope, region, goal, obstacles, link_radius):
+    """Multistart constrained local projection onto continuous FK equality.
+
+    The sample coordinate box restricts the selected local portion; it can omit
+    unsampled extrema. This is local numerical projection, not a global proof.
+    """
+    point = np.asarray(point)
+    samples = envelope.samples
+    lower, upper = samples.min(axis=0), samples.max(axis=0)
+    constraints = [
+        {"type": "eq", "fun": lambda q: link_points(q)[-1] - goal},
+        {"type": "ineq", "fun": lambda q: region.b - region.A @ q},
+    ]
+    candidates = []
+    # Include exact sampled endpoints and use nearby samples as local seeds.
+    order = np.argsort(np.linalg.norm(samples - point, axis=1))
+    for q in samples:
+        if (region.contains(q) and np.linalg.norm(link_points(q)[-1] - goal) <= 1e-7
+                and is_collision_free(q, obstacles, link_radius=link_radius)):
+            candidates.append(q)
+    for index in order[:8]:
+        result = minimize(lambda q: np.sum((q - point)**2), samples[index],
+                          method="SLSQP", bounds=list(zip(lower, upper)),
+                          constraints=constraints, options={"ftol": 1e-12, "maxiter": 200})
+        q = result.x
+        if (result.success and np.all(np.isfinite(q)) and region.contains(q)
+                and np.linalg.norm(link_points(q)[-1] - goal) <= 1e-7
+                and is_collision_free(q, obstacles, link_radius=link_radius)):
+            candidates.append(q)
+    if not candidates:
+        return None
+    return min(candidates, key=lambda q: np.linalg.norm(q - point)).copy()

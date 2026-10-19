@@ -1,9 +1,13 @@
 # IRIS + reliability + GCS
 
-The sole pre-failure planning workflow is: generate collision-free IRIS polytopes,
+The original pre-failure planning workflow is: generate collision-free IRIS polytopes,
 intersect them with SSM bounding-box reliability partitions, filter by
 connectivity, solve with Drake GCS, and independently validate the path.
 Grid region generation and the fallback shortest-path planner have been removed.
+
+The additional fixed-start two-stage planner reuses these IRIS regions and cost
+partitions with adaptive SSM target hulls. See
+[TWO_STAGE_SSM_WORKFLOW.md](TWO_STAGE_SSM_WORKFLOW.md).
 
 ## Verified state
 

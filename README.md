@@ -32,6 +32,14 @@ Other reliability-map and animation scripts remain available for independent
 research and historical visualization. Grid-based planning and the fallback
 planner have been removed.
 
+An additional fixed-start workflow implements adaptive local SSM hulls, one GCS
+target-selection solve, continuous IK projection, and a second full GCS solve to
+the selected fixed goal. See [TWO_STAGE_SSM_WORKFLOW.md](TWO_STAGE_SSM_WORKFLOW.md)
+for geometric epsilon, assumptions, validation, and comparison options. Run
+`planar3R_two_stage_gcs_planner.py --geometric-epsilon 0.05 --ssm-samples 300`
+in the Drake container; its default fixed start is waypoint 0 of `iris_path.json`
+and its output is `two_stage_path.json`.
+
 Single-joint locked-failure replanning uses 2D slices of the original IRIS regions
 and a pure joint-space path-length objective. It stops and reports immediately
 if the goal is unreachable, all goal configurations collide, or the current

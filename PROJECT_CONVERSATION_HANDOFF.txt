@@ -3,6 +3,16 @@ Updated: 2026-10-18
 Language: English, following the user's instruction that project documentation be in English.
 
 PURPOSE AND SCOPE
+IMPLEMENTATION UPDATE (2026-10-18): The subsequent user request authorized
+implementation. The two-stage prototype is now in
+planar3R_two_stage_gcs_planner.py and planar3R_ssm_envelopes.py. See
+TWO_STAGE_SSM_WORKFLOW.md for the implemented epsilon metric, projection
+assumptions, CLI, tests, and runtime limitations. Historical statements below
+that implementation was not authorized or had not started refer to the earlier
+theory/documentation conversation. Windows preprocessing was exercised, but
+real GCS experiments remain pending because this machine has no robotics Drake
+or Docker executable. No commit or push was performed.
+
 This file summarizes the available conversation about this project so that work can
 continue on another device or in another conversation. It is a technical summary,
 not a verbatim transcript. Historical implementation and benchmark details below
