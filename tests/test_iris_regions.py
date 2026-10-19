@@ -110,6 +110,8 @@ class DrakeIntegrationTests(unittest.TestCase):
         np.testing.assert_allclose(waypoints[:, 0], [0, 0, 0], atol=1e-6)
         np.testing.assert_allclose(waypoints[:, -1], [2, 0, 0], atol=1e-6)
         self.assertAlmostEqual(result["rounded_cost"], 2.0, places=5)
+        self.assertAlmostEqual(result["relaxation_cost"], 2.0, places=5)
+        self.assertEqual(result["rounded_path_count"], 1)
 
     def test_plant_has_three_positions_and_fixed_base(self):
         from planar3R_drake_iris import build_drake_plant

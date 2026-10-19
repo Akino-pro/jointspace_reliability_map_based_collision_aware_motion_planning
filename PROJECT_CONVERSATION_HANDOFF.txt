@@ -1,17 +1,157 @@
 PROJECT AND CONVERSATION HANDOFF
-Updated: 2026-10-18
+Updated: 2026-10-19
 Language: English, following the user's instruction that project documentation be in English.
 
 PURPOSE AND SCOPE
-IMPLEMENTATION UPDATE (2026-10-18): The subsequent user request authorized
-implementation. The two-stage prototype is now in
-planar3R_two_stage_gcs_planner.py and planar3R_ssm_envelopes.py. See
-TWO_STAGE_SSM_WORKFLOW.md for the implemented epsilon metric, projection
-assumptions, CLI, tests, and runtime limitations. Historical statements below
-that implementation was not authorized or had not started refer to the earlier
-theory/documentation conversation. Windows preprocessing was exercised, but
-real GCS experiments remain pending because this machine has no robotics Drake
-or Docker executable. No commit or push was performed.
+CURRENT IMPLEMENTATION UPDATE (2026-10-19): Implementation and real Docker/Drake
+GCS experiments have been completed. The active two-stage planner is in
+planar3R_two_stage_gcs_planner.py and planar3R_ssm_envelopes.py. Both stages now
+default to max_rounded_paths=200 and max_rounding_trials=300. The latest full
+benchmark is two_stage_all_paths200_trials300.json. Read the current summary
+below before the historical theory discussion; it supersedes older statements
+about pending implementation, missing Docker, and combined first-stage targets.
+See TWO_STAGE_SSM_WORKFLOW.md for implementation details. No commit or push.
+
+LATEST CONFIRMED WORKFLOW AND PARAMETERS
+- CURRENT USER-SELECTED CONFIGURATION: retain geometric epsilon=0.025,
+  300 SSM samples, and BOTH stages max_paths=200 / max_trials=300.
+  plan_two_stage and its CLI now default to geometric epsilon 0.025.
+  Keep the extra stage-one route as a stage-two fallback. The full benchmark
+  for this selected configuration is two_stage_all_paths200_trials300.json.
+  The epsilon 0.0125 run remains a comparison experiment, not the selected
+  default. No new experiment was run for this configuration update.
+- LATEST FULL RUN supersedes the geometry-only status below: epsilon 0.0125,
+  300 SSM samples, both stages explicitly 100 paths / 150 trials, seed 0,
+  Clarabel. File two_stage_epsilon00125_paths100_trials150.json. All 28 stage-one
+  targets and stage two produced 100 unique routes each. Target index 22 won,
+  stage-one cost 0.3818634313717322. Goal configuration changed to
+  [0.3757867697535929,-0.15490638851605437,1.7679057112502206]. Projection
+  distance 0.0008716871409386708. Extra route [1,3,11] gave final cost
+  0.3818714856801985 versus native 0.5215069012896434. Stage-two graph gap
+  6.4705%, still above 1%. Collision validation passed 619 samples; FK error
+  1.88e-13. Stage one 832.20 s, stage two 30.92 s, total 866.82 s (14m26.82s).
+  Relative to epsilon 0.025 with both-stage 200/300, cost rose 0.0403% and
+  runtime rose 250.29 s (40.60%). Both epsilon and candidate budgets changed;
+  do not attribute the difference to epsilon alone or claim monotonic quality.
+  Code defaults were not changed by this experiment: both stages 200/300,
+  CLI geometric epsilon 0.05. The earlier full solved benchmark remains
+  available in two_stage_all_paths200_trials300.json. No commit or push.
+- Subsequent geometry-only experiment: geometric epsilon was halved from
+  0.025 to 0.0125, retaining 300 SSM samples. Local hulls increased 40 -> 55
+  (+37.5%), effective target intersections 20 -> 28 (+40%). The original 6
+  IRIS regions and 43 reliability-partitioned regions remain unchanged.
+  Output: two_stage_geometry_epsilon_00125.json; preprocessing 3.72 s,
+  ZERO GCS planning calls. Neither stage was run at the user's request.
+  The planner now supports --geometry-only for this count-only workflow.
+  At that point only counts were requested; the subsequent full solve above
+  now supplies path costs for epsilon 0.0125.
+- Robot: planar 3R, link lengths [1,1,1], no artificial joint limits. The finite
+  IRIS chart [-pi,pi]^3 and missing periodic boundary connections still limit
+  represented coverage; they are not physical limits.
+- Task: fixed start configuration from iris_path.json waypoint 0, workspace
+  start (0.5,0.5), goal (1.5,1.5). Joint reliabilities [0.7,0.5,0.3].
+- Obstacle: circle center (0.75,0.75), radius 0.15; link radius 0.02.
+- Cached IRIS regions: 6 before reliability partitioning, 43 afterward.
+  Count ratio before:after = 6:43; expansion factor approximately 7.17.
+  The planning graph contains 824 directed connections between these regions.
+- Current experiment uses 300 SSM samples and geometric epsilon=0.025.
+  This is now also the planner and CLI default. The separate
+  reliability_epsilon is 0.01.
+  Region cost weight is reliability_epsilon + 1 - R.
+- The 300 samples yield 40 local hulls and 20 effective target intersections.
+  Stage one independently solves fixed-start-to-target-set GCS for EACH of
+  the 20 intersections. It does NOT combine them in one shared-sink solve.
+- Choose the lowest returned stage-one cost; project that endpoint onto its
+  corresponding feasible continuous SSM portion to estimate a goal configuration.
+  Stage two runs full GCS between the fixed start and this fixed goal.
+- Keep the selected stage-one region sequence as an EXTRA stage-two candidate:
+  solve its convex restriction again for the fixed goal, optimizing all
+  intermediate configurations, and compare it with native rounded candidates.
+  This is not direct segment stitching and does not constrain the full search
+  to the stage-one route. Preserve this fallback at the user's explicit request.
+- Projection-connection cost is retained only as a comparison baseline.
+- Current default budgets in plan_two_stage and its CLI are 200 paths / 300
+  trials for BOTH stages. Generic solve_target_sets retains its own defaults;
+  the planner supplies the per-stage budgets explicitly.
+- max_paths caps distinct sampled region routes; max_trials caps sampling
+  attempts, including duplicates. No fixed 10:1 ratio is required. These are
+  relaxation-rounding parameters, not mixed-integer solver parameters.
+- Distinct region sequences are discrete route candidates; each then receives
+  continuous convex optimization. They are not distinct samples of SSM points.
+  The total simple-route count in this graph has not been computed. Arbitrary
+  continuous robot trajectories are infinite in number.
+
+LATEST COMPLETE BENCHMARK: BOTH STAGES 200/300
+- File: two_stage_all_paths200_trials300.json. Clarabel, seed 0, same scene,
+  cached geometry, 300 SSM samples, geometric epsilon 0.025.
+- 20 independent stage-one solves plus one full stage-two solve; additionally
+  one stage-two convex restriction for the retained stage-one route.
+- All 20 first-stage targets succeeded, each with 200 unique rounded routes.
+  Compared with the prior full 100/100 run, 13 target costs improved by more
+  than 1e-8, but the winning target remained index 19 (the 20th intersection).
+- Stage-one winning cost: 0.38165104742918676.
+  Selected region sequence: [1,3,28].
+  Estimated goal: [0.6087380070193158, -0.6279264205318301, 1.915910797633629].
+  Winning intersection and projected goal are unchanged from the 100/100 run.
+- Final cost: 0.3817177110865746. Native rounding and the extra stage-one
+  route both give this cost. Stage-two lower bound: 0.3585083602263087.
+  Stage-two gap: 6.473866005695084%, exceeding the requested 1% tolerance.
+- Stage one: 586.1031 s; stage two: 26.8937 s; total including preprocessing:
+  616.5266 s (10 min 16.53 s). The prior full 100/100 run took 589.6692 s;
+  increase 26.8573 s, about 4.55%. These are single-run measurements.
+- Final path passes 618 collision samples. End-effector error 1.76e-13,
+  fixed-goal configuration error 1.04e-13. All 22 two-stage tests passed.
+
+SECOND-STAGE-ONLY BUDGET COMPARISONS
+All replays below reuse the first stage from two_stage_all_paths100_trials100.json,
+with identical fixed endpoints, seed 0, Clarabel, and extra stage-one route.
+Budgets     Unique routes    Stage-two seconds    Final cost
+100/100     99               26.44                0.3817177111
+150/200     150              27.66                0.3817177111
+200/300     200              27.46                0.3817177111
+1000/1100   1000             29.66                0.3817177111
+- Native-only best cost at 100/100 was 0.3991851967; the extra route reduced
+  it to the final cost above. At 150/200 and 200/300 native rounding also
+  found the same cost. At 1000/1100 native cost was 0.381717711086879,
+  just about 3e-13 above the extra-route cost: a numerical difference only.
+- Duplicate routes discarded: 5 at 150/200, 6 at 200/300, 49 at 1000/1100.
+  All reported distinct candidates in these replays solved successfully.
+- Files: stage2_paths150_trials200.json, stage2_paths200_trials300.json,
+  stage2_paths1000_trials1100.json. Replay utility planar3R_diagnose_stage2.py
+  supports --input, --stage2-only, --max-rounded-paths, --max-rounding-trials.
+- There was NO full two-stage 150/200 benchmark. Its 27.66 s is only stage two.
+- Increasing to 1000 did not improve final cost in this example; compared with
+  100/100 it added 3.22 s (12.2%). Do not generalize this to all environments.
+
+SOLVER BOUNDS, GAP, AND MIXED-INTEGER STATUS
+- Current reported graph gap = (U-L)/L, for positive L. U is the best validated
+  feasible route cost; L is the convex-relaxation lower bound for the SAME graph
+  problem. For stage two: (0.3817177111-0.3585083602)/0.3585083602 = 6.4739%.
+- This is a bound gap, not a measured error relative to a known optimum.
+  The true optimum can equal U if the relaxation is loose. It is not a
+  certificate for global goal-SSM selection, continuous coverage, or all paths
+  outside the represented region graph. Current 1% requirement is not met.
+- Stage-one aggregate gap uses minimum lower bound across all target solves
+  and the minimum feasible returned cost; no certified target ranking is claimed.
+- MOSEK mixed-integer mode does NOT use max_paths/max_trials. Its earlier
+  experiment used a 60 s limit and 1% requested MIP gap. It returned a feasible
+  cost about 0.8346454952 for an OLDER fixed goal, without proving optimality.
+  Do not compare it as though its fixed goal were the latest benchmark goal.
+- The user supplied mosek.lic at project root. It is ignored by Git; never
+  expose its contents or commit it. Container license path /tmp/mosek.lic is
+  enabled only when explicitly passed via MOSEKLM_LICENSE_FILE. The rounding
+  comparisons above omit that environment variable and use Clarabel.
+- Solver-native MIP gap conventions may differ from this project's (U-L)/L.
+
+REPRODUCE THE LATEST FULL RUN
+  docker start planar3r-iris-validation
+  docker exec -w /workspace planar3r-iris-validation /usr/bin/python3 -u planar3R_two_stage_gcs_planner.py --start-path iris_path.json --geometric-epsilon 0.025 --ssm-samples 300 --max-rounded-paths 200 --max-rounding-trials 300 --stage2-max-rounded-paths 200 --stage2-max-rounding-trials 300 --output two_stage_all_paths200_trials300.json
+  docker stop planar3r-iris-validation
+Use a new output filename to preserve prior results when performing a new run.
+The container was stopped after the latest run. No new run was made for this
+documentation-only update. Continue only with the user's next requested task.
+
+HISTORICAL CONTEXT FOLLOWS
 
 This file summarizes the available conversation about this project so that work can
 continue on another device or in another conversation. It is a technical summary,
@@ -320,6 +460,118 @@ User's intended construction:
    change; do not freeze the first route or merely append a projection segment.
 9. Validate and return the second solve's path and its actual cost.
 
+LATEST USER CORRECTION (2026-10-19; supersedes the combined-target wording below):
+- First-stage GCS must run SEPARATELY for EACH effective target intersection.
+  Compare all returned candidate costs, select the lowest, and project only
+  that candidate's endpoint to its corresponding SSM portion.
+- Then perform one final fixed-start/fixed-goal GCS solve. With N target
+  intersections, the prescribed count is N+1 top-level GCS calls, not two.
+- The planner now uses a direct single-target vertex for each first-stage
+  problem and a direct fixed-goal vertex for the final problem; no artificial
+  common sink participates in these solves. The same cost map is reused.
+- Each candidate's time, cost, endpoint, and status are recorded, with progress
+  output. A candidate with no solution is not retried; compare the remaining
+  prescribed targets, and stop if none succeed. No epsilon sweep is added.
+- Older text describing a combined-target graph records the previous proposal
+  and implementation, not the corrected current execution mode.
+- The projection-connection diagnostic remains enabled as a comparison only.
+- This corrected workflow was implemented and run once on 2026-10-19 with
+  300 samples and epsilon 0.025: 40 hulls, 20 intersections, 20 first-stage
+  solves plus one fixed-goal solve, all successful. Total time 599.07 seconds;
+  first-stage time 568.18 seconds; second-stage time 27.41 seconds.
+- Selected candidate cost: 0.5813465168. Its validated projection-connection
+  baseline cost: 0.5813467627. Final replan cost: 0.8667624205. Both paths
+  passed sampled collision checks. The worse second-stage returned route
+  remains an unresolved quality issue; do not infer global optimality.
+- Results are saved in two_stage_path_per_intersection.json; 43 tests passed.
+- Follow-up diagnosis reproduced the worse native final result in the SAME
+  graph/cost model. At most 10 random rounded routes were compared, and a good
+  route was missed. A simple route recovered from the saved stage-one path,
+  v1 -> v3 -> v11 -> v28, was feasible in that model; convex reoptimization
+  gave 0.3850930626, with matching independent cost and sampled collision checks.
+  The unrounded relaxation was 0.3618987263 for this fixed-endpoint graph only.
+- The planner now saves the selected first-stage region route and evaluates
+  its convex restriction as an EXTRA final-stage candidate. The full graph
+  search remains free, and the cheaper result wins. This adds a small convex
+  restriction, not a repeated full GCS relaxation; it is counted separately.
+  This prevents forgetting a known feasible route but does not certify global
+  optimality or remove all rounding error. 44 tests passed after the repair.
+- Diagnostic utility: planar3R_diagnose_stage2.py; output: stage2_diagnosis.json.
+- The user then requested adopting the official solver-quality scheme.
+  BaseGCS now solves the relaxation once, retains its numerical lower bound,
+  samples paths from that same result, and optimizes convex restrictions.
+  It does not duplicate the full relaxation for quality reporting.
+- The two-stage CLI exposes max-rounded-paths (10), max-rounding-trials (100),
+  rounding-seed (0), and relative-gap-tolerance (0.01). Each target has quality
+  metadata; stage1_quality aggregates bounds over all sampled target sets,
+  and stage2_quality concerns the selected fixed goal. These are graph-model
+  bounds, not full continuous-SSM or physical-space optimality guarantees.
+- Fixed-endpoint replay: L=0.3618987263, U=0.3850930626, (U-L)/L=6.4091%.
+  It is feasible but DOES NOT meet the default 1% quality tolerance. Missing or
+  invalid bounds are explicitly unavailable; no automatic repeated search or
+  epsilon sweep is introduced. Saved replay: stage2_quality_review.json.
+- Exact --no-rounding mode now preflights mixed-integer conic solver support.
+  This container lacks an enabled suitable solver (Mosek disabled, Gurobi absent)
+  and reports mixed_integer_solver_unavailable with no GCS calls. Report:
+  two_stage_exact_environment_check.json. No packages/licenses were installed.
+  The user offered installation assistance if needed; continuous-mode work
+  needs no new package. Exact execution needs solver/license configuration.
+- The quality-reporting implementation passed all 52 tests. The fixed-goal
+  replay was run with real Drake; no full 20-target rerun was needed for this
+  validation. No solver, package, or license was installed automatically.
+- LICENSE ACTIVATION UPDATE (supersedes the earlier unavailable status):
+  The user obtained a personal academic MOSEK license supporting version 12
+  and earlier, valid until 2027-10-19, and placed mosek.lic in this project.
+  *.lic was added to .gitignore. Do not expose its contents or commit it.
+  It was copied to /tmp/mosek.lic in planar3r-iris-validation. Use
+  docker exec -e MOSEKLM_LICENSE_FILE=/tmp/mosek.lic ... for each solver process.
+  This per-process environment setting is not persistent container configuration.
+- License acquisition succeeded and a tiny MISOCP solved to known optimum 0.3.
+  Utility: planar3R_verify_mosek.py. Report: mosek_environment_check.json.
+  No new solver software was installed; Drake already contained MOSEK.
+- Added --mip-time-limit (default 60 seconds per call) and --mip-relative-gap
+  (default 0.01); these control the mixed-integer optimizer, independently of
+  the reporting threshold and SSM geometric epsilon.
+- The saved fixed-endpoint case was tested once with native MIP (no known-route
+  seed), a 60-second search limit and 1% stopping-gap target. Cost 0.8346454952,
+  solve/setup time 62.89 seconds, optimizer time 60.88 seconds. MOSEK solution
+  status 2 means feasible only, NOT integer optimal. 653 collision samples
+  passed; fixed-goal error zero. Do not claim the requested 1% was achieved.
+  Report: stage2_mosek_mip_review.json. The earlier feasible cost 0.3850930626
+  remains better and was preserved. All 52 tests passed; no 20-target rerun.
+- LATEST ROUNDING BUDGET CHANGE: user requested stage one stay at 10 paths /
+  100 trials and stage two change to 100 paths / 100 trials. Separate stage-two
+  flags/defaults now implement this without changing stage-one budgets.
+- Replayed only the fixed-goal final stage, reusing saved stage-one results,
+  projection and known-route candidate, with Clarabel and seed 0. 99 unique
+  random routes found in 100 trials. Best random cost 0.5239423200 (previously
+  0.8667624205 with 10 routes). The preserved route still won at 0.3850930626;
+  fixed-goal graph lower bound 0.3618987263 and relative gap 6.4091% unchanged.
+  Solve time 26.53 seconds; 652 collision samples passed. Record:
+  stage2_paths100_trials100.json. First-stage 20 solves were not repeated.
+  52 tests passed, including separate first/second budget forwarding.
+- LATEST COMPLETE EXPERIMENT: the user then requested BOTH stages use 100/100
+  and the whole pipeline be rerun. All 20 first-stage targets plus one final
+  stage were actually rerun (no cached first-stage result reuse), with Clarabel,
+  seed 0, 300 samples and geometric epsilon 0.025.
+- Selected target changed to index 19 (20th intersection); lowest stage-one
+  returned cost 0.3816510474, aggregate lower bound 0.3584417133, gap 6.4751%.
+  The true best intersection is not certified, despite improved candidates.
+- Projection selected [0.6087380070, -0.6279264205, 1.9159107976]. Its distance
+  was 0.0078651106 rad. The validated direct-connection baseline cost was
+  0.3817296985. This goal differs from the earlier fixed-goal replay cases.
+- Final stage: 99 random routes, best random cost 0.3991851967. The extra
+  first-stage region route [1,3,28], reoptimized for the fixed projected goal,
+  won at 0.3817177111. Lower bound 0.3585083602; fixed-goal gap 6.4739%, above
+  1%. 618 collision samples passed, FK error 1.76e-13. This directly supports
+  keeping the first-stage route as an additional candidate, not freezing it.
+- Stage-one time 559.70 s, stage-two time 26.44 s, total 589.67 s (about 9m50s),
+  with 21 top-level GCS calls and one extra convex restriction. Single-run times
+  are not a reliable speed comparison. Output: two_stage_all_paths100_trials100.json.
+- During this run the user asked whether to retain the first-stage route as a
+  final-stage candidate. Recommendation: yes, while preserving full graph search
+  and reporting random-only cost separately. That mechanism was already active.
+
 Role of epsilon and the computational tradeoff:
 - The user initially proposed a threshold based on convex-hull boundary distance
   to the nearest SSM sample. Operationally this must specify how distances over
@@ -409,6 +661,13 @@ Projection for goal selection and final replanning:
   restricted to the appropriate branch/free-region intersection.
 - Re-run full GCS with the original start q0 and fixed q_hat. The final motion
   may use a completely different route from the first-stage solution.
+- Later, the user explicitly requested a separate diagnostic comparison using
+  the first-stage path plus the projection segment. The planner now always
+  records this under projection_connection_baseline after projection succeeds,
+  with actual region-weighted connector cost, path, and validation results.
+  It adds no GCS solves and does not replace the final second-stage route.
+  stage2_minus_projection_connection_cost reports the cost difference when
+  that diagnostic path passes validation. It is not a global optimality gap.
 - This removes the specific route penalty caused by directly stitching on a
   projection segment. It does not prove q_hat is the best goal on the entire SSM.
 - Remaining limitations include approximate goal selection, finite region/chart
@@ -482,9 +741,11 @@ Novelty discussion after the first handoff version:
 - No exhaustive search established either that this exact two-stage combination
   already exists or that it is new. Do not claim a first-of-its-kind result.
 
-10. NEXT WORK, ONLY WHEN THE USER REQUESTS IMPLEMENTATION
+10. HISTORICAL IMPLEMENTATION PLAN (SUPERSEDED BY THE CURRENT SUMMARY ABOVE)
 
-Potential implementation sequence (not yet authorized by the latest request):
+Earlier implementation proposal; implementation is now authorized and completed.
+Its shared-target first-stage proposal below was rejected by the user and
+replaced with independent per-intersection GCS solves:
 - Fix the start configuration and reuse the current IRIS cache; do not regenerate
   a grid or change robot parameters without reason.
 - Inspect current SSM branch sampling/parameterization and angular unwrapping.
@@ -500,6 +761,42 @@ Potential implementation sequence (not yet authorized by the latest request):
 - Do not add an online repeated epsilon/GCS search unless the user requests it.
 
 CURRENT HANDOFF STATUS
+- Latest full rerun: BOTH stages now default to 200 paths / 300 trials.
+  See two_stage_all_paths200_trials300.json. All 20 first-stage targets
+  succeeded with 200 routes each; 13 target costs improved by more than 1e-8
+  over the 100/100 run, but target index 19 still won at 0.381651047429187.
+  The projected goal and final cost 0.381717711086575 were unchanged; native
+  rounding and the extra stage-one route tied. Fixed-goal gap 6.4739%.
+  Stage one 586.10 s, stage two 26.89 s, total 616.53 s (10m16.53s), compared
+  with 589.67 s previously for the full 100/100 run (+26.86s, 4.55%). The
+  150/200 comparison was second-stage-only (27.66s), with the same final
+  cost and goal; there was no full first-stage 150/200 experiment.
+  Collision/FK validation and 22 two-stage tests passed. Sampling remains
+  300 SSM configurations and geometric epsilon 0.025. No commit or push.
+- Latest second-stage-only replay: 1000 paths / 1100 trials, reusing the same
+  first-stage 100/100 result and fixed endpoints, seed 0, Clarabel. Output:
+  stage2_paths1000_trials1100.json. Found 1000 unique routes and discarded
+  49 duplicates; all 1000 restrictions succeeded. Runtime 29.66 s versus
+  27.46 s at 200/300 (+2.19 s, about 8%). Final cost 0.3817177111 and gap
+  6.4739% unchanged. Native cost differs from the extra first-stage route
+  by only about 3e-13. Collision and FK validation passed. No first-stage
+  recomputation or default change was made.
+- Subsequent second-stage-only replay: 200 paths / 300 trials, using the same
+  first-stage 100/100 result and fixed endpoints. Output:
+  stage2_paths200_trials300.json. Sampling found 200 unique routes with 6
+  duplicates discarded; all 200 restrictions succeeded. Native and final
+  costs remained 0.3817177111, gap 6.4739%, runtime 27.46 s. Collision and FK
+  validation passed. No first-stage recomputation or default change was made.
+- Latest experiment (2026-10-19): stage two alone was replayed with 150
+  candidate paths and 200 trials, reusing the full 100/100 first-stage result
+  in two_stage_all_paths100_trials100.json. See stage2_paths150_trials200.json.
+  All 150 unique sampled routes solved successfully. Native rounding now
+  finds route [1,3,28] at cost 0.3817177111, matching the retained first-stage
+  route candidate. Previous native cost was 0.3991851967, but previous final
+  cost already was 0.3817177111; the final cost therefore did not improve.
+  Runtime 27.66 s (previous second stage 26.44 s); fixed-goal lower bound
+  0.3585083602 and gap 6.4739% unchanged. Collision/FK validation passed.
+  The historical theory-only status items below describe the initial handoff.
 - The confirmed idea is epsilon-controlled local convex target approximation,
   first-stage GCS target selection, projection ONLY for goal estimation, and a
   second full GCS solve between fixed start and estimated goal configurations.

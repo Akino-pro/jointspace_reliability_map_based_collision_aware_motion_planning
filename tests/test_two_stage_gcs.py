@@ -11,7 +11,9 @@ from planar3R_post_failure_planner import locked_joint_ik
 from planar3R_ssm_envelopes import (
     build_envelopes, intersect_envelopes, project_to_local_ssm, sample_hull,
 )
-from planar3R_two_stage_gcs_planner import plan_two_stage, solve_target_sets
+from planar3R_two_stage_gcs_planner import (
+    MixedIntegerSolverUnavailable, plan_two_stage, solve_target_sets,
+)
 
 try:
     from pydrake.geometry.optimization import HPolyhedron
@@ -114,17 +116,29 @@ class PipelineTests(unittest.TestCase):
         self.assertEqual(result["status"], "no_path_in_iris_coverage")
         self.assertEqual(result["gcs_solve_calls"], 0)
 
-    def run_mocked(self, failure=None):
+    def test_exact_mode_without_solver_stops_before_geometry_and_gcs(self):
+        with patch("planar3R_two_stage_gcs_planner.require_mixed_integer_solver",
+                   side_effect=MixedIntegerSolverUnavailable("No enabled MISOCP solver")), \
+                patch("planar3R_two_stage_gcs_planner.solve_target_sets") as solve:
+            result = plan_two_stage([0, 0, 0], [2, 0], [], self.cache, rounding=False)
+        self.assertEqual(result["status"], "mixed_integer_solver_unavailable")
+        self.assertEqual(result["gcs_solve_calls"], 0)
+        solve.assert_not_called()
+
+    def run_mocked(self, failure=None, candidate_costs=(1.0,)):
         goal, samples = local_branch()
         calls = []
 
-        def solve(regions, edges, start, targets, weights, rounding):
-            calls.append((regions, edges, start.copy(), targets))
-            if len(calls) == 1:
-                if failure == "stage1":
+        def solve(regions, edges, start, targets, weights, rounding,
+                  candidate_region_routes=None, **solve_settings):
+            calls.append((regions, edges, start.copy(), targets, candidate_region_routes,
+                          dict(solve_settings)))
+            if len(calls) <= len(candidate_costs):
+                candidate_cost = candidate_costs[len(calls) - 1]
+                if failure == "stage1" or candidate_cost is None:
                     return None
                 return {"waypoints": np.array([start, samples.mean(axis=0)]),
-                        "target": 0, "cost": 1.0}
+                        "target": 0, "cost": candidate_cost, "region_route": [0]}
             goal_q = targets[0]["polytope"].b[:3]
             # Point hull SVD can choose an arbitrary orthogonal frame: recover
             # the singleton from its first three equality normals.
@@ -132,11 +146,50 @@ class PipelineTests(unittest.TestCase):
             return {"waypoints": np.array([start, goal_q]), "target": 0,
                     "cost": float(np.linalg.norm(goal_q - start)), "solver_cost": 0.1}
 
+        def make_targets(envelopes, regions):
+            target = intersect_envelopes(envelopes, regions)[0]
+            return [dict(target) for _ in candidate_costs]
+
         with patch("planar3R_two_point_ssm_views.compute_ssms_for_target", return_value=[samples]), \
+                patch("planar3R_two_stage_gcs_planner.intersect_envelopes", side_effect=make_targets), \
                 patch("planar3R_two_stage_gcs_planner.solve_target_sets", side_effect=solve):
             result = plan_two_stage([0.3, -0.9, 0.6], goal, [], self.cache,
                                     geometric_epsilon=10, reliability_source="none")
         return result, calls
+
+    def test_each_intersection_gets_a_separate_solve_and_best_is_selected(self):
+        result, calls = self.run_mocked(candidate_costs=(3.0, 1.0, 2.0))
+        self.assertTrue(result["success"], result)
+        self.assertEqual(result["gcs_solve_calls"], 4)
+        self.assertEqual(result["stage1_gcs_solve_calls"], 3)
+        self.assertEqual(result["stage2_gcs_solve_calls"], 1)
+        self.assertEqual(result["selected_target"], 1)
+        self.assertEqual(result["stage1_cost"], 1.0)
+        self.assertEqual([x["cost"] for x in result["stage1_candidates"]], [3.0, 1.0, 2.0])
+        self.assertTrue(all(len(call[3]) == 1 for call in calls))
+        for call in calls:
+            np.testing.assert_allclose(call[2], calls[0][2])
+        self.assertEqual(result["projection_connection_baseline"]["stage1_cost"], 1.0)
+        self.assertTrue(all(call[4] is None for call in calls[:-1]))
+        self.assertEqual(calls[-1][4], [[0]])
+        for call in calls[:-1]:
+            self.assertEqual(call[5]["max_rounded_paths"], 200)
+            self.assertEqual(call[5]["max_rounding_trials"], 300)
+        self.assertEqual(calls[-1][5]["max_rounded_paths"], 200)
+        self.assertEqual(calls[-1][5]["max_rounding_trials"], 300)
+
+    def test_failed_target_does_not_hide_other_target_results(self):
+        result, calls = self.run_mocked(candidate_costs=(None, 2.0, 1.0))
+        self.assertTrue(result["success"], result)
+        self.assertEqual(len(calls), 4)
+        self.assertFalse(result["stage1_candidates"][0]["success"])
+        self.assertEqual(result["selected_target"], 2)
+
+    def test_all_target_failures_stop_before_projection_and_final_solve(self):
+        result, calls = self.run_mocked(candidate_costs=(None, None, None))
+        self.assertEqual(result["status"], "solver_failed")
+        self.assertEqual(len(calls), 3)
+        self.assertEqual(result["stage2_gcs_solve_calls"], 0)
 
     def test_two_solves_use_original_start_and_fresh_fixed_goal_graph(self):
         result, calls = self.run_mocked()
@@ -148,6 +201,37 @@ class PipelineTests(unittest.TestCase):
         self.assertEqual(len(result["waypoints"]), 2)
         np.testing.assert_allclose(result["waypoints"][-1], result["estimated_goal"])
         self.assertLess(result["endpoint_error"], 1e-7)
+
+    def test_projection_connection_comparison_preserves_stage1_route_and_weighted_cost(self):
+        result, calls = self.run_mocked()
+        comparison = result["projection_connection_baseline"]
+        self.assertTrue(comparison["success"], comparison)
+        self.assertTrue(comparison["connector_in_selected_region"])
+        self.assertEqual(comparison["gcs_solve_calls"], 0)
+        self.assertEqual(len(calls), 2)
+        # With reliability_source="none", R=1 and the actual weight is 0.01,
+        # not unit weight. The first-stage mock has a known reported cost of 1.
+        self.assertAlmostEqual(comparison["connector_weight"], 0.01)
+        connection = np.asarray(comparison["waypoints"])
+        distance = np.linalg.norm(connection[-1] - connection[-2])
+        self.assertGreater(distance, 0)
+        self.assertAlmostEqual(comparison["connector_cost"], 0.01 * distance)
+        self.assertAlmostEqual(comparison["cost"], 1.0 + 0.01 * distance)
+        np.testing.assert_allclose(connection[-1], result["estimated_goal"])
+        self.assertEqual(len(connection), 3)
+        self.assertEqual(len(result["waypoints"]), 2)
+        self.assertAlmostEqual(result["stage2_minus_projection_connection_cost"],
+                               result["cost"] - comparison["cost"])
+
+    def test_invalid_connection_is_not_reported_as_feasible(self):
+        # Only the diagnostic's collision check fails; stage two stays valid.
+        with patch("planar3R_two_stage_gcs_planner.validate_joint_path",
+                   side_effect=[(False, 2), (True, 3)]):
+            result, calls = self.run_mocked()
+        self.assertTrue(result["success"])
+        self.assertFalse(result["projection_connection_baseline"]["success"])
+        self.assertNotIn("stage2_minus_projection_connection_cost", result)
+        self.assertEqual(len(calls), 2)
 
     def test_solver_failure_stops_without_second_solve(self):
         result, calls = self.run_mocked("stage1")
@@ -164,6 +248,41 @@ class PipelineTests(unittest.TestCase):
 
 @unittest.skipUnless(HAS_DRAKE, "Requires robotics Drake bindings")
 class TwoStageDrakeTests(unittest.TestCase):
+    def test_mip_capability_error_is_not_misreported_as_invalid_task(self):
+        with patch("pydrake.solvers.ChooseBestSolver", side_effect=ValueError("no conic MIP solver")):
+            with self.assertRaises(MixedIntegerSolverUnavailable):
+                solve_target_sets([cube()], [], np.zeros(3),
+                                  [{"polytope": sample_hull([[1, 0, 0]]), "region": 0}],
+                                  [1.0], rounding=False)
+
+    def test_known_route_competes_with_native_rounding_without_appending_motion(self):
+        from gcs.linear import LinearGCS
+        from pydrake.geometry.optimization import GraphOfConvexSetsOptions
+
+        def expensive_native(planner, **kwargs):
+            names = [planner.source.name(), "v0", "v2", planner.target.name()]
+            lookup = {(e.u().name(), e.v().name()): e for e in planner.gcs.Edges()}
+            active = [lookup[pair] for pair in zip(names[:-1], names[1:])]
+            result = planner.gcs.SolveConvexRestriction(active, GraphOfConvexSetsOptions())
+            self.assertTrue(result.is_success())
+            points = np.asarray([result.GetSolution(e.xv()) for e in active]).T
+            return points, {"best_path": active, "best_result": result, "relaxation_cost": 0.2}
+
+        with patch.object(LinearGCS, "SolvePath", expensive_native):
+            result = solve_target_sets(
+                [cube(-1, 3)] * 3, [(0, 1), (1, 2), (0, 2)], np.zeros(3),
+                [{"polytope": sample_hull([[2, 0, 0]]), "region": 2}],
+                [1.0, 0.1, 1.0], candidate_region_routes=[[0, 1, 2]])
+        self.assertAlmostEqual(result["native_cost"], 2.0, places=5)
+        self.assertAlmostEqual(result["cost"], 0.2, places=5)
+        self.assertAlmostEqual(result["solver_cost"], 0.2, places=5)
+        self.assertEqual(result["solution_source"], "stage1_route_convex_restriction")
+        self.assertEqual(result["region_route"], [0, 1, 2])
+        self.assertAlmostEqual(result["quality"]["upper_bound"], 0.2, places=5)
+        self.assertTrue(result["quality"]["within_tolerance"])
+        self.assertEqual(len(result["additional_route_results"]), 1)
+        np.testing.assert_allclose(result["waypoints"][-1], [2, 0, 0], atol=1e-6)
+
     def test_variable_target_cost_has_no_free_sink_motion(self):
         region = cube(-1, 3)
         target = sample_hull([[1, 0, 0], [2, 0, 0]])
@@ -173,6 +292,9 @@ class TwoStageDrakeTests(unittest.TestCase):
         np.testing.assert_allclose(result["waypoints"][-1], [1, 0, 0], atol=1e-5)
         self.assertAlmostEqual(result["cost"], 0.4, places=5)
         self.assertAlmostEqual(result["solver_cost"], 0.4, places=5)
+        self.assertAlmostEqual(result["quality"]["lower_bound"], 0.4, places=5)
+        self.assertTrue(result["quality"]["within_tolerance"])
+        self.assertEqual(result["rounded_path_count"], 1)
 
     def test_full_two_stage_pipeline_with_real_solver_and_local_goal_curve(self):
         goal, samples = local_branch()
@@ -184,7 +306,9 @@ class TwoStageDrakeTests(unittest.TestCase):
                 result = plan_two_stage([0.3, -0.9, 0.6], goal, [], cache,
                                         reliability_source="none", geometric_epsilon=0.01)
         self.assertTrue(result["success"], result)
-        self.assertEqual(result["gcs_solve_calls"], 2)
+        self.assertEqual(result["gcs_solve_calls"], result["target_set_count"] + 1)
+        self.assertEqual(result["stage1_gcs_solve_calls"], result["target_set_count"])
+        self.assertEqual(result["stage2_gcs_solve_calls"], 1)
         self.assertLess(result["endpoint_error"], 1e-7)
         self.assertLess(result["fixed_goal_error"], 1e-6)
 

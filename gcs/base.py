@@ -199,23 +199,40 @@ class BaseGCS:
         results_dict = {}
         self.options.convex_relaxation = rounding
         self.options.preprocessing = preprocessing
+        requested_paths = self.options.max_rounded_paths
+        requested_paths = 10 if requested_paths is None else requested_paths
         self.options.max_rounded_paths = 0
 
         if rounding and not self.rounding_fn:
-            # Drake can solve the relaxation and round it in a single call.
-            # Re-solving the full relaxation before native rounding duplicates
-            # the most expensive operation on overlapping IRIS graphs.
-            self.options.max_rounded_paths = 10
-            result = self.gcs.SolveShortestPath(self.source, self.target, self.options)
-            if not result.is_success():
-                return None, None, {"rounded_results": [result]}
-            path = MipPathExtraction(self.gcs, result, self.source, self.target)[0]
-            results_dict.update({
-                "best_path": path, "best_result": result,
-                "rounded_results": [result], "rounded_cost": result.get_optimal_cost(),
-                "rounded_solver_time": solver_time(result),
-            })
-            return path, result, results_dict
+            # Keep the relaxation lower bound and round THAT result. This is
+            # the paper's two-part method without solving the relaxation twice.
+            if requested_paths < 1:
+                raise ValueError("max_rounded_paths must be positive when rounding")
+            relaxed = self.gcs.SolveShortestPath(self.source, self.target, self.options)
+            results_dict.update(relaxation_result=relaxed,
+                                relaxation_solver_time=solver_time(relaxed))
+            if not relaxed.is_success():
+                return None, None, results_dict
+            results_dict["relaxation_cost"] = relaxed.get_optimal_cost()
+            self.options.max_rounded_paths = requested_paths
+            paths = self.gcs.SamplePaths(self.source, self.target, relaxed, self.options)
+            best_path, best_result, best_cost = None, None, np.inf
+            rounded_results = []
+            for candidate in paths:
+                result = self.gcs.SolveConvexRestriction(candidate, self.options,
+                                                        initial_guess=relaxed)
+                rounded_results.append(result)
+                if result.is_success() and result.get_optimal_cost() < best_cost:
+                    best_path, best_result = candidate, result
+                    best_cost = result.get_optimal_cost()
+            results_dict.update(best_path=best_path, best_result=best_result,
+                                rounded_paths=paths, rounded_results=rounded_results,
+                                rounded_path_count=len(paths),
+                                successful_rounded_path_count=sum(r.is_success() for r in rounded_results))
+            if best_result is not None:
+                results_dict.update(rounded_cost=best_cost,
+                                    rounded_solver_time=solver_time(best_result))
+            return best_path, best_result, results_dict
 
         result = self.gcs.SolveShortestPath(self.source, self.target, self.options)
 

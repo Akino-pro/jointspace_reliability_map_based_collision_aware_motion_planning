@@ -1,0 +1,80 @@
+{
+  "input": "two_stage_all_paths100_trials100.json",
+  "stage1_reused": true,
+  "stage1_max_paths": 100,
+  "stage1_max_trials": 100,
+  "stage2_max_paths": 150,
+  "stage2_max_trials": 200,
+  "rounding_seed": 0,
+  "stage1_cost": 0.38165104742918676,
+  "reference": "two_stage_all_paths100_trials100.json",
+  "previous_stage2_cost": 0.3817177110865746,
+  "solve_seconds": 27.66338789800011,
+  "success": true,
+  "cost": 0.3817177110865746,
+  "target": 0,
+  "solver_cost": 0.3817177111243971,
+  "region_route": [
+    1,
+    3,
+    28
+  ],
+  "solution_source": "native_gcs",
+  "native_cost": 0.3817177110865746,
+  "additional_route_results": [
+    {
+      "region_route": [
+        1,
+        3,
+        28
+      ],
+      "success": true,
+      "cost": 0.3817177110865746,
+      "solver_cost": 0.3817177111243971
+    }
+  ],
+  "quality": {
+    "lower_bound": 0.3585083602263087,
+    "upper_bound": 0.3817177110865746,
+    "absolute_gap": 0.023209350860265876,
+    "relative_gap": 0.06473866005695084,
+    "relative_tolerance": 0.01,
+    "absolute_tolerance": 1e-06,
+    "scope": "fixed_start_to_supplied_target_sets_graph",
+    "within_tolerance": false,
+    "status": "gap_exceeds_tolerance"
+  },
+  "solve_mode": "relaxation_rounding",
+  "exact_solver": null,
+  "solver_termination": "SolutionResult.kSolutionFound",
+  "mip_details": null,
+  "rounded_path_count": 150,
+  "successful_rounded_path_count": 150,
+  "waypoints": [
+    [
+      -2.9723497820938127,
+      -2.26926174311021,
+      -1.2375903668686896
+    ],
+    [
+      -2.8654455491709756,
+      -1.9541214021810502,
+      -1.2281814875089447
+    ],
+    [
+      -0.4257377877443439,
+      -1.8635495966691908,
+      -1.013447801203025
+    ],
+    [
+      0.6087380070192823,
+      -0.6279264205318648,
+      1.9159107976335363
+    ]
+  ],
+  "collision_free": true,
+  "collision_samples": 618,
+  "endpoint_error": 1.7616199492028908e-13,
+  "start_error": 8.005932084973442e-16,
+  "fixed_goal_error": 1.0439072349752257e-13
+}
