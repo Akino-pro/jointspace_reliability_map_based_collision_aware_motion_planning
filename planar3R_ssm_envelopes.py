@@ -13,6 +13,34 @@ from planar3R_collision import is_collision_free, link_points
 from planar3R_iris_regions import ReliablePolytope
 
 
+# Joint-space arc length in radians, shared by every target SSM branch.
+# Approximately the density of the former 300-point (1.5, 1.5) example.
+SSM_ARC_SPACING = 0.044
+
+
+def resample_by_arclength(points, spacing):
+    """Uniformly sample a chart-local polyline, preserving both endpoints.
+
+    Spacing is an upper bound on nominal polyline arc intervals. Interpolated
+    points require IK refinement before being treated as actual SSM samples.
+    """
+    if not np.isfinite(spacing) or spacing <= 0:
+        raise ValueError("SSM arc spacing must be positive and finite")
+    points = np.asarray(points, dtype=float)
+    if points.ndim != 2 or points.shape[1] != 3 or not np.all(np.isfinite(points)):
+        raise ValueError("SSM points must be finite ordered 3D configurations")
+    if len(points) < 2:
+        return points.copy()
+    lengths = np.linalg.norm(np.diff(points, axis=0), axis=1)
+    points = points[np.r_[True, lengths > 1e-12]]
+    if len(points) < 2:
+        return points.copy()
+    cumulative = np.r_[0.0, np.cumsum(np.linalg.norm(np.diff(points, axis=0), axis=1))]
+    count = int(np.ceil(cumulative[-1] / spacing)) + 1
+    positions = np.linspace(0, cumulative[-1], count)
+    return np.column_stack([np.interp(positions, cumulative, points[:, i]) for i in range(3)])
+
+
 @dataclass
 class LocalEnvelope:
     samples: np.ndarray
@@ -59,10 +87,16 @@ def chord_bound(points):
     return float(2 * np.max(np.linalg.norm(points - points[0] - t[:, None] * delta, axis=1)))
 
 
-def build_envelopes(branches, epsilon=0.05, samples_per_branch=300):
-    if not np.isfinite(epsilon) or epsilon <= 0 or samples_per_branch < 2:
-        raise ValueError("Use positive finite geometric epsilon and at least two samples per branch")
+def build_envelopes(branches, epsilon=0.025, samples_per_branch=None,
+                    arc_spacing=SSM_ARC_SPACING, refine_sample=None, sampling_report=None):
+    if (not np.isfinite(epsilon) or epsilon <= 0
+            or (samples_per_branch is not None and samples_per_branch < 2)
+            or not np.isfinite(arc_spacing) or arc_spacing <= 0):
+        raise ValueError("Use positive finite epsilon/arc spacing and a valid optional sample budget")
     envelopes = []
+    branch_lengths = []
+    sample_counts = []
+    refinement_failures = 0
 
     def divide(points, branch, piece):
         bound = chord_bound(points)
@@ -78,13 +112,46 @@ def build_envelopes(branches, epsilon=0.05, samples_per_branch=300):
         if branch.ndim != 2 or branch.shape[1] != 3 or not np.all(np.isfinite(branch)):
             raise ValueError("SSM branches must contain finite ordered 3D configurations")
         if not len(branch):
+            branch_lengths.append(0.0)
+            sample_counts.append(0)
             continue
+        wrapped_steps = (np.diff(branch, axis=0) + np.pi) % (2 * np.pi) - np.pi
+        branch_lengths.append(float(np.linalg.norm(wrapped_steps, axis=1).sum()))
+        sampled_points = set()
         # Split BEFORE subsampling; a hull must never bridge a periodic seam.
         cuts = np.flatnonzero(np.any(np.abs(np.diff(branch, axis=0)) > np.pi, axis=1)) + 1
         for piece_index, piece in enumerate(np.split(branch, cuts)):
-            count = max(2, int(np.ceil(samples_per_branch * len(piece) / len(branch))))
-            indices = np.unique(np.linspace(0, len(piece) - 1, min(len(piece), count), dtype=int))
-            divide(piece[indices], branch_index, piece_index)
+            if samples_per_branch is not None:
+                count = max(2, int(np.ceil(samples_per_branch * len(piece) / len(branch))))
+                indices = np.unique(np.linspace(0, len(piece) - 1, min(len(piece), count), dtype=int))
+                samples = piece[indices]
+            else:
+                samples = resample_by_arclength(piece, arc_spacing)
+            # Never bridge a failed IK correction or a newly introduced seam.
+            group = []
+            for q in samples:
+                corrected = q if refine_sample is None else refine_sample(q)
+                if corrected is None:
+                    refinement_failures += 1
+                    if group:
+                        divide(np.asarray(group), branch_index, piece_index)
+                        group = []
+                    continue
+                corrected = np.asarray(corrected, dtype=float)
+                if group and np.any(np.abs(corrected - group[-1]) > np.pi):
+                    divide(np.asarray(group), branch_index, piece_index)
+                    group = []
+                group.append(corrected)
+                sampled_points.add(tuple(corrected))
+            if group:
+                divide(np.asarray(group), branch_index, piece_index)
+        sample_counts.append(len(sampled_points))
+    if sampling_report is not None:
+        sampling_report.update(
+            sampling_mode="legacy_branch_budget" if samples_per_branch is not None else "fixed_arc_spacing",
+            ssm_arc_spacing=arc_spacing if samples_per_branch is None else None,
+            ssm_branch_arc_lengths=branch_lengths, ssm_total_arc_length=sum(branch_lengths),
+            ssm_branch_sample_counts=sample_counts, sample_refinement_failures=refinement_failures)
     return envelopes
 
 

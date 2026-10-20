@@ -1,5 +1,5 @@
 PROJECT AND CONVERSATION HANDOFF
-Updated: 2026-10-19
+Updated: 2026-10-20
 Language: English, following the user's instruction that project documentation be in English.
 
 PURPOSE AND SCOPE
@@ -13,8 +13,117 @@ about pending implementation, missing Docker, and combined first-stage targets.
 See TWO_STAGE_SSM_WORKFLOW.md for implementation details. No commit or push.
 
 LATEST CONFIRMED WORKFLOW AND PARAMETERS
+- CLARABEL/MOSEK DIAGNOSIS: see SOLVER_DIAGNOSIS.md and the four relaxation_*.json
+  reports with corresponding logs. Captured/rebuilt the SAME reverse first
+  target: 93 regions, 1960 region edges, 1962 total edges. No rounding or MIP.
+  Without GCS preprocessing, Clarabel hit MaxTime after 79.19 s (7 iterations),
+  while MOSEK succeeded in 10.32 s. With MOSEK doing preprocessing but Clarabel
+  doing relaxation, Clarabel still hit MaxTime (8 iterations; 72.43 internal
+  solver seconds, 82.73 s including preprocessing). MOSEK restricted to ONE
+  thread still solved in 18.99 s. Thus the slowdown is demonstrably in the
+  continuous conic solve, not equal-weight random route search, not solely
+  GCS preprocessing, and not solely the thread-count difference. Clarabel
+  logged actual iteration progress, so this is not evidence of a deadlock.
+  Clarabel log: 15695 variables, 213040 rows, 4525222 A nonzeros, QDLDL/1 thread.
+  MOSEK log reports own presolve and solving the dual formulation. Expensive
+  iterations and slower convergence are observed; a unique underlying cause
+  such as conditioning versus factorization fill is NOT isolated. Do not
+  claim equal reliability weights caused an infinite loop. Diagnostics requested
+  a 60s solver limit and independent 100s watchdog; solver time checks can
+  exceed 60s within expensive iterations. Tool: planar3R_diagnose_relaxation.py.
+  Production defaults and full benchmark results were not changed or rerun.
+- EQUAL-RELIABILITY CONVEX MERGING (2026-10-20): after constructing the common
+  branch partition, merge adjacent boxes only if their reliabilities are
+  exactly equal and their union is exactly one box: matching extents on two
+  axes and a complete shared face on the third. Repeat across axes. Do not
+  merge L-shaped unions, partial-face/edge/point contacts, or positive gaps.
+  This is a sufficient convexity test; no larger hull fills missing space.
+  Original branch-specific cells remain as provenance because equal maximum
+  reliability does not imply equal F conditions. Then intersect merged boxes
+  with each original IRIS region, preserving convexity and collision freedom.
+  This greedy merge does not guarantee a minimum-number convex decomposition.
+  All 68 Docker/Drake tests passed, including merge coverage/cost/convexity
+  rejection tests. User explicitly agreed with this merge rule.
+- REVERSE DUAL-BRANCH TASK COMPLETED: fixed start configuration
+  [0.6087380070193158,-0.6279264205318301,1.915910797633629] at (1.5,1.5),
+  target (0.5,0.5). Target search finds 2 branches, lengths 8.5274752647 and
+  8.5264244839 radians. At spacing 0.044, each has 197 samples: 394 total,
+  53 local hulls. Epsilon 0.025, both stages 200/300, extra stage-one route kept.
+  Before merging: 125 reliability boxes, 293 IRIS intersections, 29 targets;
+  first target failed to finish after many minutes, so the run was terminated
+  to apply merging. No infeasibility or path cost was established by that run.
+  After merging: 63 boxes, 93 free regions, 1960 directed edges, 28 targets.
+  Geometry check: two_stage_reverse_merged_geometry.json, zero GCS calls.
+  The merged Clarabel rerun also remained in its first SolveShortestPath call
+  for several minutes and was terminated. There was no returned proof of
+  infeasibility. Current logging does not distinguish preprocessing from
+  relaxation inside that call; equal-weight ties were not proved the cause.
+  The completed full run uses the existing MOSEK license for CONTINUOUS
+  relaxation and random rounding, not mixed-integer search. Output:
+  two_stage_reverse_multibranch_merged_mosek.json. The license was enabled only
+  for this process via MOSEKLM_LICENSE_FILE=/tmp/mosek.lic. No default solver
+  policy or problem cost was changed. Both stages still use 200/300, seed 0.
+  All 28 first-stage targets succeeded with 200 unique candidate routes each.
+  Target index 19 (20th target), SSM branch index 1 (SECOND branch), won at
+  cost 0.4657951965800322. Selected goal configuration:
+  [-0.6602748142171214,1.5278156562917182,1.9158475580310466].
+  Projection distance 2.1843448179e-5 radians. Stage-two native best cost
+  0.479841909743721; retained route [48,16,27,90] reoptimization won at
+  0.46579498692865234. The direct-connection comparison was 0.465795415014514.
+  Timing for completed MOSEK run only: geometry 5.81 s, stage one 499.26 s,
+  stage two 16.87 s, total 521.99 s (8m41.99s). This excludes stopped Clarabel
+  attempts. Final path passed 304 collision samples; endpoint FK error
+  1.72e-14 and fixed-goal configuration error zero.
+  IMPORTANT: fixed-goal relaxation lower bound 0.02501524838258812 versus
+  feasible upper bound 0.46579498692865234 gives relative gap 17.6204422,
+  i.e. 1762.04 PERCENT under (U-L)/L. The path is feasible; proximity to
+  global optimality is not certified. First-stage gap is also very large.
+- FIXED ARC-LENGTH SAMPLING UPDATE: SSM_ARC_SPACING=0.044 radians is now the
+  global target sampling default in planar3R_ssm_envelopes.py. Every found
+  branch uses the same interval; total count follows the lengths of all
+  chart-local pieces, approximately sum(ceil(piece_length / spacing)+1).
+  Override with --ssm-arc-spacing or plan_two_stage(ssm_arc_spacing=...).
+  Do not pass --ssm-samples for this mode; that optional flag explicitly
+  selects legacy per-branch-budget sampling for reproducibility.
+  Wrapped differences measure branch length without spurious seam jumps.
+  Sample within seam-separated pieces, interpolate by polyline arc length,
+  then refine configurations back onto the goal IK equality. Failed IK
+  corrections split pieces; do not connect across them. Nominal spacing is
+  measured before correction; no strict continuous-SSM coverage/error claim.
+  Tracing density and epsilon remain separate controls. Defaults epsilon
+  0.025 and both-stage 200/300 remain unchanged; fixed 300 is now historical.
+  Calibration found existing branch length 13.1651945996 radians, giving
+  spacing about 0.04403075 for 300 samples. Default 0.044 produced 301 actual
+  points, 40 hulls and 20 targets, with zero correction failures. See
+  two_stage_geometry_arc_spacing0044.json. All 65 Docker/Drake tests passed,
+  including 7 new arc-sampling tests. No full planning run was made for this
+  update. Old saved path costs remain legacy-sampling results.
+- MULTI-BRANCH RELIABILITY UPDATE (2026-10-20): all detected SSM branches now
+  contribute to ONE reliability map. Build the 27-cell partition for the
+  first branch, overlay the second branch partition by box intersection,
+  and set each retained cell's reliability to max(R_branch1,R_branch2).
+  Do not union their F sets or add their reliabilities. The implementation
+  retains branch-specific F sets and reliabilities for inspection. Then
+  intersect this common map with the original cached collision-free IRIS
+  regions as before. Both sampled-endpoint and two-stage workflows use it.
+  Single-branch partition geometry/order/costs are preserved. The old
+  --reliability-branch option must now be 0, selecting the combined map.
+  Reports record reliability_branch_count, reliability_rule, and partition
+  count. Target envelopes still process every detected SSM branch.
+  Two distinct branch boxes yield at most 125 positive-volume cells, not
+  necessarily 729: only nonempty intersections survive. IRIS intersections
+  may further split these cells. Old 6 -> 43 counts describe the saved
+  benchmark, not a guarantee for every multi-branch scene. No full benchmark
+  was rerun for this change. Random branch discovery is still not certified.
+  Validation: all 58 tests passed in Docker/Drake, including 6 new multi-branch
+  tests. A geometry-only check of the existing (1.5,1.5) example found one
+  branch and reproduced 27 partition cells, 43 free regions, 40 SSM hulls,
+  and 20 target intersections; zero GCS planning calls. Output:
+  two_stage_geometry_multibranch_map.json. Multi-branch common-refinement
+  behavior was tested using controlled two-branch inputs, not a newly solved
+  physical two-branch planning benchmark.
 - CURRENT USER-SELECTED CONFIGURATION: retain geometric epsilon=0.025,
-  300 SSM samples, and BOTH stages max_paths=200 / max_trials=300.
+  fixed arc spacing 0.044, and BOTH stages max_paths=200 / max_trials=300.
   plan_two_stage and its CLI now default to geometric epsilon 0.025.
   Keep the extra stage-one route as a stage-two fallback. The full benchmark
   for this selected configuration is two_stage_all_paths200_trials300.json.

@@ -41,8 +41,8 @@ class EnvelopeTests(unittest.TestCase):
     def test_tighter_epsilon_refines_ordered_pieces_without_losing_samples(self):
         t = np.linspace(0, np.pi, 61)
         points = np.c_[np.cos(t), np.sin(t), t * 0]
-        coarse = build_envelopes([points], 0.3)
-        fine = build_envelopes([points], 0.02)
+        coarse = build_envelopes([points], 0.3, samples_per_branch=300)
+        fine = build_envelopes([points], 0.02, samples_per_branch=300)
         self.assertGreater(len(fine), len(coarse))
         self.assertTrue(all(e.polyline_distance_bound <= 0.02 for e in fine))
         self.assertTrue(all(any(e.polytope.contains(q) for e in fine) for q in points))

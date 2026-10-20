@@ -5,7 +5,8 @@ import json
 from pathlib import Path
 
 from planar3R_bbox_reliability_partition import (
-    R1, R2, R3, branch_bounding_box, build_reliability_lookup, partition_single_branch,
+    R1, R2, R3, branch_bounding_box, build_reliability_lookup, partition_multiple_branches,
+    merge_equal_reliability_boxes,
 )
 from planar3R_collision import L, is_collision_free
 from planar3R_two_point_ssm_views import compute_ssms_for_target, refine_ik_configuration
@@ -22,9 +23,12 @@ def reliability_region_sets_for_workspace_point(x, y, seed=0):
     if not ssms:
         raise ValueError(f"No SSM branch found for workspace point ({x}, {y}).")
     lookup = build_reliability_lookup(R1, R2, R3)
-    return [{"label": f"branch {i + 1}",
-             "regions": partition_single_branch(branch_bounding_box(ssm), lookup),
-             "ssm": ssm} for i, ssm in enumerate(ssms)]
+    raw_regions = partition_multiple_branches([branch_bounding_box(ssm) for ssm in ssms], lookup)
+    regions = merge_equal_reliability_boxes(raw_regions)
+    return [{"label": "branch 1" if len(ssms) == 1 else "combined branches (max)",
+             "regions": regions, "unmerged_partition_count": len(raw_regions),
+             "ssms": ssms, "branch_count": len(ssms),
+             "reliability_rule": "maximum_across_branches"}]
 
 
 def ssm_candidate_points(x, y, obstacles, max_candidates=30, seed=0):

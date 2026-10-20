@@ -11,7 +11,9 @@ import numpy as np
 from planar3R_collision import L, is_collision_free, link_points, wrap_to_pi
 from planar3R_iris_gcs_planner import validate_joint_path
 from planar3R_iris_regions import load_iris_checkpoint, polytope_adjacency, split_iris_regions
-from planar3R_ssm_envelopes import build_envelopes, intersect_envelopes, project_to_local_ssm
+from planar3R_ssm_envelopes import (
+    SSM_ARC_SPACING, build_envelopes, intersect_envelopes, project_to_local_ssm,
+)
 from gcs.quality import bound_quality
 
 
@@ -163,14 +165,14 @@ def solve_target_sets(regions, edges, start, targets, weights, rounding=True,
 
 
 def plan_two_stage(start, goal, obstacles, checkpoint_path="planar3R_iris_regions.npz",
-                   geometric_epsilon=0.025, samples_per_branch=300,
+                   geometric_epsilon=0.025, samples_per_branch=None,
                    reliability_source="goal", reliability_branch=0,
                    reliability_epsilon=0.01, min_reliability=0.0, seed=0,
                    rounding=True, compare_sampled=False, max_rounded_paths=200,
                    max_rounding_trials=300, rounding_seed=0, relative_gap_tolerance=0.01,
                    mip_time_limit=60.0, mip_relative_gap=0.01,
                    stage2_max_rounded_paths=200, stage2_max_rounding_trials=300,
-                   geometry_only=False):
+                   geometry_only=False, ssm_arc_spacing=SSM_ARC_SPACING):
     started = time.perf_counter()
     supplied = np.asarray(start, dtype=float)
     goal = np.asarray(goal, dtype=float)
@@ -178,7 +180,9 @@ def plan_two_stage(start, goal, obstacles, checkpoint_path="planar3R_iris_region
             or not np.all(np.isfinite(goal)) or not np.isfinite(reliability_epsilon)
             or reliability_epsilon <= 0 or not 0 <= min_reliability <= 1
             or not np.isfinite(geometric_epsilon) or geometric_epsilon <= 0
-            or samples_per_branch < 2 or max_rounded_paths < 1 or max_rounding_trials < 1
+            or (samples_per_branch is not None and samples_per_branch < 2)
+            or not np.isfinite(ssm_arc_spacing) or ssm_arc_spacing <= 0
+            or max_rounded_paths < 1 or max_rounding_trials < 1
             or not np.isfinite(mip_time_limit) or mip_time_limit <= 0
             or not np.isfinite(mip_relative_gap) or mip_relative_gap < 0
             or stage2_max_rounded_paths < 1 or stage2_max_rounding_trials < 1):
@@ -236,9 +240,14 @@ def plan_two_stage(start, goal, obstacles, checkpoint_path="planar3R_iris_region
     partition_sets = reliability_region_sets_from_source(
         reliability_source, link_points(start)[-1], goal, seed)
     if not 0 <= reliability_branch < len(partition_sets):
-        raise ValueError("reliability_branch is outside the available partition sets")
+        raise ValueError("Only reliability_branch=0 is supported; all SSM branches share one combined map")
     partition = partition_sets[reliability_branch]
     report["reliability_branch"] = partition["label"]
+    report["reliability_branch_count"] = partition.get("branch_count", 0)
+    report["reliability_rule"] = partition.get("reliability_rule", "no_reliability_partition")
+    report["reliability_partition_count"] = len(partition["regions"] or [])
+    report["unmerged_reliability_partition_count"] = partition.get(
+        "unmerged_partition_count", report["reliability_partition_count"])
     regions = split_iris_regions(original, partition["regions"], min_reliability)
     graph = nx.Graph()
     graph.add_nodes_from(range(len(regions)))
@@ -269,13 +278,21 @@ def plan_two_stage(start, goal, obstacles, checkpoint_path="planar3R_iris_region
                 piece.append(refined)
         if piece:
             refined_branches.append(np.asarray(piece))
-    envelopes = build_envelopes(refined_branches, geometric_epsilon, samples_per_branch)
+    envelopes = build_envelopes(
+        refined_branches, geometric_epsilon, samples_per_branch, arc_spacing=ssm_arc_spacing,
+        refine_sample=(lambda q: refine_ik_configuration(q, *goal)) if samples_per_branch is None else None,
+        sampling_report=report)
     targets = intersect_envelopes(envelopes, regions)
     report.update(envelope_count=len(envelopes), target_set_count=len(targets),
                   actual_sample_count=len({tuple(q) for e in envelopes for q in e.samples}),
                   region_count=len(regions), edge_count=len(edges),
                   geometry_seconds=time.perf_counter() - setup_started,
                   envelope_polyline_bounds=[e.polyline_distance_bound for e in envelopes])
+    print(f"Geometry: {report['reliability_branch_count']} reliability branches; "
+          f"{report['unmerged_reliability_partition_count']} -> "
+          f"{report['reliability_partition_count']} boxes after equal-reliability merging; "
+          f"{len(regions)} free regions, {len(edges)} directed edges; "
+          f"{report['actual_sample_count']} SSM samples, {len(targets)} targets", flush=True)
     if not targets:
         return finish("no_path_in_iris_coverage", "No sampled target hull intersects connected coverage.")
     if geometry_only:
@@ -475,10 +492,14 @@ def main():
     parser.add_argument("--gx", type=float, default=GOAL_POINT[0])
     parser.add_argument("--gy", type=float, default=GOAL_POINT[1])
     parser.add_argument("--geometric-epsilon", type=float, default=0.025)
-    parser.add_argument("--ssm-samples", type=int, default=300)
+    parser.add_argument("--ssm-arc-spacing", type=float, default=SSM_ARC_SPACING,
+                        help="Joint-space arc sampling interval shared by all branches (radians)")
+    parser.add_argument("--ssm-samples", type=int, default=None,
+                        help="Optional legacy per-branch budget; overrides fixed arc spacing")
     parser.add_argument("--iris-regions", default="planar3R_iris_regions.npz")
     parser.add_argument("--reliability-source", choices=["start", "goal", "none"], default="goal")
-    parser.add_argument("--reliability-branch", type=int, default=0)
+    parser.add_argument("--reliability-branch", type=int, default=0,
+                        help="Compatibility option; use 0 for the combined map of all found branches")
     parser.add_argument("--reliability-epsilon", type=float, default=0.01)
     parser.add_argument("--min-reliability", type=float, default=0.0)
     parser.add_argument("--seed", type=int, default=0)
@@ -510,7 +531,7 @@ def main():
                                 args.rounding_seed, args.relative_gap_tolerance,
                                 args.mip_time_limit, args.mip_relative_gap,
                                 args.stage2_max_rounded_paths, args.stage2_max_rounding_trials,
-                                geometry_only=args.geometry_only)
+                                geometry_only=args.geometry_only, ssm_arc_spacing=args.ssm_arc_spacing)
     except (ValueError, OSError, KeyError, IndexError) as exc:
         result = {"success": False, "status": "invalid_input", "message": str(exc)}
     Path(args.output).write_text(json.dumps(result, indent=2), encoding="utf-8")

@@ -1,10 +1,11 @@
 # Adaptive SSM targets and two-stage GCS
 
-Current user-selected defaults: geometric epsilon 0.025, 300 SSM samples,
-and 200 paths / 300 trials in both stages. The stage-one route remains an
-additional stage-two candidate. These settings correspond to the full result
-in `two_stage_all_paths200_trials300.json`. The epsilon 0.0125 experiment is
-retained for comparison. Historical default values below describe earlier runs.
+Current defaults: geometric epsilon 0.025, fixed SSM arc spacing 0.044 radians,
+and 200 paths / 300 trials in both stages. Every found branch uses the same
+sampling interval; sample counts follow branch lengths. The stage-one route
+remains an additional stage-two candidate. Earlier full benchmarks, including
+`two_stage_all_paths200_trials300.json`, used the legacy 300-point budget.
+Historical default values below describe earlier runs.
 
 `planar3R_two_stage_gcs_planner.py` implements the latest idea in
 `PROJECT_CONVERSATION_HANDOFF.txt`. The original sampled endpoint planner remains
@@ -16,7 +17,7 @@ In the configured Drake container, run:
 
 ```powershell
 docker start planar3r-iris-validation
-docker exec planar3r-iris-validation /usr/bin/python3 planar3R_two_stage_gcs_planner.py --start-path iris_path.json --geometric-epsilon 0.025 --ssm-samples 300
+docker exec planar3r-iris-validation /usr/bin/python3 planar3R_two_stage_gcs_planner.py --start-path iris_path.json --geometric-epsilon 0.025 --ssm-arc-spacing 0.044
 docker exec planar3r-iris-validation /usr/bin/python3 -m unittest discover -s tests -v
 docker stop planar3r-iris-validation
 ```
@@ -27,15 +28,107 @@ The output defaults to `two_stage_path.json`; the existing result is preserved.
 Workspace goal flags are `--gx` and `--gy`. The workflow neither generates new
 IRIS regions nor searches across epsilon values.
 
-The default reliability source is `goal`. Existing code constructs a different
-cost map for each traced SSM branch. This planner uses one explicit cost map,
-selected by zero-based `--reliability-branch` (default 0). For N effective target
+The default reliability source is `goal`. All traced branches contribute to one
+common reliability map: intersect their 27-cell box partitions and assign each
+nonempty cell the maximum of its branch-specific reliabilities. The joint
+condition sets from different branches are not unioned. The common refinement
+is then intersected with the cached IRIS regions. Single-branch behavior is
+unchanged. `--reliability-branch` remains a compatibility option and must be 0.
+For N effective target
 intersections, a successful run performs N independent first-stage GCS calls
 and one final fixed-configuration GCS call. All targets use the same cost map.
 `--reliability-source start|goal|none`,
 `--min-reliability`, and `--reliability-epsilon` retain their existing meanings.
 The cost is weighted Euclidean joint-space length, with region weight
 `reliability_epsilon + 1 - reliability`.
+
+## Shared arc-length sampling
+
+Equal-reliability boxes are merged before IRIS intersection only when they
+share an entire face and have identical extents along the other two axes.
+Their union is then exactly a box and therefore convex; no extra volume or
+cost change is introduced. Partial-face contacts, L-shaped unions, edge/point
+contacts, gaps, and differing reliabilities are rejected. Repeated greedy
+axis passes reduce redundant faces but do not guarantee a minimum box cover.
+Merged boxes retain their source cells for branch-condition provenance.
+The 68-test Docker/Drake suite validates these rules.
+
+For the reverse task (1.5,1.5) -> (0.5,0.5), the target has two traced branches
+with 197 samples each (394 total), yielding 53 hulls. Equal-reliability merging
+reduces 125 reliability boxes to 63 and the IRIS intersections from 293 to
+93 free regions. The resulting graph has 1960 directed edges and 28 target
+intersections. See `two_stage_reverse_merged_geometry.json`. The earlier
+unmerged full run was terminated during its first target solve; it supplied
+no path or infeasibility result. The merged Clarabel attempt also failed to
+return its first target promptly and was terminated. Equal-cost ties were not
+established as the cause; existing logging cannot separate preprocessing from
+relaxation inside that call. The subsequent complete MOSEK run is below.
+
+### Completed reverse task with MOSEK continuous relaxation
+
+`two_stage_reverse_multibranch_merged_mosek.json` plans from the earlier verified
+configuration [0.6087380070193158,-0.6279264205318301,1.915910797633629] at
+(1.5,1.5) to the two-branch target (0.5,0.5). The existing license is passed
+only to this process as `MOSEKLM_LICENSE_FILE=/tmp/mosek.lic`; the algorithm
+remains continuous relaxation plus random rounding, with both budgets 200/300.
+No MIP solve is used. All 28 stage-one targets returned 200 distinct routes.
+Target index 19 won at cost 0.4657951965800322 and selected SSM branch index 1
+(the SECOND detected branch). The projected configuration is
+[-0.6602748142171214,1.5278156562917182,1.9158475580310466]. Stage-two native
+cost 0.479841909743721 was improved by retained route [48,16,27,90] to final
+cost 0.46579498692865234. The comparison connector cost was 0.465795415014514.
+
+Geometry took 5.81 s, stage one 499.26 s, stage two 16.87 s, total 521.99 s
+(8m41.99s). These timings exclude earlier stopped Clarabel attempts. The final
+path passed 304 collision samples, with FK error 1.72e-14 and zero fixed-goal
+configuration error. Fixed-goal lower bound 0.02501524838258812 is very loose:
+the reported (U-L)/L gap is 17.6204422, meaning 1762.04%, NOT 17.62%.
+This validates a feasible two-branch planning workflow, not near-optimality.
+
+`SSM_ARC_SPACING = 0.044` in `planar3R_ssm_envelopes.py` is the global default;
+override it with `--ssm-arc-spacing` or the planner's `ssm_arc_spacing` argument.
+Each chart-local piece of each found branch is sampled at uniformly spaced
+polyline arc coordinates with intervals no larger than this setting, retaining
+the endpoints. Counts are approximately ceil(piece_length / spacing) + 1,
+summed over all pieces/branches. The original traced polyline must already
+resolve the curve; this setting does not increase tracing resolution.
+
+Branch lengths use wrapped joint differences so periodic seams do not add
+spurious 2*pi lengths. Sampling splits at seams and never interpolates across
+them. Linear interpolation is followed by IK refinement to the goal; failed
+corrections split pieces rather than joining across missing samples. Arc
+intervals are nominal before IK refinement and do not certify continuous SSM
+coverage or a maximum post-refinement geodesic interval. Geometric epsilon
+independently controls the sampled-polyline hull approximation.
+
+The old `--ssm-samples 300` option remains available to reproduce legacy
+experiments; explicitly setting it selects the old per-branch budget instead
+of fixed spacing. Reports include sampling mode, requested spacing, estimated
+branch/total lengths, per-branch counts, and correction failures.
+
+Calibration: the existing goal SSM has estimated length 13.1651945996 radians;
+the former 300-point budget implies spacing about 0.04403075. The rounded
+default 0.044 yielded 301 actual samples, 40 hulls, and 20 target intersections
+in `two_stage_geometry_arc_spacing0044.json`, with zero refinement failures
+and zero GCS planning calls. All 65 tests passed, including seven new sampling
+tests. No full benchmark has been rerun under the new default sampling mode.
+
+Two branches do not generally produce 27x27 nonempty cells. Their per-axis
+cut coordinates form a common refinement (at most 5 intervals per axis, or
+125 positive-volume cells for two boxes inside the chart). Coincident cuts
+reduce this count. Reports include the number of contributing branches,
+the maximum-across-branches rule, and the reliability partition cell count.
+SSM target envelopes still include all found branches. Discovery of every
+physical branch is not certified by the random IK and numerical tracing.
+Historical benchmark costs and region counts below predate this map update;
+they remain applicable unchanged only when the underlying map is unchanged.
+
+Validation of this map update: all 58 Docker/Drake tests passed, including six
+new multi-branch tests with controlled branch boxes. The existing goal (1.5,1.5)
+still yields one traced branch, 27 partition boxes, 43 free regions, 40 hulls,
+and 20 targets in `two_stage_geometry_multibranch_map.json`; no GCS planning
+stage was run for that check. A full physical two-branch benchmark has not
+been run for this update.
 
 ## Solver quality and exact mode
 

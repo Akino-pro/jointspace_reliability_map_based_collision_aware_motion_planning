@@ -75,6 +75,83 @@ def partition_single_branch(bounds, reliability_lookup):
     return regions
 
 
+def partition_multiple_branches(branch_bounds, reliability_lookup):
+    """Common refinement of branch boxes, taking the maximum branch reliability.
+
+    Keep the winning branch's F set rather than unioning F sets: recovery
+    conditions from different branches must not create a fictitious branch.
+    Zero-volume contacts are omitted, as in the downstream IRIS subdivision.
+    """
+    branch_bounds = list(branch_bounds)
+    if not branch_bounds:
+        raise ValueError("At least one SSM branch is required")
+    cells = partition_single_branch(branch_bounds[0], reliability_lookup)
+    if len(branch_bounds) == 1:
+        return cells
+    cells = [dict(cell, branch_reliabilities=(cell["reliability"],),
+                  branch_F=(cell["F"],), winning_branch=0) for cell in cells]
+    for bounds in branch_bounds[1:]:
+        refined = []
+        other_cells = partition_single_branch(bounds, reliability_lookup)
+        for cell in cells:
+            for other in other_cells:
+                lower = np.maximum(cell["lower"], other["lower"])
+                upper = np.minimum(cell["upper"], other["upper"])
+                if np.any(upper - lower <= 1e-10):
+                    continue
+                values = cell["branch_reliabilities"] + (other["reliability"],)
+                f_sets = cell["branch_F"] + (other["F"],)
+                winner = int(np.argmax(values))
+                refined.append({"lower": lower, "upper": upper,
+                                "F": f_sets[winner], "reliability": values[winner],
+                                "branch_reliabilities": values, "branch_F": f_sets,
+                                "winning_branch": winner})
+        cells = refined
+    return cells
+
+
+def merge_equal_reliability_boxes(regions):
+    """Merge equal-cost boxes only when their union is exactly a box.
+
+    A merge requires an entire shared face and identical extents on the other
+    axes. No hull filling, tolerance-based gaps, or nonconvex unions are added.
+    Repeat all axes to remove further faces exposed by earlier merges. Keep
+    original cells as provenance because branch conditions can vary inside a
+    merged box even though its maximum reliability is constant.
+    """
+    cells = list(regions)
+    while True:
+        previous = cells
+        for axis in range(3):
+            other_axes = [i for i in range(3) if i != axis]
+            groups = {}
+            for cell in cells:
+                key = (float(cell["reliability"]),
+                       *np.asarray(cell["lower"])[other_axes],
+                       *np.asarray(cell["upper"])[other_axes])
+                groups.setdefault(key, []).append(cell)
+            merged = []
+            for group in groups.values():
+                group.sort(key=lambda cell: cell["lower"][axis])
+                current = group[0]
+                for following in group[1:]:
+                    if current["upper"][axis] == following["lower"][axis]:
+                        upper = np.asarray(current["upper"]).copy()
+                        upper[axis] = following["upper"][axis]
+                        sources = (current.get("source_cells", [current])
+                                   + following.get("source_cells", [following]))
+                        current = {"lower": np.asarray(current["lower"]).copy(),
+                                   "upper": upper, "reliability": current["reliability"],
+                                   "source_cells": sources}
+                    else:
+                        merged.append(current)
+                        current = following
+                merged.append(current)
+            cells = merged
+        if len(cells) == len(previous):
+            return previous
+
+
 def format_f_set(f_set):
     if not f_set:
         return "empty"

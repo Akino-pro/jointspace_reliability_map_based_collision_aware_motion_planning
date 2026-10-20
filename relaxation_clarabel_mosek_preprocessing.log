@@ -1,0 +1,48 @@
+Geometry: 2 reliability branches; 125 -> 63 boxes after equal-reliability merging; 93 free regions, 1960 directed edges; 394 SSM samples, 28 targets
+Stage 1: solving target 1/28
+BEGIN SolveShortestPath {"solver": "clarabel", "preprocessing_solver": "mosek", "solver_time_limit": 60.0, "graph_regions": 93, "graph_region_edges": 1960, "graph_total_edges": 1962, "setup_seconds": 6.092240782000317, "status": "before_solve"}
+-------------------------------------------------------------
+           Clarabel.rs v0.11.1  -  Clever Acronym                
+
+                   (c) Paul Goulart                          
+                University of Oxford, 2022                   
+-------------------------------------------------------------
+
+problem:
+  variables     = 15095
+  constraints   = 202658
+  nnz(P)        = 0
+  nnz(A)        = 4028853
+  cones (total) = 1888
+    :        Zero = 1,  numel = 380
+    : Nonnegative = 1,  numel = 194734
+    : SecondOrder = 1886,  numel = (4,4,4,4,...,4)
+
+settings:
+  linear algebra: direct / qdldl, precision: 64 bit (1 thread)
+  max iter = 200, time limit = 60.0,  max step = 0.990
+  tol_feas = 1.0e-8, tol_gap_abs = 1.0e-8, tol_gap_rel = 1.0e-8,
+  static reg : on, ϵ1 = 1.0e-8, ϵ2 = 4.9e-32
+  dynamic reg: on, ϵ = 1.0e-13, δ = 2.0e-7
+  iter refine: on, reltol = 1.0e-13, abstol = 1.0e-12,
+               max iter = 10, stop ratio = 5.0
+  equilibrate: on, min_scale = 1.0e-4, max_scale = 1.0e4
+               max iter = 10
+
+iter    pcost        dcost       gap       pres      dres      k/t        μ       step      
+---------------------------------------------------------------------------------------------
+  0  +0.0000e+00  -7.0871e+03  7.09e+03  9.84e-01  4.37e+01  1.00e+00  2.57e+00   ------   
+  1  -4.2876e+01  -2.8693e+03  6.59e+01  8.21e-01  3.85e+01  7.70e-01  1.64e+00  5.11e-01  
+  2  -2.3289e+01  -2.4008e+03  1.02e+02  7.46e-01  3.69e+01  9.41e-01  1.46e+00  2.94e-01  
+  3  -8.4221e+00  -8.2380e+02  9.68e+01  3.83e-01  2.48e+01  5.28e-01  7.32e-01  5.88e-01  
+  4  -9.1997e+00  -3.2157e+02  3.40e+01  1.50e-01  1.47e+01  1.95e-01  3.61e-01  6.20e-01  
+  5  -8.0628e+00  -1.6838e+02  1.99e+01  7.21e-02  1.02e+01  7.72e-02  2.19e-01  6.66e-01  
+  6  -5.7259e+00  -1.0349e+02  1.71e+01  4.36e-02  7.17e+00  4.25e-02  1.47e-01  4.40e-01  
+  7  -3.0033e+00  -4.8609e+01  1.52e+01  2.01e-02  3.75e+00  1.80e-02  7.61e-02  5.53e-01  
+  8  -6.8250e-01  -1.5718e+01  1.50e+01  6.52e-03  1.31e+00  4.16e-03  2.70e-02  8.00e-01  
+---------------------------------------------------------------------------------------------
+Terminated with status = MaxTime
+solve time = 72.426095802s
+INFO:drake:Clarabel returns MaxTime
+INFO:drake:Solved GCS shortest path using Clarabel with convex_relaxation=true and preprocessing=true and no rounding.
+END SolveShortestPath {"solver": "clarabel", "preprocessing_solver": "mosek", "solver_time_limit": 60.0, "graph_regions": 93, "graph_region_edges": 1960, "graph_total_edges": 1962, "setup_seconds": 6.092240782000317, "status": "SolutionResult.kSolverSpecificError", "wall_seconds": 82.72810071399999, "success": false, "solver_id": "Clarabel", "cost": NaN, "solver_details": {"iterations": 8, "solve_time": 72.426095802, "status": "MaxTime"}}
