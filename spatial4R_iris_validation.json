@@ -1,0 +1,9 @@
+{
+  "checkpoint": "spatial4R_iris_regions.npz",
+  "regions": 1,
+  "samples_per_region": 5000,
+  "sampled_configurations": 5000,
+  "collisions": 0,
+  "seed": 2026,
+  "method": "4D hit-and-run sampling; not a continuous collision certificate"
+}

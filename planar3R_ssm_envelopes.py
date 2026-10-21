@@ -27,8 +27,8 @@ def resample_by_arclength(points, spacing):
     if not np.isfinite(spacing) or spacing <= 0:
         raise ValueError("SSM arc spacing must be positive and finite")
     points = np.asarray(points, dtype=float)
-    if points.ndim != 2 or points.shape[1] != 3 or not np.all(np.isfinite(points)):
-        raise ValueError("SSM points must be finite ordered 3D configurations")
+    if points.ndim != 2 or points.shape[1] < 2 or not np.all(np.isfinite(points)):
+        raise ValueError("SSM points must be finite ordered joint configurations")
     if len(points) < 2:
         return points.copy()
     lengths = np.linalg.norm(np.diff(points, axis=0), axis=1)
@@ -38,7 +38,7 @@ def resample_by_arclength(points, spacing):
     cumulative = np.r_[0.0, np.cumsum(np.linalg.norm(np.diff(points, axis=0), axis=1))]
     count = int(np.ceil(cumulative[-1] / spacing)) + 1
     positions = np.linspace(0, cumulative[-1], count)
-    return np.column_stack([np.interp(positions, cumulative, points[:, i]) for i in range(3)])
+    return np.column_stack([np.interp(positions, cumulative, points[:, i]) for i in range(points.shape[1])])
 
 
 @dataclass
@@ -70,7 +70,7 @@ def sample_hull(points):
         world = hull.equations[:, :-1] @ axes
         A.extend(world)
         b.extend(world @ origin - hull.equations[:, -1])
-    return ReliablePolytope(np.asarray(A).reshape(-1, 3), np.asarray(b))
+    return ReliablePolytope(np.asarray(A).reshape(-1, points.shape[1]), np.asarray(b))
 
 
 def chord_bound(points):
@@ -109,8 +109,8 @@ def build_envelopes(branches, epsilon=0.025, samples_per_branch=None,
 
     for branch_index, branch in enumerate(branches):
         branch = np.asarray(branch, dtype=float)
-        if branch.ndim != 2 or branch.shape[1] != 3 or not np.all(np.isfinite(branch)):
-            raise ValueError("SSM branches must contain finite ordered 3D configurations")
+        if branch.ndim != 2 or branch.shape[1] < 2 or not np.all(np.isfinite(branch)):
+            raise ValueError("SSM branches must contain finite ordered joint configurations")
         if not len(branch):
             branch_lengths.append(0.0)
             sample_counts.append(0)
@@ -162,33 +162,37 @@ def intersect_envelopes(envelopes, regions):
         for region_index, region in enumerate(regions):
             A = np.vstack((envelope.polytope.A, region.A))
             b = np.concatenate((envelope.polytope.b, region.b))
-            feasible = linprog(np.zeros(3), A_ub=A, b_ub=b,
-                               bounds=[(None, None)] * 3, method="highs")
+            dimension = A.shape[1]
+            feasible = linprog(np.zeros(dimension), A_ub=A, b_ub=b,
+                               bounds=[(None, None)] * dimension, method="highs")
             if feasible.success:
                 targets.append({"polytope": ReliablePolytope(A, b),
                                 "envelope": envelope_index, "region": region_index})
     return targets
 
 
-def project_to_local_ssm(point, envelope, region, goal, obstacles, link_radius):
+def project_to_local_ssm(point, envelope, region, goal, obstacles, link_radius,
+                         position=None, collision_free=None):
     """Multistart constrained local projection onto continuous FK equality.
 
     The sample coordinate box restricts the selected local portion; it can omit
     unsampled extrema. This is local numerical projection, not a global proof.
     """
     point = np.asarray(point)
+    position = position or (lambda q: link_points(q)[-1])
+    collision_free = collision_free or (lambda q: is_collision_free(q, obstacles, link_radius=link_radius))
     samples = envelope.samples
     lower, upper = samples.min(axis=0), samples.max(axis=0)
     constraints = [
-        {"type": "eq", "fun": lambda q: link_points(q)[-1] - goal},
+        {"type": "eq", "fun": lambda q: position(q) - goal},
         {"type": "ineq", "fun": lambda q: region.b - region.A @ q},
     ]
     candidates = []
     # Include exact sampled endpoints and use nearby samples as local seeds.
     order = np.argsort(np.linalg.norm(samples - point, axis=1))
     for q in samples:
-        if (region.contains(q) and np.linalg.norm(link_points(q)[-1] - goal) <= 1e-7
-                and is_collision_free(q, obstacles, link_radius=link_radius)):
+        if (region.contains(q) and np.linalg.norm(position(q) - goal) <= 1e-7
+                and collision_free(q)):
             candidates.append(q)
     for index in order[:8]:
         result = minimize(lambda q: np.sum((q - point)**2), samples[index],
@@ -196,8 +200,8 @@ def project_to_local_ssm(point, envelope, region, goal, obstacles, link_radius):
                           constraints=constraints, options={"ftol": 1e-12, "maxiter": 200})
         q = result.x
         if (result.success and np.all(np.isfinite(q)) and region.contains(q)
-                and np.linalg.norm(link_points(q)[-1] - goal) <= 1e-7
-                and is_collision_free(q, obstacles, link_radius=link_radius)):
+                and np.linalg.norm(position(q) - goal) <= 1e-7
+                and collision_free(q)):
             candidates.append(q)
     if not candidates:
         return None

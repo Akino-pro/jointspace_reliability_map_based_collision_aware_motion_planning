@@ -14,6 +14,10 @@ from planar3R_collision import L, is_collision_free, link_points, wrap_to_pi
 from planar3R_iris_regions import interior_point, load_iris_checkpoint, polytope_adjacency
 
 
+MAX_ROUNDED_PATHS = 200
+MAX_ROUNDING_TRIALS = 300
+
+
 @dataclass
 class LockedSlice:
     A: np.ndarray
@@ -105,6 +109,8 @@ def solve_to_any_goal(regions, edges, start, goals, source_indices, goal_indices
 
     planner = LinearGCS([r.to_drake() for r in regions], edges=edges,
                         vertex_cost_weights=np.ones(len(regions)))
+    planner.options.max_rounded_paths = MAX_ROUNDED_PATHS
+    planner.options.max_rounding_trials = MAX_ROUNDING_TRIALS
     vertices = list(planner.gcs.Vertices())
     planner.source = planner.gcs.AddVertex(Point(start), "failure_start")
     planner.target = planner.gcs.AddVertex(Point(np.zeros(2)), "terminal_sink")
@@ -150,6 +156,8 @@ def plan_after_failure(q_failure, failed_joint, goal_point,
               "failure_configuration": supplied_configuration.tolist(), "goal_point": goal.tolist(),
               "active_joints": [i + 1 for i in active], "iris_checkpoint": str(checkpoint_path),
               "cost_type": "active_joint_space_euclidean_length", "gcs_solve_calls": 0,
+              "solver_settings": {"max_rounded_paths": MAX_ROUNDED_PATHS,
+                                  "max_rounding_trials": MAX_ROUNDING_TRIALS},
               "planning_chart_configuration": q_failure.tolist(),
               "angle_winding_offsets": winding_offsets.tolist()}
 

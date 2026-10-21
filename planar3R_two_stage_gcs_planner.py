@@ -39,7 +39,7 @@ def solve_target_sets(regions, edges, start, targets, weights, rounding=True,
                       candidate_region_routes=None, max_rounded_paths=10,
                       max_rounding_trials=100, rounding_seed=0,
                       relative_gap_tolerance=0.01, mip_time_limit=60.0,
-                      mip_relative_gap=0.01):
+                      mip_relative_gap=0.01, solver_backend=None):
     """Use a direct terminal vertex for a single target; charge physical motion."""
     from pydrake.geometry.optimization import Point
     from pydrake.solvers import L2NormCost
@@ -52,12 +52,21 @@ def solve_target_sets(regions, edges, start, targets, weights, rounding=True,
         raise ValueError("MIP time limit must be positive and MIP gap nonnegative")
     bound_quality(None, None, relative_gap_tolerance)  # Validate before solving.
     exact_solver = require_mixed_integer_solver() if not rounding else None
+    dimension = len(start)
 
     planner = LinearGCS([r.to_drake() for r in regions], edges=edges,
                         vertex_cost_weights=weights)
     planner.options.max_rounded_paths = max_rounded_paths
     planner.options.max_rounding_trials = max_rounding_trials
     planner.options.rounding_seed = rounding_seed
+    if solver_backend is not None:
+        from pydrake.solvers import ClarabelSolver, MosekSolver
+        if solver_backend not in ("mosek", "clarabel"):
+            raise ValueError("Solver backend must be mosek or clarabel")
+        conic_solver = MosekSolver() if solver_backend == "mosek" else ClarabelSolver()
+        if not (conic_solver.available() and conic_solver.enabled()):
+            raise RuntimeError(f"Requested solver {solver_backend} is not available/enabled")
+        planner.options.solver = conic_solver
     if not rounding:
         from pydrake.solvers import GurobiSolver, MosekSolver, SolverOptions
         solver_options = SolverOptions()
@@ -76,11 +85,11 @@ def solve_target_sets(regions, edges, start, targets, weights, rounding=True,
     if not targets:
         return None
     if multiple_targets:
-        planner.target = planner.gcs.AddVertex(Point(np.zeros(3)), "terminal_sink")
+        planner.target = planner.gcs.AddVertex(Point(np.zeros(dimension)), "terminal_sink")
     for index, region in enumerate(regions):
         if region.contains(start):
             edge = planner.gcs.AddEdge(planner.source, vertices[index])
-            for axis in range(3):
+            for axis in range(dimension):
                 edge.AddConstraint(edge.xu()[axis] == edge.xv()[axis])
     target_vertices = {}
     for index, target in enumerate(targets):
@@ -88,8 +97,8 @@ def solve_target_sets(regions, edges, start, targets, weights, rounding=True,
         target_vertices[vertex.name()] = index
         for region_index in target.get("regions", [target["region"]]):
             edge = planner.gcs.AddEdge(vertices[region_index], vertex)
-            matrix = weights[region_index] * np.hstack((-np.eye(3), np.eye(3)))
-            edge.AddCost(BindingCost(L2NormCost(matrix, np.zeros(3)),
+            matrix = weights[region_index] * np.hstack((-np.eye(dimension), np.eye(dimension)))
+            edge.AddCost(BindingCost(L2NormCost(matrix, np.zeros(dimension)),
                                      np.append(edge.xu(), edge.xv())))
         if multiple_targets:
             planner.gcs.AddEdge(vertex, planner.target)
@@ -158,6 +167,7 @@ def solve_target_sets(regions, edges, start, targets, weights, rounding=True,
             "native_cost": native_cost, "additional_route_results": route_results,
             "quality": quality, "solve_mode": "relaxation_rounding" if rounding else "mixed_integer",
             "exact_solver": exact_solver,
+            "solver_name": best_result.get_solver_id().name(),
             "solver_termination": str(best_result.get_solution_result()),
             "mip_details": mip_details,
             "rounded_path_count": results.get("rounded_path_count", 0),

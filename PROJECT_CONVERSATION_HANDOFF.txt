@@ -1,5 +1,5 @@
 PROJECT AND CONVERSATION HANDOFF
-Updated: 2026-10-20
+Updated: 2026-10-21
 Language: English, following the user's instruction that project documentation be in English.
 
 PURPOSE AND SCOPE
@@ -13,6 +13,105 @@ about pending implementation, missing Docker, and combined first-stage targets.
 See TWO_STAGE_SSM_WORKFLOW.md for implementation details. No commit or push.
 
 LATEST CONFIRMED WORKFLOW AND PARAMETERS
+- FIRST SPATIAL ROBOT TEST: default robot is now ftwmax (first parameter set).
+  CLI --robot rcmax selects the previous model; default cache/result filenames
+  include the robot name. DH a=[0.5,0.48,0.76,0.95], d=[-0.29,0,0.05,1],
+  alpha=[85,-53,-89,68] degrees, reliabilities [0.9,0.7,0.5,0.3], no CA limits.
+  Numeric expressions in the first parameter set are parsed without running
+  the original map script. All 80 tests passed under ftwmax; rcmax extraction
+  remains explicitly tested. No model/cache/result mixing is allowed.
+  Same start/reference angles and sphere give new workspace points:
+  [2.0780462171,1.6396001579,-0.3902624283] ->
+  [0.8408788052,2.5945928525,-0.6250625833]. One SSM branch, 153 samples,
+  32 hulls, 11 targets, 16 free regions, 240 directed edges, local IRIS radius
+  0.9. Epsilon 0.025, arc interval 0.044, MOSEK seed 0, retained route kept.
+  User-requested 1000/1500 test in BOTH stages collected 1000 distinct routes
+  in every call. First-stage target index 5 wins at 0.07675044859275859;
+  final cost 0.07685758311854818, gap 11.6822%. Stage one 40.56s, stage two
+  2.28s, sum 42.83s. Full 61.15s includes 17.41s one-time IRIS generation.
+  Same-robot 200/300 control chooses target index 6 at first-stage cost
+  0.07676953521773118; final 0.07676821560717718, gap 11.6968%. Stage one
+  17.60s, stage two 0.83s, sum 18.43s; cached full run 19.23s. Both stages
+  collected 200 routes each in that control. Larger budget improved one
+  target and changed the projected goal: first-stage best cost dropped
+  0.0249% but final cost rose 0.1164%. These are DIFFERENT fixed-goal problems;
+  do not claim more candidates worsen the same fixed-endpoint GCS solve.
+  Both final native results tie retained route [3,7,5,13]. Both pass collision
+  and FK checks: 1000 result 95 samples/FK 9.16e-16; 200 result 93/FK 1.11e-16.
+  Files spatial4R_ftwmax_paths1000_trials1500.json and
+  spatial4R_ftwmax_paths200_trials300.json; cache spatial4R_ftwmax_iris_local_regions.npz
+  passed 5000 independent collision samples. Rounding defaults remain 200/300;
+  1000/1500 was an experiment, not a user-selected replacement default.
+  See SPATIAL4R_WORKFLOW.md. No commit or push.
+- SPATIAL 4R PRE-FAILURE PROTOTYPE (2026-10-21): implemented in spatial4R_model.py,
+  spatial4R_iris.py, spatial4R_two_stage_gcs_planner.py, spatial4R_validate_iris.py.
+  Read SPATIAL4R_WORKFLOW.md for the full robot/scene/configuration details.
+  The model reads final top-level literal rcmax parameters from
+  spatial_4r_reliability_maps_proposed_method.py via AST without running its
+  grid or importing Robotics Toolbox. Reliabilities [0.9,0.7,0.5,0.3]; standard
+  DH a=[0.04732540449946272,0.8501471809443848,0.0018628495298751034,0.8495872435309159],
+  d=[-0.0020589855582313892,-0.12359280272943952,0.0025723721804752,0.04538990560835715],
+  alpha=[1.1599121046989387,-0.5154988273227061,0.03775362985949342,0.5365523262566805].
+  Reference CA is recorded but NOT enforced; physical joint limits remain absent.
+  Position-only XYZ task, generic 1D SSM in 4D joint space. Both d offsets and
+  a links are capsules, radius 0.015, with matching analytic/Drake collision
+  checks. Only spherical obstacles supported; self-collision explicitly disabled.
+  Shared planar-named geometry/GCS helpers now also support four dimensions;
+  all prior planar tests still pass. Box-implied original IRIS halfspaces are
+  safely dropped using exact box support with a strict numerical margin.
+  Spatial stages use per-target first solves, true local SSM projection, full
+  fixed-goal second solve, and the retained stage-one route. All found branches
+  contribute to the maximum-reliability map. Epsilon 0.025, arc spacing 0.044,
+  both-stage budgets 200/300, reliability cost epsilon 0.01, seed 0, explicit
+  MOSEK continuous relaxation + rounding. All 15 reliability formulas match
+  the reference exactly. No spatial post-failure planner has been added.
+
+  Test start q=[0.2,-0.8,0.6,-0.3], position
+  [1.3921760958,0.0630204588,-1.0303980729]. Goal XYZ
+  [1.0048114470,1.3268089240,-0.3027628522], generated from q=[0.8,-0.4,0.2,0.4]
+  as an IK/IRIS seed only, not a fixed endpoint constraint. Sphere center
+  [0.5,0,0.3], radius 0.10. Found 2 SSM branches, lengths about 8.8866 radians
+  each, 205+204=409 samples, 10 local hulls. Combined map 625 boxes -> 247
+  convex equal-reliability boxes.
+
+  RESOURCE LIMIT: the initial larger-domain cache spatial4R_iris_regions.npz
+  took 90.41s to generate one region; its graph had 207 regions/3890 edges,
+  20 targets. Full solving failed to complete; Docker cgroup recorded an OOM
+  kill with about 7.57 GiB RAM available. No optimality or infeasibility claim.
+  The completed prototype instead uses spatial4R_iris_local_regions.npz,
+  with local seed +/-0.9-radian inflation domains clipped to [-pi,pi]^4.
+  These limit represented IRIS COVERAGE, not physical robot joint ranges.
+  The cache does not cover all SSM branches or all periodic routes.
+
+  SUCCESSFUL FULL TEST: local cache gives one original region, 21 reliable
+  regions, 104 directed edges, 3 target intersections. First-stage returned
+  cost 0.06601626039626814; selected target index 1 / SSM branch index 0.
+  Projected goal q=[0.7882687205502752,-0.39373734534478555,
+  0.7531786903199453,-0.1474218192119493]. Final cost 0.0660305054225731,
+  native and retained route [1,9,19] tie. Second-stage lower bound
+  0.05765536717912147, gap 14.5262% (1% not met). FK error 7.04e-16, zero
+  start/fixed-goal errors, collision check passes 99 path samples. First-stage
+  distinct route counts 113,105,200; second-stage 122, bounded by 300 trials.
+  First run including local IRIS generation took 32.96s (generation 25.66s).
+  Cached rerun: geometry 0.98s, stage one 5.36s, stage two 0.44s, total 6.83s.
+  Outputs spatial4R_two_stage_path.json and spatial4R_two_stage_cached_path.json.
+  All 79 tests passed, including 11 new spatial tests and prior planar tests.
+  At 100 random configurations Drake tool poses and collisions matched the
+  analytic DH model. Both larger/local IRIS caches passed 5000 independent
+  interior collision samples (sampled validation, not a continuous proof).
+  Documentation and commands are in SPATIAL4R_WORKFLOW.md. No commit or push.
+- POST-FAILURE BUDGET UPDATE (2026-10-21): the independent single-locked-joint
+  planner now explicitly sets max_rounded_paths=200 and max_rounding_trials=300,
+  matching both pre-failure stages. Constants MAX_ROUNDED_PATHS and
+  MAX_ROUNDING_TRIALS are in planar3R_post_failure_planner.py. Output reports
+  include solver_settings with these budgets. Post-failure cost remains
+  unweighted active-joint Euclidean length on original IRIS slices, without
+  SSM sampling or reliability subdivision. Degenerate continuous-goal IK
+  remains explicitly unsupported at the user's request. No full benchmark
+  was rerun for this small configuration change.
+  Validation: all 14 post-failure tests passed in Docker/Drake, including
+  real GCS solves, locked-angle/winding preservation, collision checks, and
+  fail-fast unreachable/degenerate cases.
 - CLARABEL/MOSEK DIAGNOSIS: see SOLVER_DIAGNOSIS.md and the four relaxation_*.json
   reports with corresponding logs. Captured/rebuilt the SAME reverse first
   target: 93 regions, 1960 region edges, 1962 total edges. No rounding or MIP.

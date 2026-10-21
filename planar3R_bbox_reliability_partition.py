@@ -122,8 +122,8 @@ def merge_equal_reliability_boxes(regions):
     cells = list(regions)
     while True:
         previous = cells
-        for axis in range(3):
-            other_axes = [i for i in range(3) if i != axis]
+        for axis in range(len(cells[0]["lower"]) if cells else 0):
+            other_axes = [i for i in range(len(cells[0]["lower"])) if i != axis]
             groups = {}
             for cell in cells:
                 key = (float(cell["reliability"]),

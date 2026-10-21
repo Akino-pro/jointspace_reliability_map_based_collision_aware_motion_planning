@@ -13,6 +13,12 @@ available. Both use the existing IRIS cache and the same robot geometry.
 
 ## Run
 
+The separate post-failure entry point `planar3R_post_failure_planner.py` also
+uses 200 candidate paths / 300 sampling trials, explicitly set by its module
+constants. Its output records these solver settings. This remains a single
+2D GCS solve after analytic locked-joint IK, with unweighted joint-space cost;
+it does not use the two-stage SSM envelopes or reliability partitioning.
+
 In the configured Drake container, run:
 
 ```powershell

@@ -20,7 +20,7 @@ class ReliablePolytope:
     partition_index: int = -1
 
     def contains(self, point, tol=1e-8):
-        return bool(np.all(self.A @ np.asarray(point).reshape(3) <= self.b + tol))
+        return bool(np.all(self.A @ np.asarray(point).reshape(self.A.shape[1]) <= self.b + tol))
 
     def to_drake(self):
         from pydrake.geometry.optimization import HPolyhedron
@@ -58,8 +58,13 @@ def split_iris_regions(regions, reliability_regions, min_reliability=0.0):
             lower, upper = np.asarray(partition["lower"]), np.asarray(partition["upper"])
             if np.any(upper - lower <= 1e-10):
                 continue
-            A = np.vstack((region.A, np.eye(3), -np.eye(3)))
-            b = np.concatenate((region.b, upper, -lower))
+            dimension = region.A.shape[1]
+            # Box support is an exact upper bound for each original halfspace.
+            # Drop only strictly implied rows; retain rows near numerical ties.
+            support = np.sum(np.where(region.A >= 0, region.A * upper, region.A * lower), axis=1)
+            needed = support > region.b - 1e-10
+            A = np.vstack((region.A[needed], np.eye(dimension), -np.eye(dimension)))
+            b = np.concatenate((region.b[needed], upper, -lower))
             if interior_point(A, b) is not None:
                 children.append(ReliablePolytope(A, b, reliability, i, j))
     return children
@@ -97,7 +102,7 @@ def save_iris_checkpoint(path, regions, metadata):
     temporary.replace(path)
 
 
-def load_iris_checkpoint(path, allow_empty=False):
+def load_iris_checkpoint(path, allow_empty=False, expected_dimension=3):
     with np.load(path, allow_pickle=False) as arrays:
         metadata = json.loads(str(arrays["metadata"]))
         count = len([name for name in arrays.files if name.startswith("A_")])
@@ -106,8 +111,9 @@ def load_iris_checkpoint(path, allow_empty=False):
     if not regions and not allow_empty:
         raise ValueError("The IRIS checkpoint contains no completed regions.")
     for region in regions:
-        if region.A.ndim != 2 or region.A.shape[1] != 3 or region.b.shape != (len(region.A),):
-            raise ValueError("Invalid planar 3R IRIS halfspace dimensions.")
+        if (region.A.ndim != 2 or region.A.shape[1] != expected_dimension
+                or region.b.shape != (len(region.A),)):
+            raise ValueError(f"Invalid {expected_dimension}D IRIS halfspace dimensions.")
         if not np.all(np.isfinite(region.A)) or not np.all(np.isfinite(region.b)):
             raise ValueError("Non-finite IRIS halfspaces.")
     return regions, metadata
