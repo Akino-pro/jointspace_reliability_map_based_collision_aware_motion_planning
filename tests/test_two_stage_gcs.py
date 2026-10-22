@@ -5,13 +5,13 @@ from unittest.mock import patch
 
 import numpy as np
 
-from planar3R_collision import link_points
-from planar3R_iris_regions import ReliablePolytope, save_iris_checkpoint
-from planar3R_post_failure_planner import locked_joint_ik
-from planar3R_ssm_envelopes import (
+from scripts.planar3R_collision import link_points
+from scripts.planar3R_iris_regions import ReliablePolytope, save_iris_checkpoint
+from scripts.planar3R_post_failure_planner import locked_joint_ik
+from scripts.planar3R_ssm_envelopes import (
     build_envelopes, intersect_envelopes, project_to_local_ssm, sample_hull,
 )
-from planar3R_two_stage_gcs_planner import (
+from scripts.planar3R_two_stage_gcs_planner import (
     MixedIntegerSolverUnavailable, plan_two_stage, solve_target_sets,
 )
 
@@ -103,7 +103,7 @@ class PipelineTests(unittest.TestCase):
             "link_lengths": [1, 1, 1], "obstacles": [], "link_radius": 0.0}})
 
     def test_unreachable_goal_stops_without_sampling_or_gcs(self):
-        with patch("planar3R_two_stage_gcs_planner.solve_target_sets") as solve:
+        with patch('scripts.planar3R_two_stage_gcs_planner.solve_target_sets') as solve:
             result = plan_two_stage([0, 0, 0], [10, 0], [], self.cache)
         self.assertEqual(result["status"], "goal_unreachable")
         self.assertEqual(result["gcs_solve_calls"], 0)
@@ -117,9 +117,9 @@ class PipelineTests(unittest.TestCase):
         self.assertEqual(result["gcs_solve_calls"], 0)
 
     def test_exact_mode_without_solver_stops_before_geometry_and_gcs(self):
-        with patch("planar3R_two_stage_gcs_planner.require_mixed_integer_solver",
+        with patch('scripts.planar3R_two_stage_gcs_planner.require_mixed_integer_solver',
                    side_effect=MixedIntegerSolverUnavailable("No enabled MISOCP solver")), \
-                patch("planar3R_two_stage_gcs_planner.solve_target_sets") as solve:
+                patch('scripts.planar3R_two_stage_gcs_planner.solve_target_sets') as solve:
             result = plan_two_stage([0, 0, 0], [2, 0], [], self.cache, rounding=False)
         self.assertEqual(result["status"], "mixed_integer_solver_unavailable")
         self.assertEqual(result["gcs_solve_calls"], 0)
@@ -150,9 +150,9 @@ class PipelineTests(unittest.TestCase):
             target = intersect_envelopes(envelopes, regions)[0]
             return [dict(target) for _ in candidate_costs]
 
-        with patch("planar3R_two_point_ssm_views.compute_ssms_for_target", return_value=[samples]), \
-                patch("planar3R_two_stage_gcs_planner.intersect_envelopes", side_effect=make_targets), \
-                patch("planar3R_two_stage_gcs_planner.solve_target_sets", side_effect=solve):
+        with patch('scripts.planar3R_two_point_ssm_views.compute_ssms_for_target', return_value=[samples]), \
+                patch('scripts.planar3R_two_stage_gcs_planner.intersect_envelopes', side_effect=make_targets), \
+                patch('scripts.planar3R_two_stage_gcs_planner.solve_target_sets', side_effect=solve):
             result = plan_two_stage([0.3, -0.9, 0.6], goal, [], self.cache,
                                     geometric_epsilon=10, reliability_source="none")
         return result, calls
@@ -225,7 +225,7 @@ class PipelineTests(unittest.TestCase):
 
     def test_invalid_connection_is_not_reported_as_feasible(self):
         # Only the diagnostic's collision check fails; stage two stays valid.
-        with patch("planar3R_two_stage_gcs_planner.validate_joint_path",
+        with patch('scripts.planar3R_two_stage_gcs_planner.validate_joint_path',
                    side_effect=[(False, 2), (True, 3)]):
             result, calls = self.run_mocked()
         self.assertTrue(result["success"])
@@ -239,7 +239,7 @@ class PipelineTests(unittest.TestCase):
         self.assertEqual(len(calls), 1)
 
     def test_projection_failure_stops_without_second_solve(self):
-        with patch("planar3R_two_stage_gcs_planner.project_to_local_ssm", return_value=None):
+        with patch('scripts.planar3R_two_stage_gcs_planner.project_to_local_ssm', return_value=None):
             result, calls = self.run_mocked()
         self.assertEqual(result["status"], "projection_failed")
         self.assertEqual(result["gcs_solve_calls"], 1)
@@ -302,7 +302,7 @@ class TwoStageDrakeTests(unittest.TestCase):
             cache = Path(directory) / "cache.npz"
             save_iris_checkpoint(cache, [cube()], {"model": {
                 "link_lengths": [1, 1, 1], "obstacles": [], "link_radius": 0.0}})
-            with patch("planar3R_two_point_ssm_views.compute_ssms_for_target", return_value=[samples]):
+            with patch('scripts.planar3R_two_point_ssm_views.compute_ssms_for_target', return_value=[samples]):
                 result = plan_two_stage([0.3, -0.9, 0.6], goal, [], cache,
                                         reliability_source="none", geometric_epsilon=0.01)
         self.assertTrue(result["success"], result)

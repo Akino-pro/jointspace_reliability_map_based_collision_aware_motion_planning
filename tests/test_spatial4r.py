@@ -4,13 +4,13 @@ import unittest
 
 import numpy as np
 
-import spatial4R_model as model
-from spatial4R_iris import build_plant
-from spatial4R_two_stage_gcs_planner import plan_before_failure
-from planar3R_bbox_reliability_partition import partition_multiple_branches, merge_equal_reliability_boxes
-from planar3R_iris_regions import ReliablePolytope, split_iris_regions
-from planar3R_ssm_envelopes import build_envelopes, intersect_envelopes, sample_hull
-from planar3R_two_stage_gcs_planner import solve_target_sets
+from scripts import spatial4R_model as model
+from scripts.spatial4R_iris import build_plant
+from scripts.spatial4R_two_stage_gcs_planner import plan_before_failure
+from scripts.planar3R_bbox_reliability_partition import partition_multiple_branches, merge_equal_reliability_boxes
+from scripts.planar3R_iris_regions import ReliablePolytope, split_iris_regions
+from scripts.planar3R_ssm_envelopes import build_envelopes, intersect_envelopes, sample_hull
+from scripts.planar3R_two_stage_gcs_planner import solve_target_sets
 
 try:
     from pydrake.geometry.optimization import HPolyhedron
@@ -20,6 +20,17 @@ except ImportError:
 
 
 class SpatialModelTests(unittest.TestCase):
+    def test_default_obstacle_tracks_task_midpoint_and_preserves_endpoints(self):
+        goal = model.position(model.GOAL_REFERENCE_CONFIGURATION)
+        obstacle = model.midpoint_obstacles()[0]
+        np.testing.assert_allclose(obstacle["center"], (model.position(model.START_CONFIGURATION)+goal)/2)
+        self.assertEqual(obstacle["radius"], 0.10)
+        self.assertTrue(model.collision_free(model.START_CONFIGURATION, [obstacle]))
+        self.assertTrue(model.collision_free(model.GOAL_REFERENCE_CONFIGURATION, [obstacle]))
+        custom_goal = goal+np.array([.1, .2, -.3])
+        np.testing.assert_allclose(model.midpoint_obstacles(goal=custom_goal)[0]["center"],
+                                   (model.position(model.START_CONFIGURATION)+custom_goal)/2)
+
     def test_reference_uses_final_active_rcmax_parameters(self):
         parameters = model.reference_parameters(parameter_set="rcmax")
         self.assertEqual(parameters["reliabilities"], [0.9, 0.7, 0.5, 0.3])

@@ -2,10 +2,10 @@ import unittest
 
 import numpy as np
 
-from planar3R_collision import link_points
-from planar3R_ssm_envelopes import build_envelopes, resample_by_arclength
-from planar3R_two_point_ssm_views import refine_ik_configuration
-from planar3R_post_failure_planner import locked_joint_ik
+from scripts.planar3R_collision import link_points
+from scripts.planar3R_ssm_envelopes import build_envelopes, resample_by_arclength
+from scripts.planar3R_two_point_ssm_views import refine_ik_configuration
+from scripts.planar3R_post_failure_planner import locked_joint_ik
 
 
 class ArcLengthSamplingTests(unittest.TestCase):

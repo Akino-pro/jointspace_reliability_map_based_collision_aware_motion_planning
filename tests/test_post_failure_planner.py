@@ -5,9 +5,9 @@ from unittest.mock import patch
 
 import numpy as np
 
-from planar3R_collision import link_points
-from planar3R_iris_regions import ReliablePolytope, save_iris_checkpoint
-from planar3R_post_failure_planner import locked_joint_ik, plan_after_failure, slice_regions
+from scripts.planar3R_collision import link_points
+from scripts.planar3R_iris_regions import ReliablePolytope, save_iris_checkpoint
+from scripts.planar3R_post_failure_planner import locked_joint_ik, plan_after_failure, slice_regions
 
 try:
     from pydrake.geometry.optimization import Point
@@ -65,21 +65,21 @@ class PostFailureTests(unittest.TestCase):
         self.assertEqual(len(slice_regions([cube()], 1, np.pi)), 1)
         self.assertEqual(slice_regions([cube()], 1, 4), [])
 
-    @patch("planar3R_post_failure_planner.solve_to_any_goal")
+    @patch('scripts.planar3R_post_failure_planner.solve_to_any_goal')
     def test_unreachable_stops_before_gcs(self, solve):
         report = plan_after_failure([0.4, -0.8, 0.7], 2, [10, 10], self.cache)
         self.assertEqual(report["status"], "unreachable")
         self.assertEqual(report["gcs_solve_calls"], 0)
         solve.assert_not_called()
 
-    @patch("planar3R_post_failure_planner.solve_to_any_goal")
+    @patch('scripts.planar3R_post_failure_planner.solve_to_any_goal')
     def test_collision_at_failure_configuration_stops_before_gcs(self, solve):
         self.save([cube()], [{"type": "circle", "center": [0.5, 0], "radius": 0.1}])
         report = plan_after_failure([0, 0, 0], 3, [1, 1], self.cache)
         self.assertEqual(report["status"], "start_in_collision")
         solve.assert_not_called()
 
-    @patch("planar3R_post_failure_planner.solve_to_any_goal")
+    @patch('scripts.planar3R_post_failure_planner.solve_to_any_goal')
     def test_all_colliding_goals_stop_before_gcs(self, solve):
         goal = link_points([0.3, 0.6, 0])[-1]
         self.save([cube()], [{"type": "circle", "center": goal.tolist(), "radius": 0.02}])
@@ -87,7 +87,7 @@ class PostFailureTests(unittest.TestCase):
         self.assertEqual(report["status"], "all_goals_in_collision")
         solve.assert_not_called()
 
-    @patch("planar3R_post_failure_planner.solve_to_any_goal")
+    @patch('scripts.planar3R_post_failure_planner.solve_to_any_goal')
     def test_missing_coverage_stops_without_generating_or_solving(self, solve):
         q = np.array([0.4, -0.8, 0.7])
         self.save([cube(q - 0.02, q + 0.02)])
@@ -96,7 +96,7 @@ class PostFailureTests(unittest.TestCase):
         self.assertEqual(report["gcs_solve_calls"], 0)
         solve.assert_not_called()
 
-    @patch("planar3R_post_failure_planner.solve_to_any_goal", return_value=(None, None))
+    @patch('scripts.planar3R_post_failure_planner.solve_to_any_goal', return_value=(None, None))
     def test_solver_failure_is_not_retried(self, solve):
         report = plan_after_failure([0.4, -0.8, 0.7], 3,
                                     link_points([0.9, -0.5, 0.7])[-1], self.cache)
@@ -104,7 +104,7 @@ class PostFailureTests(unittest.TestCase):
         self.assertEqual(report["gcs_solve_calls"], 1)
         solve.assert_called_once()
 
-    @patch("planar3R_post_failure_planner.solve_to_any_goal")
+    @patch('scripts.planar3R_post_failure_planner.solve_to_any_goal')
     def test_invalid_returned_path_stops_without_retry(self, solve):
         solve.return_value = (np.array([[0.4, -0.8], [0.5, -0.8]]), 0.1)
         report = plan_after_failure([0.4, -0.8, 0.7], 3,
@@ -112,13 +112,13 @@ class PostFailureTests(unittest.TestCase):
         self.assertEqual(report["status"], "path_validation_failed")
         solve.assert_called_once()
 
-    @patch("planar3R_post_failure_planner.solve_to_any_goal")
+    @patch('scripts.planar3R_post_failure_planner.solve_to_any_goal')
     def test_degenerate_continuous_ik_is_not_misreported_as_unreachable(self, solve):
         report = plan_after_failure([0.3, 0.4, np.pi], 3, [1, 0], self.cache)
         self.assertEqual(report["status"], "unsupported_degenerate_ik")
         solve.assert_not_called()
 
-    @patch("planar3R_post_failure_planner.solve_to_any_goal")
+    @patch('scripts.planar3R_post_failure_planner.solve_to_any_goal')
     def test_already_at_goal_needs_no_solver(self, solve):
         q = [0.4, -0.8, 0.7]
         report = plan_after_failure(q, 3, link_points(q)[-1], self.cache)

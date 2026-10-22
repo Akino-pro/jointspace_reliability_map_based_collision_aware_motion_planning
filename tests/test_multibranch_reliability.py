@@ -4,11 +4,11 @@ from unittest.mock import patch
 
 import numpy as np
 
-from planar3R_bbox_reliability_partition import (
+from scripts.planar3R_bbox_reliability_partition import (
     build_reliability_lookup, partition_multiple_branches, partition_single_branch,
     merge_equal_reliability_boxes,
 )
-from planar3R_gcs_planner import reliability_region_sets_for_workspace_point
+from scripts.planar3R_gcs_planner import reliability_region_sets_for_workspace_point
 
 
 class MultiBranchReliabilityTests(unittest.TestCase):
@@ -64,7 +64,7 @@ class MultiBranchReliabilityTests(unittest.TestCase):
 
     def test_planner_receives_one_map_for_both_detected_branches(self):
         branches = [np.array(list(itertools.product(*bounds))) for bounds in self.bounds]
-        with patch("planar3R_gcs_planner.compute_ssms_for_target", return_value=branches):
+        with patch('scripts.planar3R_gcs_planner.compute_ssms_for_target', return_value=branches):
             maps = reliability_region_sets_for_workspace_point(0.5, 0.5)
         self.assertEqual(len(maps), 1)
         self.assertEqual(maps[0]["branch_count"], 2)

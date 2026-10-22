@@ -6,11 +6,11 @@ from pathlib import Path
 import numpy as np
 import networkx as nx
 
-from planar3R_drake_iris import make_planar3r_urdf
-from planar3R_two_point_ssm_views import refine_ik_configuration
-from planar3R_collision import link_points
-from planar3R_iris_gcs_planner import select_connected_candidates, validate_joint_path
-from planar3R_iris_regions import (
+from scripts.planar3R_drake_iris import make_planar3r_urdf
+from scripts.planar3R_two_point_ssm_views import refine_ik_configuration
+from scripts.planar3R_collision import link_points
+from scripts.planar3R_iris_gcs_planner import select_connected_candidates, validate_joint_path
+from scripts.planar3R_iris_regions import (
     ReliablePolytope, load_iris_checkpoint, polytope_adjacency,
     save_iris_checkpoint, split_iris_regions,
 )
@@ -114,7 +114,7 @@ class DrakeIntegrationTests(unittest.TestCase):
         self.assertEqual(result["rounded_path_count"], 1)
 
     def test_plant_has_three_positions_and_fixed_base(self):
-        from planar3R_drake_iris import build_drake_plant
+        from scripts.planar3R_drake_iris import build_drake_plant
         diagram, plant, _, urdf_path = build_drake_plant(
             [1, 1, 1], {"type": "circle", "center": [0.75, 0.75], "radius": 0.15}
         )
