@@ -1,0 +1,87 @@
+{
+  "input": "results/planar3r/two_stage_path_per_intersection.json",
+  "stage1_reused": true,
+  "stage1_max_paths": 10,
+  "stage1_max_trials": 100,
+  "stage2_max_paths": 100,
+  "stage2_max_trials": 100,
+  "rounding_seed": 0,
+  "stage1_cost": 0.5813465167571831,
+  "reference": "results/diagnostics/stage2_quality_review.json",
+  "previous_stage2_cost": 0.3850930626151655,
+  "solve_seconds": 26.534966466,
+  "success": true,
+  "cost": 0.3850930626151655,
+  "target": 0,
+  "solver_cost": 0.3850930626411555,
+  "region_route": [
+    1,
+    3,
+    11,
+    28
+  ],
+  "solution_source": "stage1_route_convex_restriction",
+  "native_cost": 0.5239423199966521,
+  "additional_route_results": [
+    {
+      "region_route": [
+        1,
+        3,
+        11,
+        28
+      ],
+      "success": true,
+      "cost": 0.3850930626151655,
+      "solver_cost": 0.3850930626411555
+    }
+  ],
+  "quality": {
+    "lower_bound": 0.3618987262881315,
+    "upper_bound": 0.3850930626151655,
+    "absolute_gap": 0.023194336327033993,
+    "relative_gap": 0.06409068239872015,
+    "relative_tolerance": 0.01,
+    "absolute_tolerance": 1e-06,
+    "scope": "fixed_start_to_supplied_target_sets_graph",
+    "within_tolerance": false,
+    "status": "gap_exceeds_tolerance"
+  },
+  "solve_mode": "relaxation_rounding",
+  "exact_solver": null,
+  "solver_termination": "SolutionResult.kSolutionFound",
+  "mip_details": null,
+  "rounded_path_count": 99,
+  "successful_rounded_path_count": 99,
+  "waypoints": [
+    [
+      -2.972349782093813,
+      -2.26926174311021,
+      -1.2375903668686903
+    ],
+    [
+      -2.865549265595031,
+      -1.9541214021880398,
+      -1.2358903772322012
+    ],
+    [
+      -0.42573778774693005,
+      -1.7120862280991083,
+      -1.1970448913927338
+    ],
+    [
+      -0.38168933245206704,
+      -0.04762892616811101,
+      -0.9298731168085325
+    ],
+    [
+      -0.3298498647601201,
+      1.9133538818436118,
+      -0.6151012754851594
+    ]
+  ],
+  "collision_free": true,
+  "collision_samples": 652,
+  "endpoint_error": 7.517506938226835e-13,
+  "start_error": 0.0,
+  "fixed_goal_error": 3.632883513789585e-13
+}

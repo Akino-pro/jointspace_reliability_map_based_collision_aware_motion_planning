@@ -1,0 +1,23 @@
+{
+  "solver": "clarabel",
+  "preprocessing_solver": "none",
+  "solver_time_limit": 60.0,
+  "graph_regions": 93,
+  "graph_region_edges": 1960,
+  "graph_total_edges": 1962,
+  "setup_seconds": 6.255261338999844,
+  "status": "SolutionResult.kSolverSpecificError",
+  "wall_seconds": 79.1938532260001,
+  "success": false,
+  "solver_id": "Clarabel",
+  "cost": null,
+  "solver_details": {
+    "iterations": 7,
+    "solve_time": 78.758576659,
+    "status": "MaxTime"
+  },
+  "watchdog_timed_out": false,
+  "worker_exit_code": 0,
+  "total_seconds": 86.79559281399997,
+  "log": "logs/relaxation_clarabel_no_preprocessing.log"
+}

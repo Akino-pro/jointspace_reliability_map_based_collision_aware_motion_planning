@@ -66,16 +66,20 @@ class LinearGCS(BaseGCS):
                 edges = self.findEdgesViaOverlaps()
 
         vertices = self.gcs.Vertices()
-        for ii, jj in edges:
+        self.edge_shifts = {}
+        for edge_index, region_edge in enumerate(edges):
+            ii, jj = region_edge
+            shift = np.asarray(getattr(region_edge, "shift", np.zeros(self.dimension)))
             u = vertices[ii]
             v = vertices[jj]
-            edge = self.gcs.AddEdge(u, v, f"({u.name()}, {v.name()})")
+            edge = self.gcs.AddEdge(u, v, f"({u.name()}, {v.name()})_{edge_index}")
+            self.edge_shifts[edge.name()] = shift
             weighted_edge_cost = L2NormCost(
                 np.hstack((
                     np.diag(-self.path_weights * self.vertex_cost_weights[ii]),
                     np.diag(self.path_weights * self.vertex_cost_weights[ii]),
                 )),
-                np.zeros(self.dimension)
+                shift * self.path_weights * self.vertex_cost_weights[ii]
             )
 
             edge.AddCost(BindingCost(
@@ -85,7 +89,7 @@ class LinearGCS(BaseGCS):
             edge.AddConstraint(BindingConstraint(
                 LinearConstraint(u.set().A(),
                                  -np.inf*np.ones(len(u.set().b())),
-                                 u.set().b()),
+                                 u.set().b()-u.set().A()@shift),
                 v.x()))
 
     def addSourceTarget(self, source, target, edges=None):
@@ -117,10 +121,8 @@ class LinearGCS(BaseGCS):
             return None, results_dict
 
         # Extract trajectory
-        waypoints = np.empty((self.dimension, 0))
-        for edge in best_path:
-            new_waypoint = best_result.GetSolution(edge.xv())
-            waypoints = np.concatenate(
-                [waypoints, np.expand_dims(new_waypoint, 1)], axis=1)
+        from scripts.periodic_graph import lift_path
+        points, _ = lift_path(best_path, best_result, self.edge_shifts, self.dimension)
+        waypoints = points.T
 
         return waypoints, results_dict

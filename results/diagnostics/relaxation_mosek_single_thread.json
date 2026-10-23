@@ -1,0 +1,24 @@
+{
+  "solver": "mosek",
+  "preprocessing_solver": "none",
+  "mosek_threads": 1,
+  "solver_time_limit": 60.0,
+  "graph_regions": 93,
+  "graph_region_edges": 1960,
+  "graph_total_edges": 1962,
+  "setup_seconds": 6.1245156719996885,
+  "status": "SolutionResult.kSolutionFound",
+  "wall_seconds": 18.99235753699986,
+  "success": true,
+  "solver_id": "MOSEK",
+  "cost": 1.1238832554744331,
+  "solver_details": {
+    "optimizer_time": 18.480702811000356,
+    "solution_status": 1,
+    "rescode": 0
+  },
+  "watchdog_timed_out": false,
+  "worker_exit_code": 0,
+  "total_seconds": 25.92902281700026,
+  "log": "logs/relaxation_mosek_single_thread.log"
+}

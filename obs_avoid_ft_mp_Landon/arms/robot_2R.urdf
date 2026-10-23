@@ -1,0 +1,70 @@
+<robot name="2R">
+
+  <link name="fixed">
+
+    <collision name="right">
+      <origin rpy="0 0 0" xyz="1.5 0 -0.2"/>
+      <geometry><box size="0.5 10 0.5"/></geometry>
+    </collision>
+
+    <collision name="above">
+      <origin rpy="0 0 0" xyz="0 0 1.5"/>
+      <geometry><box size="0.5 10 0.5"/></geometry>
+    </collision>
+
+    <collision name="left">
+      <origin rpy="0 0 0" xyz="-1.4 0 0.3"/>
+      <geometry><box size="0.5 10 0.5"/></geometry>
+    </collision>
+
+    <collision name="under">
+      <origin rpy="0 0 0" xyz="-0.1 0 -1.4"/>
+      <geometry><box size="0.5 10 0.3"/></geometry>
+    </collision>
+  </link>
+
+
+    <joint name="world_joint" type="fixed">
+    <parent link="world"/>
+    <child link="fixed"/>
+    </joint>
+
+
+  <link name="link1">
+    <collision name="arm1">
+      <origin rpy="0 0 0" xyz="0.5 0 0.0"/>
+      <geometry><box size="1.0 0.1 0.1"/></geometry>
+    </collision>
+    <inertial>
+        <mass value="10"/>
+        <inertia ixx="0.4" ixy="0.0" ixz="0.0" iyy="0.4" iyz="0.0" izz="0.2"/>
+    </inertial>
+  </link>
+
+  <joint name="joint1" type="revolute">
+    <axis xyz="0 -1 0"/>
+    <parent link="fixed"/>
+    <limit lower="-3.1415" upper="3.1415"/>
+    <child link="link1"/>
+  </joint>
+
+  <link name="link2">
+    <collision name="arm2">
+      <origin rpy="0 0 0" xyz="0.5 0 0.0"/>
+      <geometry><box size="1.0 0.1 0.1"/></geometry>
+    </collision>
+    <inertial>
+        <mass value="10"/>
+        <inertia ixx="0.4" ixy="0.0" ixz="0.0" iyy="0.4" iyz="0.0" izz="0.2"/>
+    </inertial>
+  </link>
+
+  <joint name="joint2" type="revolute">
+    <origin rpy="0 0 0" xyz="1.0 0 0"/>
+    <axis xyz="0 -1 0"/>
+    <limit lower="-3.1415" upper="3.1415"/>
+    <parent link="link1"/>
+    <child link="link2"/>
+  </joint>
+
+</robot>

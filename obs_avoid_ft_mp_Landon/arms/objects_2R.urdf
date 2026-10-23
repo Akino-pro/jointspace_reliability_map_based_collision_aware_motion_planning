@@ -1,0 +1,27 @@
+<robot name="2R_obstacles">
+
+  <link name="fixed">
+
+    <collision name="right">
+      <origin rpy="0 0 0" xyz="1.5 0 -0.2"/>
+      <geometry><box size="0.5 10 0.5"/></geometry>
+    </collision>
+
+    <collision name="above">
+      <origin rpy="0 0 0" xyz="0 0 1.5"/>
+      <geometry><box size="0.5 10 0.5"/></geometry>
+    </collision>
+
+    <collision name="left">
+      <origin rpy="0 0 0" xyz="-1.4 0 0.3"/>
+      <geometry><box size="0.5 10 0.5"/></geometry>
+    </collision>
+
+    <collision name="under">
+      <origin rpy="0 0 0" xyz="-0.1 0 -1.4"/>
+      <geometry><box size="0.5 10 0.3"/></geometry>
+    </collision>
+  </link>
+
+
+</robot>

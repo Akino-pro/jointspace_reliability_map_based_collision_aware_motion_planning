@@ -1,7 +1,7 @@
-# Reliability-aware motion planning for planar 3R and spatial 4R
+# Reliability-aware motion planning for planar 3R and spatial 4R/7R
 
 Experimental reliability-aware motion planning for planar three-joint and
-standard-DH spatial four-joint robots. The original planar pre-failure workflow is:
+standard-DH spatial four- and seven-joint robots. The original planar pre-failure workflow is:
 
 ```text
 Collision-free IRIS polytopes -> reliability intersections -> connectivity filtering -> GCS path -> collision and endpoint checks
@@ -23,6 +23,7 @@ Run commands from the repository root. Python entry points are now modules under
 | `data/seeds/` | IRIS seed inputs |
 | `results/planar3r/` | Planar planning results and comparisons |
 | `results/spatial4r/` | Spatial planning results and comparisons |
+| `results/spatial7r/` | Seven-joint full-pose planning results and comparisons |
 | `results/diagnostics/` | Solver and environment diagnosis reports |
 | `visualizations/` | Scene models, GIFs, PNGs and replay artifacts |
 | `logs/` | Solver diagnostic logs |
@@ -93,8 +94,10 @@ coverage has no connecting path. See [docs/POST_FAILURE_WORKFLOW.md](docs/POST_F
 Revolute joints are assumed to have no mechanical angle limits. Both workflows
 use the original IRIS regions without additional joint-angle clipping. The
 cached IRIS model uses `[-pi,pi]^3` as a coordinate chart for periodic angles;
-connections across opposite chart boundaries are not yet implemented. Thus the
-current graph does not cover every possible periodic route.
+connections across opposite chart boundaries are disabled by default. The
+two-stage and post-failure entry points accept optional `--periodic` connections;
+this restricted graph still does not cover every possible periodic route. See
+[the comparison guide](docs/LEGACY_METHOD_COMPARISON.md) for scope and examples.
 
 ## Planar 3R MuJoCo viewer
 
@@ -144,6 +147,30 @@ certificate or full configuration-space coverage. A larger-domain attempt
 exceeded the Docker memory budget; the completed benchmark uses explicitly
 local IRIS inflation domains, not physical joint limits. See
 [docs/SPATIAL4R_WORKFLOW.md](docs/SPATIAL4R_WORKFLOW.md) for the scene, assumptions and commands.
+
+## Spatial 7R pre-failure prototype
+
+Shared adjacency screening and the optional direct sampled-SSM baseline are
+documented in [the legacy-method comparison](docs/LEGACY_METHOD_COMPARISON.md).
+All three pre-failure planners accept `--compare-sampled`. Planar 3R additionally
+accepts optional `--periodic` connections, disabled by default; the two-stage
+method and existing reliability model remain the primary workflow.
+
+`python -m scripts.spatial7R_two_stage_gcs_planner` uses the DH parameters and
+reliabilities from `scripts/spatial_7r_FTW_estimation_ssm.py`, without importing
+or executing its workspace grid. It plans to a full position-and-orientation
+goal, traces up to eight regular one-dimensional SSM branches, and uses the
+same two-stage GCS workflow with both rounding budgets 200/300. Exact reliability
+partitioning is restricted to original IRIS coverage to control seven-dimensional
+growth, with explicit resource limits and all-branch maximum reliability.
+
+The current local example has exactly 30 cm translation and 20 degrees of
+relative rotation: one detected branch, 92 samples, 24 free regions and four
+targets. It completed in 32.16 s including IRIS generation, with final weighted
+cost 0.0043086900 and position/orientation errors near machine precision.
+Three first-stage targets returned no feasible path, so target-selection/global
+optimality is not certified. See [the 7R workflow](docs/SPATIAL7R_WORKFLOW.md)
+for commands, source geometry, measured results and limitations.
 
 ## Historical planar status and execution
 

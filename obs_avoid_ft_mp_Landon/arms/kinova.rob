@@ -1,0 +1,20 @@
+# solver parameters
+# use dynamics, use graphics, joints, pos dof, orientation dof
+
+0 0 7 3 1
+
+
+# kinematic parameters
+# type, a, alpha, d, theta
+
+1 0 -1.57079632679  0.2848  0
+1 0  1.57079632679 -0.0118  0
+1 0 -1.57079632679  0.4208  0
+1 0  1.57079632679 -0.0128  0
+1 0 -1.57079632679  0.3143  0
+1 0  1.57079632679  0       0
+1 0  0              0.1674  0
+
+
+
+# dynamic parameters

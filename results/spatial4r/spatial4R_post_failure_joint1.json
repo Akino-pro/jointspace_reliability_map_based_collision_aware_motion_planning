@@ -1,0 +1,135 @@
+{
+  "success": false,
+  "planner": "spatial4R_post_failure_gcs",
+  "robot": {
+    "alpha": [
+      1.4835298641951802,
+      -0.9250245035569946,
+      -1.5533430342749535,
+      1.1868238913561442
+    ],
+    "d": [
+      -0.29,
+      0,
+      0.05,
+      1
+    ],
+    "a": [
+      0.5,
+      0.48,
+      0.76,
+      0.95
+    ],
+    "reference_CA": [
+      [
+        -2.548180707911721,
+        2.548180707911721
+      ],
+      [
+        -4.084070449666731,
+        0.17453292519943295
+      ],
+      [
+        -2.007128639793479,
+        2.303834612632515
+      ],
+      [
+        -1.7627825445142729,
+        2.0594885173533086
+      ]
+    ],
+    "reliabilities": [
+      0.9,
+      0.7,
+      0.5,
+      0.3
+    ]
+  },
+  "robot_parameter_set": "ftwmax",
+  "failed_joint": 1,
+  "locked_angle": 0.2,
+  "failure_configuration": [
+    0.2,
+    -0.8,
+    0.6,
+    -0.3
+  ],
+  "start_configuration": [
+    0.2,
+    -0.8,
+    0.6,
+    -0.3
+  ],
+  "start_point": [
+    2.0780462171327434,
+    1.6396001579405586,
+    -0.39026242826544744
+  ],
+  "goal_point": [
+    0.8408788051720951,
+    2.5945928524838324,
+    -0.6250625832937884
+  ],
+  "active_joints": [
+    2,
+    3,
+    4
+  ],
+  "iris_checkpoint": "data/iris/spatial4R_ftwmax_iris_midpoint_regions.npz",
+  "planning_chart_configuration": [
+    0.2,
+    -0.8,
+    0.6,
+    -0.3
+  ],
+  "angle_winding_offsets": [
+    0.0,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "physical_joint_limits": null,
+  "cost_type": "active_joint_space_euclidean_length",
+  "reliability_used": false,
+  "gcs_solve_calls": 0,
+  "ik_completeness_certified": false,
+  "global_optimality_certified": false,
+  "solver_settings": {
+    "max_rounded_paths": 200,
+    "max_rounding_trials": 300
+  },
+  "obstacles": [
+    {
+      "center": [
+        1.4594625111524193,
+        2.1170965052121957,
+        -0.5076625057796179
+      ],
+      "radius": 0.1,
+      "type": "sphere"
+    }
+  ],
+  "link_radius": 0.015,
+  "ik_seconds": 0.7397727919999966,
+  "ik_search": {
+    "method": "periodic multistart three-variable numerical IK",
+    "max_starts": 256,
+    "random_seed": 0,
+    "starts_attempted": 256,
+    "physical_solution_limit": 4,
+    "completeness_certified": false,
+    "singular_solution_count": 0,
+    "position_tolerance": 1e-08,
+    "duplicate_tolerance": 1e-05,
+    "singular_tolerance": 1e-07,
+    "proven_unreachable": false,
+    "physical_solution_count": 0,
+    "chart_solution_count": 0,
+    "termination_reason": "ik_start_budget_exhausted",
+    "minimum_active_jacobian_singular_values": []
+  },
+  "ik_solutions": [],
+  "status": "ik_search_failed",
+  "message": "No IK solution found within the numerical budget; this is not proof of unreachability. Planning stopped before GCS.",
+  "total_seconds": 0.7456901959999982
+}

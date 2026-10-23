@@ -1,0 +1,27 @@
+{
+  "entry_points_checked": [
+    "scripts.planar3R_two_stage_gcs_planner",
+    "scripts.planar3R_post_failure_planner",
+    "scripts.spatial4R_two_stage_gcs_planner",
+    "scripts.spatial4R_post_failure_planner",
+    "scripts.planar3R_mujoco_viewer",
+    "scripts.spatial4R_mujoco_viewer",
+    "scripts.planar3R_diagnose_relaxation",
+    "scripts.planar3R_diagnose_stage2"
+  ],
+  "planar": {
+    "status": "geometry_only",
+    "regions": 43,
+    "targets": 20
+  },
+  "spatial": {
+    "status": "geometry_only",
+    "regions": 56,
+    "targets": 13
+  },
+  "post_failure": {
+    "status": "success",
+    "cost": 0.7353883585602623,
+    "locked_joint_error": 0.0
+  }
+}

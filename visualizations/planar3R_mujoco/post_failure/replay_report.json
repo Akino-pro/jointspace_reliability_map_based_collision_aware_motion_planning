@@ -1,0 +1,13 @@
+{
+  "source": "results/planar3r/post_failure_success.json",
+  "mujoco_version": "3.4.0",
+  "waypoints": 2,
+  "duration_seconds": 0.0769230769227236,
+  "failed_joint": 3,
+  "sampled_configurations": 6,
+  "collision_samples": 0,
+  "endpoint_error": 7.856740153113387e-15,
+  "angular_windings_preserved": true,
+  "method": "prescribed GCS segments; sampled analytic checks, not dynamic tracking",
+  "rendered_frames": 25
+}

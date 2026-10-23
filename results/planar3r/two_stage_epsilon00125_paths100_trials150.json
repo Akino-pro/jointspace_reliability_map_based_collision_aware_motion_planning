@@ -1,0 +1,1045 @@
+{
+  "success": true,
+  "planner": "two_stage_ssm_gcs",
+  "gcs_solve_calls": 29,
+  "start_configuration": [
+    -2.972349782093813,
+    -2.26926174311021,
+    -1.2375903668686903
+  ],
+  "goal_point": [
+    1.5,
+    1.5
+  ],
+  "geometric_epsilon": 0.0125,
+  "samples_per_branch": 300,
+  "reliability_epsilon": 0.01,
+  "reliability_source": "goal",
+  "iris_checkpoint": "data/iris/planar3R_iris_regions.npz",
+  "angle_winding_offsets": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "continuous_coverage_certified": false,
+  "global_optimality_certified": false,
+  "solve_mode": "relaxation_rounding",
+  "solver_settings": {
+    "max_rounded_paths": 100,
+    "max_rounding_trials": 150,
+    "rounding_seed": 0,
+    "relative_gap_tolerance": 0.01,
+    "mip_time_limit": 60.0,
+    "mip_relative_gap": 0.01
+  },
+  "stage1_solver_settings": {
+    "max_rounded_paths": 100,
+    "max_rounding_trials": 150,
+    "rounding_seed": 0,
+    "relative_gap_tolerance": 0.01,
+    "mip_time_limit": 60.0,
+    "mip_relative_gap": 0.01
+  },
+  "stage2_solver_settings": {
+    "max_rounded_paths": 100,
+    "max_rounding_trials": 150,
+    "rounding_seed": 0,
+    "relative_gap_tolerance": 0.01,
+    "mip_time_limit": 60.0,
+    "mip_relative_gap": 0.01
+  },
+  "reliability_branch": "branch 1",
+  "envelope_count": 55,
+  "target_set_count": 28,
+  "actual_sample_count": 300,
+  "region_count": 43,
+  "edge_count": 824,
+  "geometry_seconds": 3.6407128129999364,
+  "envelope_polyline_bounds": [
+    0.009475833499310426,
+    0.008450408560090151,
+    0.0076830591152052706,
+    0.004511458780969032,
+    0.007199027202131545,
+    0.007161853874916686,
+    0.0070429533022619405,
+    0.004655712944581153,
+    0.0062230444302258815,
+    0.005503762816508109,
+    0.004750518141823883,
+    0.002841859487439372,
+    0.010935320695438008,
+    0.009549789682734705,
+    0.010943725672105425,
+    0.009667401150339788,
+    0.0031864529839246594,
+    0.003487366066878323,
+    0.0038341448317330677,
+    0.0028979447758437004,
+    0.004644486348758166,
+    0.005293926603890978,
+    0.006202855269099413,
+    0.004455651519902525,
+    0.00842828553102468,
+    0.0066907697153377795,
+    0.010320230110895763,
+    0.007039281254020938,
+    0.009423840070463884,
+    0.008418443735577237,
+    0.0076632301912106585,
+    0.0044911541866354725,
+    0.00718420013674579,
+    0.007699189802392587,
+    0.0069973164496587425,
+    0.004114494046614995,
+    0.00618154585388204,
+    0.00545813192192238,
+    0.00470747512268071,
+    0.0028163434783143597,
+    0.011444232192371829,
+    0.008970184914063326,
+    0.010948446705090887,
+    0.009704448370083668,
+    0.011245607588273273,
+    0.00378821611793261,
+    0.0025390509649012923,
+    0.004521358562349456,
+    0.005124595102423319,
+    0.006523455412118461,
+    0.004342813778913581,
+    0.008336858758042624,
+    0.006592343511774231,
+    0.010280295657288554,
+    0.007085498024458461
+  ],
+  "stage1_mode": "per_target_intersection",
+  "stage1_candidates": [
+    {
+      "target": 0,
+      "envelope": 5,
+      "region": 28,
+      "seconds": 28.88921160599989,
+      "success": true,
+      "error": null,
+      "cost": 0.39392348416040823,
+      "solver_cost": 0.39392348414279815,
+      "endpoint": [
+        -0.32743414774737495,
+        1.9107450110500332,
+        -0.6150707588192535
+      ],
+      "quality": {
+        "lower_bound": 0.3618219142545924,
+        "upper_bound": 0.39392348416040823,
+        "absolute_gap": 0.03210156990581581,
+        "relative_gap": 0.08872201666377746,
+        "relative_tolerance": 0.01,
+        "absolute_tolerance": 1e-06,
+        "scope": "fixed_start_to_supplied_target_sets_graph",
+        "within_tolerance": false,
+        "status": "gap_exceeds_tolerance"
+      },
+      "rounded_path_count": 100
+    },
+    {
+      "target": 1,
+      "envelope": 6,
+      "region": 28,
+      "seconds": 28.19630297799995,
+      "success": true,
+      "error": null,
+      "cost": 0.39807606269139256,
+      "solver_cost": 0.39807606263730927,
+      "endpoint": [
+        -0.36377300389358436,
+        1.8843171264788887,
+        -0.4909980088768703
+      ],
+      "quality": {
+        "lower_bound": 0.36163104808877566,
+        "upper_bound": 0.39807606269139256,
+        "absolute_gap": 0.0364450146026169,
+        "relative_gap": 0.1007795508577851,
+        "relative_tolerance": 0.01,
+        "absolute_tolerance": 1e-06,
+        "scope": "fixed_start_to_supplied_target_sets_graph",
+        "within_tolerance": false,
+        "status": "gap_exceeds_tolerance"
+      },
+      "rounded_path_count": 100
+    },
+    {
+      "target": 2,
+      "envelope": 7,
+      "region": 11,
+      "seconds": 34.887756997999986,
+      "success": true,
+      "error": null,
+      "cost": 0.3846204492729738,
+      "solver_cost": 0.38462044928396827,
+      "endpoint": [
+        -0.42045008939404716,
+        1.752385492310507,
+        -0.1192425265100184
+      ],
+      "quality": {
+        "lower_bound": 0.3614250897721067,
+        "upper_bound": 0.3846204492729738,
+        "absolute_gap": 0.023195359500867097,
+        "relative_gap": 0.06417750221904274,
+        "relative_tolerance": 0.01,
+        "absolute_tolerance": 1e-06,
+        "scope": "fixed_start_to_supplied_target_sets_graph",
+        "within_tolerance": false,
+        "status": "gap_exceeds_tolerance"
+      },
+      "rounded_path_count": 100
+    },
+    {
+      "target": 3,
+      "envelope": 7,
+      "region": 28,
+      "seconds": 31.615989551999974,
+      "success": true,
+      "error": null,
+      "cost": 0.39825497404881816,
+      "solver_cost": 0.3982549740505615,
+      "endpoint": [
+        -0.4036096457608043,
+        1.8194318894218846,
+        -0.2850885932741042
+      ],
+      "quality": {
+        "lower_bound": 0.3614251348121284,
+        "upper_bound": 0.39825497404881816,
+        "absolute_gap": 0.036829839236689754,
+        "relative_gap": 0.1019017098958383,
+        "relative_tolerance": 0.01,
+        "absolute_tolerance": 1e-06,
+        "scope": "fixed_start_to_supplied_target_sets_graph",
+        "within_tolerance": false,
+        "status": "gap_exceeds_tolerance"
+      },
+      "rounded_path_count": 100
+    },
+    {
+      "target": 4,
+      "envelope": 8,
+      "region": 11,
+      "seconds": 41.311232233000055,
+      "success": true,
+      "error": null,
+      "cost": 0.5416240309602768,
+      "solver_cost": 0.5416240311325637,
+      "endpoint": [
+        -0.4204499047599619,
+        1.7523869516717188,
+        -0.11924579235792332
+      ],
+      "quality": {
+        "lower_bound": 0.36112567358719544,
+        "upper_bound": 0.5416240309602768,
+        "absolute_gap": 0.18049835737308134,
+        "relative_gap": 0.49982144880513235,
+        "relative_tolerance": 0.01,
+        "absolute_tolerance": 1e-06,
+        "scope": "fixed_start_to_supplied_target_sets_graph",
+        "within_tolerance": false,
+        "status": "gap_exceeds_tolerance"
+      },
+      "rounded_path_count": 100
+    },
+    {
+      "target": 5,
+      "envelope": 8,
+      "region": 28,
+      "seconds": 30.585224545000074,
+      "success": true,
+      "error": null,
+      "cost": 0.5254601883104345,
+      "solver_cost": 0.5254601882895861,
+      "endpoint": [
+        -0.42044987685484225,
+        1.7523871593726488,
+        -0.11924626013773518
+      ],
+      "quality": {
+        "lower_bound": 0.36112620890208447,
+        "upper_bound": 0.5254601883104345,
+        "absolute_gap": 0.16433397940835004,
+        "relative_gap": 0.4550596864956635,
+        "relative_tolerance": 0.01,
+        "absolute_tolerance": 1e-06,
+        "scope": "fixed_start_to_supplied_target_sets_graph",
+        "within_tolerance": false,
+        "status": "gap_exceeds_tolerance"
+      },
+      "rounded_path_count": 100
+    },
+    {
+      "target": 6,
+      "envelope": 9,
+      "region": 11,
+      "seconds": 34.74389681699995,
+      "success": true,
+      "error": null,
+      "cost": 0.5255580764707809,
+      "solver_cost": 0.525558076467786,
+      "endpoint": [
+        -0.41809479099248265,
+        1.6261777412683018,
+        0.12872371922747558
+      ],
+      "quality": {
+        "lower_bound": 0.36080027377349494,
+        "upper_bound": 0.5255580764707809,
+        "absolute_gap": 0.16475780269728596,
+        "relative_gap": 0.4566454481149271,
+        "relative_tolerance": 0.01,
+        "absolute_tolerance": 1e-06,
+        "scope": "fixed_start_to_supplied_target_sets_graph",
+        "within_tolerance": false,
+        "status": "gap_exceeds_tolerance"
+      },
+      "rounded_path_count": 100
+    },
+    {
+      "target": 7,
+      "envelope": 9,
+      "region": 28,
+      "seconds": 32.66421830500008,
+      "success": true,
+      "error": null,
+      "cost": 0.3984124987303881,
+      "solver_cost": 0.3984124987038084,
+      "endpoint": [
+        -0.4180782540123059,
+        1.6260669060801514,
+        0.12891424140996496
+      ],
+      "quality": {
+        "lower_bound": 0.3608003118828414,
+        "upper_bound": 0.3984124987303881,
+        "absolute_gap": 0.03761218684754669,
+        "relative_gap": 0.10424654749123408,
+        "relative_tolerance": 0.01,
+        "absolute_tolerance": 1e-06,
+        "scope": "fixed_start_to_supplied_target_sets_graph",
+        "within_tolerance": false,
+        "status": "gap_exceeds_tolerance"
+      },
+      "rounded_path_count": 100
+    },
+    {
+      "target": 8,
+      "envelope": 10,
+      "region": 11,
+      "seconds": 28.958717004999926,
+      "success": true,
+      "error": null,
+      "cost": 0.42154095233703637,
+      "solver_cost": 0.42154095233730915,
+      "endpoint": [
+        -0.3738373428528376,
+        1.4245878899179951,
+        0.4478357503067491
+      ],
+      "quality": {
+        "lower_bound": 0.36046269427233146,
+        "upper_bound": 0.42154095233703637,
+        "absolute_gap": 0.061078258064704904,
+        "relative_gap": 0.1694440479839502,
+        "relative_tolerance": 0.01,
+        "absolute_tolerance": 1e-06,
+        "scope": "fixed_start_to_supplied_target_sets_graph",
+        "within_tolerance": false,
+        "status": "gap_exceeds_tolerance"
+      },
+      "rounded_path_count": 100
+    },
+    {
+      "target": 9,
+      "envelope": 10,
+      "region": 28,
+      "seconds": 26.904704303000017,
+      "success": true,
+      "error": null,
+      "cost": 0.5173037952101489,
+      "solver_cost": 0.5173037952856174,
+      "endpoint": [
+        -0.37383732675946735,
+        1.424587833885541,
+        0.4478358316142359
+      ],
+      "quality": {
+        "lower_bound": 0.3604627065452916,
+        "upper_bound": 0.5173037952101489,
+        "absolute_gap": 0.1568410886648573,
+        "relative_gap": 0.4351104450389251,
+        "relative_tolerance": 0.01,
+        "absolute_tolerance": 1e-06,
+        "scope": "fixed_start_to_supplied_target_sets_graph",
+        "within_tolerance": false,
+        "status": "gap_exceeds_tolerance"
+      },
+      "rounded_path_count": 100
+    },
+    {
+      "target": 10,
+      "envelope": 11,
+      "region": 11,
+      "seconds": 36.79572977399994,
+      "success": true,
+      "error": null,
+      "cost": 0.3984392589484921,
+      "solver_cost": 0.39843925894984206,
+      "endpoint": [
+        -0.3556335205942955,
+        1.371494010757077,
+        0.5187490513546114
+      ],
+      "quality": {
+        "lower_bound": 0.3601920258864142,
+        "upper_bound": 0.3984392589484921,
+        "absolute_gap": 0.03824723306207789,
+        "relative_gap": 0.10618567406636335,
+        "relative_tolerance": 0.01,
+        "absolute_tolerance": 1e-06,
+        "scope": "fixed_start_to_supplied_target_sets_graph",
+        "within_tolerance": false,
+        "status": "gap_exceeds_tolerance"
+      },
+      "rounded_path_count": 100
+    },
+    {
+      "target": 11,
+      "envelope": 11,
+      "region": 28,
+      "seconds": 29.397415275000185,
+      "success": true,
+      "error": null,
+      "cost": 0.5158443863329519,
+      "solver_cost": 0.5158443863131557,
+      "endpoint": [
+        -0.33763810933773114,
+        1.3190079907355923,
+        0.5888504824846025
+      ],
+      "quality": {
+        "lower_bound": 0.3601920099844964,
+        "upper_bound": 0.5158443863329519,
+        "absolute_gap": 0.15565237634845552,
+        "relative_gap": 0.4321372269061582,
+        "relative_tolerance": 0.01,
+        "absolute_tolerance": 1e-06,
+        "scope": "fixed_start_to_supplied_target_sets_graph",
+        "within_tolerance": false,
+        "status": "gap_exceeds_tolerance"
+      },
+      "rounded_path_count": 100
+    },
+    {
+      "target": 12,
+      "envelope": 12,
+      "region": 11,
+      "seconds": 28.46903582699997,
+      "success": true,
+      "error": null,
+      "cost": 0.3828609840245655,
+      "solver_cost": 0.3828609840709932,
+      "endpoint": [
+        -0.23568114143806676,
+        1.073981486598514,
+        0.8740512629821171
+      ],
+      "quality": {
+        "lower_bound": 0.35966126637537243,
+        "upper_bound": 0.3828609840245655,
+        "absolute_gap": 0.02319971764919304,
+        "relative_gap": 0.06450435400786218,
+        "relative_tolerance": 0.01,
+        "absolute_tolerance": 1e-06,
+        "scope": "fixed_start_to_supplied_target_sets_graph",
+        "within_tolerance": false,
+        "status": "gap_exceeds_tolerance"
+      },
+      "rounded_path_count": 100
+    },
+    {
+      "target": 13,
+      "envelope": 12,
+      "region": 28,
+      "seconds": 27.584418226000025,
+      "success": true,
+      "error": null,
+      "cost": 0.3976717145288817,
+      "solver_cost": 0.39767171456465816,
+      "endpoint": [
+        -0.32392167237541564,
+        1.2860441773587414,
+        0.6272190053059571
+      ],
+      "quality": {
+        "lower_bound": 0.3596612662553307,
+        "upper_bound": 0.3976717145288817,
+        "absolute_gap": 0.038010448273551045,
+        "relative_gap": 0.10568401949229271,
+        "relative_tolerance": 0.01,
+        "absolute_tolerance": 1e-06,
+        "scope": "fixed_start_to_supplied_target_sets_graph",
+        "within_tolerance": false,
+        "status": "gap_exceeds_tolerance"
+      },
+      "rounded_path_count": 100
+    },
+    {
+      "target": 14,
+      "envelope": 13,
+      "region": 11,
+      "seconds": 29.624636981000094,
+      "success": true,
+      "error": null,
+      "cost": 0.5255972871465908,
+      "solver_cost": 0.5255972871316318,
+      "endpoint": [
+        -0.19840178188871074,
+        0.9956287159399752,
+        0.9507216271780397
+      ],
+      "quality": {
+        "lower_bound": 0.3592368926748609,
+        "upper_bound": 0.5255972871465908,
+        "absolute_gap": 0.1663603944717299,
+        "relative_gap": 0.46309384660639463,
+        "relative_tolerance": 0.01,
+        "absolute_tolerance": 1e-06,
+        "scope": "fixed_start_to_supplied_target_sets_graph",
+        "within_tolerance": false,
+        "status": "gap_exceeds_tolerance"
+      },
+      "rounded_path_count": 100
+    },
+    {
+      "target": 15,
+      "envelope": 13,
+      "region": 28,
+      "seconds": 29.40272379499993,
+      "success": true,
+      "error": null,
+      "cost": 0.3978099088031714,
+      "solver_cost": 0.3978099088018848,
+      "endpoint": [
+        -0.23567367252282956,
+        1.0739657681406962,
+        0.8740666769249064
+      ],
+      "quality": {
+        "lower_bound": 0.35923691245598377,
+        "upper_bound": 0.3978099088031714,
+        "absolute_gap": 0.03857299634718764,
+        "relative_gap": 0.10737481313787282,
+        "relative_tolerance": 0.01,
+        "absolute_tolerance": 1e-06,
+        "scope": "fixed_start_to_supplied_target_sets_graph",
+        "within_tolerance": false,
+        "status": "gap_exceeds_tolerance"
+      },
+      "rounded_path_count": 100
+    },
+    {
+      "target": 16,
+      "envelope": 14,
+      "region": 11,
+      "seconds": 29.998103481000044,
+      "success": true,
+      "error": null,
+      "cost": 0.39854455001463734,
+      "solver_cost": 0.39854455001579897,
+      "endpoint": [
+        -0.08535982080104852,
+        0.7605222235620797,
+        1.1736792349184895
+      ],
+      "quality": {
+        "lower_bound": 0.3589275490324643,
+        "upper_bound": 0.39854455001463734,
+        "absolute_gap": 0.03961700098217302,
+        "relative_gap": 0.1103760385319148,
+        "relative_tolerance": 0.01,
+        "absolute_tolerance": 1e-06,
+        "scope": "fixed_start_to_supplied_target_sets_graph",
+        "within_tolerance": false,
+        "status": "gap_exceeds_tolerance"
+      },
+      "rounded_path_count": 100
+    },
+    {
+      "target": 17,
+      "envelope": 14,
+      "region": 28,
+      "seconds": 25.119397396000068,
+      "success": true,
+      "error": null,
+      "cost": 0.39800831477496773,
+      "solver_cost": 0.39800831477599496,
+      "endpoint": [
+        -0.10699630952134649,
+        0.803515210146968,
+        1.1387098172195333
+      ],
+      "quality": {
+        "lower_bound": 0.35892755185598435,
+        "upper_bound": 0.39800831477496773,
+        "absolute_gap": 0.03908076291898338,
+        "relative_gap": 0.1088820368258163,
+        "relative_tolerance": 0.01,
+        "absolute_tolerance": 1e-06,
+        "scope": "fixed_start_to_supplied_target_sets_graph",
+        "within_tolerance": false,
+        "status": "gap_exceeds_tolerance"
+      },
+      "rounded_path_count": 100
+    },
+    {
+      "target": 18,
+      "envelope": 15,
+      "region": 11,
+      "seconds": 27.89195444500001,
+      "success": true,
+      "error": null,
+      "cost": 0.39871812962566233,
+      "solver_cost": 0.39871812962286857,
+      "endpoint": [
+        0.05290863882068042,
+        0.48577460218557905,
+        1.3971518045279403
+      ],
+      "quality": {
+        "lower_bound": 0.358761469679598,
+        "upper_bound": 0.39871812962566233,
+        "absolute_gap": 0.03995665994606434,
+        "relative_gap": 0.11137388856654189,
+        "relative_tolerance": 0.01,
+        "absolute_tolerance": 1e-06,
+        "scope": "fixed_start_to_supplied_target_sets_graph",
+        "within_tolerance": false,
+        "status": "gap_exceeds_tolerance"
+      },
+      "rounded_path_count": 100
+    },
+    {
+      "target": 19,
+      "envelope": 15,
+      "region": 28,
+      "seconds": 24.317650995000122,
+      "success": true,
+      "error": null,
+      "cost": 0.3987181295169877,
+      "solver_cost": 0.3987181295153868,
+      "endpoint": [
+        0.05290796223863992,
+        0.4857759343497205,
+        1.3971509274369325
+      ],
+      "quality": {
+        "lower_bound": 0.3587614871567028,
+        "upper_bound": 0.3987181295169877,
+        "absolute_gap": 0.0399566423602849,
+        "relative_gap": 0.11137383412292609,
+        "relative_tolerance": 0.01,
+        "absolute_tolerance": 1e-06,
+        "scope": "fixed_start_to_supplied_target_sets_graph",
+        "within_tolerance": false,
+        "status": "gap_exceeds_tolerance"
+      },
+      "rounded_path_count": 100
+    },
+    {
+      "target": 20,
+      "envelope": 16,
+      "region": 11,
+      "seconds": 30.6491982309999,
+      "success": true,
+      "error": null,
+      "cost": 0.3989147982317635,
+      "solver_cost": 0.39891479823784887,
+      "endpoint": [
+        0.209024996047275,
+        0.17838326400318502,
+        1.599410122118504
+      ],
+      "quality": {
+        "lower_bound": 0.358706964394664,
+        "upper_bound": 0.3989147982317635,
+        "absolute_gap": 0.04020783383709953,
+        "relative_gap": 0.11209103203488749,
+        "relative_tolerance": 0.01,
+        "absolute_tolerance": 1e-06,
+        "scope": "fixed_start_to_supplied_target_sets_graph",
+        "within_tolerance": false,
+        "status": "gap_exceeds_tolerance"
+      },
+      "rounded_path_count": 100
+    },
+    {
+      "target": 21,
+      "envelope": 16,
+      "region": 28,
+      "seconds": 27.472811774000093,
+      "success": true,
+      "error": null,
+      "cost": 0.39860051850003064,
+      "solver_cost": 0.3986005185092232,
+      "endpoint": [
+        0.20902487415700383,
+        0.17838350614181459,
+        1.5994099882923363
+      ],
+      "quality": {
+        "lower_bound": 0.35870696938537716,
+        "upper_bound": 0.39860051850003064,
+        "absolute_gap": 0.03989354911465348,
+        "relative_gap": 0.11121487040803439,
+        "relative_tolerance": 0.01,
+        "absolute_tolerance": 1e-06,
+        "scope": "fixed_start_to_supplied_target_sets_graph",
+        "within_tolerance": false,
+        "status": "gap_exceeds_tolerance"
+      },
+      "rounded_path_count": 100
+    },
+    {
+      "target": 22,
+      "envelope": 17,
+      "region": 11,
+      "seconds": 29.884542278000026,
+      "success": true,
+      "error": null,
+      "cost": 0.3818634313717322,
+      "solver_cost": 0.38186343147098123,
+      "endpoint": [
+        0.37587828687126,
+        -0.15520788346733347,
+        1.7670929604377295
+      ],
+      "quality": {
+        "lower_bound": 0.35865610265290476,
+        "upper_bound": 0.3818634313717322,
+        "absolute_gap": 0.023207328718827414,
+        "relative_gap": 0.0647063539339429,
+        "relative_tolerance": 0.01,
+        "absolute_tolerance": 1e-06,
+        "scope": "fixed_start_to_supplied_target_sets_graph",
+        "within_tolerance": false,
+        "status": "gap_exceeds_tolerance"
+      },
+      "rounded_path_count": 100
+    },
+    {
+      "target": 23,
+      "envelope": 17,
+      "region": 28,
+      "seconds": 27.96641326100007,
+      "success": true,
+      "error": null,
+      "cost": 0.399020456078254,
+      "solver_cost": 0.39902045609216064,
+      "endpoint": [
+        0.2979036303657304,
+        0.0015990773872929813,
+        1.6953240304957022
+      ],
+      "quality": {
+        "lower_bound": 0.3586561285191476,
+        "upper_bound": 0.399020456078254,
+        "absolute_gap": 0.040364327559106405,
+        "relative_gap": 0.11254325341035257,
+        "relative_tolerance": 0.01,
+        "absolute_tolerance": 1e-06,
+        "scope": "fixed_start_to_supplied_target_sets_graph",
+        "within_tolerance": false,
+        "status": "gap_exceeds_tolerance"
+      },
+      "rounded_path_count": 100
+    },
+    {
+      "target": 24,
+      "envelope": 18,
+      "region": 11,
+      "seconds": 30.822397580999905,
+      "success": true,
+      "error": null,
+      "cost": 0.3991099680763624,
+      "solver_cost": 0.39910996811304084,
+      "endpoint": [
+        0.3884906770261459,
+        -0.1805713831013212,
+        1.7787016155704092
+      ],
+      "quality": {
+        "lower_bound": 0.35861291444016175,
+        "upper_bound": 0.3991099680763624,
+        "absolute_gap": 0.04049705363620065,
+        "relative_gap": 0.11292692484157038,
+        "relative_tolerance": 0.01,
+        "absolute_tolerance": 1e-06,
+        "scope": "fixed_start_to_supplied_target_sets_graph",
+        "within_tolerance": false,
+        "status": "gap_exceeds_tolerance"
+      },
+      "rounded_path_count": 100
+    },
+    {
+      "target": 25,
+      "envelope": 18,
+      "region": 28,
+      "seconds": 26.87077828800011,
+      "success": true,
+      "error": null,
+      "cost": 0.3991099680754452,
+      "solver_cost": 0.399109968072402,
+      "endpoint": [
+        0.38849084080170965,
+        -0.18057171529207267,
+        1.7787017414027386
+      ],
+      "quality": {
+        "lower_bound": 0.3586036753614581,
+        "upper_bound": 0.3991099680754452,
+        "absolute_gap": 0.04050629271398709,
+        "relative_gap": 0.112955598330548,
+        "relative_tolerance": 0.01,
+        "absolute_tolerance": 1e-06,
+        "scope": "fixed_start_to_supplied_target_sets_graph",
+        "within_tolerance": false,
+        "status": "gap_exceeds_tolerance"
+      },
+      "rounded_path_count": 100
+    },
+    {
+      "target": 26,
+      "envelope": 19,
+      "region": 28,
+      "seconds": 25.834811855999988,
+      "success": true,
+      "error": null,
+      "cost": 0.6540250471675193,
+      "solver_cost": 0.6540250471782609,
+      "endpoint": [
+        0.557517557234239,
+        -0.5240826179310383,
+        1.8928113601042
+      ],
+      "quality": {
+        "lower_bound": 0.3585513360358187,
+        "upper_bound": 0.6540250471675193,
+        "absolute_gap": 0.2954737111317006,
+        "relative_gap": 0.8240764471790542,
+        "relative_tolerance": 0.01,
+        "absolute_tolerance": 1e-06,
+        "scope": "fixed_start_to_supplied_target_sets_graph",
+        "within_tolerance": false,
+        "status": "gap_exceeds_tolerance"
+      },
+      "rounded_path_count": 100
+    },
+    {
+      "target": 27,
+      "envelope": 20,
+      "region": 28,
+      "seconds": 25.342393346000108,
+      "success": true,
+      "error": null,
+      "cost": 0.3991634210816388,
+      "solver_cost": 0.3991634210804887,
+      "endpoint": [
+        0.6100436926231502,
+        -0.6301855290081202,
+        1.9139608732873994
+      ],
+      "quality": {
+        "lower_bound": 0.35848697703906807,
+        "upper_bound": 0.3991634210816388,
+        "absolute_gap": 0.04067644404257076,
+        "relative_gap": 0.11346700618956605,
+        "relative_tolerance": 0.01,
+        "absolute_tolerance": 1e-06,
+        "scope": "fixed_start_to_supplied_target_sets_graph",
+        "within_tolerance": false,
+        "status": "gap_exceeds_tolerance"
+      },
+      "rounded_path_count": 100
+    }
+  ],
+  "stage1_gcs_solve_calls": 28,
+  "stage2_gcs_solve_calls": 1,
+  "stage1_seconds": 832.2043395980002,
+  "stage1_quality": {
+    "lower_bound": 0.35848697703906807,
+    "upper_bound": 0.3818634313717322,
+    "absolute_gap": 0.02337645433266411,
+    "relative_gap": 0.06520865702219507,
+    "relative_tolerance": 0.01,
+    "absolute_tolerance": 1e-06,
+    "scope": "union_of_sampled_target_intersections_graph_not_continuous_ssm",
+    "within_tolerance": false,
+    "status": "gap_exceeds_tolerance"
+  },
+  "stage1_cost": 0.3818634313717322,
+  "selected_target": 22,
+  "selected_envelope": 17,
+  "selected_region": 11,
+  "selected_ssm_branch": 0,
+  "selected_chart_piece": 0,
+  "stage1_endpoint": [
+    0.37587828687126,
+    -0.15520788346733347,
+    1.7670929604377295
+  ],
+  "stage1_region_route": [
+    1,
+    3,
+    11
+  ],
+  "projection_seconds": 0.009234657999968476,
+  "estimated_goal": [
+    0.3757867697535929,
+    -0.15490638851605437,
+    1.7679057112502206
+  ],
+  "projection_distance": 0.0008716871409386708,
+  "projection_connection_baseline": {
+    "method": "stage1_path_plus_projection_segment",
+    "success": true,
+    "stage1_cost": 0.3818634313717322,
+    "connector_length": 0.0008716871409386708,
+    "connector_region": 11,
+    "connector_reliability": 1.0,
+    "connector_weight": 0.010000000000000009,
+    "connector_cost": 8.716871409386716e-06,
+    "cost": 0.3818721482431416,
+    "connector_in_selected_region": true,
+    "collision_free": true,
+    "collision_samples": 621,
+    "endpoint_error": 4.440892098500626e-16,
+    "start_error": 4.440892098500626e-16,
+    "waypoints": [
+      [
+        -2.9723497820938136,
+        -2.26926174311021,
+        -1.2375903668686903
+      ],
+      [
+        -2.8654735756894567,
+        -1.954121402185956,
+        -1.2286510966054116
+      ],
+      [
+        -0.4257377877460542,
+        -1.8315878240492784,
+        -1.0245892617601389
+      ],
+      [
+        0.37587828687126,
+        -0.15520788346733347,
+        1.7670929604377295
+      ],
+      [
+        0.3757867697535929,
+        -0.15490638851605437,
+        1.7679057112502206
+      ]
+    ],
+    "seconds": 0.017948609000086435,
+    "gcs_solve_calls": 0
+  },
+  "stage2_seconds": 30.918446248000237,
+  "stage2_solution_source": "stage1_route_convex_restriction",
+  "stage2_quality": {
+    "lower_bound": 0.3586641961693408,
+    "upper_bound": 0.3818714856801985,
+    "absolute_gap": 0.02320728951085771,
+    "relative_gap": 0.06470478447171389,
+    "relative_tolerance": 0.01,
+    "absolute_tolerance": 1e-06,
+    "scope": "fixed_endpoint_graph",
+    "within_tolerance": false,
+    "status": "gap_exceeds_tolerance"
+  },
+  "stage2_mip_details": null,
+  "stage2_rounded_path_count": 100,
+  "stage2_native_cost": 0.5215069012896434,
+  "stage2_additional_route_results": [
+    {
+      "region_route": [
+        1,
+        3,
+        11
+      ],
+      "success": true,
+      "cost": 0.3818714856801985,
+      "solver_cost": 0.38187148570673274
+    }
+  ],
+  "stage2_additional_convex_restriction_calls": 1,
+  "stage2_region_route": [
+    1,
+    3,
+    11
+  ],
+  "waypoints": [
+    [
+      -2.9723497820938136,
+      -2.26926174311021,
+      -1.2375903668686903
+    ],
+    [
+      -2.8654749546573393,
+      -1.954121402180984,
+      -1.2286508644163356
+    ],
+    [
+      -0.4257377877443947,
+      -1.831591131303437,
+      -1.0245810144941088
+    ],
+    [
+      0.3757867697535656,
+      -0.15490638851610883,
+      1.7679057112501306
+    ]
+  ],
+  "cost": 0.3818714856801985,
+  "solver_cost": 0.38187148570673274,
+  "collision_free": true,
+  "collision_samples": 619,
+  "endpoint_error": 1.8769008977241128e-13,
+  "start_error": 4.440892098500626e-16,
+  "fixed_goal_error": 1.0860685451799532e-13,
+  "link_lengths": [
+    1,
+    1,
+    1
+  ],
+  "obstacles": [
+    {
+      "type": "circle",
+      "center": [
+        0.75,
+        0.75
+      ],
+      "radius": 0.15
+    }
+  ],
+  "link_radius": 0.02,
+  "start_point": [
+    0.49999999999998457,
+    0.5000000000000024
+  ],
+  "cost_type": "region_weighted_joint_space_length",
+  "stage2_minus_projection_connection_cost": -6.625629430656588e-07,
+  "solve_seconds": 863.1227858460004,
+  "status": "success",
+  "message": "Validated second-stage path to continuous IK goal; graph-model quality: gap_exceeds_tolerance.",
+  "total_seconds": 866.8157965879998
+}

@@ -1,0 +1,189 @@
+<robot name="kinova_obstacles">
+
+  <link name="fixed"/>
+
+  <link name="wall">
+    <collision name="wall">
+      <origin rpy="0 0 0" xyz="0.735 0.25 0.16"/>
+      <geometry><box size="0.05 2.535 1.76"/></geometry>
+    </collision>
+  </link>
+  <joint name="j1" type="fixed">
+    <parent link="fixed"/>
+    <child link="wall"/>
+  </joint>
+
+  <link name="table">
+    <collision name="table">
+      <origin rpy="0 0 0" xyz="-0.29 -0.0275 -0.02"/>
+      <geometry><box size="0.76 1.525 0.04"/></geometry>
+    </collision>
+  </link>
+  <joint name="j2" type="fixed">
+    <parent link="fixed"/>
+    <child link="table"/>
+  </joint>
+
+  <link name="table_leg_bl">
+    <collision name="table_leg_bl">
+      <origin rpy="0 0 0" xyz="-0.59 0.67 -0.37"/>
+      <geometry>
+        <cylinder length='0.7' radius='0.02'/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="j3" type="fixed">
+    <parent link="fixed"/>
+    <child link="table_leg_bl"/>
+  </joint>
+
+  <link name="table_leg_br">
+    <collision name="table_leg_br">
+      <origin rpy="0 0 0" xyz="-0.59 -0.725 -0.37"/>
+      <geometry>
+        <cylinder length='0.7' radius='0.02'/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="j4" type="fixed">
+    <parent link="fixed"/>
+    <child link="table_leg_br"/>
+  </joint>
+
+  <link name="table_leg_fl">
+    <collision name="table_leg_fl">
+      <origin rpy="0 0 0" xyz="0.0 0.67 -0.37"/>
+      <geometry>
+        <cylinder length='0.7' radius='0.02'/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="j5" type="fixed">
+    <parent link="fixed"/>
+    <child link="table_leg_fl"/>
+  </joint>
+
+  <link name="table_leg_fr">
+    <collision name="table_leg_fr">
+      <origin rpy="0 0 0" xyz="0.0 -0.725 -0.37"/>
+      <geometry>
+        <cylinder length='0.7' radius='0.02'/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="j6" type="fixed">
+    <parent link="fixed"/>
+    <child link="table_leg_fr"/>
+  </joint>
+
+  <link name="desk">
+    <collision name="desk">
+      <origin rpy="0 0 0" xyz="0.4 1.055 -0.36"/>
+      <geometry><box size="0.62 1.25 0.72"/></geometry>
+    </collision>
+  </link>
+  <joint name="j7" type="fixed">
+    <parent link="fixed"/>
+    <child link="desk"/>
+  </joint>
+
+  <link name="cab_back">
+    <collision name="cab_back">
+      <origin rpy="0 0 0" xyz="0.69 -0.6425 0.11"/>
+      <geometry><box size="0.04 0.915 1.66"/></geometry>
+    </collision>
+  </link>
+  <joint name="j8" type="fixed">
+    <parent link="fixed"/>
+    <child link="cab_back"/>
+  </joint>
+
+  <link name="cab_left">
+    <collision name="cab_left">
+      <origin rpy="0 0 0" xyz="0.52 -0.1975 0.11"/>
+      <geometry><box size="0.38 0.025 1.66"/></geometry>
+    </collision>
+  </link>
+  <joint name="j9" type="fixed">
+    <parent link="fixed"/>
+    <child link="cab_left"/>
+  </joint>
+
+  <link name="cab_right">
+    <collision name="cab_right">
+      <origin rpy="0 0 0" xyz="0.52 -1.0875 0.11"/>
+      <geometry><box size="0.38 0.025 1.66"/></geometry>
+    </collision>
+  </link>
+  <joint name="j10" type="fixed">
+    <parent link="fixed"/>
+    <child link="cab_right"/>
+  </joint>
+
+  <link name="cab_top">
+    <collision name="cab_top">
+      <origin rpy="0 0 0" xyz="0.52 -0.6425 0.9275"/>
+      <geometry><box size="0.38 0.915 0.025"/></geometry>
+    </collision>
+  </link>
+  <joint name="j11" type="fixed">
+    <parent link="fixed"/>
+    <child link="cab_top"/>
+  </joint>
+
+  <link name="shelf_1">
+    <collision name="shelf_1">
+      <origin rpy="0 0 0" xyz="0.53 -0.6425 0.6375"/>
+      <geometry><box size="0.36 0.915 0.025"/></geometry>
+    </collision>
+  </link>
+  <joint name="j12" type="fixed">
+    <parent link="fixed"/>
+    <child link="shelf_1"/>
+  </joint>
+
+  <link name="shelf_2">
+    <collision name="shelf_2">
+      <origin rpy="0 0 0" xyz="0.53 -0.6425 0.3375"/>
+      <geometry><box size="0.36 0.915 0.025"/></geometry>
+    </collision>
+  </link>
+  <joint name="j13" type="fixed">
+    <parent link="fixed"/>
+    <child link="shelf_2"/>
+  </joint>
+
+  <link name="shelf_3">
+    <collision name="shelf_3">
+      <origin rpy="0 0 0" xyz="0.53 -0.6425 0.0375"/>
+      <geometry><box size="0.36 0.915 0.025"/></geometry>
+    </collision>
+  </link>
+  <joint name="j14" type="fixed">
+    <parent link="fixed"/>
+    <child link="shelf_3"/>
+  </joint>
+
+  <link name="shelf_4">
+    <collision name="shelf_4">
+      <origin rpy="0 0 0" xyz="0.53 -0.6425 -0.2625"/>
+      <geometry><box size="0.36 0.915 0.025"/></geometry>
+    </collision>
+  </link>
+  <joint name="j15" type="fixed">
+    <parent link="fixed"/>
+    <child link="shelf_4"/>
+  </joint>
+
+  <link name="shelf_5">
+    <collision name="shelf_5">
+      <origin rpy="0 0 0" xyz="0.52 -0.6425 -0.7"/>
+      <geometry><box size="0.38 0.915 0.04"/></geometry>
+    </collision>
+  </link>
+  <joint name="j16" type="fixed">
+    <parent link="fixed"/>
+    <child link="shelf_5"/>
+  </joint>
+
+</robot>

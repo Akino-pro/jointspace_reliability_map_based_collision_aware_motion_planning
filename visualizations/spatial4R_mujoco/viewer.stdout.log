@@ -1,0 +1,17 @@
+MuJoCo controls: Space pause/resume | R restart | L loop | T trace | mouse rotate/zoom | Esc close
+{
+  "source": "D:\\\u65b0\u5efa\u6587\u4ef6\u5939\\jointspace_reliability_map_based_collision_aware_motion_planning\\spatial4R_ftwmax_paths200_trials300.json",
+  "robot": "ftwmax",
+  "mujoco_version": "3.4.0",
+  "waypoints": 5,
+  "duration_seconds": 1.3352322167192692,
+  "playback_speed": 0.5,
+  "sampled_configurations": 82,
+  "collision_samples": 0,
+  "mujoco_contact_samples": 0,
+  "maximum_mujoco_fk_error": 2.1210781103223385e-15,
+  "endpoint_error": 1.1102230246251565e-16,
+  "angular_windings_preserved": true,
+  "method": "prescribed GCS segments; sampled capsule-sphere checks, not dynamic tracking"
+}
+MuJoCo artifacts: D:\新建文件夹\jointspace_reliability_map_based_collision_aware_motion_planning\visualizations\spatial4R_mujoco\viewer

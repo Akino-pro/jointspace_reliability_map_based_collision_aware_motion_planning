@@ -1,0 +1,12 @@
+{
+  "source": "results/planar3r/two_stage_all_paths200_trials300.json",
+  "mujoco_version": "3.4.0",
+  "waypoints": 4,
+  "duration_seconds": 9.426283680041518,
+  "failed_joint": null,
+  "sampled_configurations": 567,
+  "collision_samples": 0,
+  "endpoint_error": 1.7616199492028908e-13,
+  "angular_windings_preserved": true,
+  "method": "prescribed GCS segments; sampled analytic checks, not dynamic tracking"
+}

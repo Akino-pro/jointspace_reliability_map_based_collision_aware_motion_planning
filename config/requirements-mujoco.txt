@@ -1,0 +1,5 @@
+# Optional native-host visualization; independent of the Drake Docker runtime.
+mujoco>=3.4.0
+numpy
+Pillow
+imageio

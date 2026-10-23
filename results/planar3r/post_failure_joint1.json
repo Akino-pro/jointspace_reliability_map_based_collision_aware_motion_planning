@@ -1,0 +1,41 @@
+{
+  "success": false,
+  "failed_joint": 1,
+  "locked_angle": -2.972349782093813,
+  "failure_configuration": [
+    -2.972349782093813,
+    -2.26926174311021,
+    -1.2375903668686903
+  ],
+  "goal_point": [
+    1.5,
+    1.5
+  ],
+  "active_joints": [
+    2,
+    3
+  ],
+  "iris_checkpoint": "data/iris/planar3R_iris_regions.npz",
+  "cost_type": "active_joint_space_euclidean_length",
+  "gcs_solve_calls": 0,
+  "link_lengths": [
+    1,
+    1,
+    1
+  ],
+  "obstacles": [
+    {
+      "center": [
+        0.75,
+        0.75
+      ],
+      "radius": 0.15,
+      "type": "circle"
+    }
+  ],
+  "link_radius": 0.02,
+  "ik_solutions": [],
+  "status": "unreachable",
+  "message": "The goal position is unreachable with the joint locked; planning stopped.",
+  "total_seconds": 0.009149472999997244
+}

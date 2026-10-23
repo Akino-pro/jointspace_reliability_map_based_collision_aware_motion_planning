@@ -1,0 +1,317 @@
+{
+  "success": true,
+  "planner": "spatial4R_two_stage_gcs",
+  "robot": {
+    "alpha": [
+      1.1599121046989387,
+      -0.5154988273227061,
+      0.03775362985949342,
+      0.5365523262566805
+    ],
+    "d": [
+      -0.0020589855582313892,
+      -0.12359280272943952,
+      0.0025723721804752,
+      0.04538990560835715
+    ],
+    "a": [
+      0.04732540449946272,
+      0.8501471809443848,
+      0.0018628495298751034,
+      0.8495872435309159
+    ],
+    "reference_CA": [
+      [
+        -2.7873328856440396,
+        3.1363905327568893
+      ],
+      [
+        -2.4637381023154603,
+        2.136018018712809
+      ],
+      [
+        -1.8292591098878526,
+        2.0339314472150742
+      ],
+      [
+        -1.6142928309703712,
+        1.7054258649412979
+      ]
+    ],
+    "reliabilities": [
+      0.9,
+      0.7,
+      0.5,
+      0.3
+    ]
+  },
+  "position_task_only": true,
+  "physical_joint_limits": null,
+  "start_configuration": [
+    0.2,
+    -0.8,
+    0.6,
+    -0.3
+  ],
+  "start_point": [
+    1.3921760958027778,
+    0.06302045877903387,
+    -1.0303980728681965
+  ],
+  "goal_point": [
+    1.0048114469897442,
+    1.3268089239526883,
+    -0.3027628522094646
+  ],
+  "obstacles": [
+    {
+      "type": "sphere",
+      "center": [
+        0.5,
+        0.0,
+        0.3
+      ],
+      "radius": 0.1
+    }
+  ],
+  "link_radius": 0.015,
+  "iris_checkpoint": "data/iris/spatial4R_iris_local_regions.npz",
+  "geometric_epsilon": 0.025,
+  "ssm_arc_spacing": 0.044,
+  "reliability_epsilon": 0.01,
+  "solver_settings": {
+    "max_rounded_paths": 200,
+    "max_rounding_trials": 300,
+    "rounding_seed": 0
+  },
+  "gcs_solve_calls": 4,
+  "continuous_coverage_certified": false,
+  "global_optimality_certified": false,
+  "ssm_branch_count": 2,
+  "ssm_trace": {
+    "ik_attempts": 20,
+    "failed_traces": 0,
+    "all_branches_certified": false
+  },
+  "original_region_count": 1,
+  "iris_generation_seconds": 25.63965737700005,
+  "iris_coverage_radius": 0.9,
+  "coverage_is_complete": false,
+  "sampling_mode": "fixed_arc_spacing",
+  "ssm_branch_arc_lengths": [
+    8.886576294950533,
+    8.886714049258487
+  ],
+  "ssm_total_arc_length": 17.77329034420902,
+  "ssm_branch_sample_counts": [
+    205,
+    204
+  ],
+  "sample_refinement_failures": 0,
+  "unmerged_reliability_partition_count": 625,
+  "reliability_partition_count": 247,
+  "reliability_rule": "maximum_across_branches",
+  "region_count": 21,
+  "edge_count": 104,
+  "envelope_count": 10,
+  "target_set_count": 3,
+  "actual_sample_count": 409,
+  "geometry_seconds": 0.9804553349999878,
+  "stage1_seconds": 5.364986155999986,
+  "stage1_candidates": [
+    {
+      "target": 0,
+      "envelope": 0,
+      "region": 19,
+      "success": true,
+      "seconds": 2.564530273999935,
+      "cost": 0.07186691017365675,
+      "quality": {
+        "lower_bound": 0.0634394657171748,
+        "upper_bound": 0.07186691017365675,
+        "absolute_gap": 0.008427444456481942,
+        "relative_gap": 0.1328422987364536,
+        "relative_tolerance": 0.01,
+        "absolute_tolerance": 1e-06,
+        "scope": "fixed_start_to_supplied_target_sets_graph",
+        "within_tolerance": false,
+        "status": "gap_exceeds_tolerance"
+      },
+      "rounded_path_count": 113,
+      "solver_name": "MOSEK"
+    },
+    {
+      "target": 1,
+      "envelope": 4,
+      "region": 19,
+      "success": true,
+      "seconds": 1.0329004860000168,
+      "cost": 0.06601626039626814,
+      "quality": {
+        "lower_bound": 0.05764709092151529,
+        "upper_bound": 0.06601626039626814,
+        "absolute_gap": 0.008369169474752844,
+        "relative_gap": 0.1451793896442616,
+        "relative_tolerance": 0.01,
+        "absolute_tolerance": 1e-06,
+        "scope": "fixed_start_to_supplied_target_sets_graph",
+        "within_tolerance": false,
+        "status": "gap_exceeds_tolerance"
+      },
+      "rounded_path_count": 105,
+      "solver_name": "MOSEK"
+    },
+    {
+      "target": 2,
+      "envelope": 9,
+      "region": 20,
+      "success": true,
+      "seconds": 1.7674056070000006,
+      "cost": 0.10702930950660951,
+      "quality": {
+        "lower_bound": 0.09864044934553155,
+        "upper_bound": 0.10702930950660951,
+        "absolute_gap": 0.008388860161077955,
+        "relative_gap": 0.08504482914197078,
+        "relative_tolerance": 0.01,
+        "absolute_tolerance": 1e-06,
+        "scope": "fixed_start_to_supplied_target_sets_graph",
+        "within_tolerance": false,
+        "status": "gap_exceeds_tolerance"
+      },
+      "rounded_path_count": 200,
+      "solver_name": "MOSEK"
+    }
+  ],
+  "stage1_quality": {
+    "lower_bound": 0.05764709092151529,
+    "upper_bound": 0.06601626039626814,
+    "absolute_gap": 0.008369169474752844,
+    "relative_gap": 0.1451793896442616,
+    "relative_tolerance": 0.01,
+    "absolute_tolerance": 1e-06,
+    "scope": "union_of_sampled_target_intersections_graph_not_continuous_ssm",
+    "within_tolerance": false,
+    "status": "gap_exceeds_tolerance"
+  },
+  "selected_target": 1,
+  "selected_ssm_branch": 0,
+  "stage1_cost": 0.06601626039626814,
+  "stage1_region_route": [
+    1,
+    9,
+    19
+  ],
+  "estimated_goal": [
+    0.7882687205502752,
+    -0.39373734534478555,
+    0.7531786903199453,
+    -0.1474218192119493
+  ],
+  "projection_distance": 0.002982211080047504,
+  "projection_connection_baseline": {
+    "cost": 0.06604608250706862,
+    "collision_free": true,
+    "collision_samples": 101,
+    "waypoints": [
+      [
+        0.2,
+        -0.8,
+        0.6,
+        -0.3
+      ],
+      [
+        0.30704177918457926,
+        -0.40454506921471567,
+        0.6223827115269701,
+        -0.2777141277408077
+      ],
+      [
+        0.7723217196683125,
+        -0.3963025385401238,
+        0.7196774802727579,
+        -0.18083452628106067
+      ],
+      [
+        0.7902068236246897,
+        -0.3935976682097112,
+        0.7516041409752425,
+        -0.14904620342079164
+      ],
+      [
+        0.7882687205502752,
+        -0.39373734534478555,
+        0.7531786903199453,
+        -0.1474218192119493
+      ]
+    ]
+  },
+  "stage2_seconds": 0.43664171599994006,
+  "cost": 0.0660305054225731,
+  "stage2_quality": {
+    "lower_bound": 0.05765536717912147,
+    "upper_bound": 0.0660305054225731,
+    "absolute_gap": 0.008375138243451638,
+    "relative_gap": 0.14526207451653342,
+    "relative_tolerance": 0.01,
+    "absolute_tolerance": 1e-06,
+    "scope": "fixed_start_to_supplied_target_sets_graph",
+    "within_tolerance": false,
+    "status": "gap_exceeds_tolerance"
+  },
+  "solver_name": "MOSEK",
+  "stage2_native_cost": 0.0660305054225731,
+  "stage2_solution_source": "native_gcs",
+  "stage2_region_route": [
+    1,
+    9,
+    19
+  ],
+  "stage2_additional_route_results": [
+    {
+      "region_route": [
+        1,
+        9,
+        19
+      ],
+      "success": true,
+      "cost": 0.0660305054225731,
+      "solver_cost": 0.06603050578267021
+    }
+  ],
+  "stage2_rounded_path_count": 122,
+  "waypoints": [
+    [
+      0.2,
+      -0.8,
+      0.6,
+      -0.3
+    ],
+    [
+      0.30690759552891717,
+      -0.40454506921471567,
+      0.6226878357041858,
+      -0.2774011078777557
+    ],
+    [
+      0.7723217196683125,
+      -0.3963815204399003,
+      0.7214406122830949,
+      -0.17903547376726492
+    ],
+    [
+      0.7882687205502752,
+      -0.39373734534478555,
+      0.7531786903199453,
+      -0.1474218192119493
+    ]
+  ],
+  "collision_free": true,
+  "collision_samples": 99,
+  "endpoint_error": 7.043575467574348e-16,
+  "start_error": 0.0,
+  "fixed_goal_error": 0.0,
+  "status": "success",
+  "message": "Spatial fixed-goal path validated; optimality remains subject to reported bounds.",
+  "total_seconds": 6.82503021499997
+}

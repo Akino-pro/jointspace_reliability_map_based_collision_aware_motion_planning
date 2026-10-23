@@ -1,0 +1,38 @@
+<robot name="3R_obstacles">
+
+  <link name="fixed"/>
+
+  <link name="right_obs">
+    <collision name="right">
+      <origin rpy="0 0 0" xyz="1.5 -0.2 0"/>
+      <geometry><box size="0.5 0.5 10"/></geometry>
+    </collision>
+  </link>
+  <joint name="j1" type="fixed">
+    <parent link="fixed"/>
+    <child link="right_obs"/>
+  </joint>
+
+  <link name="above_obs">
+    <collision name="above">
+      <origin rpy="0 0 0" xyz="0 1.5 0"/>
+      <geometry><box size="0.5 0.5 10"/></geometry>
+    </collision>
+  </link>
+  <joint name="j2" type="fixed">
+    <parent link="fixed"/>
+    <child link="above_obs"/>
+  </joint>
+
+  <link name="left_obs">
+    <collision name="left">
+      <origin rpy="0 0 0" xyz="-1.4 0.3 0"/>
+      <geometry><box size="0.5 0.5 10"/></geometry>
+    </collision>
+  </link>
+  <joint name="j3" type="fixed">
+    <parent link="fixed"/>
+    <child link="left_obs"/>
+  </joint>
+
+</robot>

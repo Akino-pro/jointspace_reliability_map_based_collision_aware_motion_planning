@@ -1,0 +1,15 @@
+{
+  "source": "results/spatial4r/spatial4R_ftwmax_paths200_trials300.json",
+  "robot": "ftwmax",
+  "mujoco_version": "3.4.0",
+  "waypoints": 5,
+  "duration_seconds": 1.3352322167192692,
+  "playback_speed": 0.5,
+  "sampled_configurations": 82,
+  "collision_samples": 0,
+  "mujoco_contact_samples": 0,
+  "maximum_mujoco_fk_error": 2.1210781103223385e-15,
+  "endpoint_error": 1.1102230246251565e-16,
+  "angular_windings_preserved": true,
+  "method": "prescribed GCS segments; sampled capsule-sphere checks, not dynamic tracking"
+}

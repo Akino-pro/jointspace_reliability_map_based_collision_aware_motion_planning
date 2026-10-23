@@ -1,0 +1,14 @@
+MuJoCo controls: Space pause/resume | R restart | L loop | T trace | mouse rotate/zoom | Esc close
+{
+  "source": "D:\\\u65b0\u5efa\u6587\u4ef6\u5939\\jointspace_reliability_map_based_collision_aware_motion_planning\\two_stage_planar3R_mujoco_20261022.json",
+  "mujoco_version": "3.4.0",
+  "waypoints": 4,
+  "duration_seconds": 9.426371319810368,
+  "failed_joint": null,
+  "sampled_configurations": 567,
+  "collision_samples": 0,
+  "endpoint_error": 2.220446049250313e-16,
+  "angular_windings_preserved": true,
+  "method": "prescribed GCS segments; sampled analytic checks, not dynamic tracking"
+}
+MuJoCo artifacts: D:\新建文件夹\jointspace_reliability_map_based_collision_aware_motion_planning\visualizations\planar3R_mujoco_20261022\viewer

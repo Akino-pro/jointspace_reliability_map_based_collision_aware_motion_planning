@@ -1,0 +1,16 @@
+{
+  "source": "results/spatial4r/spatial4R_ftwmax_midpoint_two_stage_path.json",
+  "robot": "ftwmax",
+  "mujoco_version": "3.4.0",
+  "waypoints": 6,
+  "duration_seconds": 1.443794299028979,
+  "playback_speed": 0.5,
+  "sampled_configurations": 88,
+  "collision_samples": 0,
+  "mujoco_contact_samples": 0,
+  "maximum_mujoco_fk_error": 1.7422013638940487e-15,
+  "endpoint_error": 9.155133597044475e-16,
+  "angular_windings_preserved": true,
+  "method": "prescribed GCS segments; sampled capsule-sphere checks, not dynamic tracking",
+  "rendered_frames": 71
+}

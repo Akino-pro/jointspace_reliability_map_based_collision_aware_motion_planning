@@ -1,0 +1,13 @@
+﻿{
+    "success":  false,
+    "status":  "memory_limit",
+    "task_position_distance":  0.3,
+    "task_orientation_difference_degrees":  20,
+    "iris_checkpoint":  "data/iris/spatial7R_30cm20deg_endpoint_seed_regions.npz",
+    "original_region_count":  2,
+    "region_count":  72,
+    "edge_count":  2392,
+    "target_set_count":  8,
+    "gcs_solve_calls":  1,
+    "message":  "Endpoint-seeded cover exceeded Docker memory during the first GCS target; cgroup recorded an OOM kill. No path returned."
+}

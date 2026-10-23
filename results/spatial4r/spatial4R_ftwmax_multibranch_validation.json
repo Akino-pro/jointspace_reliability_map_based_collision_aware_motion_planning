@@ -1,0 +1,48 @@
+{
+  "purpose": "Real ftwmax multibranch SSM and reliability preprocessing validation; no IRIS or GCS solve",
+  "goal": [
+    0.9487804194344686,
+    -1.2546894825462571,
+    -0.5848754941809485
+  ],
+  "reference": [
+    -2.0291132605617523,
+    2.3781117581837794,
+    1.3056985099517648,
+    1.4303215263847688
+  ],
+  "ssm_branch_count": 2,
+  "trace": {
+    "ik_attempts": 80,
+    "failed_traces": 0,
+    "ik_attempt_budget": 80,
+    "branch_limit": 4,
+    "branch_count": 2,
+    "failed_ik": 5,
+    "duplicate_starts": 73,
+    "random_seed": 1,
+    "duplicate_tolerance": 0.005,
+    "termination_reason": "ik_attempt_budget_exhausted",
+    "all_branches_certified": false
+  },
+  "reliability_rule": "maximum_across_branches",
+  "unmerged_partition_count": 625,
+  "merged_partition_count": 205,
+  "maximum_fk_error": 9.967103643506434e-10,
+  "sampling_mode": "fixed_arc_spacing",
+  "ssm_arc_spacing": 0.044,
+  "ssm_branch_arc_lengths": [
+    15.850759557918272,
+    19.053390914230107
+  ],
+  "ssm_total_arc_length": 34.90415047214838,
+  "ssm_branch_sample_counts": [
+    364,
+    436
+  ],
+  "sample_refinement_failures": 0,
+  "envelope_counts": [
+    42,
+    52
+  ]
+}

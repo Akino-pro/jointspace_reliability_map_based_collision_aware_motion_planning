@@ -1,0 +1,224 @@
+{
+  "comparisons": [
+    {
+      "source": "results/planar3r/two_stage_sampled_comparison.json",
+      "planner": "two_stage_ssm_gcs",
+      "two_stage_success": true,
+      "baseline_success": true,
+      "two_stage_cost": 0.3817177694444778,
+      "sampled_cost": 0.3817192601649112,
+      "shared_preprocessing_seconds": 3.2801872450000076,
+      "two_stage_total_seconds": 110.153792899,
+      "sampled_incremental_seconds": 14.612893603999993,
+      "sampled_total_with_shared_preprocessing_seconds": 17.893080849,
+      "samples": 301,
+      "covered_sampled_targets": 91,
+      "effective_hull_targets": 20,
+      "adjacency": {
+        "region_pairs": 3321,
+        "bounding_lp_count": 0,
+        "candidate_intersections": 1883,
+        "intersection_lp_count": 1883,
+        "directed_edges": 1478,
+        "periodic": false,
+        "periodic_directed_edges": 0
+      },
+      "periodic": false,
+      "baseline_input_sha256": "64cb5cb9b8b1c82c1870117ea962138239cb9508d19c91bda7f610cfb8aa3e13",
+      "baseline_solver_settings": {
+        "max_rounded_paths": 200,
+        "max_rounding_trials": 300,
+        "rounding_seed": 0,
+        "relative_gap_tolerance": 0.01,
+        "mip_time_limit": 60.0,
+        "mip_relative_gap": 0.01
+      },
+      "two_stage_solver_settings": {
+        "max_rounded_paths": 200,
+        "max_rounding_trials": 300,
+        "rounding_seed": 0,
+        "relative_gap_tolerance": 0.01,
+        "mip_time_limit": 60.0,
+        "mip_relative_gap": 0.01
+      },
+      "stage1_quality": {
+        "lower_bound": 0.3584366212350418,
+        "upper_bound": 0.38164594316818823,
+        "absolute_gap": 0.023209321933146454,
+        "relative_gap": 0.06475153641716519,
+        "relative_tolerance": 0.01,
+        "absolute_tolerance": 1e-06,
+        "scope": "union_of_sampled_target_intersections_graph_not_continuous_ssm",
+        "within_tolerance": false,
+        "status": "gap_exceeds_tolerance"
+      },
+      "stage2_quality": {
+        "lower_bound": 0.35850844136549137,
+        "upper_bound": 0.3817177694444778,
+        "absolute_gap": 0.023209328078986402,
+        "relative_gap": 0.06473858186040593,
+        "relative_tolerance": 0.01,
+        "absolute_tolerance": 1e-06,
+        "scope": "fixed_endpoint_graph",
+        "within_tolerance": false,
+        "status": "gap_exceeds_tolerance"
+      },
+      "sampled_quality": {
+        "lower_bound": 0.35516842431758716,
+        "upper_bound": 0.3817192601649112,
+        "absolute_gap": 0.02655083584732404,
+        "relative_gap": 0.07475562023380382,
+        "relative_tolerance": 0.01,
+        "absolute_tolerance": 1e-06,
+        "scope": "fixed_start_to_supplied_target_sets_graph",
+        "within_tolerance": false,
+        "status": "gap_exceeds_tolerance"
+      },
+      "global_optimality_certified": false,
+      "two_stage_minus_sampled_cost": -1.4907204334280166e-06
+    },
+    {
+      "source": "results/spatial4r/spatial4R_ftwmax_midpoint_sampled_comparison.json",
+      "planner": "spatial4R_two_stage_gcs",
+      "two_stage_success": true,
+      "baseline_success": true,
+      "two_stage_cost": 0.07807983167132608,
+      "sampled_cost": 0.09207648479516244,
+      "shared_preprocessing_seconds": 2.3687709929999983,
+      "two_stage_total_seconds": 119.72353690900002,
+      "sampled_incremental_seconds": 12.313831477999997,
+      "sampled_total_with_shared_preprocessing_seconds": 14.682602470999996,
+      "samples": 153,
+      "covered_sampled_targets": 53,
+      "effective_hull_targets": 13,
+      "adjacency": {
+        "region_pairs": 1540,
+        "bounding_lp_count": 0,
+        "candidate_intersections": 724,
+        "intersection_lp_count": 724,
+        "directed_edges": 1202,
+        "periodic": false,
+        "periodic_directed_edges": 0
+      },
+      "periodic": false,
+      "baseline_input_sha256": "b396a5229cc50054323f58957c4e0ee870d7b813a7ea33ce114a4fee648426d1",
+      "baseline_solver_settings": {
+        "max_rounded_paths": 200,
+        "max_rounding_trials": 300,
+        "solver_backend": "mosek"
+      },
+      "two_stage_solver_settings": {
+        "max_rounded_paths": 200,
+        "max_rounding_trials": 300,
+        "rounding_seed": 0
+      },
+      "stage1_quality": {
+        "lower_bound": null,
+        "upper_bound": 0.09111110457352885,
+        "absolute_gap": null,
+        "relative_gap": null,
+        "relative_tolerance": 0.01,
+        "absolute_tolerance": 1e-06,
+        "scope": "union_of_sampled_target_intersections_graph_not_continuous_ssm",
+        "within_tolerance": false,
+        "status": "bound_unavailable"
+      },
+      "stage2_quality": {
+        "lower_bound": 0.0688190745586008,
+        "upper_bound": 0.07807983167132608,
+        "absolute_gap": 0.009260757112725282,
+        "relative_gap": 0.134566719650372,
+        "relative_tolerance": 0.01,
+        "absolute_tolerance": 1e-06,
+        "scope": "fixed_start_to_supplied_target_sets_graph",
+        "within_tolerance": false,
+        "status": "gap_exceeds_tolerance"
+      },
+      "sampled_quality": {
+        "lower_bound": 0.06873006457950753,
+        "upper_bound": 0.09207648479516244,
+        "absolute_gap": 0.023346420215654903,
+        "relative_gap": 0.33968279178099076,
+        "relative_tolerance": 0.01,
+        "absolute_tolerance": 1e-06,
+        "scope": "fixed_start_to_supplied_target_sets_graph",
+        "within_tolerance": false,
+        "status": "gap_exceeds_tolerance"
+      },
+      "global_optimality_certified": false,
+      "two_stage_minus_sampled_cost": -0.013996653123836356
+    },
+    {
+      "source": "results/spatial7r/spatial7R_30cm20deg_sampled_comparison.json",
+      "planner": "spatial7R_two_stage_gcs",
+      "two_stage_success": true,
+      "baseline_success": true,
+      "two_stage_cost": 0.004308689987573309,
+      "sampled_cost": 0.004031521798587946,
+      "shared_preprocessing_seconds": 1.505844236999991,
+      "two_stage_total_seconds": 14.89371441099999,
+      "sampled_incremental_seconds": 3.8952566310000094,
+      "sampled_total_with_shared_preprocessing_seconds": 5.401100868,
+      "samples": 92,
+      "covered_sampled_targets": 6,
+      "effective_hull_targets": 4,
+      "adjacency": {
+        "region_pairs": 276,
+        "bounding_lp_count": 0,
+        "candidate_intersections": 212,
+        "intersection_lp_count": 212,
+        "directed_edges": 424,
+        "periodic": false,
+        "periodic_directed_edges": 0
+      },
+      "periodic": false,
+      "baseline_input_sha256": "5afc0ca513f4169c74bec9dfb5c462162fdac2bc4c6376681d9ac177654b0b38",
+      "baseline_solver_settings": {
+        "max_rounded_paths": 200,
+        "max_rounding_trials": 300,
+        "solver_backend": "mosek"
+      },
+      "two_stage_solver_settings": {
+        "max_rounded_paths": 200,
+        "max_rounding_trials": 300
+      },
+      "stage1_quality": {
+        "lower_bound": null,
+        "upper_bound": 0.0043086444333183295,
+        "absolute_gap": null,
+        "relative_gap": null,
+        "relative_tolerance": 0.01,
+        "absolute_tolerance": 1e-06,
+        "scope": "sampled_full_pose_target_intersections_graph",
+        "within_tolerance": false,
+        "status": "bound_unavailable"
+      },
+      "stage2_quality": {
+        "lower_bound": 0.004308689987573307,
+        "upper_bound": 0.004308689987573309,
+        "absolute_gap": 1.734723475976807e-18,
+        "relative_gap": 4.0261041777893586e-16,
+        "relative_tolerance": 0.01,
+        "absolute_tolerance": 1e-06,
+        "scope": "fixed_start_to_supplied_target_sets_graph",
+        "within_tolerance": true,
+        "status": "within_tolerance"
+      },
+      "sampled_quality": {
+        "lower_bound": 0.004031522006664116,
+        "upper_bound": 0.004031521798587946,
+        "absolute_gap": 0.0,
+        "relative_gap": 0.0,
+        "relative_tolerance": 0.01,
+        "absolute_tolerance": 1e-06,
+        "scope": "fixed_start_to_supplied_target_sets_graph",
+        "within_tolerance": true,
+        "status": "within_tolerance"
+      },
+      "global_optimality_certified": false,
+      "two_stage_minus_sampled_cost": 0.00027716818898536246
+    }
+  ],
+  "timing_note": "Cached runs; shared preprocessing is counted once for each method. Measured sequentially, with no claim of repeated-run statistics.",
+  "interpretation": "These are heuristic GCS results for different terminal models, not ground truth or continuous-SSM optimality certificates."
+}

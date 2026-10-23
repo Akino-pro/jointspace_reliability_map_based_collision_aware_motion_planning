@@ -1,0 +1,84 @@
+{
+  "success": true,
+  "failed_joint": 3,
+  "locked_angle": -0.4722077464279502,
+  "failure_configuration": [
+    -0.3182651673106314,
+    1.8792519611450273,
+    -0.4722077464279502
+  ],
+  "goal_point": [
+    1.5,
+    1.5
+  ],
+  "active_joints": [
+    1,
+    2
+  ],
+  "iris_checkpoint": "data/iris/planar3R_iris_regions.npz",
+  "cost_type": "active_joint_space_euclidean_length",
+  "gcs_solve_calls": 1,
+  "link_lengths": [
+    1,
+    1,
+    1
+  ],
+  "obstacles": [
+    {
+      "center": [
+        0.75,
+        0.75
+      ],
+      "radius": 0.15,
+      "type": "circle"
+    }
+  ],
+  "link_radius": 0.02,
+  "ik_solutions": [
+    [
+      -0.3682651673103381,
+      1.8792519611447345,
+      -0.4722077464279502
+    ],
+    [
+      1.9390614941052347,
+      -1.4070442147167843,
+      -0.4722077464279502
+    ]
+  ],
+  "collision_free_ik_solutions": [
+    [
+      -0.3682651673103381,
+      1.8792519611447345,
+      -0.4722077464279502
+    ],
+    [
+      1.9390614941052347,
+      -1.4070442147167843,
+      -0.4722077464279502
+    ]
+  ],
+  "slice_region_count": 4,
+  "connected_goal_count": 1,
+  "gcs_region_count": 2,
+  "gcs_edge_count": 2,
+  "status": "success",
+  "message": "Post-failure planning succeeded; the locked joint remains fixed throughout the path.",
+  "total_seconds": 0.40318059900000947,
+  "waypoints": [
+    [
+      -0.3182651673105638,
+      1.8792519611451026,
+      -0.4722077464279502
+    ],
+    [
+      -0.36826516731033415,
+      1.8792519611447345,
+      -0.4722077464279502
+    ]
+  ],
+  "path_length": 0.04999999999977034,
+  "cost": 0.05000000003779447,
+  "endpoint_error": 7.856740153113387e-15,
+  "collision_samples": 6
+}

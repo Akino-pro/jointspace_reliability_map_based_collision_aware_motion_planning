@@ -1,0 +1,121 @@
+{
+  "success": true,
+  "planner": "spatial4R_two_stage_gcs",
+  "robot": {
+    "alpha": [
+      1.1599121046989387,
+      -0.5154988273227061,
+      0.03775362985949342,
+      0.5365523262566805
+    ],
+    "d": [
+      -0.0020589855582313892,
+      -0.12359280272943952,
+      0.0025723721804752,
+      0.04538990560835715
+    ],
+    "a": [
+      0.04732540449946272,
+      0.8501471809443848,
+      0.0018628495298751034,
+      0.8495872435309159
+    ],
+    "reference_CA": [
+      [
+        -2.7873328856440396,
+        3.1363905327568893
+      ],
+      [
+        -2.4637381023154603,
+        2.136018018712809
+      ],
+      [
+        -1.8292591098878526,
+        2.0339314472150742
+      ],
+      [
+        -1.6142928309703712,
+        1.7054258649412979
+      ]
+    ],
+    "reliabilities": [
+      0.9,
+      0.7,
+      0.5,
+      0.3
+    ]
+  },
+  "position_task_only": true,
+  "physical_joint_limits": null,
+  "start_configuration": [
+    0.2,
+    -0.8,
+    0.6,
+    -0.3
+  ],
+  "start_point": [
+    1.3921760958027778,
+    0.06302045877903387,
+    -1.0303980728681965
+  ],
+  "goal_point": [
+    1.0048114469897442,
+    1.3268089239526883,
+    -0.3027628522094646
+  ],
+  "obstacles": [
+    {
+      "type": "sphere",
+      "center": [
+        0.5,
+        0.0,
+        0.3
+      ],
+      "radius": 0.1
+    }
+  ],
+  "link_radius": 0.015,
+  "iris_checkpoint": "data/iris/spatial4R_iris_regions.npz",
+  "geometric_epsilon": 0.025,
+  "ssm_arc_spacing": 0.044,
+  "reliability_epsilon": 0.01,
+  "solver_settings": {
+    "max_rounded_paths": 200,
+    "max_rounding_trials": 300,
+    "rounding_seed": 0
+  },
+  "gcs_solve_calls": 0,
+  "continuous_coverage_certified": false,
+  "global_optimality_certified": false,
+  "ssm_branch_count": 2,
+  "ssm_trace": {
+    "ik_attempts": 20,
+    "failed_traces": 0,
+    "all_branches_certified": false
+  },
+  "original_region_count": 1,
+  "iris_generation_seconds": 90.41029881500003,
+  "sampling_mode": "fixed_arc_spacing",
+  "ssm_branch_arc_lengths": [
+    8.886576294950533,
+    8.886714049258487
+  ],
+  "ssm_total_arc_length": 17.77329034420902,
+  "ssm_branch_sample_counts": [
+    205,
+    204
+  ],
+  "sample_refinement_failures": 0,
+  "unmerged_reliability_partition_count": 625,
+  "reliability_partition_count": 247,
+  "reliability_rule": "maximum_across_branches",
+  "region_count": 207,
+  "edge_count": 3890,
+  "envelope_count": 10,
+  "target_set_count": 20,
+  "actual_sample_count": 409,
+  "geometry_seconds": 9.041274417000011,
+  "status": "geometry_only",
+  "message": "Spatial preprocessing complete; no GCS solve performed.",
+  "total_seconds": 9.041693244000044
+}
