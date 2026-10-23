@@ -37,24 +37,28 @@ class SpatialMultiBranchTests(unittest.TestCase):
         self.assertTrue(model.is_duplicate_ssm_start([np.pi, 0, 0, 0], [seam]))
         self.assertFalse(model.is_duplicate_ssm_start([0, 0, 0, 0], [seam]))
 
-    def test_four_branch_refinement_uses_max_and_only_convex_equal_cost_merges(self):
+    def test_four_branch_refinement_unions_recovery_and_only_convex_equal_cost_merges(self):
         bounds = [np.tile([1., 2.], (4, 1)) for _ in range(4)]
         for i, bound in enumerate(bounds):
             bound[i] = [-.4, .4]
         branches = [np.array([b[:, 0], b[:, 1]]) for b in bounds]
         raw, merged = reliability_regions_for_branches(branches)
         self.assertEqual(len(raw), 625)
-        self.assertLess(len(merged), len(raw))
+        # Union probabilities can distinguish cells that formerly tied under
+        # max aggregation; this fixture need not have equal-cost neighbors.
+        self.assertLessEqual(len(merged), len(raw))
         self.assertAlmostEqual(sum(np.prod(c["upper"]-c["lower"]) for c in raw), (2*np.pi)**4)
         self.assertAlmostEqual(sum(np.prod(c["upper"]-c["lower"]) for c in merged), (2*np.pi)**4)
         lookup = model.reliability_lookup()
         lower, upper = np.array([c["lower"] for c in merged]), np.array([c["upper"] for c in merged])
         for cell in raw:
             point = (cell["lower"]+cell["upper"])/2
-            values = [lookup[frozenset(j+1 for j in range(4) if b[j, 0] < point[j] < b[j, 1])]
+            f_sets = [frozenset(j+1 for j in range(4) if b[j, 0] < point[j] < b[j, 1])
                       for b in bounds]
+            values = [lookup[f] for f in f_sets]
             self.assertEqual(cell["branch_reliabilities"], tuple(values))
-            self.assertEqual(cell["reliability"], max(values))
+            self.assertEqual(cell["F"], frozenset().union(*f_sets))
+            self.assertEqual(cell["reliability"], lookup[cell["F"]])
             matches = np.flatnonzero(np.all(point > lower, axis=1) & np.all(point < upper, axis=1))
             # Original cell centers may lie on a removed face of a merged box,
             # but remain strictly inside the unique box containing that cell.
@@ -65,12 +69,13 @@ class SpatialMultiBranchTests(unittest.TestCase):
             self.assertTrue(np.all(containing["upper"] >= cell["upper"]))
         origin_cell = next(c for c in raw if np.all(c["lower"] < 0) and np.all(c["upper"] > 0))
         self.assertEqual(origin_cell["branch_F"], tuple(frozenset({i+1}) for i in range(4)))
-        self.assertLess(origin_cell["reliability"], lookup[frozenset({1, 2, 3, 4})])
+        self.assertEqual(origin_cell["F"], frozenset({1, 2, 3, 4}))
+        self.assertEqual(origin_cell["reliability"], 1.0)
         for i in range(4):
             point = np.full(4, 2.5)
             point[i] = 0
             cell = next(c for c in raw if np.all(point > c["lower"]) and np.all(point < c["upper"]))
-            self.assertEqual(cell["winning_branch"], i)
+            self.assertEqual(cell["recovery_branches"], {i+1: (i,)})
         def signature(cells):
             return {(*c["lower"], *c["upper"]): c["reliability"] for c in cells}
         self.assertEqual(signature(raw), signature(partition_multiple_branches(bounds[::-1], lookup)))

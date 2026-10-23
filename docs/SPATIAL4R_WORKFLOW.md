@@ -16,9 +16,10 @@ reason, failed IK/traces and duplicate starts.
 
 Each branch yields a 4D bounding-box partition of up to 3^4=81 cells. Successive
 branches refine the existing partition; they do not create independent cost
-maps. Each common cell uses the maximum reliability of the individual branch
-conditions. Joint-recovery sets from different branches are never unioned into
-a fictitious branch. Equal-reliability neighbors are merged only when their
+maps. Each common cell unions the recoverable joint IDs from all branches and
+evaluates its conditional reliability once on that union. Different single-joint
+failures may recover to different branches; this does not create a new physical
+SSM branch or join target hulls across branches. Equal-reliability neighbors are merged only when their
 union is exactly a box, then intersected with the original IRIS regions.
 
 All detected branches use the same arc spacing (0.044 by default), so the total
@@ -36,9 +37,9 @@ candidate records its `ssm_branch` index (zero-based).
 
 Validation: all 13 existing spatial tests and six new multi-branch tests passed.
 Controlled four-branch fixtures verify discovery/capping, periodic deduplication,
-maximum reliability, branch-order invariance, convex merging, common arc density
+unioned recovery sets, branch-order invariance, convex merging, common arc density
 and all-branch target inclusion. These fixtures are not physical four-branch
-robot examples. A separate real ftwmax target at
+robot examples. A historical max-rule benchmark at the real ftwmax target
 [0.9487804194,-1.2546894825,-0.5848754942] produced two distinct closed branches,
 625 raw reliability boxes merged to 205, arc lengths 15.85076 and 19.05339 rad,
 and 364+436=800 samples at spacing 0.044. Its hull counts are 42+52=94 and maximum
@@ -196,7 +197,8 @@ checker. This is a model assumption, not a full hardware collision model.
 - Local hull epsilon 0.025. The hull/projection machinery supports four joint
   coordinates; sampled hulls are not certified continuous SSM outer envelopes.
 - Each branch induces 3^4=81 reliability boxes. Branch maps are overlaid and
-  their maximum conditional reliability is used. All 15 nonempty-condition
+  their joint-recovery sets are unioned before computing conditional reliability.
+  All 15 nonempty-condition
   values match the reference script's formulas exactly. The no-condition value
   is zero. Equal-reliability cells merge only when their union is exactly a box.
 - Intersect these boxes with IRIS. Drop an original IRIS halfspace only when

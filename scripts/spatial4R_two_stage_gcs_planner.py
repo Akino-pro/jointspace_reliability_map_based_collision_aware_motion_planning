@@ -10,7 +10,7 @@ import numpy as np
 
 from scripts import spatial4R_model as model
 from scripts.spatial4R_iris import generate_regions, scene_metadata
-from scripts.planar3R_bbox_reliability_partition import partition_multiple_branches, merge_equal_reliability_boxes
+from scripts.planar3R_bbox_reliability_partition import partition_multiple_branches, merge_equal_reliability_boxes, RELIABILITY_RULE
 from scripts.planar3R_iris_regions import load_iris_checkpoint, split_iris_regions, polytope_adjacency
 from scripts.planar3R_ssm_envelopes import SSM_ARC_SPACING, build_envelopes, intersect_envelopes, project_to_local_ssm, sample_hull
 from scripts.planar3R_two_stage_gcs_planner import solve_target_sets
@@ -23,7 +23,7 @@ MAX_ROUNDING_TRIALS = 300
 
 
 def reliability_regions_for_branches(branches):
-    """Same sequential common refinement/max rule as planar 3R, in four dimensions."""
+    """Same common refinement/recovery-set union as planar 3R, in four dimensions."""
     if not 1 <= len(branches) <= model.MAX_SSM_BRANCHES:
         raise ValueError("Expected one to four spatial 4R SSM branches")
     bounds = [np.column_stack((b.min(axis=0), b.max(axis=0))) for b in branches]
@@ -124,7 +124,7 @@ def plan_before_failure(start=model.START_CONFIGURATION, goal=None,
         target_set_count=sum(envelopes[t["envelope"]].branch == i for t in targets))
         for i, b in enumerate(branches)]
     report.update(unmerged_reliability_partition_count=len(boxes), reliability_partition_count=len(merged),
-                  reliability_rule="maximum_across_branches", region_count=len(regions), edge_count=len(edges),
+                  reliability_rule=RELIABILITY_RULE, region_count=len(regions), edge_count=len(edges),
                   envelope_count=len(envelopes), target_set_count=len(targets),
                   actual_sample_count=len({tuple(q) for e in envelopes for q in e.samples}),
                   geometry_seconds=time.perf_counter()-setup)

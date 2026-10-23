@@ -40,9 +40,10 @@ coverage, not physical joint motion. Opposite-chart boundary edges remain absent
    **eight** regular closed SSM branches, per the user's requested limit. Search
    defaults to 80 IK starts and seed 1; discovery is not certified complete.
 4. Subdivide each original IRIS bounding domain at every discovered branch's
-   coordinate bounds. Each resulting cell receives the maximum reliability of
-   the individual branch recovery sets. Recovery sets are not unioned across
-   branches. This is the existing planar/4R reliability rule in seven dimensions.
+   coordinate bounds. Each resulting cell unions the individual branch recovery
+   sets and receives the conditional reliability of that union, counting each
+   failure event and the no-failure event once. Different failures may select
+   different branches. This is the planar/4R rule in seven dimensions.
 5. Merge equal-reliability cells only if their union is exactly a box, then
    intersect with the full original IRIS halfspaces. Restricting refinement to
    exact LP coordinate bounds avoids constructing unreachable parts of a global

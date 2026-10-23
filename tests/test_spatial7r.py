@@ -118,7 +118,7 @@ class Spatial7RTests(unittest.TestCase):
         self.assertEqual({envelopes[t["envelope"]].branch for t in targets}, set(range(8)))
         self.assertEqual(len(report["ssm_branch_sample_counts"]), 8)
 
-    def test_branch_recovery_sets_are_not_unioned_and_iris_halfspaces_remain(self):
+    def test_branch_recovery_sets_are_unioned_and_iris_halfspaces_remain(self):
         parent = box(np.full(7, -.2), np.full(7, .2))
         parent.A = np.vstack((parent.A, [1, 1, 0, 0, 0, 0, 0]))
         parent.b = np.r_[parent.b, .08]
@@ -130,10 +130,23 @@ class Spatial7RTests(unittest.TestCase):
         point = np.zeros(7)
         actual = max(r.reliability for r in regions if r.contains(point))
         lookup = model.reliability_lookup()
-        self.assertEqual(actual, max(lookup[frozenset({1})], lookup[frozenset({2})]))
-        self.assertLess(actual, lookup[frozenset({1, 2})])
+        self.assertEqual(actual, lookup[frozenset({1, 2})])
+        self.assertGreater(actual, max(lookup[frozenset({1})], lookup[frozenset({2})]))
         for point in np.random.default_rng(7).uniform(-.25, .25, (200, 7)):
             self.assertEqual(parent.contains(point), any(r.contains(point) for r in regions))
+
+    def test_eight_branches_union_all_seven_failures_without_duplicate_credit(self):
+        parent = box(np.full(7, -.02), np.full(7, .02))
+        bounds = [np.tile([1., 2.], (7, 1)) for _ in range(8)]
+        for i, bound in enumerate(bounds):
+            bound[i % 7] = [-.1, .1]
+        branches = [np.array([b[:, 0], b[:, 1]]) for b in bounds]
+        regions, report = local_reliability_regions([parent], branches)
+        self.assertEqual(report["reliability_rule"], "union_of_branch_recovery_sets")
+        self.assertEqual(report["local_partition_cell_count"], 1)
+        self.assertEqual(len(regions), 1)
+        self.assertTrue(regions[0].contains(np.zeros(7)))
+        self.assertEqual(regions[0].reliability, 1.0)
 
     def test_budget_stops_before_allocating_large_partition(self):
         parent = box(np.full(7, -.2), np.full(7, .2))

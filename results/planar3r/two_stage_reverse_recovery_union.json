@@ -1,0 +1,21 @@
+{
+  "success": false,
+  "status": "experiment_stopped",
+  "message": "Validation run stopped after more than two minutes in the first target relaxation without a solver return, with Docker using approximately 6.7 GiB of its 7.57 GiB budget. This is not an infeasibility result or a completed path solve.",
+  "reliability_rule": "union_of_branch_recovery_sets",
+  "start_configuration": [0.6087380070193158, -0.6279264205318301, 1.915910797633629],
+  "goal_point": [0.5, 0.5],
+  "iris_checkpoint": "data/iris/planar3R_iris_regions.npz",
+  "reliability_branch_count": 2,
+  "unmerged_reliability_partition_count": 125,
+  "reliability_partition_count": 75,
+  "region_count": 110,
+  "edge_count": 2776,
+  "actual_sample_count": 394,
+  "target_set_count": 28,
+  "solver_settings": {"solver": "MOSEK", "max_rounded_paths": 200, "max_rounding_trials": 300},
+  "gcs_solve_calls_started": 1,
+  "gcs_solve_calls_completed": 0,
+  "global_optimality_certified": false,
+  "log": "logs/planar3R_reverse_recovery_union_main.log"
+}

@@ -1,0 +1,14 @@
+{
+  "success": false,
+  "status": "experiment_stopped",
+  "reliability_rule": "union_of_branch_recovery_sets",
+  "experiment": "planar3R_reverse_with_optional_sampled_baseline",
+  "reason": "Optional sampled-terminal baseline was stopped after more than two minutes without a solver return, with Docker using approximately 6.7 GiB of its 7.57 GiB budget. This is not a solver infeasibility result.",
+  "ssm_branches": 2,
+  "ssm_samples": 394,
+  "effective_hull_targets": 28,
+  "connected_regions": 110,
+  "directed_edges": 2776,
+  "main_gcs_calls_completed": 0,
+  "log": "logs/planar3R_reverse_recovery_union.log"
+}

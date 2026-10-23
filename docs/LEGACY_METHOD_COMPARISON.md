@@ -4,6 +4,13 @@ The two-stage method remains the primary planner. These changes borrow ideas
 from `obs_avoid_ft_mp_Landon` without copying its reliability model, random
 probabilities, center-distance graph pruning or custom collision inflation.
 
+Update: the primary reliability aggregation now unions recoverable joint IDs
+across branches before applying the existing conditional probability lookup.
+The old maximum-per-branch rule is superseded. The measurements below are
+historical; their three tasks each had one detected branch, so this aggregation
+change alone does not alter those tasks' weights. Both methods continue to
+receive the same current reliability map when a new comparison is run.
+
 ## Adjacency screening
 
 `scripts/planar3R_iris_regions.py::polytope_adjacency` now first checks

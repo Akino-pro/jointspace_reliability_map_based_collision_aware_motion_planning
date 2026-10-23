@@ -2,7 +2,45 @@ PROJECT AND CONVERSATION HANDOFF
 Updated: 2026-10-22
 Language: English, following the user's instruction that project documentation be in English.
 
-LATEST GRAPH AND BASELINE UPDATE (2026-10-23)
+LATEST RELIABILITY UPDATE: UNION BRANCH RECOVERY SETS (2026-10-23)
+- User explicitly changed multi-branch aggregation: each common region may
+  recover different single-joint failures through different SSM branches.
+  Compute F(Q)=union_b F_b(Q), then evaluate the existing conditional lookup ONCE.
+  This supersedes all historical maximum-across-branches rules described below.
+- Implemented shared aggregate_branch_recovery in
+  scripts/planar3R_bbox_reliability_partition.py. Planar 3R, spatial 4R and local
+  spatial 7R refinement all use it. New reliability_rule metadata is
+  union_of_branch_recovery_sets; no winning branch is assigned. Raw cells retain
+  branch_F, per-branch diagnostic values and recovery_branches per joint.
+- The single-branch lookup, no-failure contribution, conditioning on at most
+  one failed joint, empty-F zero convention, 0.01+1-R weight, target sampling,
+  two-stage GCS, post-failure search and periodic defaults are unchanged.
+  Duplicate/overlapping joint recovery and no-failure probability are counted
+  once. Target hulls remain branch-local. This is candidate angle coverage,
+  not proof of an obstacle-free locked-joint path.
+- Example with r=[0.7,0.5,0.3]: F_A={1}, F_B={2} gives R=0.51, compared with
+  old max(0.30,0.42)=0.42. Actual MOSEK/GCS regression verifies resulting cost.
+- Docker suite: 142 tests, 136 passed, six optional MuJoCo tests skipped.
+  Tests cover union conditions, duplicate/empty sets, original conditional
+  formula, one-time no-failure credit, branch order, convex merges, actual GCS
+  weights, four-branch 4R and eight-branch 7R coverage, and IRIS geometry.
+- Existing reverse 3R task geometry: two branches, 394 samples, 28 targets,
+  125 raw cells -> 75 equal-cost boxes -> 110 connected regions / 2776 edges.
+  Historical max-rule graph was 93 regions / 1960 edges. Original IRIS unchanged;
+  the number of permissible equal-cost merges changes with the new weights.
+- Extra sampled baseline and then a separate main-only run were each stopped
+  after more than two minutes without a first solver return, Docker memory
+  approximately 6.7/7.57 GiB. NO new full real-benchmark path/cost/gap is claimed.
+  Records explicitly say experiment_stopped, not infeasible:
+  results/diagnostics/recovery_union_sampled_comparison_stopped.json and
+  results/planar3r/two_stage_reverse_recovery_union.json. Separate logs in logs/.
+- Historical results, region-route IDs and max-rule multi-branch costs remain
+  preserved and must not be treated as current-map results. Main and sampled
+  baseline automatically share the new map. Summary rows now expose the rule.
+  Documentation: docs/BRANCH_RECOVERY_UNION.md and updated active workflow guides.
+  No reference grids, package installs, git staging, commits or pushes.
+
+PREVIOUS GRAPH AND BASELINE UPDATE (2026-10-23)
 - User authorized legacy-inspired adjacency filtering, periodic connections and
   a direct sampled-SSM goal baseline while preserving the two-stage main method.
   User clarified periodicity is optional and spatial implementation can wait.

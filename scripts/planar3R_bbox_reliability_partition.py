@@ -15,6 +15,7 @@ TARGET_POINT = (1.5, 1.5)
 R1 = 0.7
 R2 = 0.5
 R3 = 0.3
+RELIABILITY_RULE = "union_of_branch_recovery_sets"
 
 
 def build_reliability_lookup(r1, r2, r3):
@@ -75,11 +76,31 @@ def partition_single_branch(bounds, reliability_lookup):
     return regions
 
 
-def partition_multiple_branches(branch_bounds, reliability_lookup):
-    """Common refinement of branch boxes, taking the maximum branch reliability.
+def aggregate_branch_recovery(f_sets, reliability_lookup):
+    """Allow a different target branch for each mutually exclusive joint failure.
 
-    Keep the winning branch's F set rather than unioning F sets: recovery
-    conditions from different branches must not create a fictitious branch.
+    Union joint IDs BEFORE the conditional lookup, so overlapping recovery and
+    the no-failure contribution are counted only once. Individual branch values
+    remain diagnostics; they are neither maximized nor added. This denotes
+    candidate recovery angles, not a proof of collision-free recovery paths.
+    """
+    f_sets = tuple(frozenset(f) for f in f_sets)
+    if not f_sets:
+        raise ValueError("At least one branch recovery set is required")
+    combined = frozenset().union(*f_sets)
+    return dict(F=combined, reliability=reliability_lookup[combined],
+                branch_F=f_sets,
+                branch_reliabilities=tuple(reliability_lookup[f] for f in f_sets),
+                recovery_branches={joint: tuple(i for i, f in enumerate(f_sets) if joint in f)
+                                   for joint in sorted(combined)},
+                reliability_rule=RELIABILITY_RULE)
+
+
+def partition_multiple_branches(branch_bounds, reliability_lookup):
+    """Common refinement of branch boxes with unioned joint-recovery sets.
+
+    Different single-joint failures may choose different SSM branches. The
+    original conditional lookup (including its empty-set convention) is kept.
     Zero-volume contacts are omitted, as in the downstream IRIS subdivision.
     """
     branch_bounds = list(branch_bounds)
@@ -88,8 +109,8 @@ def partition_multiple_branches(branch_bounds, reliability_lookup):
     cells = partition_single_branch(branch_bounds[0], reliability_lookup)
     if len(branch_bounds) == 1:
         return cells
-    cells = [dict(cell, branch_reliabilities=(cell["reliability"],),
-                  branch_F=(cell["F"],), winning_branch=0) for cell in cells]
+    cells = [dict(cell, **aggregate_branch_recovery([cell["F"]], reliability_lookup))
+             for cell in cells]
     for bounds in branch_bounds[1:]:
         refined = []
         other_cells = partition_single_branch(bounds, reliability_lookup)
@@ -99,13 +120,9 @@ def partition_multiple_branches(branch_bounds, reliability_lookup):
                 upper = np.minimum(cell["upper"], other["upper"])
                 if np.any(upper - lower <= 1e-10):
                     continue
-                values = cell["branch_reliabilities"] + (other["reliability"],)
                 f_sets = cell["branch_F"] + (other["F"],)
-                winner = int(np.argmax(values))
                 refined.append({"lower": lower, "upper": upper,
-                                "F": f_sets[winner], "reliability": values[winner],
-                                "branch_reliabilities": values, "branch_F": f_sets,
-                                "winning_branch": winner})
+                                **aggregate_branch_recovery(f_sets, reliability_lookup)})
         cells = refined
     return cells
 
@@ -117,7 +134,7 @@ def merge_equal_reliability_boxes(regions):
     axes. No hull filling, tolerance-based gaps, or nonconvex unions are added.
     Repeat all axes to remove further faces exposed by earlier merges. Keep
     original cells as provenance because branch conditions can vary inside a
-    merged box even though its maximum reliability is constant.
+    merged box even though its combined reliability is constant.
     """
     cells = list(regions)
     while True:

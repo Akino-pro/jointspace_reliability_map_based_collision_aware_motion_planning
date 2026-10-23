@@ -1,4 +1,5 @@
 import itertools
+import importlib.util
 import unittest
 from unittest.mock import patch
 
@@ -6,7 +7,7 @@ import numpy as np
 
 from scripts.planar3R_bbox_reliability_partition import (
     build_reliability_lookup, partition_multiple_branches, partition_single_branch,
-    merge_equal_reliability_boxes,
+    merge_equal_reliability_boxes, aggregate_branch_recovery, RELIABILITY_RULE,
 )
 from scripts.planar3R_gcs_planner import reliability_region_sets_for_workspace_point
 
@@ -25,7 +26,7 @@ class MultiBranchReliabilityTests(unittest.TestCase):
             np.testing.assert_array_equal(before["upper"], after["upper"])
             self.assertEqual(before["reliability"], after["reliability"])
 
-    def test_common_refinement_covers_chart_with_pointwise_maximum(self):
+    def test_common_refinement_covers_chart_with_unioned_recovery_sets(self):
         cells = partition_multiple_branches(self.bounds, self.lookup)
         self.assertEqual(len(cells), 125)
         volume = sum(np.prod(cell["upper"] - cell["lower"]) for cell in cells)
@@ -33,24 +34,71 @@ class MultiBranchReliabilityTests(unittest.TestCase):
         for cell in cells:
             point = (cell["lower"] + cell["upper"]) / 2
             values = []
+            f_sets = []
             for bounds in self.bounds:
                 active = frozenset(i + 1 for i in range(3)
                                    if bounds[i, 0] < point[i] < bounds[i, 1])
                 values.append(self.lookup[active])
+                f_sets.append(active)
             self.assertEqual(cell["branch_reliabilities"], tuple(values))
-            self.assertEqual(cell["reliability"], max(values))
+            combined = frozenset().union(*f_sets)
+            self.assertEqual(cell["F"], combined)
+            self.assertEqual(cell["reliability"], self.lookup[combined])
+            self.assertGreaterEqual(cell["reliability"], max(values))
             matches = [other for other in cells if np.all(point > other["lower"])
                        and np.all(point < other["upper"])]
             self.assertEqual(len(matches), 1)
 
-    def test_different_branch_joint_conditions_are_not_unioned(self):
+    def test_different_branches_can_recover_different_joint_failures(self):
         point = np.array([-1.5, 0.5, 2.0])
         cell = next(cell for cell in partition_multiple_branches(self.bounds, self.lookup)
                     if np.all(point > cell["lower"]) and np.all(point < cell["upper"]))
         self.assertEqual(cell["branch_F"], (frozenset({1}), frozenset({2})))
-        self.assertEqual(cell["reliability"], max(self.lookup[frozenset({1})],
-                                                 self.lookup[frozenset({2})]))
-        self.assertLess(cell["reliability"], self.lookup[frozenset({1, 2})])
+        self.assertEqual(cell["F"], frozenset({1, 2}))
+        self.assertEqual(cell["reliability"], self.lookup[frozenset({1, 2})])
+        self.assertGreater(cell["reliability"], max(cell["branch_reliabilities"]))
+        self.assertEqual(cell["recovery_branches"], {1: (0,), 2: (1,)})
+
+    def test_overlap_and_no_failure_event_are_counted_only_once(self):
+        first, second = frozenset({1, 2}), frozenset({2, 3})
+        result = aggregate_branch_recovery([first, second, first], self.lookup)
+        self.assertEqual(result["F"], frozenset({1, 2, 3}))
+        self.assertAlmostEqual(result["reliability"], 1.0)
+        self.assertEqual(result["recovery_branches"][2], (0, 1, 2))
+        product = .7*.5*.3
+        failure_terms = [(1-r)*product/r for r in (.7, .5, .3)]
+        partial = aggregate_branch_recovery([{1}, {2}], self.lookup)
+        self.assertAlmostEqual(partial["reliability"],
+            (product+failure_terms[0]+failure_terms[1])/(product+sum(failure_terms)))
+
+    def test_duplicate_and_empty_branches_do_not_change_recovery_probability(self):
+        expected = self.lookup[frozenset({1})]
+        for f_sets in ([{1}, {1}], [set(), {1}], [{1}, set(), {1}]):
+            self.assertEqual(aggregate_branch_recovery(f_sets, self.lookup)["reliability"], expected)
+        self.assertEqual(aggregate_branch_recovery([set(), set()], self.lookup)["reliability"],
+                         self.lookup[frozenset()])
+        with self.assertRaises(ValueError):
+            aggregate_branch_recovery([], self.lookup)
+
+    @unittest.skipUnless(importlib.util.find_spec("pydrake"), "Drake required")
+    def test_unioned_recovery_weight_reaches_the_actual_gcs_objective(self):
+        from scripts.planar3R_iris_regions import ReliablePolytope, split_iris_regions
+        from scripts.planar3R_ssm_envelopes import sample_hull
+        from scripts.planar3R_two_stage_gcs_planner import solve_target_sets
+        start, goal = np.array([-1.5, .5, 2.]), np.array([-1.4, .5, 2.])
+        cell = next(c for c in partition_multiple_branches(self.bounds, self.lookup)
+                    if np.all(start > c["lower"]) and np.all(start < c["upper"]))
+        self.assertEqual(cell["F"], frozenset({1, 2}))
+        self.assertAlmostEqual(cell["reliability"], .51)
+        chart = ReliablePolytope(np.vstack((np.eye(3), -np.eye(3))), np.full(6, np.pi))
+        regions = split_iris_regions([chart], [cell])
+        weights = [.01+1-r.reliability for r in regions]
+        solved = solve_target_sets(regions, [], start,
+            [dict(polytope=sample_hull([goal]), region=0)], weights,
+            max_rounded_paths=10, max_rounding_trials=20, solver_backend="mosek")
+        self.assertIsNotNone(solved)
+        self.assertAlmostEqual(solved["cost"], .05, places=7)
+        self.assertNotAlmostEqual(solved["cost"], (.01+1-.42)*.1, places=5)
 
     def test_branch_order_does_not_change_geometry_or_reliability(self):
         def signature(cells):
@@ -68,7 +116,7 @@ class MultiBranchReliabilityTests(unittest.TestCase):
             maps = reliability_region_sets_for_workspace_point(0.5, 0.5)
         self.assertEqual(len(maps), 1)
         self.assertEqual(maps[0]["branch_count"], 2)
-        self.assertEqual(maps[0]["reliability_rule"], "maximum_across_branches")
+        self.assertEqual(maps[0]["reliability_rule"], RELIABILITY_RULE)
         self.assertEqual(maps[0]["unmerged_partition_count"], 125)
         self.assertLess(len(maps[0]["regions"]), 125)
 

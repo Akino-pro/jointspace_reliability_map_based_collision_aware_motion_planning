@@ -14,7 +14,7 @@ from scipy.spatial.transform import Rotation
 
 from scripts import spatial7R_model as model
 from scripts.spatial7R_iris import generate_regions, scene_metadata
-from scripts.planar3R_bbox_reliability_partition import merge_equal_reliability_boxes
+from scripts.planar3R_bbox_reliability_partition import merge_equal_reliability_boxes, aggregate_branch_recovery, RELIABILITY_RULE
 from scripts.planar3R_iris_regions import load_iris_checkpoint, split_iris_regions, polytope_adjacency
 from scripts.planar3R_ssm_envelopes import build_envelopes, intersect_envelopes, project_to_local_ssm, sample_hull
 from scripts.planar3R_two_stage_gcs_planner import solve_target_sets
@@ -62,7 +62,7 @@ def region_bounds(region):
 
 
 def local_reliability_regions(originals, branches, max_cells=MAX_PARTITION_CELLS):
-    """Exact common refinement inside each IRIS AABB, with all-branch max reliability.
+    """Exact common refinement inside each IRIS AABB, unioning branch recovery sets.
 
     This equals restricting the global bounding-box partition to IRIS coverage,
     without constructing its enormous out-of-coverage Cartesian grid. Equal-cost
@@ -89,9 +89,8 @@ def local_reliability_regions(originals, branches, max_cells=MAX_PARTITION_CELLS
             upper = np.array([cuts[j][i+1] for j, i in enumerate(intervals)])
             point = (lower+upper)/2
             f_sets = tuple(frozenset(j+1 for j in range(7) if b[j, 0] <= point[j] <= b[j, 1]) for b in bounds)
-            values = tuple(lookup[f] for f in f_sets)
-            cells.append(dict(lower=lower, upper=upper, reliability=max(values),
-                              branch_F=f_sets, branch_reliabilities=values))
+            cells.append(dict(lower=lower, upper=upper,
+                              **aggregate_branch_recovery(f_sets, lookup)))
         merged = merge_equal_reliability_boxes(cells)
         merged_count += len(merged)
         children = split_iris_regions([parent], merged)
@@ -99,7 +98,7 @@ def local_reliability_regions(originals, branches, max_cells=MAX_PARTITION_CELLS
             child.parent_index = parent_index
         regions.extend(children)
     return regions, dict(local_partition_cell_count=raw_count, merged_partition_cell_count=merged_count,
-                          reliability_rule="maximum_across_branches",
+                          reliability_rule=RELIABILITY_RULE,
                           reliability_partition_scope="exact_refinement_restricted_to_iris_coverage")
 
 

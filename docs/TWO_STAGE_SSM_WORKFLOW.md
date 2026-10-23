@@ -35,9 +35,11 @@ Workspace goal flags are `--gx` and `--gy`. The workflow neither generates new
 IRIS regions nor searches across epsilon values.
 
 The default reliability source is `goal`. All traced branches contribute to one
-common reliability map: intersect their 27-cell box partitions and assign each
-nonempty cell the maximum of its branch-specific reliabilities. The joint
-condition sets from different branches are not unioned. The common refinement
+common reliability map: intersect their 27-cell box partitions, union the joint
+recovery sets supplied by all branches for each nonempty cell, and evaluate the
+existing conditional reliability lookup once on that union. Different single-joint
+failures may choose different branches; duplicate recovery conditions and the
+no-failure event are counted only once. The common refinement
 is then intersected with the cached IRIS regions. Single-branch behavior is
 unchanged. `--reliability-branch` remains a compatibility option and must be 0.
 For N effective target
@@ -123,7 +125,7 @@ Two branches do not generally produce 27x27 nonempty cells. Their per-axis
 cut coordinates form a common refinement (at most 5 intervals per axis, or
 125 positive-volume cells for two boxes inside the chart). Coincident cuts
 reduce this count. Reports include the number of contributing branches,
-the maximum-across-branches rule, and the reliability partition cell count.
+the `union_of_branch_recovery_sets` rule, and the reliability partition cell count.
 SSM target envelopes still include all found branches. Discovery of every
 physical branch is not certified by the random IK and numerical tracing.
 Historical benchmark costs and region counts below predate this map update;

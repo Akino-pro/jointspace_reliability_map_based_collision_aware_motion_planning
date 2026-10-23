@@ -6,7 +6,7 @@ from pathlib import Path
 
 from scripts.planar3R_bbox_reliability_partition import (
     R1, R2, R3, branch_bounding_box, build_reliability_lookup, partition_multiple_branches,
-    merge_equal_reliability_boxes,
+    merge_equal_reliability_boxes, RELIABILITY_RULE,
 )
 from scripts.planar3R_collision import L, is_collision_free
 from scripts.planar3R_two_point_ssm_views import compute_ssms_for_target, refine_ik_configuration
@@ -25,10 +25,10 @@ def reliability_region_sets_for_workspace_point(x, y, seed=0):
     lookup = build_reliability_lookup(R1, R2, R3)
     raw_regions = partition_multiple_branches([branch_bounding_box(ssm) for ssm in ssms], lookup)
     regions = merge_equal_reliability_boxes(raw_regions)
-    return [{"label": "branch 1" if len(ssms) == 1 else "combined branches (max)",
+    return [{"label": "branch 1" if len(ssms) == 1 else "combined branch recovery sets (union)",
              "regions": regions, "unmerged_partition_count": len(raw_regions),
              "ssms": ssms, "branch_count": len(ssms),
-             "reliability_rule": "maximum_across_branches"}]
+             "reliability_rule": RELIABILITY_RULE}]
 
 
 def ssm_candidate_points(x, y, obstacles, max_candidates=30, seed=0):

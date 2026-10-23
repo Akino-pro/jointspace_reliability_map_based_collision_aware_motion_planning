@@ -7,6 +7,10 @@ standard-DH spatial four- and seven-joint robots. The original planar pre-failur
 Collision-free IRIS polytopes -> reliability intersections -> connectivity filtering -> GCS path -> collision and endpoint checks
 ```
 
+Current multi-branch reliability unions the recoverable joint IDs across all
+branches before applying the existing conditional probability lookup. See
+[the recovery-set update](docs/BRANCH_RECOVERY_UNION.md) for the rule and validation.
+
 ## Project layout and commands
 
 Run commands from the repository root. Python entry points are now modules under
@@ -120,7 +124,8 @@ unsupported singular IK and missing coverage stop before GCS. See
 status meanings and the completed obstacle benchmark.
 
 Up to four detected SSM branches share one sequentially refined reliability
-map, using the maximum per-branch reliability, exact convex box merging and
+map, unioning the per-branch recoverable joint sets before one conditional
+reliability calculation, with exact convex box merging and
 common arc sampling density. All branches supply first-stage GCS targets.
 The default numerical discovery budget is now 80 IK attempts (`--ssm-ik-attempts`);
 branch completeness is not certified. Reports include per-branch statistics.
@@ -162,7 +167,7 @@ or executing its workspace grid. It plans to a full position-and-orientation
 goal, traces up to eight regular one-dimensional SSM branches, and uses the
 same two-stage GCS workflow with both rounding budgets 200/300. Exact reliability
 partitioning is restricted to original IRIS coverage to control seven-dimensional
-growth, with explicit resource limits and all-branch maximum reliability.
+growth, with explicit resource limits and unioned recovery sets across branches.
 
 The current local example has exactly 30 cm translation and 20 degrees of
 relative rotation: one detected branch, 92 samples, 24 free regions and four

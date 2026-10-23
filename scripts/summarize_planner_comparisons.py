@@ -11,6 +11,7 @@ def summarize(paths):
         baseline = report.get("sampled_baseline", {})
         common = report.get("geometry_seconds")
         row = dict(source=str(path), planner=report.get("planner"),
+                   reliability_rule=report.get("reliability_rule", "unspecified_historical_rule"),
                    two_stage_success=report.get("success", False),
                    baseline_success=baseline.get("success", False),
                    two_stage_cost=report.get("cost"), sampled_cost=baseline.get("cost"),
