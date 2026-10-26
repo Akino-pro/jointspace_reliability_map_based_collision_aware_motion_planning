@@ -161,6 +161,13 @@ All three pre-failure planners accept `--compare-sampled`. Planar 3R additionall
 accepts optional `--periodic` connections, disabled by default; the two-stage
 method and existing reliability model remain the primary workflow.
 
+All three also accept `--compare-union-hulls` (one joint hull-target solve plus
+the same projection/replan), `--compare-nonlinear-goal` (native GCS nonlinear
+task-constrained restrictions), or `--compare-all`. Comparisons preserve the
+main algorithm and save independent costs, validation and timings. See
+[goal-set comparisons](docs/GOAL_SET_COMPARISONS.md) for exact terminal models,
+solver settings, commands and limitations.
+
 `python -m scripts.spatial7R_two_stage_gcs_planner` uses the DH parameters and
 reliabilities from `scripts/spatial_7r_FTW_estimation_ssm.py`, without importing
 or executing its workspace grid. It plans to a full position-and-orientation
@@ -176,6 +183,14 @@ cost 0.0043086900 and position/orientation errors near machine precision.
 Three first-stage targets returned no feasible path, so target-selection/global
 optimality is not certified. See [the 7R workflow](docs/SPATIAL7R_WORKFLOW.md)
 for commands, source geometry, measured results and limitations.
+
+`python -m scripts.spatial7R_post_failure_planner --failed-joint 7` now supports
+single-joint locking. It slices the original 7D IRIS regions into 6D active
+coordinates, searches full-pose locked-joint IK roots, and compares all found
+safe connected goals in one GCS with unit edge weights. Reliability is not
+used after failure. Use `--path` and `--waypoint-index` to select a saved failure
+state, or supply seven angles through `--q`. See the post-failure section of
+[the 7R workflow](docs/SPATIAL7R_WORKFLOW.md) for coverage limits and experiments.
 
 ## Historical planar status and execution
 

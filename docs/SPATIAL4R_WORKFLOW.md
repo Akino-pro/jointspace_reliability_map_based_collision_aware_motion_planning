@@ -300,3 +300,12 @@ issues have not been resolved by this prototype. Generation options include
 (3 coordinates), `--geometric-epsilon`, `--ssm-arc-spacing`, and both rounding
 budgets. Custom tasks may need new IRIS seeds/coverage; the default seed
 corridor and reference configuration are specific to this tested scene.
+
+## Additional goal-set comparisons
+
+The pre-failure entry point accepts `--compare-union-hulls` (one joint hull
+selection solve followed by the same projection/replan),
+`--compare-nonlinear-goal` (native nonlinear task-constrained GCS restrictions),
+or `--compare-all` including the existing sampled baseline. See
+[goal-set comparisons](GOAL_SET_COMPARISONS.md) for exact scope, solver budgets,
+validation and timing conventions. The main algorithm is unchanged.

@@ -1,0 +1,221 @@
+{
+  "success": false,
+  "planner": "spatial7R_post_failure_gcs",
+  "robot": {
+    "a": [
+      0.4,
+      0.8,
+      0.2,
+      1,
+      0.6,
+      0.4,
+      0
+    ],
+    "d": [
+      -0.4,
+      -0.6,
+      0.2,
+      0.6,
+      -0.8,
+      0.2,
+      0
+    ],
+    "alpha": [
+      -1.0821041362364843,
+      -1.3788101090755203,
+      1.5707963267948966,
+      0.5061454830783556,
+      1.413716694115407,
+      -1.3962634015954636,
+      0
+    ],
+    "reference_CA": [
+      [
+        -1.8675022996339325,
+        1.8675022996339325
+      ],
+      [
+        -2.8623399732707,
+        2.4609142453120043
+      ],
+      [
+        -2.303834612632515,
+        2.303834612632515
+      ],
+      [
+        -2.6354471705114375,
+        1.780235837034216
+      ],
+      [
+        -2.007128639793479,
+        2.600540585471551
+      ],
+      [
+        -1.3089969389957472,
+        2.251474735072685
+      ],
+      [
+        0.2792526803190927,
+        3.368485456349056
+      ]
+    ],
+    "reliabilities": [
+      0.2,
+      0.3,
+      0.4,
+      0.5,
+      0.6,
+      0.7,
+      0.8
+    ]
+  },
+  "task": "full_pose_SE3",
+  "failed_joint": 5,
+  "locked_angle": 0.44,
+  "failure_configuration": [
+    0.2,
+    -0.62,
+    0.3,
+    -0.55,
+    0.44,
+    -0.36,
+    0.12
+  ],
+  "start_configuration": [
+    0.2,
+    -0.62,
+    0.3,
+    -0.55,
+    0.44,
+    -0.36,
+    0.12
+  ],
+  "goal_pose": [
+    [
+      0.9927983058760178,
+      0.05548026963653996,
+      -0.10617656771042334,
+      3.104211167896474
+    ],
+    [
+      -0.03635171727204306,
+      0.9840255382338239,
+      0.17427648365458462,
+      -1.206970564996001
+    ],
+    [
+      0.11414936049353361,
+      -0.16916169715597557,
+      0.9789556903732812,
+      0.5555487406733661
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "goal_point": [
+    3.104211167896474,
+    -1.206970564996001,
+    0.5555487406733661
+  ],
+  "active_joints": [
+    1,
+    2,
+    3,
+    4,
+    6,
+    7
+  ],
+  "iris_checkpoint": "data/iris/spatial7R_30cm20deg_iris_regions.npz",
+  "planning_chart_configuration": [
+    0.2,
+    -0.62,
+    0.3,
+    -0.55,
+    0.44,
+    -0.36,
+    0.12
+  ],
+  "angle_winding_offsets": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "physical_joint_limits": null,
+  "cost_type": "active_joint_space_euclidean_length",
+  "reliability_used": false,
+  "gcs_solve_calls": 0,
+  "ik_completeness_certified": false,
+  "global_optimality_certified": false,
+  "solver_settings": {
+    "max_rounded_paths": 200,
+    "max_rounding_trials": 300,
+    "solver_backend": "mosek"
+  },
+  "obstacles": [
+    {
+      "center": [
+        3.06237225103104,
+        -1.3508052862828512,
+        0.747733499930983
+      ],
+      "radius": 0.08,
+      "type": "sphere"
+    }
+  ],
+  "link_radius": 0.015,
+  "self_collision": false,
+  "ik_seconds": 1.6515104599999972,
+  "ik_search": {
+    "method": "periodic multistart six-variable full-pose numerical IK",
+    "max_starts": 256,
+    "random_seed": 0,
+    "starts_attempted": 256,
+    "completeness_certified": false,
+    "proven_unreachable": false,
+    "position_tolerance": 1e-08,
+    "orientation_tolerance": 1e-08,
+    "singular_solution_count": 0,
+    "physical_solution_count": 2,
+    "chart_solution_count": 2,
+    "minimum_active_jacobian_singular_values": [
+      0.27150488238204135,
+      0.2774055286848972
+    ],
+    "termination_reason": "ik_start_budget_exhausted"
+  },
+  "ik_solutions": [
+    [
+      0.3990358066399442,
+      -0.6921584424168343,
+      0.389775210548156,
+      -0.6090798420997396,
+      0.44,
+      -0.44510869009570886,
+      0.4173769125199849
+    ],
+    [
+      0.16593602932487173,
+      -1.132425479335577,
+      0.3684297484214696,
+      0.3208885802217889,
+      0.44,
+      -0.29729389557137154,
+      0.07243557717898597
+    ]
+  ],
+  "slice_region_count": 1,
+  "collision_free_goal_count": 2,
+  "connected_goal_count": 0,
+  "connected_goals": [],
+  "status": "no_path_in_iris_coverage",
+  "message": "No found safe goal connects through the original IRIS slices; no new regions or retries were added.",
+  "total_seconds": 1.715560262000011
+}

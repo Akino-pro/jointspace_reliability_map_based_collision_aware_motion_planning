@@ -1,6 +1,86 @@
 PROJECT AND CONVERSATION HANDOFF
-Updated: 2026-10-22
+Updated: 2026-10-26
 Language: English, following the user's instruction that project documentation be in English.
+
+LATEST GOAL-SET COMPARISONS UPDATE (2026-10-26)
+- User authorized baseline2 (all convex hull/region targets in one GCS, then
+  unchanged projection and fixed-goal replan) and baseline3 (native GCS-guided
+  nonlinear endpoint optimization). Existing sampled baseline is preserved.
+- Added scripts/goal_set_baselines.py, integrated into all three pre-failure
+  planners. Flags:--compare-union-hulls,--compare-nonlinear-goal,--compare-all,
+  --nonlinear-solver snopt|ipopt. Primary defaults and results are unchanged.
+- Extended solve_target_sets with optional true-task terminal constraints in
+  GraphOfConvexSets.Transcription.kRestriction. Conic relaxation uses the same
+  backend; restrictions use SNOPT by default (500 major iterations, feasibility
+  1e-8,optimality1e-7). Analytic task Jacobians are chained through AutoDiff.
+- Nonlinear terminals cover ALL connected free regions. Relaxation drops the
+  task equality, a valid but weak surrogate. Restrictions jointly adjust route
+  points and endpoint under the real task, with no projection, second stage or
+  main-result seeding. Hulls are not imposed on nonlinear endpoints. This is
+  an adaptation of the native interface, not a full paper reproduction or a
+  claim of a strong surrogate. --no-rounding reports unsupported_solve_mode.
+- Each comparison records costs, task/collision/graph/cost checks, timing,
+  solver/budgets and fingerprint. Restores winding offsets; periodic route
+  shifts retained. two_stage_total_seconds now subtracts ALL comparison times.
+  Summarizer includes both new methods and charges shared preprocessing once.
+- Tests:8 new comparison tests passed, including real nonlinear 3R/4R/7R tasks,
+  actual MOSEK+SNOPT, multiple hull choice, periodic route, AutoDiff, failures
+  and winding restoration. Full Docker suite161:155 passed,6 optional skips.
+- Completed 7R30cm/20deg cached comparison, MOSEK200/300 and SNOPT restrictions:
+  primary cost.004308689987573309,time14.06s;
+  sampled cost.004031521798587946,time3.87s;
+  union-hull cost.004308689987573309,time5.32s;
+  nonlinear cost.003979518378563895,time120.78s.
+  Times include shared preprocessing1.5622s per method, no fresh IRIS.
+  All paths validated; nonlinear task residual3.39e-10 but lower bound3.35e-10
+  is weak, not a global-optimality certificate. Single-run timings only.
+  Report:results/spatial7r/spatial7R_30cm20deg_all_goal_comparisons.json.
+- Completed4Rftwmax midpoint cached comparison on56 regions/13 hull targets:
+  main cost.0780798316713,time110.10s;sampled.0920764847952,time14.16s;
+  union-hull returned no feasible first-stage path in9.80s(not infeasibility);
+  nonlinear cost.2813945055571,time129.63s,true-task residual7.96e-14.
+  Timings include shared preprocessing2.3517s. Nonlinear surrogate bound1.12e-10
+  is weak. No retries/substitutions. Preserve this unfavorable result as well.
+  Report:results/spatial4r/spatial4R_all_goal_comparisons.json.
+  Combined summary:results/diagnostics/all_goal_comparisons_summary.json.
+- docs/GOAL_SET_COMPARISONS.md documents methods, official sources and commands.
+  Full planar benchmark not rerun: union-recovery graph's previous memory
+  issue remains. No packages installed, no grids, no git staging/commit/push.
+
+LATEST SPATIAL 7R POST-FAILURE UPDATE (2026-10-26)
+- User requested the same post-failure principle as existing planners: no
+  reliability weighting; choose the least-cost route across found goal branches.
+- Added scripts/spatial7R_post_failure_planner.py. Lock one joint at its failure
+  angle; substitute into every original 7D IRIS halfspace to obtain 6D slices.
+  Solve full position/orientation IK with six active joints, periodic multistart
+  (256 starts, seed 0), no inherited four-root cap. All safe source-connected
+  endpoints compete in one GCS with unit region weights, MOSEK 200/300.
+  Root IDs are endpoints, not certified pre-failure SSM IDs. A branch may have
+  multiple locked-angle intersections. Discovery is not certified complete.
+- CLI accepts --failed-joint 1..7, --q (7 angles), or --path/--waypoint-index;
+  defaults to the 30cm/20deg pre-failure report. Custom full pose uses paired
+  --goal-position/--goal-quaternion flags. Saved-path scene/DH mismatches rejected.
+- Restores input winding offsets; validates graph/target membership, start,
+  fixed failed angle, position/orientation, sampled collisions and actual cost.
+  Singular locked-joint IK sets explicitly unsupported; no automatic retry or
+  new IRIS generation. Spatial periodicity and self-collision remain absent.
+- Docker/MOSEK tests: 11 new tests passed, including actual GCS for every lock
+  and controlled multi-target shortest-goal selection. Full suite:153 tests,
+  147 passed,6 optional MuJoCo tests skipped. Log:logs/spatial7R_post_failure_tests.log.
+- Real-scene runs at the default saved path START: all seven locks reported
+  no_path_in_iris_coverage, not physical unreachability. Reports:
+  results/spatial7r/spatial7R_post_failure_joint{1..7}.json.
+- Real-scene runs at q_failure=.05*q_start+.95*q_final: all seven locks succeeded
+  using the unchanged 30cm/20deg IRIS checkpoint and original sphere scene.
+  Each had one connected goal; costs for joints1..7:
+  .0424441197921,.0215519178834,.0222622023702,.0358186258407,
+  .0199685731922,.0392771974923,.0477153095691 rad.
+  Total time about1.98..2.34s each; all locked-angle errors exactly zero,
+  pose errors below1.2e-15;3..6 collision samples per short path all passed.
+  Reports:results/spatial7r/spatial7R_post_failure_near_goal_joint{1..7}.json.
+- Read docs/SPATIAL7R_WORKFLOW.md for commands and scope. No packages installed,
+  no reference grids run, no staging/commit/push. Existing historical results
+  and unrelated .DS_Store files were preserved.
 
 LATEST RELIABILITY UPDATE: UNION BRANCH RECOVERY SETS (2026-10-23)
 - User explicitly changed multi-branch aggregation: each common region may

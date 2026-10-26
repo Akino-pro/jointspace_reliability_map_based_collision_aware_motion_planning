@@ -34,6 +34,21 @@ def summarize(paths):
                    global_optimality_certified=False)
         if row["two_stage_success"] and row["baseline_success"]:
             row["two_stage_minus_sampled_cost"] = row["two_stage_cost"]-row["sampled_cost"]
+        for key in ("union_hull_baseline", "nonlinear_goal_baseline"):
+            if key not in report:
+                continue
+            comparison = report[key]
+            row[key] = dict(success=comparison.get("success", False), status=comparison.get("status"),
+                            cost=comparison.get("cost"), incremental_seconds=comparison.get("seconds"),
+                            total_with_shared_preprocessing_seconds=(common+comparison["seconds"]
+                                if common is not None and "seconds" in comparison else None),
+                            quality=comparison.get("quality"), task_error=comparison.get("task_error"),
+                            gcs_solve_calls=comparison.get("gcs_solve_calls"),
+                            input_sha256=comparison.get("input_sha256"),
+                            solver_settings=comparison.get("solver_settings"),
+                            restriction_solver=comparison.get("restriction_solver"))
+            if report.get("success") and comparison.get("success"):
+                row[key]["two_stage_minus_baseline_cost"] = report["cost"]-comparison["cost"]
         rows.append(row)
     return dict(comparisons=rows,
                 timing_note="Cached runs; shared preprocessing is counted once for each method. "

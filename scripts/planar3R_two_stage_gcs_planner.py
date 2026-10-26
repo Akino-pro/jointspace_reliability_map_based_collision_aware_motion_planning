@@ -16,6 +16,7 @@ from scripts.planar3R_ssm_envelopes import (
 )
 from gcs.quality import bound_quality
 from scripts.periodic_graph import lift_path, remap_edges, angle_error
+from scripts.goal_set_baselines import baseline_seconds, compare_goal_sets, planar_position_jacobian
 
 
 class MixedIntegerSolverUnavailable(RuntimeError):
@@ -40,7 +41,8 @@ def solve_target_sets(regions, edges, start, targets, weights, rounding=True,
                       candidate_region_routes=None, max_rounded_paths=10,
                       max_rounding_trials=100, rounding_seed=0,
                       relative_gap_tolerance=0.01, mip_time_limit=60.0,
-                      mip_relative_gap=0.01, solver_backend=None):
+                      mip_relative_gap=0.01, solver_backend=None,
+                      nonlinear_task=None, restriction_solver_backend="snopt"):
     """Use a direct terminal vertex for a single target; charge physical motion."""
     from pydrake.geometry.optimization import Point
     from pydrake.solvers import L2NormCost
@@ -68,6 +70,11 @@ def solve_target_sets(regions, edges, start, targets, weights, rounding=True,
         if not (conic_solver.available() and conic_solver.enabled()):
             raise RuntimeError(f"Requested solver {solver_backend} is not available/enabled")
         planner.options.solver = conic_solver
+    if nonlinear_task is not None:
+        if not rounding:
+            raise ValueError("Nonlinear terminal constraints require relaxation and nonlinear restriction")
+        from scripts.goal_set_baselines import configure_nonlinear_restriction
+        configure_nonlinear_restriction(planner.options, restriction_solver_backend)
     if not rounding:
         from pydrake.solvers import GurobiSolver, MosekSolver, SolverOptions
         solver_options = SolverOptions()
@@ -95,6 +102,9 @@ def solve_target_sets(regions, edges, start, targets, weights, rounding=True,
     target_vertices = {}
     for index, target in enumerate(targets):
         vertex = planner.gcs.AddVertex(target["polytope"].to_drake(), f"local_target_{index}")
+        if nonlinear_task is not None:
+            from scripts.goal_set_baselines import add_terminal_task_constraint
+            add_terminal_task_constraint(vertex, nonlinear_task)
         target_vertices[vertex.name()] = index
         for region_index in target.get("regions", [target["region"]]):
             edge = planner.gcs.AddEdge(vertices[region_index], vertex)
@@ -204,7 +214,8 @@ def plan_two_stage(start, goal, obstacles, checkpoint_path='data/iris/planar3R_i
                    max_rounding_trials=300, rounding_seed=0, relative_gap_tolerance=0.01,
                    mip_time_limit=60.0, mip_relative_gap=0.01,
                    stage2_max_rounded_paths=200, stage2_max_rounding_trials=300,
-                   geometry_only=False, ssm_arc_spacing=SSM_ARC_SPACING, periodic=False):
+                   geometry_only=False, ssm_arc_spacing=SSM_ARC_SPACING, periodic=False,
+                   compare_union_hulls=False, compare_nonlinear_goal=False, nonlinear_solver="snopt"):
     started = time.perf_counter()
     supplied = np.asarray(start, dtype=float)
     goal = np.asarray(goal, dtype=float)
@@ -244,7 +255,7 @@ def plan_two_stage(start, goal, obstacles, checkpoint_path='data/iris/planar3R_i
     def finish(status, message, **values):
         report.update(status=status, message=message,
                       total_seconds=time.perf_counter() - started, **values)
-        report["two_stage_total_seconds"] = report["total_seconds"]-report.get("sampled_baseline", {}).get("seconds", 0)
+        report["two_stage_total_seconds"] = report["total_seconds"]-baseline_seconds(report)
         return report
 
     if np.linalg.norm(goal) > sum(L) + 1e-10:
@@ -341,6 +352,16 @@ def plan_two_stage(start, goal, obstacles, checkpoint_path='data/iris/planar3R_i
             lambda q: is_collision_free(q, obstacles, link_radius=link_radius),
             lambda p: validate_joint_path(p, obstacles, link_radius),
             lambda q: np.linalg.norm(link_points(q)[-1]-goal), rounding=rounding)
+    if compare_union_hulls or compare_nonlinear_goal:
+        task = dict(id=dict(type="position_2D", goal=goal.tolist()), dimension=2,
+                    residual=lambda q: link_points(q)[-1]-goal,
+                    jacobian=lambda q: planar_position_jacobian(q, np.asarray(L)))
+        report.update(compare_goal_sets(
+            regions, edges, start, targets, envelopes, weights, solve_settings, stage2_settings, task,
+            lambda p, e, r: project_to_local_ssm(p, e, r, goal, obstacles, link_radius),
+            lambda p: validate_joint_path(p, obstacles, link_radius), offsets,
+            union_hulls=compare_union_hulls, nonlinear_goal=compare_nonlinear_goal,
+            rounding=rounding, nonlinear_solver=nonlinear_solver))
     stage_started = time.perf_counter()
     report.update(stage1_mode="per_target_intersection", stage1_candidates=[],
                   stage1_gcs_solve_calls=0, stage2_gcs_solve_calls=0)
@@ -526,6 +547,10 @@ def main():
     parser.add_argument("--mip-relative-gap", type=float, default=0.01,
                         help="Mixed-integer solver stopping gap; independent of report threshold")
     parser.add_argument("--compare-sampled", action="store_true")
+    parser.add_argument("--compare-union-hulls", action="store_true")
+    parser.add_argument("--compare-nonlinear-goal", action="store_true")
+    parser.add_argument("--compare-all", action="store_true")
+    parser.add_argument("--nonlinear-solver", choices=["snopt", "ipopt"], default="snopt")
     parser.add_argument("--periodic", action="store_true",
                         help="Optional periodic chart connections; disabled for historical comparisons")
     parser.add_argument("--geometry-only", action="store_true",
@@ -538,13 +563,16 @@ def main():
         result = plan_two_stage(start, [args.gx, args.gy], OBSTACLES, args.iris_regions,
                                 args.geometric_epsilon, args.ssm_samples, args.reliability_source,
                                 args.reliability_branch, args.reliability_epsilon, args.min_reliability,
-                                args.seed, not args.no_rounding, args.compare_sampled,
+                                args.seed, not args.no_rounding, args.compare_sampled or args.compare_all,
                                 args.max_rounded_paths, args.max_rounding_trials,
                                 args.rounding_seed, args.relative_gap_tolerance,
                                 args.mip_time_limit, args.mip_relative_gap,
                                 args.stage2_max_rounded_paths, args.stage2_max_rounding_trials,
                                 geometry_only=args.geometry_only, ssm_arc_spacing=args.ssm_arc_spacing,
-                                periodic=args.periodic)
+                                periodic=args.periodic,
+                                compare_union_hulls=args.compare_union_hulls or args.compare_all,
+                                compare_nonlinear_goal=args.compare_nonlinear_goal or args.compare_all,
+                                nonlinear_solver=args.nonlinear_solver)
     except (ValueError, OSError, KeyError, IndexError) as exc:
         result = {"success": False, "status": "invalid_input", "message": str(exc)}
     Path(args.output).write_text(json.dumps(result, indent=2), encoding="utf-8")

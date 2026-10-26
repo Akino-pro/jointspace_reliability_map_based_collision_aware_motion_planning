@@ -20,6 +20,7 @@ from scripts.planar3R_ssm_envelopes import build_envelopes, intersect_envelopes,
 from scripts.planar3R_two_stage_gcs_planner import solve_target_sets
 from scripts.spatial4R_post_failure_planner import chart_configuration
 from gcs.quality import bound_quality
+from scripts.goal_set_baselines import baseline_seconds, compare_goal_sets
 
 GEOMETRIC_EPSILON = .025
 SSM_ARC_SPACING = .044
@@ -111,7 +112,8 @@ def plan_before_failure(start=model.START_CONFIGURATION, goal_pose=None,
                         ssm_attempts=model.MAX_SSM_IK_ATTEMPTS, ssm_seed=1,
                         max_partition_cells=MAX_PARTITION_CELLS, max_regions=MAX_FREE_REGIONS,
                         max_edges=MAX_GRAPH_EDGES, max_targets=MAX_TARGETS, solver_backend="mosek",
-                        compare_sampled=False):
+                        compare_sampled=False, compare_union_hulls=False,
+                        compare_nonlinear_goal=False, nonlinear_solver="snopt"):
     began = time.perf_counter()
     supplied = np.asarray(start, dtype=float)
     goal = model.validate_pose(model.pose(reference) if goal_pose is None else goal_pose)
@@ -142,7 +144,7 @@ def plan_before_failure(start=model.START_CONFIGURATION, goal_pose=None,
                                        directed_edges=max_edges, targets=max_targets))
     def finish(status, message, **values):
         report.update(status=status, message=message, total_seconds=time.perf_counter()-began, **values)
-        report["two_stage_total_seconds"] = report["total_seconds"]-report.get("sampled_baseline", {}).get("seconds", 0)
+        report["two_stage_total_seconds"] = report["total_seconds"]-baseline_seconds(report)
         return report
     if np.linalg.norm(goal[:3, 3]) > np.hypot(model.A, model.D).sum()+1e-9:
         return finish("goal_unreachable", "Position exceeds the conservative radial reach bound; stopped.")
@@ -215,6 +217,19 @@ def plan_before_failure(start=model.START_CONFIGURATION, goal_pose=None,
             lambda q: model.collision_free(q, obstacles),
             lambda p: model.validate_path(p, obstacles),
             lambda q: np.linalg.norm(model.pose_residual(q, goal)))
+    if compare_union_hulls or compare_nonlinear_goal:
+        task = dict(id=dict(type="full_pose_SE3", goal=goal.tolist()), dimension=6,
+                    residual=lambda q: model.pose_residual(q, goal),
+                    jacobian=lambda q: model.residual_jacobian(q, goal))
+        report.update(compare_goal_sets(
+            regions, edges, start, targets, envelopes, weights, settings, settings, task,
+            lambda p, e, r: project_to_local_ssm(
+                p, e, r, np.zeros(6), obstacles, model.LINK_RADIUS,
+                position=lambda q: model.pose_residual(q, goal),
+                collision_free=lambda q: model.collision_free(q, obstacles)),
+            lambda p: model.validate_path(p, obstacles), offsets,
+            union_hulls=compare_union_hulls, nonlinear_goal=compare_nonlinear_goal,
+            nonlinear_solver=nonlinear_solver))
     first_began = time.perf_counter()
     candidates, best = [], None
     for index, target in enumerate(targets):
@@ -300,6 +315,10 @@ def main():
     parser.add_argument("--iris-radius", type=float, default=.16)
     parser.add_argument("--geometry-only", action="store_true")
     parser.add_argument("--compare-sampled", action="store_true")
+    parser.add_argument("--compare-union-hulls", action="store_true")
+    parser.add_argument("--compare-nonlinear-goal", action="store_true")
+    parser.add_argument("--compare-all", action="store_true")
+    parser.add_argument("--nonlinear-solver", choices=["snopt", "ipopt"], default="snopt")
     parser.add_argument("--ssm-ik-attempts", type=int, default=model.MAX_SSM_IK_ATTEMPTS)
     parser.add_argument("--ssm-seed", type=int, default=1)
     parser.add_argument("--geometric-epsilon", type=float, default=GEOMETRIC_EPSILON)
@@ -322,7 +341,10 @@ def main():
                                       geometric_epsilon=args.geometric_epsilon, arc_spacing=args.ssm_arc_spacing,
                                       max_paths=args.max_rounded_paths, max_trials=args.max_rounding_trials,
                                       ssm_attempts=args.ssm_ik_attempts, ssm_seed=args.ssm_seed, solver_backend=args.solver,
-                                      compare_sampled=args.compare_sampled)
+                                      compare_sampled=args.compare_sampled or args.compare_all,
+                                      compare_union_hulls=args.compare_union_hulls or args.compare_all,
+                                      compare_nonlinear_goal=args.compare_nonlinear_goal or args.compare_all,
+                                      nonlinear_solver=args.nonlinear_solver)
     except (ValueError, OSError, RuntimeError) as exc:
         result = dict(success=False, status="planning_error", message=str(exc))
     output = Path(args.output)

@@ -15,6 +15,7 @@ from scripts.planar3R_iris_regions import load_iris_checkpoint, split_iris_regio
 from scripts.planar3R_ssm_envelopes import SSM_ARC_SPACING, build_envelopes, intersect_envelopes, project_to_local_ssm, sample_hull
 from scripts.planar3R_two_stage_gcs_planner import solve_target_sets
 from gcs.quality import bound_quality
+from scripts.goal_set_baselines import baseline_seconds, compare_goal_sets
 
 GEOMETRIC_EPSILON = 0.025
 RELIABILITY_EPSILON = 0.01
@@ -37,7 +38,8 @@ def plan_before_failure(start=model.START_CONFIGURATION, goal=None,
                         max_paths=MAX_ROUNDED_PATHS, max_trials=MAX_ROUNDING_TRIALS,
                         geometry_only=False, generate_iris=False, reference=model.GOAL_REFERENCE_CONFIGURATION,
                         solver_backend="mosek", iris_radius=0.9, iris_seeds=None,
-                        ssm_ik_attempts=model.MAX_SSM_IK_ATTEMPTS, ssm_seed=1, compare_sampled=False):
+                        ssm_ik_attempts=model.MAX_SSM_IK_ATTEMPTS, ssm_seed=1, compare_sampled=False,
+                        compare_union_hulls=False, compare_nonlinear_goal=False, nonlinear_solver="snopt"):
     began = time.perf_counter()
     checkpoint = checkpoint or f"data/iris/spatial4R_{model.ROBOT_PARAMETER_SET}_iris_midpoint_regions.npz"
     supplied = np.asarray(start, dtype=float)
@@ -67,7 +69,7 @@ def plan_before_failure(start=model.START_CONFIGURATION, goal=None,
 
     def finish(status, message, **values):
         report.update(status=status, message=message, total_seconds=time.perf_counter()-began, **values)
-        report["two_stage_total_seconds"] = report["total_seconds"]-report.get("sampled_baseline", {}).get("seconds", 0)
+        report["two_stage_total_seconds"] = report["total_seconds"]-baseline_seconds(report)
         return report
 
     if np.linalg.norm(goal) > sum(np.hypot(model.A, model.D)) + 1e-9:
@@ -144,6 +146,17 @@ def plan_before_failure(start=model.START_CONFIGURATION, goal=None,
             lambda q: model.collision_free(q, obstacles),
             lambda p: model.validate_path(p, obstacles),
             lambda q: np.linalg.norm(model.position(q)-goal))
+    if compare_union_hulls or compare_nonlinear_goal:
+        task = dict(id=dict(type="position_3D", goal=goal.tolist()), dimension=3,
+                    residual=lambda q: model.position(q)-goal, jacobian=model.jacobian)
+        report.update(compare_goal_sets(
+            regions, edges, start, targets, envelopes, weights, settings, settings, task,
+            lambda p, e, r: project_to_local_ssm(
+                p, e, r, goal, obstacles, model.LINK_RADIUS,
+                position=model.position, collision_free=lambda q: model.collision_free(q, obstacles)),
+            lambda p: model.validate_path(p, obstacles), offsets,
+            union_hulls=compare_union_hulls, nonlinear_goal=compare_nonlinear_goal,
+            nonlinear_solver=nonlinear_solver))
     candidates, best = [], None
     stage1_began = time.perf_counter()
     for index, target in enumerate(targets):
@@ -232,6 +245,10 @@ def main():
                         help="Reproduce the historical sphere at [0.5,0,0.3] instead of the task midpoint")
     parser.add_argument("--geometry-only", action="store_true")
     parser.add_argument("--compare-sampled", action="store_true")
+    parser.add_argument("--compare-union-hulls", action="store_true")
+    parser.add_argument("--compare-nonlinear-goal", action="store_true")
+    parser.add_argument("--compare-all", action="store_true")
+    parser.add_argument("--nonlinear-solver", choices=["snopt", "ipopt"], default="snopt")
     parser.add_argument("--geometric-epsilon", type=float, default=GEOMETRIC_EPSILON)
     parser.add_argument("--ssm-arc-spacing", type=float, default=SSM_ARC_SPACING)
     parser.add_argument("--ssm-ik-attempts", type=int, default=model.MAX_SSM_IK_ATTEMPTS,
@@ -256,7 +273,10 @@ def main():
                                      geometry_only=args.geometry_only, generate_iris=args.generate_iris,
                                      solver_backend=args.solver, iris_radius=args.iris_radius,
                                      iris_seeds=iris_seeds, ssm_ik_attempts=args.ssm_ik_attempts,
-                                     ssm_seed=args.ssm_seed, compare_sampled=args.compare_sampled)
+                                     ssm_seed=args.ssm_seed, compare_sampled=args.compare_sampled or args.compare_all,
+                                     compare_union_hulls=args.compare_union_hulls or args.compare_all,
+                                     compare_nonlinear_goal=args.compare_nonlinear_goal or args.compare_all,
+                                     nonlinear_solver=args.nonlinear_solver)
     except (ValueError, OSError, RuntimeError) as exc:
         result = dict(success=False, status="planning_error", message=str(exc))
     Path(args.output).write_text(json.dumps(result, indent=2), encoding="utf-8")

@@ -1,5 +1,10 @@
 # Spatial 7R pre-failure planning
 
+Optional comparisons now include `--compare-union-hulls`,
+`--compare-nonlinear-goal` and `--compare-all`, alongside `--compare-sampled`.
+See [goal-set comparisons](GOAL_SET_COMPARISONS.md) for the terminal models,
+native nonlinear solver settings and the measured four-method 7R experiment.
+
 The entry point is `python -m scripts.spatial7R_two_stage_gcs_planner`, run from
 the repository root in the Drake container. The implementation uses the actual
 DH constants and reliabilities in `scripts/spatial_7r_FTW_estimation_ssm.py`.
@@ -216,6 +221,83 @@ by 1000 was tested, returned no feasible rounded first-stage paths and was not
 retained; its report is `spatial7R_scaled_two_stage_path.json`. The working
 implementation keeps the original objective scale.
 
+## Post-failure planning (2026-10-26)
+
+Entry point: `python -m scripts.spatial7R_post_failure_planner`. One joint is
+locked at its failure angle; the six remaining coordinates are active. The
+original full SE(3) goal is preserved. The cost is the sum of Euclidean segment
+lengths in those six coordinates, with every region weight equal to one.
+Reliability maps, reliability probabilities and the pre-failure 0.01 offset
+are not used after failure.
+
+The planner substitutes the locked angle into **all original IRIS halfspaces**,
+forming 6D collision-free slices without reliability subdivision. Periodic
+multistart IK finds intersections of the full-pose goal SSMs with the locked
+angle plane. Each regular intersection is a discrete goal configuration. All
+found collision-free goals in the source-connected slice graph attach to a
+single GCS with a zero-cost bookkeeping sink. This compares paths to different
+goal branches directly; the sink adds no physical motion or cost. No projection
+or second planning stage is needed after failure. All goal attachments in all
+containing regions are retained.
+
+Default budgets: 256 IK starts (seed 0), 200 rounded paths / 300 trials, MOSEK.
+The IK search runs its full budget with no inherited four-root cap. A root
+index identifies an endpoint, not an original pre-failure SSM branch ID: a
+branch can intersect the locked-angle plane more than once. IK discovery is
+not certified complete, and GCS relaxation/rounding does not certify global
+branch selection. Solver bounds are reported for the graph of found goals.
+Rank-deficient locked-joint goals return `unsupported_singular_ik`; a continuous
+singular goal set is not represented as a fabricated finite set of points.
+
+The output restores input winding offsets and holds the supplied failed angle
+exactly. Checks include all six pose residuals, the start and locked angle,
+graph/target membership, physical path length and sampled capsule collisions.
+The original scene is preserved when loading a pre-failure report; mismatched
+robot or checkpoint geometry is rejected. Self-collision remains disabled and
+spatial periodic seam connections remain deferred.
+
+```powershell
+# Read the default successful pre-failure report and lock joint 7 at waypoint 0.
+docker exec -e MOSEKLM_LICENSE_FILE=/tmp/mosek.lic -w /workspace planar3r-iris-validation /usr/bin/python3 -m scripts.spatial7R_post_failure_planner --failed-joint 7
+# Supply a failure state explicitly; the default goal and IRIS scene are retained.
+docker exec -e MOSEKLM_LICENSE_FILE=/tmp/mosek.lic -w /workspace planar3r-iris-validation /usr/bin/python3 -m scripts.spatial7R_post_failure_planner --failed-joint 7 --q 0.44 -0.75 0.46 -0.63 0.54 -0.42 0.37
+```
+
+Other flags: `--path`, `--waypoint-index`, `--iris-regions`, `--ik-starts`,
+`--ik-seed`, `--max-rounded-paths`, `--max-rounding-trials`, `--solver` and
+`--output`. A custom full goal requires both `--goal-position X Y Z` and
+`--goal-quaternion X Y Z W`. The default output is
+`results/spatial7r/spatial7R_post_failure_path.json`.
+
+Real-scene experiments reused the 30 cm / 20-degree IRIS checkpoint without
+generating new regions. At the saved pre-failure start, all seven lock cases
+returned `no_path_in_iris_coverage`. This means that no found safe root is
+connected within the limited cache; it is not proof of physical unreachability.
+Reports: `results/spatial7r/spatial7R_post_failure_joint{1..7}.json`.
+
+At 95% of the saved straight pre-failure segment,
+`q_failure = 0.05*q_start + 0.95*q_final`, **all seven lock cases succeeded**
+with the original obstacle scene. Each had one connected goal and one GCS
+region. Results are saved as
+`results/spatial7r/spatial7R_post_failure_near_goal_joint{1..7}.json`.
+
+| Locked joint | Unweighted path cost (rad) |
+| --- | ---: |
+| 1 | 0.04244412 |
+| 2 | 0.02155192 |
+| 3 | 0.02226220 |
+| 4 | 0.03581863 |
+| 5 | 0.01996857 |
+| 6 | 0.03927720 |
+| 7 | 0.04771531 |
+
+Eleven new post-failure tests passed in Docker, including actual MOSEK solves
+for every locked joint, winding restoration and a controlled multi-goal graph
+that selects the shorter endpoint path. Full regression: 153 tests, 147 passed,
+six optional MuJoCo tests skipped. These results do not establish complete IK
+enumeration, continuous collision certification or performance on difficult
+obstacle-detour scenes.
+
 ## Verification and scope
 
 All 16 7R tests pass, including the default 30 cm / 20-degree task regression.
@@ -228,7 +310,7 @@ preflight and seven-coordinate GCS cost. Eight-branch fixtures are controlled
 tests, not a claim that this physical example has eight branches.
 
 The full Docker suite ran 125 tests: 119 passed and six optional MuJoCo tests
-were skipped in the headless environment. This change adds no 7R MuJoCo viewer
-or post-failure planner. The saved 7D IRIS region also passed 5,000 independent
+were skipped in the headless environment. That pre-failure change added no 7R
+MuJoCo viewer. The post-failure planner is documented above. The saved 7D IRIS region also passed 5,000 independent
 hit-and-run collision samples; this does not certify continuous collision
 freedom. No new packages were needed and no reference grid was run.
