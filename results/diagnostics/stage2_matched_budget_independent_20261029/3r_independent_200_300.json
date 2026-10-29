@@ -1,0 +1,108 @@
+{
+  "method": "3R independent",
+  "max_paths": 200,
+  "max_trials": 300,
+  "source": "results/planar3r/per_target_budget_sweep_20261029/paths200_trials300.json",
+  "source_sha256": "62d357bf8617b8bd727cbf528f53331884c974438ebe034f9a9bf4ad5a72887f",
+  "graph_task_sha256": "adb7875c4e38a58d316ad8b3d3c708c0e6060c44901f8dd17151add701deeda0",
+  "source_stage1_cost": 0.38164594316818823,
+  "saved_goal": [
+    0.6086749949598668,
+    -0.6277991075768086,
+    1.9158858301179487
+  ],
+  "retained_stage1_route": true,
+  "missing_stage1_route": false,
+  "previous_cost": 0.3817177694444778,
+  "previous_stage2_seconds": 4.16126043300028,
+  "stage2_seconds": 3.4097800319996168,
+  "stitched_total_seconds": 103.54348943199966,
+  "rounding_diagnostics": {
+    "rounded_path_count": 200,
+    "successful_rounded_path_count": 200,
+    "max_rounded_paths": 200,
+    "max_rounding_trials": 300,
+    "rounding_trials_attempted": null,
+    "trials_note": "Drake SamplePaths exposes a trial cap, not its actual attempt count"
+  },
+  "stage1_gcs_solve_calls": 0,
+  "success": true,
+  "status": "success",
+  "collision_free": true,
+  "collision_samples": 618,
+  "task_error": 2.220446049250313e-16,
+  "graph_membership_valid": true,
+  "recomputed_cost": 0.3817177694444778,
+  "cost_valid": true,
+  "cost": 0.3817177694444778,
+  "quality": {
+    "lower_bound": 0.35850844136549137,
+    "upper_bound": 0.3817177694444778,
+    "absolute_gap": 0.023209328078986402,
+    "relative_gap": 0.06473858186040593,
+    "relative_tolerance": 0.01,
+    "absolute_tolerance": 1e-06,
+    "scope": "fixed_start_to_supplied_target_sets_graph",
+    "within_tolerance": false,
+    "status": "gap_exceeds_tolerance"
+  },
+  "waypoints": [
+    [
+      -2.972349782093813,
+      -2.26926174311021,
+      -1.2375903668686903
+    ],
+    [
+      -2.865505783541928,
+      -1.9541214021782742,
+      -1.2281811359998007
+    ],
+    [
+      -0.42573778774333837,
+      -1.86352739391287,
+      -1.013470711719875
+    ],
+    [
+      0.6086749949598668,
+      -0.6277991075768086,
+      1.9158858301179487
+    ]
+  ],
+  "region_route": [
+    1,
+    3,
+    28
+  ],
+  "route_spec": {
+    "regions": [
+      1,
+      3,
+      28
+    ],
+    "shifts": [
+      [
+        0.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        0.0
+      ]
+    ]
+  },
+  "endpoint": [
+    0.6086749949598668,
+    -0.6277991075768086,
+    1.9158858301179487
+  ],
+  "selected_target": 0,
+  "rounded_path_count": 200,
+  "solver_name": "MOSEK"
+}

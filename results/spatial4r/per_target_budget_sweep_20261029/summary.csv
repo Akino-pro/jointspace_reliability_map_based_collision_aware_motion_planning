@@ -1,0 +1,2 @@
+max_paths,max_trials,target_count,total_path_cap,total_trial_cap,actual_stage1_paths,successful_stage1_restrictions,feasible_targets,stage1_cost,final_cost,preprocessing_seconds,stage1_seconds,stage2_seconds,total_seconds,actual_stage2_paths,additional_stage2_restrictions,selected_target,endpoint_error,collision_free,collision_samples,success,status,report
+50,75,13,650,975,550,550,11,0.13068911477948902,0.13068915352676208,2.234349896999447,92.20914259100027,6.294124848000138,100.82313534199966,200,1,4,2.685869905030104e-10,True,329,True,success,paths050_trials075.json

@@ -40,6 +40,8 @@ class GoalSetTests(unittest.TestCase):
         result = reports["union_hull_baseline"]
         self.assertTrue(result["success"], result)
         self.assertEqual(result["selected_hull_target"], 1)
+        self.assertEqual(result["stage1_region_route"], [0])
+        self.assertEqual(result["stage1_route_spec"]["regions"], [0])
         self.assertEqual(result["selected_ssm_branch"], 1)
         self.assertEqual(result["gcs_solve_calls"], 2)
         self.assertAlmostEqual(result["cost"], 1., places=6)

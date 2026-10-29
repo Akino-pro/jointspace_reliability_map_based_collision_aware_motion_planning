@@ -168,6 +168,31 @@ main algorithm and save independent costs, validation and timings. See
 [goal-set comparisons](docs/GOAL_SET_COMPARISONS.md) for exact terminal models,
 solver settings, commands and limitations.
 
+Planar 3R additionally supports an optional shared first-stage budget through
+`--stage1-total-paths` and `--stage1-total-trials`. Independent target solves
+divide this total; the joint-hull comparison receives the same total in one
+call. Stage-two settings remain independent. See
+[shared candidate budgets](docs/SHARED_GCS_BUDGET.md) for the two-method experiment.
+
+The planar3R primary now defaults to100paths/150trials for EACH first-stage
+target and100/150for the second stage. The4R and7R defaults are
+unchanged. Historical experiment reports retain their measured budgets.
+
+`--union-hulls-only` runs the planar joint-hull two-stage method without the
+primary or other comparisons. `python -m scripts.planar3R_union_hull_budget_sweep`
+runs the five first-stage budgets50/75,100/150,200/300,300/450,400/600 with a
+fixed second-stage200/300 budget; [measured results and charts](results/planar3r/union_hull_budget_sweep_20261029/README.md)
+are saved independently from the earlier comparisons.
+
+For a fresh4R sweep with matching budgets in both stages,run
+`python -m scripts.spatial4R_per_target_budget_sweep --matched-stage-budgets --output-dir results/spatial4r/per_target_matched_stage_budget_sweep_20261029`.
+This records real full-pipeline timings,without using the earlier stitched estimates.
+
+`python -m scripts.planar3R_per_target_budget_sweep` runs those same five
+budgets independently for **each** planar target, with stage two fixed at
+200/300. It verifies the graph and target fingerprints against the prior
+joint-hull sweep and saves [the per-target comparison](results/planar3r/per_target_budget_sweep_20261029/README.md).
+
 `python -m scripts.spatial7R_two_stage_gcs_planner` uses the DH parameters and
 reliabilities from `scripts/spatial_7r_FTW_estimation_ssm.py`, without importing
 or executing its workspace grid. It plans to a full position-and-orientation

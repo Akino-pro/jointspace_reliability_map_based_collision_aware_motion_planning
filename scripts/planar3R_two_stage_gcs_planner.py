@@ -16,7 +16,16 @@ from scripts.planar3R_ssm_envelopes import (
 )
 from gcs.quality import bound_quality
 from scripts.periodic_graph import lift_path, remap_edges, angle_error
-from scripts.goal_set_baselines import baseline_seconds, compare_goal_sets, planar_position_jacobian
+from scripts.goal_set_baselines import (
+    baseline_seconds, compare_goal_sets, planar_position_jacobian,
+    graph_task_fingerprint, hull_targets_fingerprint,
+)
+from scripts.gcs_budget import allocate_target_budgets
+
+STAGE1_MAX_ROUNDED_PATHS = 100
+STAGE1_MAX_ROUNDING_TRIALS = 150
+STAGE2_MAX_ROUNDED_PATHS = 100
+STAGE2_MAX_ROUNDING_TRIALS = 150
 
 
 class MixedIntegerSolverUnavailable(RuntimeError):
@@ -42,7 +51,7 @@ def solve_target_sets(regions, edges, start, targets, weights, rounding=True,
                       max_rounding_trials=100, rounding_seed=0,
                       relative_gap_tolerance=0.01, mip_time_limit=60.0,
                       mip_relative_gap=0.01, solver_backend=None,
-                      nonlinear_task=None, restriction_solver_backend="snopt"):
+                      nonlinear_task=None, restriction_solver_backend="snopt", diagnostics=None):
     """Use a direct terminal vertex for a single target; charge physical motion."""
     from pydrake.geometry.optimization import Point
     from pydrake.solvers import L2NormCost
@@ -116,6 +125,13 @@ def solve_target_sets(regions, edges, start, targets, weights, rounding=True,
         else:
             planner.target = vertex
     waypoints, results = planner.SolvePath(rounding=rounding, preprocessing=True)
+    if diagnostics is not None:
+        diagnostics.update(
+            rounded_path_count=results.get("rounded_path_count", 0),
+            successful_rounded_path_count=results.get("successful_rounded_path_count", 0),
+            max_rounded_paths=max_rounded_paths, max_rounding_trials=max_rounding_trials,
+            rounding_trials_attempted=None,
+            trials_note="Drake SamplePaths exposes a trial cap, not its actual attempt count")
     if waypoints is None and not candidate_region_routes:
         return None
     path = results.get("best_path") if waypoints is not None else None
@@ -210,15 +226,26 @@ def plan_two_stage(start, goal, obstacles, checkpoint_path='data/iris/planar3R_i
                    geometric_epsilon=0.025, samples_per_branch=None,
                    reliability_source="goal", reliability_branch=0,
                    reliability_epsilon=0.01, min_reliability=0.0, seed=0,
-                   rounding=True, compare_sampled=False, max_rounded_paths=200,
-                   max_rounding_trials=300, rounding_seed=0, relative_gap_tolerance=0.01,
+                   rounding=True, compare_sampled=False, max_rounded_paths=STAGE1_MAX_ROUNDED_PATHS,
+                   max_rounding_trials=STAGE1_MAX_ROUNDING_TRIALS, rounding_seed=0, relative_gap_tolerance=0.01,
                    mip_time_limit=60.0, mip_relative_gap=0.01,
-                   stage2_max_rounded_paths=200, stage2_max_rounding_trials=300,
+                   stage2_max_rounded_paths=STAGE2_MAX_ROUNDED_PATHS,
+                   stage2_max_rounding_trials=STAGE2_MAX_ROUNDING_TRIALS,
                    geometry_only=False, ssm_arc_spacing=SSM_ARC_SPACING, periodic=False,
-                   compare_union_hulls=False, compare_nonlinear_goal=False, nonlinear_solver="snopt"):
+                   compare_union_hulls=False, compare_nonlinear_goal=False, nonlinear_solver="snopt",
+                   stage1_total_paths=None, stage1_total_trials=None, union_hulls_only=False):
     started = time.perf_counter()
     supplied = np.asarray(start, dtype=float)
     goal = np.asarray(goal, dtype=float)
+    if union_hulls_only:
+        if compare_sampled or compare_nonlinear_goal:
+            raise ValueError("Union-hulls-only mode excludes sampled and nonlinear comparisons")
+        compare_union_hulls = True
+    shared_budget = stage1_total_paths is not None or stage1_total_trials is not None
+    if shared_budget:
+        allocate_target_budgets(1, stage1_total_paths, stage1_total_trials)
+        if not rounding:
+            raise ValueError("A shared candidate budget requires relaxation and rounding")
     if (supplied.shape != (3,) or goal.shape != (2,) or not np.all(np.isfinite(supplied))
             or not np.all(np.isfinite(goal)) or not np.isfinite(reliability_epsilon)
             or reliability_epsilon <= 0 or not 0 <= min_reliability <= 1
@@ -237,6 +264,8 @@ def plan_two_stage(start, goal, obstacles, checkpoint_path='data/iris/planar3R_i
                           mip_time_limit=mip_time_limit, mip_relative_gap=mip_relative_gap)
     stage2_settings = dict(solve_settings, max_rounded_paths=stage2_max_rounded_paths,
                           max_rounding_trials=stage2_max_rounding_trials)
+    comparison_settings = (dict(solve_settings, max_rounded_paths=stage1_total_paths,
+                                max_rounding_trials=stage1_total_trials) if shared_budget else solve_settings)
     start = np.where(np.abs(supplied) > np.pi, wrap_to_pi(supplied), supplied)
     positive_boundary = ((np.abs(supplied) > np.pi) & (supplied > 0)
                          & np.isclose(start, -np.pi, atol=1e-12, rtol=0))
@@ -251,11 +280,14 @@ def plan_two_stage(start, goal, obstacles, checkpoint_path='data/iris/planar3R_i
     report.update(solve_mode="relaxation_rounding" if rounding else "mixed_integer",
                   solver_settings=solve_settings, stage1_solver_settings=solve_settings,
                   stage2_solver_settings=stage2_settings)
+    report.update(stage1_budget_mode="shared_total" if shared_budget else "per_target",
+                  stage1_comparison_solver_settings=comparison_settings)
 
     def finish(status, message, **values):
         report.update(status=status, message=message,
                       total_seconds=time.perf_counter() - started, **values)
-        report["two_stage_total_seconds"] = report["total_seconds"]-baseline_seconds(report)
+        report["two_stage_total_seconds"] = (report["total_seconds"] if union_hulls_only else
+                                              report["total_seconds"]-baseline_seconds(report))
         return report
 
     if np.linalg.norm(goal) > sum(L) + 1e-10:
@@ -329,6 +361,9 @@ def plan_two_stage(start, goal, obstacles, checkpoint_path='data/iris/planar3R_i
         refine_sample=(lambda q: refine_ik_configuration(q, *goal)) if samples_per_branch is None else None,
         sampling_report=report)
     targets = intersect_envelopes(envelopes, regions)
+    report.update(graph_task_sha256=graph_task_fingerprint(
+        regions, edges, start, weights, dict(type="position_2D", goal=goal.tolist())),
+        hull_targets_sha256=hull_targets_fingerprint(targets))
     report.update(envelope_count=len(envelopes), target_set_count=len(targets),
                   actual_sample_count=len({tuple(q) for e in envelopes for q in e.samples}),
                   region_count=len(regions), edge_count=len(edges),
@@ -341,6 +376,15 @@ def plan_two_stage(start, goal, obstacles, checkpoint_path='data/iris/planar3R_i
           f"{report['actual_sample_count']} SSM samples, {len(targets)} targets", flush=True)
     if not targets:
         return finish("no_path_in_iris_coverage", "No sampled target hull intersects connected coverage.")
+    quotas = (allocate_target_budgets(len(targets), stage1_total_paths, stage1_total_trials)
+              if shared_budget else [dict(max_rounded_paths=max_rounded_paths,
+                                         max_rounding_trials=max_rounding_trials) for _ in targets])
+    report["stage1_budget"] = dict(
+        allocation="balanced_in_target_order_no_reallocation" if shared_budget else "fixed_per_target",
+        total_max_rounded_paths=sum(q["max_rounded_paths"] for q in quotas),
+        total_max_rounding_trials=sum(q["max_rounding_trials"] for q in quotas),
+        per_target=quotas, stage2_budget_independent=True,
+        extra_stage2_retained_route_restrictions_are_separate=True)
     if geometry_only:
         return finish("geometry_only", "Geometry counts only; no GCS planning performed.",
                       success=True, original_region_count=len(original),
@@ -348,7 +392,7 @@ def plan_two_stage(start, goal, obstacles, checkpoint_path='data/iris/planar3R_i
     if compare_sampled:
         from scripts.sampled_goal_baseline import compare_sampled_goals
         report["sampled_baseline"] = compare_sampled_goals(
-            regions, edges, start, envelopes, weights, solve_settings,
+            regions, edges, start, envelopes, weights, comparison_settings,
             lambda q: is_collision_free(q, obstacles, link_radius=link_radius),
             lambda p: validate_joint_path(p, obstacles, link_radius),
             lambda q: np.linalg.norm(link_points(q)[-1]-goal), rounding=rounding)
@@ -357,11 +401,23 @@ def plan_two_stage(start, goal, obstacles, checkpoint_path='data/iris/planar3R_i
                     residual=lambda q: link_points(q)[-1]-goal,
                     jacobian=lambda q: planar_position_jacobian(q, np.asarray(L)))
         report.update(compare_goal_sets(
-            regions, edges, start, targets, envelopes, weights, solve_settings, stage2_settings, task,
+            regions, edges, start, targets, envelopes, weights, comparison_settings, stage2_settings, task,
             lambda p, e, r: project_to_local_ssm(p, e, r, goal, obstacles, link_radius),
             lambda p: validate_joint_path(p, obstacles, link_radius), offsets,
             union_hulls=compare_union_hulls, nonlinear_goal=compare_nonlinear_goal,
             rounding=rounding, nonlinear_solver=nonlinear_solver))
+    if union_hulls_only:
+        joint = report["union_hull_baseline"]
+        report.update(planner="planar3R_union_hull_two_stage_gcs", primary_method_executed=False,
+                      stage1_mode="one_graph_all_hull_targets", stage1_budget=dict(
+                          allocation="one_joint_target_call",
+                          total_max_rounded_paths=comparison_settings["max_rounded_paths"],
+                          total_max_rounding_trials=comparison_settings["max_rounding_trials"],
+                          stage2_budget_independent=True),
+                      stage1_rounding_diagnostics=joint.get("stage1_rounding_diagnostics"))
+        return finish(joint["status"], "Only the joint-hull two-stage method was executed.",
+                      success=joint["success"], cost=joint.get("cost"),
+                      gcs_solve_calls=joint["gcs_solve_calls"])
     stage_started = time.perf_counter()
     report.update(stage1_mode="per_target_intersection", stage1_candidates=[],
                   stage1_gcs_solve_calls=0, stage2_gcs_solve_calls=0)
@@ -370,11 +426,14 @@ def plan_two_stage(start, goal, obstacles, checkpoint_path='data/iris/planar3R_i
         candidate_started = time.perf_counter()
         print(f"Stage 1: solving target {target_index + 1}/{len(targets)}", flush=True)
         error = None
+        target_settings = dict(solve_settings, **quotas[target_index])
+        diagnostics = {}
         try:
             report["gcs_solve_calls"] += 1
             report["stage1_gcs_solve_calls"] += 1
             candidate = solve_target_sets(
-                regions, edges, start, [candidate_target], weights, rounding, **solve_settings)
+                regions, edges, start, [candidate_target], weights, rounding,
+                diagnostics=diagnostics, **target_settings)
         except ImportError as exc:
             report["gcs_solve_calls"] -= 1
             report["stage1_gcs_solve_calls"] -= 1
@@ -385,6 +444,7 @@ def plan_two_stage(start, goal, obstacles, checkpoint_path='data/iris/planar3R_i
         item = {"target": target_index, "envelope": candidate_target["envelope"],
                 "region": candidate_target["region"], "seconds": candidate_seconds,
                 "success": candidate is not None, "error": error}
+        item.update(solver_settings=target_settings, rounding_diagnostics=diagnostics)
         if candidate is not None:
             item.update(cost=candidate["cost"], solver_cost=candidate.get("solver_cost"),
                         endpoint=(candidate["waypoints"][-1] + offsets).tolist(),
@@ -397,6 +457,12 @@ def plan_two_stage(start, goal, obstacles, checkpoint_path='data/iris/planar3R_i
         print(f"Stage 1: target {target_index + 1}/{len(targets)} finished in "
               f"{candidate_seconds:.2f}s; {result_text}", flush=True)
     report["stage1_seconds"] = time.perf_counter() - stage_started
+    report["stage1_rounding_diagnostics"] = dict(
+        rounded_path_count=sum(c["rounding_diagnostics"].get("rounded_path_count", 0)
+                               for c in report["stage1_candidates"]),
+        successful_rounded_path_count=sum(c["rounding_diagnostics"].get("successful_rounded_path_count", 0)
+                                          for c in report["stage1_candidates"]),
+        rounding_trials_attempted=None)
     if first is None:
         return finish("solver_failed", "No individual target solve returned a feasible route.")
     candidate_lowers = [item.get("quality", {}).get("lower_bound")
@@ -535,10 +601,14 @@ def main():
     parser.add_argument("--min-reliability", type=float, default=0.0)
     parser.add_argument("--seed", type=int, default=0)
     parser.add_argument("--no-rounding", action="store_true")
-    parser.add_argument("--max-rounded-paths", type=int, default=200)
-    parser.add_argument("--max-rounding-trials", type=int, default=300)
-    parser.add_argument("--stage2-max-rounded-paths", type=int, default=200)
-    parser.add_argument("--stage2-max-rounding-trials", type=int, default=300)
+    parser.add_argument("--max-rounded-paths", type=int, default=STAGE1_MAX_ROUNDED_PATHS)
+    parser.add_argument("--max-rounding-trials", type=int, default=STAGE1_MAX_ROUNDING_TRIALS)
+    parser.add_argument("--stage1-total-paths", type=int,
+                        help="Optional total stage-one path cap, shared across all individual targets")
+    parser.add_argument("--stage1-total-trials", type=int,
+                        help="Total stage-one trial cap; supply together with --stage1-total-paths")
+    parser.add_argument("--stage2-max-rounded-paths", type=int, default=STAGE2_MAX_ROUNDED_PATHS)
+    parser.add_argument("--stage2-max-rounding-trials", type=int, default=STAGE2_MAX_ROUNDING_TRIALS)
     parser.add_argument("--rounding-seed", type=int, default=0)
     parser.add_argument("--relative-gap-tolerance", type=float, default=0.01,
                         help="Graph-model quality threshold; 0.01 means 1 percent")
@@ -550,6 +620,8 @@ def main():
     parser.add_argument("--compare-union-hulls", action="store_true")
     parser.add_argument("--compare-nonlinear-goal", action="store_true")
     parser.add_argument("--compare-all", action="store_true")
+    parser.add_argument("--union-hulls-only", action="store_true",
+                        help="Run the joint-hull two-stage method without primary or other baselines")
     parser.add_argument("--nonlinear-solver", choices=["snopt", "ipopt"], default="snopt")
     parser.add_argument("--periodic", action="store_true",
                         help="Optional periodic chart connections; disabled for historical comparisons")
@@ -572,7 +644,10 @@ def main():
                                 periodic=args.periodic,
                                 compare_union_hulls=args.compare_union_hulls or args.compare_all,
                                 compare_nonlinear_goal=args.compare_nonlinear_goal or args.compare_all,
-                                nonlinear_solver=args.nonlinear_solver)
+                                nonlinear_solver=args.nonlinear_solver,
+                                stage1_total_paths=args.stage1_total_paths,
+                                stage1_total_trials=args.stage1_total_trials,
+                                union_hulls_only=args.union_hulls_only)
     except (ValueError, OSError, KeyError, IndexError) as exc:
         result = {"success": False, "status": "invalid_input", "message": str(exc)}
     Path(args.output).write_text(json.dumps(result, indent=2), encoding="utf-8")

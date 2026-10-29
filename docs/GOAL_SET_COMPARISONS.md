@@ -1,5 +1,35 @@
 # Goal-set planning comparisons
 
+Matched-stage-two replays now reuse the saved stage-one endpoint for each
+completed sweep case and set stage two to that case's own budget. See
+[the final matched-budget summary](../results/diagnostics/stage2_matched_budget_summary_20261029/README.md).
+The unfinished4R first-stage sweep remains paused. Older joint reports omitted
+the first-stage route,so their endpoint-only replays have no extra retained
+route;this caveat is explicit in the summary. Future joint reports now save
+the first-stage route,route shifts and waypoints for complete replayability.
+
+The matching [per-target five-budget sweep](../results/planar3r/per_target_budget_sweep_20261029/README.md)
+uses each configured budget in full for every target. It is separate from
+the earlier shared-total-budget ablation and reuses the joint sweep only for
+comparison, without rerunning other methods.
+
+A five-budget experiment for the joint-hull method alone is available in
+[the budget-sweep report](../results/planar3r/union_hull_budget_sweep_20261029/README.md).
+It varies first-stage budgets from50/75 through400/600 while fixing stage two
+at200/300. All five runs returned the same validated final cost; timings and
+the standalone cost/time figure are saved with the per-case reports.
+
+An optional equal-total-candidate-budget ablation for planar 3R is now
+documented in [shared GCS budgets](SHARED_GCS_BUDGET.md). It runs only the
+independent and joint-hull methods and preserves the four-method records below.
+
+The experiment matrix is now complete as of 2026-10-28: the original forward
+3R example was run with all four methods under the current union-recovery
+rule. See [the final 12-entry comparison](../results/diagnostics/final_four_method_comparisons_20261028.md).
+Ten combinations returned validated paths; the 3R nonlinear and 4R joint-hull
+methods returned no feasible paths in their recorded runs. The earlier
+"planar not rerun" notes below describe the 2026-10-26 session only.
+
 All three pre-failure planners (planar 3R, spatial 4R and full-pose spatial 7R)
 support three independent comparisons. The main per-target two-stage algorithm
 is unchanged. Enable individual methods with `--compare-sampled`,

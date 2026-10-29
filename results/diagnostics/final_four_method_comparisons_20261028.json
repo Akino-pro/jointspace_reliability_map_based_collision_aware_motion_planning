@@ -1,0 +1,382 @@
+{
+  "comparisons": [
+    {
+      "source": "results/planar3r/all_goal_comparisons_20261028.json",
+      "planner": "two_stage_ssm_gcs",
+      "reliability_rule": "union_of_branch_recovery_sets",
+      "two_stage_success": true,
+      "baseline_success": true,
+      "two_stage_cost": 0.3817177694444778,
+      "sampled_cost": 0.3817192601649112,
+      "shared_preprocessing_seconds": 3.3381432800000006,
+      "two_stage_total_seconds": 115.799239691,
+      "sampled_incremental_seconds": 18.610226096,
+      "sampled_total_with_shared_preprocessing_seconds": 21.948369376000002,
+      "samples": 301,
+      "covered_sampled_targets": 91,
+      "effective_hull_targets": 20,
+      "adjacency": {
+        "input_region_count": 82,
+        "region_pairs": 3321,
+        "bounding_lp_count": 0,
+        "candidate_intersections": 1883,
+        "intersection_lp_count": 1883,
+        "directed_edges": 1478,
+        "periodic": false,
+        "periodic_directed_edges": 0
+      },
+      "periodic": false,
+      "baseline_input_sha256": "64cb5cb9b8b1c82c1870117ea962138239cb9508d19c91bda7f610cfb8aa3e13",
+      "baseline_solver_settings": {
+        "max_rounded_paths": 200,
+        "max_rounding_trials": 300,
+        "rounding_seed": 0,
+        "relative_gap_tolerance": 0.01,
+        "mip_time_limit": 60.0,
+        "mip_relative_gap": 0.01
+      },
+      "two_stage_solver_settings": {
+        "max_rounded_paths": 200,
+        "max_rounding_trials": 300,
+        "rounding_seed": 0,
+        "relative_gap_tolerance": 0.01,
+        "mip_time_limit": 60.0,
+        "mip_relative_gap": 0.01
+      },
+      "stage1_quality": {
+        "lower_bound": 0.3584366212350418,
+        "upper_bound": 0.38164594316818823,
+        "absolute_gap": 0.023209321933146454,
+        "relative_gap": 0.06475153641716519,
+        "relative_tolerance": 0.01,
+        "absolute_tolerance": 1e-06,
+        "scope": "union_of_sampled_target_intersections_graph_not_continuous_ssm",
+        "within_tolerance": false,
+        "status": "gap_exceeds_tolerance"
+      },
+      "stage2_quality": {
+        "lower_bound": 0.35850844136549137,
+        "upper_bound": 0.3817177694444778,
+        "absolute_gap": 0.023209328078986402,
+        "relative_gap": 0.06473858186040593,
+        "relative_tolerance": 0.01,
+        "absolute_tolerance": 1e-06,
+        "scope": "fixed_endpoint_graph",
+        "within_tolerance": false,
+        "status": "gap_exceeds_tolerance"
+      },
+      "sampled_quality": {
+        "lower_bound": 0.35516842431758716,
+        "upper_bound": 0.3817192601649112,
+        "absolute_gap": 0.02655083584732404,
+        "relative_gap": 0.07475562023380382,
+        "relative_tolerance": 0.01,
+        "absolute_tolerance": 1e-06,
+        "scope": "fixed_start_to_supplied_target_sets_graph",
+        "within_tolerance": false,
+        "status": "gap_exceeds_tolerance"
+      },
+      "global_optimality_certified": false,
+      "two_stage_minus_sampled_cost": -1.4907204334280166e-06,
+      "union_hull_baseline": {
+        "success": true,
+        "status": "success",
+        "cost": 0.38501373771925956,
+        "incremental_seconds": 17.775227171999994,
+        "total_with_shared_preprocessing_seconds": 21.113370451999995,
+        "quality": {
+          "lower_bound": 0.3618192894411515,
+          "upper_bound": 0.38501373771925956,
+          "absolute_gap": 0.02319444827810807,
+          "relative_gap": 0.06410506281722318,
+          "relative_tolerance": 0.01,
+          "absolute_tolerance": 1e-06,
+          "scope": "fixed_start_to_supplied_target_sets_graph",
+          "within_tolerance": false,
+          "status": "gap_exceeds_tolerance"
+        },
+        "task_error": 3.3306690738754696e-15,
+        "gcs_solve_calls": 2,
+        "input_sha256": "7401b42e4d0ea1e61b9cb29d847fdda1ab6dbc328f8a077c483459b617487378",
+        "solver_settings": {
+          "max_rounded_paths": 200,
+          "max_rounding_trials": 300,
+          "rounding_seed": 0,
+          "relative_gap_tolerance": 0.01,
+          "mip_time_limit": 60.0,
+          "mip_relative_gap": 0.01
+        },
+        "restriction_solver": null,
+        "two_stage_minus_baseline_cost": -0.003295968274781791
+      },
+      "nonlinear_goal_baseline": {
+        "success": false,
+        "status": "solver_failed",
+        "cost": null,
+        "incremental_seconds": 89.07758941700001,
+        "total_with_shared_preprocessing_seconds": 92.41573269700001,
+        "quality": null,
+        "task_error": null,
+        "gcs_solve_calls": 1,
+        "input_sha256": "7401b42e4d0ea1e61b9cb29d847fdda1ab6dbc328f8a077c483459b617487378",
+        "solver_settings": {
+          "max_rounded_paths": 200,
+          "max_rounding_trials": 300,
+          "rounding_seed": 0,
+          "relative_gap_tolerance": 0.01,
+          "mip_time_limit": 60.0,
+          "mip_relative_gap": 0.01
+        },
+        "restriction_solver": "snopt"
+      }
+    },
+    {
+      "source": "results/spatial4r/spatial4R_all_goal_comparisons.json",
+      "planner": "spatial4R_two_stage_gcs",
+      "reliability_rule": "union_of_branch_recovery_sets",
+      "two_stage_success": true,
+      "baseline_success": true,
+      "two_stage_cost": 0.07807983167132608,
+      "sampled_cost": 0.09207648479516244,
+      "shared_preprocessing_seconds": 2.351725794000231,
+      "two_stage_total_seconds": 110.1048296709987,
+      "sampled_incremental_seconds": 11.803678224000578,
+      "sampled_total_with_shared_preprocessing_seconds": 14.155404018000809,
+      "samples": 153,
+      "covered_sampled_targets": 53,
+      "effective_hull_targets": 13,
+      "adjacency": {
+        "input_region_count": 56,
+        "region_pairs": 1540,
+        "bounding_lp_count": 0,
+        "candidate_intersections": 724,
+        "intersection_lp_count": 724,
+        "directed_edges": 1202,
+        "periodic": false,
+        "periodic_directed_edges": 0
+      },
+      "periodic": false,
+      "baseline_input_sha256": "b396a5229cc50054323f58957c4e0ee870d7b813a7ea33ce114a4fee648426d1",
+      "baseline_solver_settings": {
+        "max_rounded_paths": 200,
+        "max_rounding_trials": 300,
+        "solver_backend": "mosek"
+      },
+      "two_stage_solver_settings": {
+        "max_rounded_paths": 200,
+        "max_rounding_trials": 300,
+        "rounding_seed": 0
+      },
+      "stage1_quality": {
+        "lower_bound": null,
+        "upper_bound": 0.09111110457352885,
+        "absolute_gap": null,
+        "relative_gap": null,
+        "relative_tolerance": 0.01,
+        "absolute_tolerance": 1e-06,
+        "scope": "union_of_sampled_target_intersections_graph_not_continuous_ssm",
+        "within_tolerance": false,
+        "status": "bound_unavailable"
+      },
+      "stage2_quality": {
+        "lower_bound": 0.0688190745586008,
+        "upper_bound": 0.07807983167132608,
+        "absolute_gap": 0.009260757112725282,
+        "relative_gap": 0.134566719650372,
+        "relative_tolerance": 0.01,
+        "absolute_tolerance": 1e-06,
+        "scope": "fixed_start_to_supplied_target_sets_graph",
+        "within_tolerance": false,
+        "status": "gap_exceeds_tolerance"
+      },
+      "sampled_quality": {
+        "lower_bound": 0.06873006457950753,
+        "upper_bound": 0.09207648479516244,
+        "absolute_gap": 0.023346420215654903,
+        "relative_gap": 0.33968279178099076,
+        "relative_tolerance": 0.01,
+        "absolute_tolerance": 1e-06,
+        "scope": "fixed_start_to_supplied_target_sets_graph",
+        "within_tolerance": false,
+        "status": "gap_exceeds_tolerance"
+      },
+      "global_optimality_certified": false,
+      "two_stage_minus_sampled_cost": -0.013996653123836356,
+      "union_hull_baseline": {
+        "success": false,
+        "status": "solver_failed",
+        "cost": null,
+        "incremental_seconds": 7.450914159000604,
+        "total_with_shared_preprocessing_seconds": 9.802639953000835,
+        "quality": null,
+        "task_error": null,
+        "gcs_solve_calls": 1,
+        "input_sha256": "9c351c6e2ec0eb3242dc92b793c3422fb10ac24795942d9efaa0cdb1d4b8c475",
+        "solver_settings": {
+          "max_rounded_paths": 200,
+          "max_rounding_trials": 300,
+          "solver_backend": "mosek"
+        },
+        "restriction_solver": null
+      },
+      "nonlinear_goal_baseline": {
+        "success": true,
+        "status": "success",
+        "cost": 0.28139450555711243,
+        "incremental_seconds": 127.27545416700013,
+        "total_with_shared_preprocessing_seconds": 129.62717996100037,
+        "quality": {
+          "lower_bound": 1.1190333453193115e-10,
+          "upper_bound": 0.28139450555711243,
+          "absolute_gap": 0.2813945054452091,
+          "relative_gap": 2514621272.2098494,
+          "relative_tolerance": 0.01,
+          "absolute_tolerance": 1e-06,
+          "scope": "fixed_start_to_supplied_target_sets_graph",
+          "within_tolerance": false,
+          "status": "gap_exceeds_tolerance"
+        },
+        "task_error": 7.961011331673778e-14,
+        "gcs_solve_calls": 1,
+        "input_sha256": "9c351c6e2ec0eb3242dc92b793c3422fb10ac24795942d9efaa0cdb1d4b8c475",
+        "solver_settings": {
+          "max_rounded_paths": 200,
+          "max_rounding_trials": 300,
+          "solver_backend": "mosek"
+        },
+        "restriction_solver": "snopt",
+        "two_stage_minus_baseline_cost": -0.20331467388578633
+      }
+    },
+    {
+      "source": "results/spatial7r/spatial7R_30cm20deg_all_goal_comparisons.json",
+      "planner": "spatial7R_two_stage_gcs",
+      "reliability_rule": "union_of_branch_recovery_sets",
+      "two_stage_success": true,
+      "baseline_success": true,
+      "two_stage_cost": 0.004308689987573309,
+      "sampled_cost": 0.004031521798587946,
+      "shared_preprocessing_seconds": 1.562174892999792,
+      "two_stage_total_seconds": 14.060684400000355,
+      "sampled_incremental_seconds": 2.3094563820004623,
+      "sampled_total_with_shared_preprocessing_seconds": 3.8716312750002544,
+      "samples": 92,
+      "covered_sampled_targets": 6,
+      "effective_hull_targets": 4,
+      "adjacency": {
+        "input_region_count": 24,
+        "region_pairs": 276,
+        "bounding_lp_count": 0,
+        "candidate_intersections": 212,
+        "intersection_lp_count": 212,
+        "directed_edges": 424,
+        "periodic": false,
+        "periodic_directed_edges": 0
+      },
+      "periodic": false,
+      "baseline_input_sha256": "5afc0ca513f4169c74bec9dfb5c462162fdac2bc4c6376681d9ac177654b0b38",
+      "baseline_solver_settings": {
+        "max_rounded_paths": 200,
+        "max_rounding_trials": 300,
+        "solver_backend": "mosek"
+      },
+      "two_stage_solver_settings": {
+        "max_rounded_paths": 200,
+        "max_rounding_trials": 300
+      },
+      "stage1_quality": {
+        "lower_bound": null,
+        "upper_bound": 0.0043086444333183295,
+        "absolute_gap": null,
+        "relative_gap": null,
+        "relative_tolerance": 0.01,
+        "absolute_tolerance": 1e-06,
+        "scope": "sampled_full_pose_target_intersections_graph",
+        "within_tolerance": false,
+        "status": "bound_unavailable"
+      },
+      "stage2_quality": {
+        "lower_bound": 0.004308689987573307,
+        "upper_bound": 0.004308689987573309,
+        "absolute_gap": 1.734723475976807e-18,
+        "relative_gap": 4.0261041777893586e-16,
+        "relative_tolerance": 0.01,
+        "absolute_tolerance": 1e-06,
+        "scope": "fixed_start_to_supplied_target_sets_graph",
+        "within_tolerance": true,
+        "status": "within_tolerance"
+      },
+      "sampled_quality": {
+        "lower_bound": 0.004031522006664116,
+        "upper_bound": 0.004031521798587946,
+        "absolute_gap": 0.0,
+        "relative_gap": 0.0,
+        "relative_tolerance": 0.01,
+        "absolute_tolerance": 1e-06,
+        "scope": "fixed_start_to_supplied_target_sets_graph",
+        "within_tolerance": true,
+        "status": "within_tolerance"
+      },
+      "global_optimality_certified": false,
+      "two_stage_minus_sampled_cost": 0.00027716818898536246,
+      "union_hull_baseline": {
+        "success": true,
+        "status": "success",
+        "cost": 0.004308689987573309,
+        "incremental_seconds": 3.757699277000029,
+        "total_with_shared_preprocessing_seconds": 5.319874169999821,
+        "quality": {
+          "lower_bound": 0.004308689987573307,
+          "upper_bound": 0.004308689987573309,
+          "absolute_gap": 1.734723475976807e-18,
+          "relative_gap": 4.0261041777893586e-16,
+          "relative_tolerance": 0.01,
+          "absolute_tolerance": 1e-06,
+          "scope": "fixed_start_to_supplied_target_sets_graph",
+          "within_tolerance": true,
+          "status": "within_tolerance"
+        },
+        "task_error": 5.932272400637851e-16,
+        "gcs_solve_calls": 2,
+        "input_sha256": "dda99aeac5e05a5fbfa4fc7e11dacc1f6c65621bbf1836b837152ac513842de8",
+        "solver_settings": {
+          "max_rounded_paths": 200,
+          "max_rounding_trials": 300,
+          "solver_backend": "mosek"
+        },
+        "restriction_solver": null,
+        "two_stage_minus_baseline_cost": 0.0
+      },
+      "nonlinear_goal_baseline": {
+        "success": true,
+        "status": "success",
+        "cost": 0.003979518378563895,
+        "incremental_seconds": 119.21668236499954,
+        "total_with_shared_preprocessing_seconds": 120.77885725799933,
+        "quality": {
+          "lower_bound": 3.347591348358054e-10,
+          "upper_bound": 0.003979518378563895,
+          "absolute_gap": 0.003979518043804761,
+          "relative_gap": 11887705.605872884,
+          "relative_tolerance": 0.01,
+          "absolute_tolerance": 1e-06,
+          "scope": "fixed_start_to_supplied_target_sets_graph",
+          "within_tolerance": false,
+          "status": "gap_exceeds_tolerance"
+        },
+        "task_error": 3.385917323974179e-10,
+        "gcs_solve_calls": 1,
+        "input_sha256": "dda99aeac5e05a5fbfa4fc7e11dacc1f6c65621bbf1836b837152ac513842de8",
+        "solver_settings": {
+          "max_rounded_paths": 200,
+          "max_rounding_trials": 300,
+          "solver_backend": "mosek"
+        },
+        "restriction_solver": "snopt",
+        "two_stage_minus_baseline_cost": 0.0003291716090094137
+      }
+    }
+  ],
+  "timing_note": "Cached runs; shared preprocessing is counted once for each method. Measured sequentially, with no claim of repeated-run statistics.",
+  "interpretation": "These are heuristic GCS results for different terminal models, not ground truth or continuous-SSM optimality certificates."
+}

@@ -1,0 +1,51 @@
+{
+  "status": "running",
+  "method": "spatial4R_independent_target_two_stage_only",
+  "robot": "ftwmax",
+  "budget_scope": "full_cap_per_target_not_divided",
+  "stage2_budget": [
+    200,
+    300
+  ],
+  "rounding_seed": 0,
+  "ssm_seed": 1,
+  "ssm_ik_attempts": 80,
+  "geometric_epsilon": 0.025,
+  "ssm_arc_spacing": 0.044,
+  "iris_checkpoint": "data/iris/spatial4R_ftwmax_iris_midpoint_regions.npz",
+  "repeats_per_budget": 1,
+  "actual_trial_counts_available": false,
+  "runs": [
+    {
+      "max_paths": 50,
+      "max_trials": 75,
+      "target_count": 13,
+      "total_path_cap": 650,
+      "total_trial_cap": 975,
+      "actual_stage1_paths": 550,
+      "successful_stage1_restrictions": 550,
+      "feasible_targets": 11,
+      "stage1_cost": 0.13068911477948902,
+      "final_cost": 0.13068915352676208,
+      "preprocessing_seconds": 2.234349896999447,
+      "stage1_seconds": 92.20914259100027,
+      "stage2_seconds": 6.294124848000138,
+      "total_seconds": 100.82313534199966,
+      "actual_stage2_paths": 200,
+      "additional_stage2_restrictions": 1,
+      "selected_target": 4,
+      "endpoint_error": 2.685869905030104e-10,
+      "collision_free": true,
+      "collision_samples": 329,
+      "success": true,
+      "status": "success",
+      "report": "paths050_trials075.json"
+    }
+  ],
+  "graph_task_sha256": "0429dd3c31a8312948d9ae093d254772e98d7a8d2d8cdd9565f711f3c83a0ece",
+  "hull_targets_sha256": "9ecfa314cee70d16473f9cb88c8d3489aac6ca7baf6c2046a115ba0873cb218c",
+  "free_regions": 56,
+  "region_edges": 1202,
+  "hull_targets": 13,
+  "ssm_branches": 1
+}

@@ -1,7 +1,10 @@
 # Adaptive SSM targets and two-stage GCS
 
-Current defaults: geometric epsilon 0.025, fixed SSM arc spacing 0.044 radians,
-and 200 paths / 300 trials in both stages. Every found branch uses the same
+Current defaults (updated2026-10-29): geometric epsilon0.025, fixed SSM arc
+spacing0.044radians, stage one100paths/150trials PER TARGET, and stage two
+100paths/150trials. Both defaults were explicitly selected by the user after
+the forward3R sweep and matched-stage-two replay. The lower budget
+is not a division of one global quota across targets. Every found branch uses the same
 sampling interval; sample counts follow branch lengths. The stage-one route
 remains an additional stage-two candidate. Earlier full benchmarks, including
 `results/planar3r/two_stage_all_paths200_trials300.json`, used the legacy 300-point budget.

@@ -1,0 +1,16 @@
+﻿{
+    "status":  "superseded_by_fresh_matched_stage_sweep",
+    "container":  "planar3r-iris-validation",
+    "container_pid":  26182,
+    "paused_at_utc":  "2026-10-29T19:43:02.3637061Z",
+    "completed_budget":  [
+                             50,
+                             75
+                         ],
+    "in_progress_budget":  [
+                               100,
+                               150
+                           ],
+    "note":  "Following explicit user restart authorization, terminated the old SIGSTOP worker because it retained fixed200/300 stage-two settings and paused wall-clock timing. Saved50/75 report preserved; partial100/150 data is not a completed result. New fresh sweep uses matching stage budgets and a separate output folder.",
+    "superseded_at_utc":  "2026-10-29T19:51:47.9366392Z"
+}

@@ -15,7 +15,9 @@ from scripts.planar3R_iris_regions import load_iris_checkpoint, split_iris_regio
 from scripts.planar3R_ssm_envelopes import SSM_ARC_SPACING, build_envelopes, intersect_envelopes, project_to_local_ssm, sample_hull
 from scripts.planar3R_two_stage_gcs_planner import solve_target_sets
 from gcs.quality import bound_quality
-from scripts.goal_set_baselines import baseline_seconds, compare_goal_sets
+from scripts.goal_set_baselines import (
+    baseline_seconds, compare_goal_sets, graph_task_fingerprint, hull_targets_fingerprint,
+)
 
 GEOMETRIC_EPSILON = 0.025
 RELIABILITY_EPSILON = 0.01
@@ -39,15 +41,18 @@ def plan_before_failure(start=model.START_CONFIGURATION, goal=None,
                         geometry_only=False, generate_iris=False, reference=model.GOAL_REFERENCE_CONFIGURATION,
                         solver_backend="mosek", iris_radius=0.9, iris_seeds=None,
                         ssm_ik_attempts=model.MAX_SSM_IK_ATTEMPTS, ssm_seed=1, compare_sampled=False,
-                        compare_union_hulls=False, compare_nonlinear_goal=False, nonlinear_solver="snopt"):
+                        compare_union_hulls=False, compare_nonlinear_goal=False, nonlinear_solver="snopt",
+                        stage2_max_paths=MAX_ROUNDED_PATHS, stage2_max_trials=MAX_ROUNDING_TRIALS):
     began = time.perf_counter()
     checkpoint = checkpoint or f"data/iris/spatial4R_{model.ROBOT_PARAMETER_SET}_iris_midpoint_regions.npz"
     supplied = np.asarray(start, dtype=float)
     goal = model.position(reference) if goal is None else np.asarray(goal, dtype=float)
+    stage2_max_paths = max_paths if stage2_max_paths is None else stage2_max_paths
+    stage2_max_trials = max_trials if stage2_max_trials is None else stage2_max_trials
     if (supplied.shape != (4,) or goal.shape != (3,) or not np.all(np.isfinite(supplied))
             or not np.all(np.isfinite(goal)) or geometric_epsilon <= 0 or arc_spacing <= 0
             or not np.isfinite(geometric_epsilon) or not np.isfinite(arc_spacing)
-            or max_paths < 1 or max_trials < 1
+            or max_paths < 1 or max_trials < 1 or stage2_max_paths < 1 or stage2_max_trials < 1
             or not isinstance(ssm_ik_attempts, (int, np.integer)) or ssm_ik_attempts < 1):
         raise ValueError("Use a finite 4D configuration, 3D goal, positive resolution and budgets")
     outside = np.abs(supplied) > np.pi
@@ -118,6 +123,10 @@ def plan_before_failure(start=model.START_CONFIGURATION, goal=None,
     envelopes = build_envelopes(branches, geometric_epsilon, arc_spacing=arc_spacing,
                                refine_sample=lambda q: model.refine_ik(q, goal), sampling_report=report)
     targets = intersect_envelopes(envelopes, regions)
+    weights = [RELIABILITY_EPSILON + 1-r.reliability for r in regions]
+    report.update(graph_task_sha256=graph_task_fingerprint(
+        regions, edges, start, weights, dict(type="position_3D", goal=goal.tolist())),
+        hull_targets_sha256=hull_targets_fingerprint(targets))
     report["ssm_branch_summaries"] = [dict(
         branch=i, bounding_box=np.column_stack((b.min(axis=0), b.max(axis=0))).tolist(),
         arc_length=report["ssm_branch_arc_lengths"][i],
@@ -137,8 +146,12 @@ def plan_before_failure(start=model.START_CONFIGURATION, goal=None,
         return finish("no_path_in_iris_coverage", "No sampled target hull intersects connected IRIS coverage.")
     if geometry_only:
         return finish("geometry_only", "Spatial preprocessing complete; no GCS solve performed.", success=True)
-    weights = [RELIABILITY_EPSILON + 1-r.reliability for r in regions]
     settings = dict(max_rounded_paths=max_paths, max_rounding_trials=max_trials, solver_backend=solver_backend)
+    second_settings = dict(settings, max_rounded_paths=stage2_max_paths, max_rounding_trials=stage2_max_trials)
+    report.update(stage1_solver_settings=settings, stage2_solver_settings=second_settings,
+                  stage1_budget=dict(allocation="fixed_per_target", target_count=len(targets),
+                                     total_max_rounded_paths=max_paths*len(targets),
+                                     total_max_rounding_trials=max_trials*len(targets)))
     if compare_sampled:
         from scripts.sampled_goal_baseline import compare_sampled_goals
         report["sampled_baseline"] = compare_sampled_goals(
@@ -150,7 +163,7 @@ def plan_before_failure(start=model.START_CONFIGURATION, goal=None,
         task = dict(id=dict(type="position_3D", goal=goal.tolist()), dimension=3,
                     residual=lambda q: model.position(q)-goal, jacobian=model.jacobian)
         report.update(compare_goal_sets(
-            regions, edges, start, targets, envelopes, weights, settings, settings, task,
+            regions, edges, start, targets, envelopes, weights, settings, second_settings, task,
             lambda p, e, r: project_to_local_ssm(
                 p, e, r, goal, obstacles, model.LINK_RADIUS,
                 position=model.position, collision_free=lambda q: model.collision_free(q, obstacles)),
@@ -163,13 +176,16 @@ def plan_before_failure(start=model.START_CONFIGURATION, goal=None,
         candidate_began = time.perf_counter()
         print(f"Spatial stage 1: target {index+1}/{len(targets)}", flush=True)
         error = None
+        diagnostics = {}
         try:
-            solved = solve_target_sets(regions, edges, start, [target], weights, **settings)
+            solved = solve_target_sets(regions, edges, start, [target], weights,
+                                       diagnostics=diagnostics, **settings)
         except RuntimeError as exc:
             solved, error = None, str(exc)
         item = dict(target=index, envelope=target["envelope"], region=target["region"],
                     ssm_branch=envelopes[target["envelope"]].branch, success=solved is not None,
                     seconds=time.perf_counter()-candidate_began, error=error)
+        item.update(solver_settings=settings, rounding_diagnostics=diagnostics)
         report["gcs_solve_calls"] += 1
         if solved is not None:
             item.update(cost=solved["cost"], quality=solved["quality"], rounded_path_count=solved["rounded_path_count"],
@@ -179,6 +195,10 @@ def plan_before_failure(start=model.START_CONFIGURATION, goal=None,
         candidates.append(item)
         print(f"Spatial target {index+1}: {item.get('cost', 'no solution')}, {item['seconds']:.2f}s", flush=True)
     report.update(stage1_seconds=time.perf_counter()-stage1_began, stage1_candidates=candidates)
+    report["stage1_rounding_diagnostics"] = dict(
+        rounded_path_count=sum(c["rounding_diagnostics"].get("rounded_path_count", 0) for c in candidates),
+        successful_rounded_path_count=sum(c["rounding_diagnostics"].get("successful_rounded_path_count", 0)
+                                          for c in candidates), rounding_trials_attempted=None)
     if best is None:
         return finish("stage1_solver_failed", "No feasible first-stage path was returned.")
     lowers = [c.get("quality", {}).get("lower_bound") for c in candidates]
@@ -206,10 +226,12 @@ def plan_before_failure(start=model.START_CONFIGURATION, goal=None,
     goal_regions = [i for i, r in enumerate(regions) if r.contains(projected)]
     stage2_began = time.perf_counter()
     print("Spatial stage 2: full fixed-goal GCS plus retained stage-one route", flush=True)
+    stage2_diagnostics = {}
     solved = solve_target_sets(
         regions, edges, start, [dict(polytope=sample_hull([projected]), region=goal_regions[0], regions=goal_regions)],
-        weights, candidate_region_routes=[best["region_route"]], **settings)
-    report.update(stage2_seconds=time.perf_counter()-stage2_began, gcs_solve_calls=report["gcs_solve_calls"]+1)
+        weights, candidate_region_routes=[best["region_route"]], diagnostics=stage2_diagnostics, **second_settings)
+    report.update(stage2_seconds=time.perf_counter()-stage2_began, gcs_solve_calls=report["gcs_solve_calls"]+1,
+                  stage2_rounding_diagnostics=stage2_diagnostics)
     if solved is None:
         return finish("stage2_solver_failed", "Fixed-goal GCS returned no feasible path.")
     path = solved["waypoints"]+offsets
@@ -256,6 +278,10 @@ def main():
     parser.add_argument("--ssm-seed", type=int, default=1)
     parser.add_argument("--max-rounded-paths", type=int, default=MAX_ROUNDED_PATHS)
     parser.add_argument("--max-rounding-trials", type=int, default=MAX_ROUNDING_TRIALS)
+    parser.add_argument("--stage2-max-rounded-paths", type=int, default=MAX_ROUNDED_PATHS,
+                        help="Independent second-stage path cap (default: 200)")
+    parser.add_argument("--stage2-max-rounding-trials", type=int, default=MAX_ROUNDING_TRIALS,
+                        help="Independent second-stage trial cap (default: 300)")
     parser.add_argument("--solver", choices=["mosek", "clarabel"], default="mosek")
     parser.add_argument("--output", default=None)
     args = parser.parse_args()
@@ -276,7 +302,9 @@ def main():
                                      ssm_seed=args.ssm_seed, compare_sampled=args.compare_sampled or args.compare_all,
                                      compare_union_hulls=args.compare_union_hulls or args.compare_all,
                                      compare_nonlinear_goal=args.compare_nonlinear_goal or args.compare_all,
-                                     nonlinear_solver=args.nonlinear_solver)
+                                     nonlinear_solver=args.nonlinear_solver,
+                                     stage2_max_paths=args.stage2_max_rounded_paths,
+                                     stage2_max_trials=args.stage2_max_rounding_trials)
     except (ValueError, OSError, RuntimeError) as exc:
         result = dict(success=False, status="planning_error", message=str(exc))
     Path(args.output).write_text(json.dumps(result, indent=2), encoding="utf-8")

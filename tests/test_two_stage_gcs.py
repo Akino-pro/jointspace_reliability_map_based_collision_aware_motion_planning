@@ -125,7 +125,7 @@ class PipelineTests(unittest.TestCase):
         self.assertEqual(result["gcs_solve_calls"], 0)
         solve.assert_not_called()
 
-    def run_mocked(self, failure=None, candidate_costs=(1.0,)):
+    def run_mocked(self, failure=None, candidate_costs=(1.0,), **planner_kwargs):
         goal, samples = local_branch()
         calls = []
 
@@ -154,8 +154,58 @@ class PipelineTests(unittest.TestCase):
                 patch('scripts.planar3R_two_stage_gcs_planner.intersect_envelopes', side_effect=make_targets), \
                 patch('scripts.planar3R_two_stage_gcs_planner.solve_target_sets', side_effect=solve):
             result = plan_two_stage([0.3, -0.9, 0.6], goal, [], self.cache,
-                                    geometric_epsilon=10, reliability_source="none")
+                                    geometric_epsilon=10, reliability_source="none", **planner_kwargs)
         return result, calls
+
+    def test_total_budget_is_conserved_and_stage_two_remains_independent(self):
+        result, calls = self.run_mocked(candidate_costs=(4., 3., 2., 1.),
+                                        stage1_total_paths=7, stage1_total_trials=11,
+                                        stage2_max_rounded_paths=200, stage2_max_rounding_trials=300)
+        self.assertTrue(result["success"], result)
+        self.assertEqual([call[-1]["max_rounded_paths"] for call in calls[:-1]], [2, 2, 2, 1])
+        self.assertEqual([call[-1]["max_rounding_trials"] for call in calls[:-1]], [3, 3, 3, 2])
+        self.assertEqual(calls[-1][-1]["max_rounded_paths"], 200)
+        self.assertEqual(calls[-1][-1]["max_rounding_trials"], 300)
+        self.assertEqual(result["stage1_budget"]["total_max_rounded_paths"], 7)
+        self.assertEqual(result["stage1_budget_mode"], "shared_total")
+
+    def test_insufficient_total_budget_does_not_drop_targets_or_call_gcs(self):
+        with self.assertRaisesRegex(ValueError, "at least one"):
+            self.run_mocked(candidate_costs=(3., 2., 1.), stage1_total_paths=2, stage1_total_trials=4)
+
+    def test_shared_budget_requires_both_caps_and_rounding(self):
+        for values in (dict(stage1_total_paths=20), dict(stage1_total_trials=30),
+                       dict(stage1_total_paths=20, stage1_total_trials=30, rounding=False)):
+            with self.assertRaises(ValueError):
+                plan_two_stage([0, 0, 0], [1, 1], [], self.cache, **values)
+
+    def test_joint_comparison_receives_the_same_total_budget(self):
+        with patch('scripts.planar3R_two_stage_gcs_planner.compare_goal_sets', return_value={}) as compare:
+            result, _ = self.run_mocked(candidate_costs=(3., 2., 1.),
+                                        stage1_total_paths=7, stage1_total_trials=11,
+                                        compare_union_hulls=True, stage2_max_rounded_paths=200,
+                                        stage2_max_rounding_trials=300)
+        self.assertTrue(result["success"], result)
+        settings, second_settings = compare.call_args.args[6:8]
+        self.assertEqual(settings["max_rounded_paths"], 7)
+        self.assertEqual(settings["max_rounding_trials"], 11)
+        self.assertEqual(second_settings["max_rounded_paths"], 200)
+        self.assertEqual(second_settings["max_rounding_trials"], 300)
+
+    def test_joint_only_skips_all_primary_solves(self):
+        comparison = dict(success=True, status="success", cost=.4, seconds=0., gcs_solve_calls=2)
+        with patch('scripts.planar3R_two_stage_gcs_planner.compare_goal_sets',
+                   return_value={"union_hull_baseline": comparison}) as compare:
+            result, calls = self.run_mocked(union_hulls_only=True)
+        self.assertTrue(result["success"], result)
+        self.assertFalse(result["primary_method_executed"])
+        self.assertEqual(calls, [])
+        self.assertTrue(compare.call_args.kwargs["union_hulls"])
+
+    def test_joint_only_rejects_other_baselines(self):
+        for flags in (dict(compare_sampled=True), dict(compare_nonlinear_goal=True)):
+            with self.assertRaisesRegex(ValueError, "excludes"):
+                plan_two_stage([0, 0, 0], [1, 1], [], self.cache, union_hulls_only=True, **flags)
 
     def test_each_intersection_gets_a_separate_solve_and_best_is_selected(self):
         result, calls = self.run_mocked(candidate_costs=(3.0, 1.0, 2.0))
@@ -173,10 +223,10 @@ class PipelineTests(unittest.TestCase):
         self.assertTrue(all(call[4] is None for call in calls[:-1]))
         self.assertEqual(calls[-1][4], [[0]])
         for call in calls[:-1]:
-            self.assertEqual(call[5]["max_rounded_paths"], 200)
-            self.assertEqual(call[5]["max_rounding_trials"], 300)
-        self.assertEqual(calls[-1][5]["max_rounded_paths"], 200)
-        self.assertEqual(calls[-1][5]["max_rounding_trials"], 300)
+            self.assertEqual(call[5]["max_rounded_paths"], 100)
+            self.assertEqual(call[5]["max_rounding_trials"], 150)
+        self.assertEqual(calls[-1][5]["max_rounded_paths"], 100)
+        self.assertEqual(calls[-1][5]["max_rounding_trials"], 150)
 
     def test_failed_target_does_not_hide_other_target_results(self):
         result, calls = self.run_mocked(candidate_costs=(None, 2.0, 1.0))

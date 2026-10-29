@@ -71,6 +71,17 @@ def _fingerprint(regions, edges, start, weights, settings, task_id):
     return hashlib.sha256(json.dumps(contract, sort_keys=True).encode()).hexdigest()
 
 
+def graph_task_fingerprint(regions, edges, start, weights, task_id):
+    return _fingerprint(regions, edges, start, weights, {}, task_id)
+
+
+def hull_targets_fingerprint(targets):
+    contract = [dict(A=t["polytope"].A.tolist(), b=t["polytope"].b.tolist(),
+                     regions=t.get("regions", [t["region"]]), envelope=t.get("envelope"))
+                for t in targets]
+    return hashlib.sha256(json.dumps(contract, sort_keys=True).encode()).hexdigest()
+
+
 def validate_result(result, regions, start, targets, weights, task, validate_path):
     """Check graph/target membership, lifted weighted cost and true task."""
     from scripts.periodic_graph import path_in_regions
@@ -112,6 +123,8 @@ def compare_goal_sets(regions, edges, start, targets, envelopes, weights, settin
     from scripts.planar3R_ssm_envelopes import sample_hull
     offsets = np.zeros(len(start)) if offsets is None else np.asarray(offsets)
     common_hash = _fingerprint(regions, edges, start, weights, settings, task["id"])
+    graph_hash = graph_task_fingerprint(regions, edges, start, weights, task["id"])
+    target_hash = hull_targets_fingerprint(targets)
     outputs = {}
     for key, enabled in (("union_hull_baseline", union_hulls), ("nonlinear_goal_baseline", nonlinear_goal)):
         if not enabled:
@@ -121,6 +134,7 @@ def compare_goal_sets(regions, edges, start, targets, envelopes, weights, settin
         report = dict(success=False, method=("native_gcs_nonlinear_terminal" if nonlinear else "one_graph_all_hull_targets_two_stage"),
                       gcs_solve_calls=0, solver_settings=dict(settings),
                       global_optimality_certified=False, input_sha256=common_hash,
+                      graph_task_sha256=graph_hash, hull_targets_sha256=target_hash,
                       task=task["id"], path_coordinates="input_winding_restored",
                       angle_winding_offsets=offsets.tolist())
         outputs[key] = report
@@ -141,9 +155,12 @@ def compare_goal_sets(regions, edges, start, targets, envelopes, weights, settin
             report["target_count"] = len(goals)
             report["gcs_solve_calls"] = 1
             solve_began = time.perf_counter()
+            first_diagnostics = {}
+            report["stage1_rounding_diagnostics"] = first_diagnostics
             first = solve_target_sets(regions, edges, start, goals, weights, rounding=rounding,
                                       nonlinear_task=task if nonlinear else None,
-                                      restriction_solver_backend=nonlinear_solver, **settings)
+                                      restriction_solver_backend=nonlinear_solver,
+                                      diagnostics=first_diagnostics, **settings)
             report["stage1_seconds"] = time.perf_counter()-solve_began
             if first is None:
                 report.update(status="solver_failed", message="No feasible rounded path returned")
@@ -157,6 +174,8 @@ def compare_goal_sets(regions, edges, start, targets, envelopes, weights, settin
                     report.update(status="stage1_path_validation_failed")
                     continue
                 target = goals[selected]
+                report.update(stage1_region_route=first["region_route"], stage1_route_spec=first.get("route_spec"),
+                              stage1_waypoints=(np.asarray(first["waypoints"])+offsets).tolist())
                 chart_endpoint = first.get("chart_waypoints", first["waypoints"])[-1]
                 projection_began = time.perf_counter()
                 q_goal = project(chart_endpoint, envelopes[target["envelope"]], regions[target["region"]])
@@ -173,8 +192,11 @@ def compare_goal_sets(regions, edges, start, targets, envelopes, weights, settin
                 fixed = [dict(polytope=sample_hull([q_goal]), region=indices[0], regions=indices)]
                 report.update(estimated_goal=(q_goal+offsets).tolist(), gcs_solve_calls=2)
                 solve_began = time.perf_counter()
+                second_diagnostics = {}
+                report["stage2_rounding_diagnostics"] = second_diagnostics
                 second = solve_target_sets(regions, edges, start, fixed, weights, rounding=rounding,
-                                           candidate_region_routes=[first["route_spec"]], **stage2_settings)
+                                           candidate_region_routes=[first["route_spec"]],
+                                           diagnostics=second_diagnostics, **stage2_settings)
                 report["stage2_seconds"] = time.perf_counter()-solve_began
                 if second is None:
                     report.update(status="stage2_solver_failed")

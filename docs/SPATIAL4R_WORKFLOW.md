@@ -1,5 +1,25 @@
 # Spatial 4R pre-failure planning
 
+The latest sweep runs both stages at each configured budget:
+50/75,100/150,200/300,300/450,400/600. Command:
+`python -m scripts.spatial4R_per_target_budget_sweep --matched-stage-budgets --output-dir results/spatial4r/per_target_matched_stage_budget_sweep_20261029`.
+This is a fresh full-pipeline sweep; the old paused fixed-stage-two sweep and
+matched-stage-two replay records remain historical artifacts.
+
+The matched sweep completed all five cases.50/75and100/150returned cost
+0.1306891535;200/300and larger returned0.0780798317. Full measured times
+were101.53,106.98,115.85,124.37,132.32seconds,respectively. All final paths
+validated;11of13targets returned candidates in each run. See
+[the completed matched-budget experiment](../results/spatial4r/per_target_matched_stage_budget_sweep_20261029/README.md).
+
+The primary 4R planner now accepts independent second-stage budgets through
+`--stage2-max-rounded-paths` and `--stage2-max-rounding-trials` (API:
+`stage2_max_paths`, `stage2_max_trials`). Both stages now explicitly default to
+200/300, including the API and CLI. Changing the first-stage cap alone leaves
+the second-stage default at 200/300. The latest matched experiment explicitly
+sets both stages to each case's budget; the older fixed-stage-two experiment
+remains available as a historical result.
+
 ## Up to four SSM branches (2026-10-22)
 
 The spatial planner applies the same multi-branch workflow as planar 3R to one

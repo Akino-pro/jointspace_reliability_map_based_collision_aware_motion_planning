@@ -1,0 +1,1313 @@
+{
+  "success": true,
+  "planner": "two_stage_ssm_gcs",
+  "gcs_solve_calls": 21,
+  "start_configuration": [
+    -2.972349782093813,
+    -2.26926174311021,
+    -1.2375903668686903
+  ],
+  "goal_point": [
+    1.5,
+    1.5
+  ],
+  "geometric_epsilon": 0.025,
+  "samples_per_branch": null,
+  "reliability_epsilon": 0.01,
+  "reliability_source": "goal",
+  "iris_checkpoint": "data/iris/planar3R_iris_regions.npz",
+  "angle_winding_offsets": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "continuous_coverage_certified": false,
+  "global_optimality_certified": false,
+  "solve_mode": "relaxation_rounding",
+  "solver_settings": {
+    "max_rounded_paths": 50,
+    "max_rounding_trials": 75,
+    "rounding_seed": 0,
+    "relative_gap_tolerance": 0.01,
+    "mip_time_limit": 60.0,
+    "mip_relative_gap": 0.01
+  },
+  "stage1_solver_settings": {
+    "max_rounded_paths": 50,
+    "max_rounding_trials": 75,
+    "rounding_seed": 0,
+    "relative_gap_tolerance": 0.01,
+    "mip_time_limit": 60.0,
+    "mip_relative_gap": 0.01
+  },
+  "stage2_solver_settings": {
+    "max_rounded_paths": 200,
+    "max_rounding_trials": 300,
+    "rounding_seed": 0,
+    "relative_gap_tolerance": 0.01,
+    "mip_time_limit": 60.0,
+    "mip_relative_gap": 0.01
+  },
+  "stage1_budget_mode": "per_target",
+  "stage1_comparison_solver_settings": {
+    "max_rounded_paths": 50,
+    "max_rounding_trials": 75,
+    "rounding_seed": 0,
+    "relative_gap_tolerance": 0.01,
+    "mip_time_limit": 60.0,
+    "mip_relative_gap": 0.01
+  },
+  "reliability_branch": "branch 1",
+  "reliability_branch_count": 1,
+  "reliability_rule": "union_of_branch_recovery_sets",
+  "reliability_partition_count": 27,
+  "unmerged_reliability_partition_count": 27,
+  "periodic_connections": false,
+  "adjacency_statistics": {
+    "input_region_count": 82,
+    "region_pairs": 3321,
+    "bounding_lp_count": 0,
+    "candidate_intersections": 1883,
+    "intersection_lp_count": 1883,
+    "directed_edges": 1478,
+    "periodic": false,
+    "periodic_directed_edges": 0
+  },
+  "sampling_mode": "fixed_arc_spacing",
+  "ssm_arc_spacing": 0.044,
+  "ssm_branch_arc_lengths": [
+    13.16519459958816
+  ],
+  "ssm_total_arc_length": 13.16519459958816,
+  "ssm_branch_sample_counts": [
+    301
+  ],
+  "sample_refinement_failures": 0,
+  "graph_task_sha256": "adb7875c4e38a58d316ad8b3d3c708c0e6060c44901f8dd17151add701deeda0",
+  "hull_targets_sha256": "be9285df1a92e32126081e0570588005f32329e0a3fa6325292ab29df324d942",
+  "envelope_count": 40,
+  "target_set_count": 20,
+  "actual_sample_count": 301,
+  "region_count": 43,
+  "edge_count": 824,
+  "geometry_seconds": 3.037534042000516,
+  "envelope_polyline_bounds": [
+    0.009430303406956957,
+    0.008421640415495913,
+    0.02481789803989392,
+    0.007125954373486252,
+    0.007091067963262459,
+    0.022819072690022865,
+    0.02411534166480233,
+    0.014755925608019044,
+    0.011291222787634123,
+    0.009307399789513997,
+    0.010890768410985149,
+    0.009384172845438918,
+    0.01362086053960935,
+    0.013072478777163327,
+    0.020108405240685596,
+    0.02166756092976295,
+    0.008361275055254861,
+    0.006342905058589292,
+    0.01022913943645403,
+    0.0067676479003691845,
+    0.00945891373884547,
+    0.00844914367158548,
+    0.024861022322997913,
+    0.0071278464281011025,
+    0.007092303004313815,
+    0.02284988786607022,
+    0.02420110908100254,
+    0.01482243104198036,
+    0.011335488849294164,
+    0.009327829609336482,
+    0.0108891337811974,
+    0.009366428787217634,
+    0.013585569691933759,
+    0.013034958946645655,
+    0.020033847043120136,
+    0.02155629735090119,
+    0.00832000071634362,
+    0.006320545046452999,
+    0.010218903981157264,
+    0.006777352031967712
+  ],
+  "stage1_budget": {
+    "allocation": "fixed_per_target",
+    "total_max_rounded_paths": 1000,
+    "total_max_rounding_trials": 1500,
+    "per_target": [
+      {
+        "max_rounded_paths": 50,
+        "max_rounding_trials": 75
+      },
+      {
+        "max_rounded_paths": 50,
+        "max_rounding_trials": 75
+      },
+      {
+        "max_rounded_paths": 50,
+        "max_rounding_trials": 75
+      },
+      {
+        "max_rounded_paths": 50,
+        "max_rounding_trials": 75
+      },
+      {
+        "max_rounded_paths": 50,
+        "max_rounding_trials": 75
+      },
+      {
+        "max_rounded_paths": 50,
+        "max_rounding_trials": 75
+      },
+      {
+        "max_rounded_paths": 50,
+        "max_rounding_trials": 75
+      },
+      {
+        "max_rounded_paths": 50,
+        "max_rounding_trials": 75
+      },
+      {
+        "max_rounded_paths": 50,
+        "max_rounding_trials": 75
+      },
+      {
+        "max_rounded_paths": 50,
+        "max_rounding_trials": 75
+      },
+      {
+        "max_rounded_paths": 50,
+        "max_rounding_trials": 75
+      },
+      {
+        "max_rounded_paths": 50,
+        "max_rounding_trials": 75
+      },
+      {
+        "max_rounded_paths": 50,
+        "max_rounding_trials": 75
+      },
+      {
+        "max_rounded_paths": 50,
+        "max_rounding_trials": 75
+      },
+      {
+        "max_rounded_paths": 50,
+        "max_rounding_trials": 75
+      },
+      {
+        "max_rounded_paths": 50,
+        "max_rounding_trials": 75
+      },
+      {
+        "max_rounded_paths": 50,
+        "max_rounding_trials": 75
+      },
+      {
+        "max_rounded_paths": 50,
+        "max_rounding_trials": 75
+      },
+      {
+        "max_rounded_paths": 50,
+        "max_rounding_trials": 75
+      },
+      {
+        "max_rounded_paths": 50,
+        "max_rounding_trials": 75
+      }
+    ],
+    "stage2_budget_independent": true,
+    "extra_stage2_retained_route_restrictions_are_separate": true
+  },
+  "stage1_mode": "per_target_intersection",
+  "stage1_candidates": [
+    {
+      "target": 0,
+      "envelope": 4,
+      "region": 28,
+      "seconds": 6.115378315999806,
+      "success": true,
+      "error": null,
+      "solver_settings": {
+        "max_rounded_paths": 50,
+        "max_rounding_trials": 75,
+        "rounding_seed": 0,
+        "relative_gap_tolerance": 0.01,
+        "mip_time_limit": 60.0,
+        "mip_relative_gap": 0.01
+      },
+      "rounding_diagnostics": {
+        "rounded_path_count": 50,
+        "successful_rounded_path_count": 50,
+        "max_rounded_paths": 50,
+        "max_rounding_trials": 75,
+        "rounding_trials_attempted": null,
+        "trials_note": "Drake SamplePaths exposes a trial cap, not its actual attempt count"
+      },
+      "cost": 0.38619408240863795,
+      "solver_cost": 0.38619408244903647,
+      "endpoint": [
+        -0.36465306353897836,
+        1.8833532660159131,
+        -0.4873722094850407
+      ],
+      "quality": {
+        "lower_bound": 0.3618192786823351,
+        "upper_bound": 0.38619408240863795,
+        "absolute_gap": 0.02437480372630285,
+        "relative_gap": 0.06736734376086989,
+        "relative_tolerance": 0.01,
+        "absolute_tolerance": 1e-06,
+        "scope": "fixed_start_to_supplied_target_sets_graph",
+        "within_tolerance": false,
+        "status": "gap_exceeds_tolerance"
+      },
+      "rounded_path_count": 50
+    },
+    {
+      "target": 1,
+      "envelope": 5,
+      "region": 11,
+      "seconds": 3.090246945999752,
+      "success": true,
+      "error": null,
+      "solver_settings": {
+        "max_rounded_paths": 50,
+        "max_rounding_trials": 75,
+        "rounding_seed": 0,
+        "relative_gap_tolerance": 0.01,
+        "mip_time_limit": 60.0,
+        "mip_relative_gap": 0.01
+      },
+      "rounding_diagnostics": {
+        "rounded_path_count": 50,
+        "successful_rounded_path_count": 50,
+        "max_rounded_paths": 50,
+        "max_rounding_trials": 75,
+        "rounding_trials_attempted": null,
+        "trials_note": "Drake SamplePaths exposes a trial cap, not its actual attempt count"
+      },
+      "cost": 0.3846212585349373,
+      "solver_cost": 0.38462126176886285,
+      "endpoint": [
+        -0.420413826696058,
+        1.7526488923392083,
+        -0.11983745760307801
+      ],
+      "quality": {
+        "lower_bound": 0.361425958192098,
+        "upper_bound": 0.3846212585349373,
+        "absolute_gap": 0.023195300342839287,
+        "relative_gap": 0.06417718433635854,
+        "relative_tolerance": 0.01,
+        "absolute_tolerance": 1e-06,
+        "scope": "fixed_start_to_supplied_target_sets_graph",
+        "within_tolerance": false,
+        "status": "gap_exceeds_tolerance"
+      },
+      "rounded_path_count": 50
+    },
+    {
+      "target": 2,
+      "envelope": 5,
+      "region": 28,
+      "seconds": 3.026952774000165,
+      "success": true,
+      "error": null,
+      "solver_settings": {
+        "max_rounded_paths": 50,
+        "max_rounding_trials": 75,
+        "rounding_seed": 0,
+        "relative_gap_tolerance": 0.01,
+        "mip_time_limit": 60.0,
+        "mip_relative_gap": 0.01
+      },
+      "rounding_diagnostics": {
+        "rounded_path_count": 50,
+        "successful_rounded_path_count": 50,
+        "max_rounded_paths": 50,
+        "max_rounding_trials": 75,
+        "rounding_trials_attempted": null,
+        "trials_note": "Drake SamplePaths exposes a trial cap, not its actual attempt count"
+      },
+      "cost": 0.7239035924248074,
+      "solver_cost": 0.7239035947053043,
+      "endpoint": [
+        -0.36465310645848903,
+        1.8833532270699835,
+        -0.48737204500914283
+      ],
+      "quality": {
+        "lower_bound": 0.36142596246351333,
+        "upper_bound": 0.7239035924248074,
+        "absolute_gap": 0.36247762996129407,
+        "relative_gap": 1.0029097729742835,
+        "relative_tolerance": 0.01,
+        "absolute_tolerance": 1e-06,
+        "scope": "fixed_start_to_supplied_target_sets_graph",
+        "within_tolerance": false,
+        "status": "gap_exceeds_tolerance"
+      },
+      "rounded_path_count": 50
+    },
+    {
+      "target": 3,
+      "envelope": 6,
+      "region": 11,
+      "seconds": 4.06710376799947,
+      "success": true,
+      "error": null,
+      "solver_settings": {
+        "max_rounded_paths": 50,
+        "max_rounding_trials": 75,
+        "rounding_seed": 0,
+        "relative_gap_tolerance": 0.01,
+        "mip_time_limit": 60.0,
+        "mip_relative_gap": 0.01
+      },
+      "rounding_diagnostics": {
+        "rounded_path_count": 50,
+        "successful_rounded_path_count": 50,
+        "max_rounded_paths": 50,
+        "max_rounding_trials": 75,
+        "rounding_trials_attempted": null,
+        "trials_note": "Drake SamplePaths exposes a trial cap, not its actual attempt count"
+      },
+      "cost": 0.3839988802990354,
+      "solver_cost": 0.3839988803748621,
+      "endpoint": [
+        -0.406221193767462,
+        1.546263627855278,
+        0.2661885942518676
+      ],
+      "quality": {
+        "lower_bound": 0.36080346132895336,
+        "upper_bound": 0.3839988802990354,
+        "absolute_gap": 0.023195418970082038,
+        "relative_gap": 0.06428823849041239,
+        "relative_tolerance": 0.01,
+        "absolute_tolerance": 1e-06,
+        "scope": "fixed_start_to_supplied_target_sets_graph",
+        "within_tolerance": false,
+        "status": "gap_exceeds_tolerance"
+      },
+      "rounded_path_count": 50
+    },
+    {
+      "target": 4,
+      "envelope": 6,
+      "region": 28,
+      "seconds": 3.8681253320000906,
+      "success": true,
+      "error": null,
+      "solver_settings": {
+        "max_rounded_paths": 50,
+        "max_rounding_trials": 75,
+        "rounding_seed": 0,
+        "relative_gap_tolerance": 0.01,
+        "mip_time_limit": 60.0,
+        "mip_relative_gap": 0.01
+      },
+      "rounding_diagnostics": {
+        "rounded_path_count": 50,
+        "successful_rounded_path_count": 50,
+        "max_rounded_paths": 50,
+        "max_rounding_trials": 75,
+        "rounding_trials_attempted": null,
+        "trials_note": "Drake SamplePaths exposes a trial cap, not its actual attempt count"
+      },
+      "cost": 0.7276583047822656,
+      "solver_cost": 0.7276583636900003,
+      "endpoint": [
+        -0.4204158586341321,
+        1.752678444128064,
+        -0.11989272176568522
+      ],
+      "quality": {
+        "lower_bound": 0.3608027912614014,
+        "upper_bound": 0.7276583047822656,
+        "absolute_gap": 0.36685551352086415,
+        "relative_gap": 1.0167757079658444,
+        "relative_tolerance": 0.01,
+        "absolute_tolerance": 1e-06,
+        "scope": "fixed_start_to_supplied_target_sets_graph",
+        "within_tolerance": false,
+        "status": "gap_exceeds_tolerance"
+      },
+      "rounded_path_count": 50
+    },
+    {
+      "target": 5,
+      "envelope": 7,
+      "region": 11,
+      "seconds": 6.43836016700061,
+      "success": true,
+      "error": null,
+      "solver_settings": {
+        "max_rounded_paths": 50,
+        "max_rounding_trials": 75,
+        "rounding_seed": 0,
+        "relative_gap_tolerance": 0.01,
+        "mip_time_limit": 60.0,
+        "mip_relative_gap": 0.01
+      },
+      "rounding_diagnostics": {
+        "rounded_path_count": 50,
+        "successful_rounded_path_count": 50,
+        "max_rounded_paths": 50,
+        "max_rounding_trials": 75,
+        "rounding_trials_attempted": null,
+        "trials_note": "Drake SamplePaths exposes a trial cap, not its actual attempt count"
+      },
+      "cost": 0.38339893490894306,
+      "solver_cost": 0.38339893534651065,
+      "endpoint": [
+        -0.3389734816467902,
+        1.322620916564125,
+        0.5842349930284005
+      ],
+      "quality": {
+        "lower_bound": 0.3602013195229165,
+        "upper_bound": 0.38339893490894306,
+        "absolute_gap": 0.02319761538602655,
+        "relative_gap": 0.06440180568119958,
+        "relative_tolerance": 0.01,
+        "absolute_tolerance": 1e-06,
+        "scope": "fixed_start_to_supplied_target_sets_graph",
+        "within_tolerance": false,
+        "status": "gap_exceeds_tolerance"
+      },
+      "rounded_path_count": 50
+    },
+    {
+      "target": 6,
+      "envelope": 7,
+      "region": 28,
+      "seconds": 4.080002726999737,
+      "success": true,
+      "error": null,
+      "solver_settings": {
+        "max_rounded_paths": 50,
+        "max_rounding_trials": 75,
+        "rounding_seed": 0,
+        "relative_gap_tolerance": 0.01,
+        "mip_time_limit": 60.0,
+        "mip_relative_gap": 0.01
+      },
+      "rounding_diagnostics": {
+        "rounded_path_count": 50,
+        "successful_rounded_path_count": 50,
+        "max_rounded_paths": 50,
+        "max_rounding_trials": 75,
+        "rounding_trials_attempted": null,
+        "trials_note": "Drake SamplePaths exposes a trial cap, not its actual attempt count"
+      },
+      "cost": 0.5362389834564578,
+      "solver_cost": 0.5362389843963733,
+      "endpoint": [
+        -0.3389725442255448,
+        1.322618104227115,
+        0.5842388022410978
+      ],
+      "quality": {
+        "lower_bound": 0.36020097801133744,
+        "upper_bound": 0.5362389834564578,
+        "absolute_gap": 0.17603800544512038,
+        "relative_gap": 0.4887216198496261,
+        "relative_tolerance": 0.01,
+        "absolute_tolerance": 1e-06,
+        "scope": "fixed_start_to_supplied_target_sets_graph",
+        "within_tolerance": false,
+        "status": "gap_exceeds_tolerance"
+      },
+      "rounded_path_count": 50
+    },
+    {
+      "target": 7,
+      "envelope": 8,
+      "region": 11,
+      "seconds": 3.1548770160006825,
+      "success": true,
+      "error": null,
+      "solver_settings": {
+        "max_rounded_paths": 50,
+        "max_rounding_trials": 75,
+        "rounding_seed": 0,
+        "relative_gap_tolerance": 0.01,
+        "mip_time_limit": 60.0,
+        "mip_relative_gap": 0.01
+      },
+      "rounding_diagnostics": {
+        "rounded_path_count": 50,
+        "successful_rounded_path_count": 50,
+        "max_rounded_paths": 50,
+        "max_rounding_trials": 75,
+        "rounding_trials_attempted": null,
+        "trials_note": "Drake SamplePaths exposes a trial cap, not its actual attempt count"
+      },
+      "cost": 0.38286201355806576,
+      "solver_cost": 0.3828620135722347,
+      "endpoint": [
+        -0.23592966752714825,
+        1.074531354144356,
+        0.873464934525831
+      ],
+      "quality": {
+        "lower_bound": 0.3596623199164034,
+        "upper_bound": 0.38286201355806576,
+        "absolute_gap": 0.023199693641662356,
+        "relative_gap": 0.06450409830825392,
+        "relative_tolerance": 0.01,
+        "absolute_tolerance": 1e-06,
+        "scope": "fixed_start_to_supplied_target_sets_graph",
+        "within_tolerance": false,
+        "status": "gap_exceeds_tolerance"
+      },
+      "rounded_path_count": 50
+    },
+    {
+      "target": 8,
+      "envelope": 8,
+      "region": 28,
+      "seconds": 3.0422243180000805,
+      "success": true,
+      "error": null,
+      "solver_settings": {
+        "max_rounded_paths": 50,
+        "max_rounding_trials": 75,
+        "rounding_seed": 0,
+        "relative_gap_tolerance": 0.01,
+        "mip_time_limit": 60.0,
+        "mip_relative_gap": 0.01
+      },
+      "rounding_diagnostics": {
+        "rounded_path_count": 50,
+        "successful_rounded_path_count": 50,
+        "max_rounded_paths": 50,
+        "max_rounding_trials": 75,
+        "rounding_trials_attempted": null,
+        "trials_note": "Drake SamplePaths exposes a trial cap, not its actual attempt count"
+      },
+      "cost": 0.5330913434598181,
+      "solver_cost": 0.5330913485875357,
+      "endpoint": [
+        -0.23592853243245124,
+        1.0745287264103303,
+        0.8734678828282803
+      ],
+      "quality": {
+        "lower_bound": 0.35966231956967576,
+        "upper_bound": 0.5330913434598181,
+        "absolute_gap": 0.17342902389014236,
+        "relative_gap": 0.48219959237777404,
+        "relative_tolerance": 0.01,
+        "absolute_tolerance": 1e-06,
+        "scope": "fixed_start_to_supplied_target_sets_graph",
+        "within_tolerance": false,
+        "status": "gap_exceeds_tolerance"
+      },
+      "rounded_path_count": 50
+    },
+    {
+      "target": 9,
+      "envelope": 9,
+      "region": 11,
+      "seconds": 3.0449307250000857,
+      "success": true,
+      "error": null,
+      "solver_settings": {
+        "max_rounded_paths": 50,
+        "max_rounding_trials": 75,
+        "rounding_seed": 0,
+        "relative_gap_tolerance": 0.01,
+        "mip_time_limit": 60.0,
+        "mip_relative_gap": 0.01
+      },
+      "rounding_diagnostics": {
+        "rounded_path_count": 50,
+        "successful_rounded_path_count": 50,
+        "max_rounded_paths": 50,
+        "max_rounding_trials": 75,
+        "rounding_trials_attempted": null,
+        "trials_note": "Drake SamplePaths exposes a trial cap, not its actual attempt count"
+      },
+      "cost": 0.38244352855917874,
+      "solver_cost": 0.38244352983151036,
+      "endpoint": [
+        -0.10897293769830513,
+        0.8075216457504717,
+        1.1351088733909598
+      ],
+      "quality": {
+        "lower_bound": 0.35924202509118824,
+        "upper_bound": 0.38244352855917874,
+        "absolute_gap": 0.023201503467990492,
+        "relative_gap": 0.06458460271206058,
+        "relative_tolerance": 0.01,
+        "absolute_tolerance": 1e-06,
+        "scope": "fixed_start_to_supplied_target_sets_graph",
+        "within_tolerance": false,
+        "status": "gap_exceeds_tolerance"
+      },
+      "rounded_path_count": 50
+    },
+    {
+      "target": 10,
+      "envelope": 9,
+      "region": 28,
+      "seconds": 3.0013085230002616,
+      "success": true,
+      "error": null,
+      "solver_settings": {
+        "max_rounded_paths": 50,
+        "max_rounding_trials": 75,
+        "rounding_seed": 0,
+        "relative_gap_tolerance": 0.01,
+        "mip_time_limit": 60.0,
+        "mip_relative_gap": 0.01
+      },
+      "rounding_diagnostics": {
+        "rounded_path_count": 50,
+        "successful_rounded_path_count": 50,
+        "max_rounded_paths": 50,
+        "max_rounding_trials": 75,
+        "rounding_trials_attempted": null,
+        "trials_note": "Drake SamplePaths exposes a trial cap, not its actual attempt count"
+      },
+      "cost": 0.3824435266202299,
+      "solver_cost": 0.38244352671991727,
+      "endpoint": [
+        -0.10897199881736741,
+        0.8075197033041656,
+        1.135110710671938
+      ],
+      "quality": {
+        "lower_bound": 0.3592420278955487,
+        "upper_bound": 0.3824435266202299,
+        "absolute_gap": 0.02320149872468119,
+        "relative_gap": 0.06458458900423292,
+        "relative_tolerance": 0.01,
+        "absolute_tolerance": 1e-06,
+        "scope": "fixed_start_to_supplied_target_sets_graph",
+        "within_tolerance": false,
+        "status": "gap_exceeds_tolerance"
+      },
+      "rounded_path_count": 50
+    },
+    {
+      "target": 11,
+      "envelope": 10,
+      "region": 11,
+      "seconds": 2.99184643999979,
+      "success": true,
+      "error": null,
+      "solver_settings": {
+        "max_rounded_paths": 50,
+        "max_rounding_trials": 75,
+        "rounding_seed": 0,
+        "relative_gap_tolerance": 0.01,
+        "mip_time_limit": 60.0,
+        "mip_relative_gap": 0.01
+      },
+      "rounding_diagnostics": {
+        "rounded_path_count": 50,
+        "successful_rounded_path_count": 50,
+        "max_rounded_paths": 50,
+        "max_rounding_trials": 75,
+        "rounding_trials_attempted": null,
+        "trials_note": "Drake SamplePaths exposes a trial cap, not its actual attempt count"
+      },
+      "cost": 0.38213473979821616,
+      "solver_cost": 0.38213474038348444,
+      "endpoint": [
+        0.050340731571170985,
+        0.4908239928008203,
+        1.3934465129146363
+      ],
+      "quality": {
+        "lower_bound": 0.35893117868069674,
+        "upper_bound": 0.38213473979821616,
+        "absolute_gap": 0.023203561117519422,
+        "relative_gap": 0.06464626785225919,
+        "relative_tolerance": 0.01,
+        "absolute_tolerance": 1e-06,
+        "scope": "fixed_start_to_supplied_target_sets_graph",
+        "within_tolerance": false,
+        "status": "gap_exceeds_tolerance"
+      },
+      "rounded_path_count": 50
+    },
+    {
+      "target": 12,
+      "envelope": 10,
+      "region": 28,
+      "seconds": 2.9525867180000205,
+      "success": true,
+      "error": null,
+      "solver_settings": {
+        "max_rounded_paths": 50,
+        "max_rounding_trials": 75,
+        "rounding_seed": 0,
+        "relative_gap_tolerance": 0.01,
+        "mip_time_limit": 60.0,
+        "mip_relative_gap": 0.01
+      },
+      "rounding_diagnostics": {
+        "rounded_path_count": 50,
+        "successful_rounded_path_count": 50,
+        "max_rounded_paths": 50,
+        "max_rounding_trials": 75,
+        "rounding_trials_attempted": null,
+        "trials_note": "Drake SamplePaths exposes a trial cap, not its actual attempt count"
+      },
+      "cost": 0.5262460853927204,
+      "solver_cost": 0.5262460931701936,
+      "endpoint": [
+        0.0503442215529267,
+        0.49081705865260783,
+        1.3934521668671351
+      ],
+      "quality": {
+        "lower_bound": 0.35893114893138395,
+        "upper_bound": 0.5262460853927204,
+        "absolute_gap": 0.1673149364613365,
+        "relative_gap": 0.4661477193034637,
+        "relative_tolerance": 0.01,
+        "absolute_tolerance": 1e-06,
+        "scope": "fixed_start_to_supplied_target_sets_graph",
+        "within_tolerance": false,
+        "status": "gap_exceeds_tolerance"
+      },
+      "rounded_path_count": 50
+    },
+    {
+      "target": 13,
+      "envelope": 11,
+      "region": 11,
+      "seconds": 3.0200963509996654,
+      "success": true,
+      "error": null,
+      "solver_settings": {
+        "max_rounded_paths": 50,
+        "max_rounding_trials": 75,
+        "rounding_seed": 0,
+        "relative_gap_tolerance": 0.01,
+        "mip_time_limit": 60.0,
+        "mip_relative_gap": 0.01
+      },
+      "rounding_diagnostics": {
+        "rounded_path_count": 50,
+        "successful_rounded_path_count": 50,
+        "max_rounded_paths": 50,
+        "max_rounding_trials": 75,
+        "rounding_trials_attempted": null,
+        "trials_note": "Drake SamplePaths exposes a trial cap, not its actual attempt count"
+      },
+      "cost": 0.38197088370608934,
+      "solver_cost": 0.3819708841978275,
+      "endpoint": [
+        0.18386382284163827,
+        0.22796323772981744,
+        1.56730784069094
+      ],
+      "quality": {
+        "lower_bound": 0.3587656774639949,
+        "upper_bound": 0.38197088370608934,
+        "absolute_gap": 0.023205206242094434,
+        "relative_gap": 0.06468067515857413,
+        "relative_tolerance": 0.01,
+        "absolute_tolerance": 1e-06,
+        "scope": "fixed_start_to_supplied_target_sets_graph",
+        "within_tolerance": false,
+        "status": "gap_exceeds_tolerance"
+      },
+      "rounded_path_count": 50
+    },
+    {
+      "target": 14,
+      "envelope": 11,
+      "region": 28,
+      "seconds": 2.8877977319998536,
+      "success": true,
+      "error": null,
+      "solver_settings": {
+        "max_rounded_paths": 50,
+        "max_rounding_trials": 75,
+        "rounding_seed": 0,
+        "relative_gap_tolerance": 0.01,
+        "mip_time_limit": 60.0,
+        "mip_relative_gap": 0.01
+      },
+      "rounding_diagnostics": {
+        "rounded_path_count": 50,
+        "successful_rounded_path_count": 50,
+        "max_rounded_paths": 50,
+        "max_rounding_trials": 75,
+        "rounding_trials_attempted": null,
+        "trials_note": "Drake SamplePaths exposes a trial cap, not its actual attempt count"
+      },
+      "cost": 0.3819708853311084,
+      "solver_cost": 0.38197088646501526,
+      "endpoint": [
+        0.18409991026920974,
+        0.22749846762722223,
+        1.567615406950171
+      ],
+      "quality": {
+        "lower_bound": 0.3587656852731631,
+        "upper_bound": 0.3819708853311084,
+        "absolute_gap": 0.023205200057945297,
+        "relative_gap": 0.06468065651339237,
+        "relative_tolerance": 0.01,
+        "absolute_tolerance": 1e-06,
+        "scope": "fixed_start_to_supplied_target_sets_graph",
+        "within_tolerance": false,
+        "status": "gap_exceeds_tolerance"
+      },
+      "rounded_path_count": 50
+    },
+    {
+      "target": 15,
+      "envelope": 12,
+      "region": 11,
+      "seconds": 3.0776336250000895,
+      "success": true,
+      "error": null,
+      "solver_settings": {
+        "max_rounded_paths": 50,
+        "max_rounding_trials": 75,
+        "rounding_seed": 0,
+        "relative_gap_tolerance": 0.01,
+        "mip_time_limit": 60.0,
+        "mip_relative_gap": 0.01
+      },
+      "rounding_diagnostics": {
+        "rounded_path_count": 50,
+        "successful_rounded_path_count": 50,
+        "max_rounded_paths": 50,
+        "max_rounding_trials": 75,
+        "rounding_trials_attempted": null,
+        "trials_note": "Drake SamplePaths exposes a trial cap, not its actual attempt count"
+      },
+      "cost": 0.39890781280195486,
+      "solver_cost": 0.3989078147808604,
+      "endpoint": [
+        0.21704168572947458,
+        0.16226320760324411,
+        1.6067763158148087
+      ],
+      "quality": {
+        "lower_bound": 0.35863614361438245,
+        "upper_bound": 0.39890781280195486,
+        "absolute_gap": 0.04027166918757241,
+        "relative_gap": 0.11229116168189075,
+        "relative_tolerance": 0.01,
+        "absolute_tolerance": 1e-06,
+        "scope": "fixed_start_to_supplied_target_sets_graph",
+        "within_tolerance": false,
+        "status": "gap_exceeds_tolerance"
+      },
+      "rounded_path_count": 50
+    },
+    {
+      "target": 16,
+      "envelope": 12,
+      "region": 28,
+      "seconds": 2.99816964799993,
+      "success": true,
+      "error": null,
+      "solver_settings": {
+        "max_rounded_paths": 50,
+        "max_rounding_trials": 75,
+        "rounding_seed": 0,
+        "relative_gap_tolerance": 0.01,
+        "mip_time_limit": 60.0,
+        "mip_relative_gap": 0.01
+      },
+      "rounding_diagnostics": {
+        "rounded_path_count": 50,
+        "successful_rounded_path_count": 50,
+        "max_rounded_paths": 50,
+        "max_rounding_trials": 75,
+        "rounding_trials_attempted": null,
+        "trials_note": "Drake SamplePaths exposes a trial cap, not its actual attempt count"
+      },
+      "cost": 0.3989078148677189,
+      "solver_cost": 0.39890781564236877,
+      "endpoint": [
+        0.21706706590781377,
+        0.16221251290834449,
+        1.6068021815738074
+      ],
+      "quality": {
+        "lower_bound": 0.35863614582931647,
+        "upper_bound": 0.3989078148677189,
+        "absolute_gap": 0.04027166903840246,
+        "relative_gap": 0.11229116057244468,
+        "relative_tolerance": 0.01,
+        "absolute_tolerance": 1e-06,
+        "scope": "fixed_start_to_supplied_target_sets_graph",
+        "within_tolerance": false,
+        "status": "gap_exceeds_tolerance"
+      },
+      "rounded_path_count": 50
+    },
+    {
+      "target": 17,
+      "envelope": 13,
+      "region": 11,
+      "seconds": 3.184310930999345,
+      "success": true,
+      "error": null,
+      "solver_settings": {
+        "max_rounded_paths": 50,
+        "max_rounding_trials": 75,
+        "rounding_seed": 0,
+        "relative_gap_tolerance": 0.01,
+        "mip_time_limit": 60.0,
+        "mip_relative_gap": 0.01
+      },
+      "rounding_diagnostics": {
+        "rounded_path_count": 50,
+        "successful_rounded_path_count": 50,
+        "max_rounded_paths": 50,
+        "max_rounding_trials": 75,
+        "rounding_trials_attempted": null,
+        "trials_note": "Drake SamplePaths exposes a trial cap, not its actual attempt count"
+      },
+      "cost": 0.3817856289259489,
+      "solver_cost": 0.3817856299614691,
+      "endpoint": [
+        0.43816262069647693,
+        -0.2815562418294402,
+        1.8120452462527072
+      ],
+      "quality": {
+        "lower_bound": 0.35857774020141137,
+        "upper_bound": 0.3817856289259489,
+        "absolute_gap": 0.02320788872453755,
+        "relative_gap": 0.06472205639843062,
+        "relative_tolerance": 0.01,
+        "absolute_tolerance": 1e-06,
+        "scope": "fixed_start_to_supplied_target_sets_graph",
+        "within_tolerance": false,
+        "status": "gap_exceeds_tolerance"
+      },
+      "rounded_path_count": 50
+    },
+    {
+      "target": 18,
+      "envelope": 13,
+      "region": 28,
+      "seconds": 3.0295808920000127,
+      "success": true,
+      "error": null,
+      "solver_settings": {
+        "max_rounded_paths": 50,
+        "max_rounding_trials": 75,
+        "rounding_seed": 0,
+        "relative_gap_tolerance": 0.01,
+        "mip_time_limit": 60.0,
+        "mip_relative_gap": 0.01
+      },
+      "rounding_diagnostics": {
+        "rounded_path_count": 50,
+        "successful_rounded_path_count": 50,
+        "max_rounded_paths": 50,
+        "max_rounding_trials": 75,
+        "rounding_trials_attempted": null,
+        "trials_note": "Drake SamplePaths exposes a trial cap, not its actual attempt count"
+      },
+      "cost": 0.38197581567112665,
+      "solver_cost": 0.38197581810026054,
+      "endpoint": [
+        0.5429556470433684,
+        -0.4944840370399812,
+        1.8841133087695536
+      ],
+      "quality": {
+        "lower_bound": 0.35854164874230665,
+        "upper_bound": 0.38197581567112665,
+        "absolute_gap": 0.02343416692882,
+        "relative_gap": 0.06535967860643926,
+        "relative_tolerance": 0.01,
+        "absolute_tolerance": 1e-06,
+        "scope": "fixed_start_to_supplied_target_sets_graph",
+        "within_tolerance": false,
+        "status": "gap_exceeds_tolerance"
+      },
+      "rounded_path_count": 50
+    },
+    {
+      "target": 19,
+      "envelope": 14,
+      "region": 28,
+      "seconds": 2.968760125000699,
+      "success": true,
+      "error": null,
+      "solver_settings": {
+        "max_rounded_paths": 50,
+        "max_rounding_trials": 75,
+        "rounding_seed": 0,
+        "relative_gap_tolerance": 0.01,
+        "mip_time_limit": 60.0,
+        "mip_relative_gap": 0.01
+      },
+      "rounding_diagnostics": {
+        "rounded_path_count": 50,
+        "successful_rounded_path_count": 50,
+        "max_rounded_paths": 50,
+        "max_rounding_trials": 75,
+        "rounding_trials_attempted": null,
+        "trials_note": "Drake SamplePaths exposes a trial cap, not its actual attempt count"
+      },
+      "cost": 0.38182414241179247,
+      "solver_cost": 0.38182414416862426,
+      "endpoint": [
+        0.6100426099697681,
+        -0.6287461083438188,
+        1.9076030387753553
+      ],
+      "quality": {
+        "lower_bound": 0.3584366212350418,
+        "upper_bound": 0.38182414241179247,
+        "absolute_gap": 0.023387521176750692,
+        "relative_gap": 0.06524869332872804,
+        "relative_tolerance": 0.01,
+        "absolute_tolerance": 1e-06,
+        "scope": "fixed_start_to_supplied_target_sets_graph",
+        "within_tolerance": false,
+        "status": "gap_exceeds_tolerance"
+      },
+      "rounded_path_count": 50
+    }
+  ],
+  "stage1_gcs_solve_calls": 20,
+  "stage2_gcs_solve_calls": 1,
+  "stage1_seconds": 70.04189109300023,
+  "stage1_rounding_diagnostics": {
+    "rounded_path_count": 1000,
+    "successful_rounded_path_count": 1000,
+    "rounding_trials_attempted": null
+  },
+  "stage1_quality": {
+    "lower_bound": 0.3584366212350418,
+    "upper_bound": 0.3817856289259489,
+    "absolute_gap": 0.023349007690907142,
+    "relative_gap": 0.06514124480488345,
+    "relative_tolerance": 0.01,
+    "absolute_tolerance": 1e-06,
+    "scope": "union_of_sampled_target_intersections_graph_not_continuous_ssm",
+    "within_tolerance": false,
+    "status": "gap_exceeds_tolerance"
+  },
+  "stage1_cost": 0.3817856289259489,
+  "selected_target": 17,
+  "selected_envelope": 13,
+  "selected_region": 11,
+  "selected_ssm_branch": 0,
+  "selected_chart_piece": 0,
+  "stage1_endpoint": [
+    0.43816262069647693,
+    -0.2815562418294402,
+    1.8120452462527072
+  ],
+  "stage1_region_route": [
+    1,
+    3,
+    11
+  ],
+  "stage1_route_spec": {
+    "regions": [
+      1,
+      3,
+      11
+    ],
+    "shifts": [
+      [
+        0.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        0.0
+      ]
+    ]
+  },
+  "projection_seconds": 0.010130144999493496,
+  "estimated_goal": [
+    0.4354851956203689,
+    -0.27579309219888026,
+    1.816020446204939
+  ],
+  "projection_distance": 0.0074956462938574235,
+  "projection_connection_baseline": {
+    "method": "stage1_path_plus_projection_segment",
+    "success": true,
+    "stage1_cost": 0.3817856289259489,
+    "connector_length": 0.0074956462938574235,
+    "connector_region": 11,
+    "connector_reliability": 1.0,
+    "connector_weight": 0.010000000000000009,
+    "connector_cost": 7.495646293857431e-05,
+    "cost": 0.3818605853888875,
+    "connector_in_selected_region": true,
+    "collision_free": true,
+    "collision_samples": 620,
+    "endpoint_error": 0.0,
+    "start_error": 0.0,
+    "waypoints": [
+      [
+        -2.972349782093813,
+        -2.26926174311021,
+        -1.2375903668686903
+      ],
+      [
+        -2.8654668731317634,
+        -1.9541214021782742,
+        -1.2285002824506597
+      ],
+      [
+        -0.42573778774333837,
+        -1.8400643103835372,
+        -1.0210112110099923
+      ],
+      [
+        0.43816262069647693,
+        -0.2815562418294402,
+        1.8120452462527072
+      ],
+      [
+        0.4354851956203689,
+        -0.27579309219888026,
+        1.816020446204939
+      ]
+    ],
+    "seconds": 0.019310163999762153,
+    "gcs_solve_calls": 0
+  },
+  "stage2_seconds": 4.4182068789996265,
+  "stage2_solution_source": "native_gcs",
+  "stage2_quality": {
+    "lower_bound": 0.3586313760153059,
+    "upper_bound": 0.3818392430276426,
+    "absolute_gap": 0.02320786701233668,
+    "relative_gap": 0.06471231622340316,
+    "relative_tolerance": 0.01,
+    "absolute_tolerance": 1e-06,
+    "scope": "fixed_endpoint_graph",
+    "within_tolerance": false,
+    "status": "gap_exceeds_tolerance"
+  },
+  "stage2_mip_details": null,
+  "stage2_rounded_path_count": 200,
+  "stage2_native_cost": 0.3818392430276426,
+  "stage2_additional_route_results": [
+    {
+      "region_route": [
+        1,
+        3,
+        11
+      ],
+      "success": true,
+      "cost": 0.3818392439401875,
+      "solver_cost": 0.38183925136959984
+    }
+  ],
+  "stage2_additional_convex_restriction_calls": 1,
+  "stage2_region_route": [
+    1,
+    19,
+    28
+  ],
+  "stage2_route_spec": {
+    "regions": [
+      1,
+      19,
+      28
+    ],
+    "shifts": [
+      [
+        0.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        0.0
+      ]
+    ]
+  },
+  "waypoints": [
+    [
+      -2.972349782093813,
+      -2.26926174311021,
+      -1.2375903668686903
+    ],
+    [
+      -2.865473447565631,
+      -1.9541214021782742,
+      -1.2285038816241207
+    ],
+    [
+      -0.42573778774333837,
+      -1.8397301755016153,
+      -1.021051306288717
+    ],
+    [
+      0.4354851956203689,
+      -0.27579309219888026,
+      1.816020446204939
+    ]
+  ],
+  "cost": 0.3818392430276426,
+  "solver_cost": 0.38183924440994105,
+  "collision_free": true,
+  "collision_samples": 619,
+  "endpoint_error": 0.0,
+  "start_error": 0.0,
+  "fixed_goal_error": 0.0,
+  "link_lengths": [
+    1,
+    1,
+    1
+  ],
+  "obstacles": [
+    {
+      "type": "circle",
+      "center": [
+        0.75,
+        0.75
+      ],
+      "radius": 0.15
+    }
+  ],
+  "link_radius": 0.02,
+  "start_point": [
+    0.49999999999998457,
+    0.5000000000000024
+  ],
+  "cost_type": "region_weighted_joint_space_length",
+  "stage2_minus_projection_connection_cost": -2.134236124490263e-05,
+  "solve_seconds": 74.46009797199986,
+  "status": "success",
+  "message": "Validated second-stage path to continuous IK goal; graph-model quality: gap_exceeds_tolerance.",
+  "total_seconds": 77.56487292999918,
+  "two_stage_total_seconds": 77.56487292999918
+}

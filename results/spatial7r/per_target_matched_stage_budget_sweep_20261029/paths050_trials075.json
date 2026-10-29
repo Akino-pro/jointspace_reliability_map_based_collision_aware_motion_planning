@@ -1,0 +1,481 @@
+{
+  "success": true,
+  "planner": "spatial7R_two_stage_gcs",
+  "robot": {
+    "a": [
+      0.4,
+      0.8,
+      0.2,
+      1,
+      0.6,
+      0.4,
+      0
+    ],
+    "d": [
+      -0.4,
+      -0.6,
+      0.2,
+      0.6,
+      -0.8,
+      0.2,
+      0
+    ],
+    "alpha": [
+      -1.0821041362364843,
+      -1.3788101090755203,
+      1.5707963267948966,
+      0.5061454830783556,
+      1.413716694115407,
+      -1.3962634015954636,
+      0
+    ],
+    "reference_CA": [
+      [
+        -1.8675022996339325,
+        1.8675022996339325
+      ],
+      [
+        -2.8623399732707,
+        2.4609142453120043
+      ],
+      [
+        -2.303834612632515,
+        2.303834612632515
+      ],
+      [
+        -2.6354471705114375,
+        1.780235837034216
+      ],
+      [
+        -2.007128639793479,
+        2.600540585471551
+      ],
+      [
+        -1.3089969389957472,
+        2.251474735072685
+      ],
+      [
+        0.2792526803190927,
+        3.368485456349056
+      ]
+    ],
+    "reliabilities": [
+      0.2,
+      0.3,
+      0.4,
+      0.5,
+      0.6,
+      0.7,
+      0.8
+    ]
+  },
+  "task": "full_pose_SE3",
+  "task_dimension": 6,
+  "ssm_regular_dimension": 1,
+  "ssm_branch_limit": 8,
+  "start_configuration": [
+    0.2,
+    -0.62,
+    0.3,
+    -0.55,
+    0.44,
+    -0.36,
+    0.12
+  ],
+  "start_point": [
+    3.0205333341656058,
+    -1.4946400075697015,
+    0.5399182591886
+  ],
+  "start_pose": [
+    [
+      0.9134005010928171,
+      0.3868562982223874,
+      -0.12665594786294715,
+      3.0205333341656058
+    ],
+    [
+      -0.342233411090386,
+      0.8982806048465608,
+      0.2756233794327605,
+      -1.4946400075697015
+    ],
+    [
+      0.2203992217246446,
+      -0.20840863581475658,
+      0.9528851051312549,
+      0.5399182591886
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "task_position_distance": 0.30000000000000004,
+  "task_orientation_difference_degrees": 20.000000000000004,
+  "goal_point": [
+    3.104211167896474,
+    -1.206970564996001,
+    0.5555487406733661
+  ],
+  "goal_pose": [
+    [
+      0.9927983058760178,
+      0.05548026963653996,
+      -0.10617656771042334,
+      3.104211167896474
+    ],
+    [
+      -0.03635171727204306,
+      0.9840255382338239,
+      0.17427648365458462,
+      -1.206970564996001
+    ],
+    [
+      0.11414936049353361,
+      -0.16916169715597557,
+      0.9789556903732812,
+      0.5555487406733661
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "obstacles": [
+    {
+      "type": "sphere",
+      "center": [
+        3.06237225103104,
+        -1.3508052862828512,
+        0.747733499930983
+      ],
+      "radius": 0.08
+    }
+  ],
+  "link_radius": 0.015,
+  "physical_joint_limits": null,
+  "iris_checkpoint": "data/iris/spatial7R_30cm20deg_iris_regions.npz",
+  "geometric_epsilon": 0.025,
+  "ssm_arc_spacing": 0.044,
+  "reliability_epsilon": 0.01,
+  "gcs_solve_calls": 5,
+  "coverage_is_complete": false,
+  "continuous_coverage_certified": false,
+  "global_optimality_certified": false,
+  "solver_settings": {
+    "max_rounded_paths": 50,
+    "max_rounding_trials": 75
+  },
+  "resource_limits": {
+    "partition_cells": 20000,
+    "regions": 160,
+    "directed_edges": 1500,
+    "targets": 128
+  },
+  "original_region_count": 1,
+  "iris_generation_seconds": 16.82297558600021,
+  "iris_coverage_radius": 0.16,
+  "ssm_branch_count": 1,
+  "ssm_trace": {
+    "branch_limit": 8,
+    "branch_count": 1,
+    "ik_attempt_budget": 80,
+    "ik_attempts": 80,
+    "failed_ik": 24,
+    "failed_traces": 0,
+    "duplicate_starts": 55,
+    "all_branches_certified": false,
+    "termination_reason": "ik_attempt_budget_exhausted"
+  },
+  "local_partition_cell_count": 24,
+  "merged_partition_cell_count": 24,
+  "reliability_rule": "union_of_branch_recovery_sets",
+  "reliability_partition_scope": "exact_refinement_restricted_to_iris_coverage",
+  "region_count": 24,
+  "adjacency_statistics": {
+    "input_region_count": 24,
+    "region_pairs": 276,
+    "bounding_lp_count": 0,
+    "candidate_intersections": 212,
+    "intersection_lp_count": 212,
+    "directed_edges": 424,
+    "periodic": false,
+    "periodic_directed_edges": 0
+  },
+  "edge_count": 424,
+  "sampling_mode": "fixed_arc_spacing",
+  "ssm_branch_arc_lengths": [
+    4.010207210884432
+  ],
+  "ssm_total_arc_length": 4.010207210884432,
+  "ssm_branch_sample_counts": [
+    92
+  ],
+  "sample_refinement_failures": 0,
+  "graph_task_sha256": "1b2e99d0bd38766de1907b8313cd808eb0d92c49e43babc411c3cc795d6fd1cf",
+  "hull_targets_sha256": "ef3cd88a5ac0cea2332d11761445ae286b593a5f1ab256fe2aaeea7870b1e6d3",
+  "envelope_count": 23,
+  "target_set_count": 4,
+  "actual_sample_count": 92,
+  "geometry_seconds": 1.4434079220009153,
+  "ssm_branch_summaries": [
+    {
+      "branch": 0,
+      "arc_length": 4.010207210884432,
+      "sample_count": 92,
+      "envelope_count": 23,
+      "target_set_count": 4
+    }
+  ],
+  "stage1_solver_settings": {
+    "max_rounded_paths": 50,
+    "max_rounding_trials": 75,
+    "solver_backend": "mosek"
+  },
+  "stage2_solver_settings": {
+    "max_rounded_paths": 50,
+    "max_rounding_trials": 75,
+    "solver_backend": "mosek"
+  },
+  "stage1_budget": {
+    "allocation": "fixed_per_target",
+    "target_count": 4,
+    "total_max_rounded_paths": 200,
+    "total_max_rounding_trials": 300
+  },
+  "stage1_seconds": 13.892168927999592,
+  "stage1_candidates": [
+    {
+      "target": 0,
+      "branch": 0,
+      "success": false,
+      "error": "No feasible rounded path returned",
+      "solver_settings": {
+        "max_rounded_paths": 50,
+        "max_rounding_trials": 75,
+        "solver_backend": "mosek"
+      },
+      "rounding_diagnostics": {
+        "rounded_path_count": 0,
+        "successful_rounded_path_count": 0,
+        "max_rounded_paths": 50,
+        "max_rounding_trials": 75,
+        "rounding_trials_attempted": null,
+        "trials_note": "Drake SamplePaths exposes a trial cap, not its actual attempt count"
+      }
+    },
+    {
+      "target": 1,
+      "branch": 0,
+      "success": false,
+      "error": "No feasible rounded path returned",
+      "solver_settings": {
+        "max_rounded_paths": 50,
+        "max_rounding_trials": 75,
+        "solver_backend": "mosek"
+      },
+      "rounding_diagnostics": {
+        "rounded_path_count": 1,
+        "successful_rounded_path_count": 0,
+        "max_rounded_paths": 50,
+        "max_rounding_trials": 75,
+        "rounding_trials_attempted": null,
+        "trials_note": "Drake SamplePaths exposes a trial cap, not its actual attempt count"
+      }
+    },
+    {
+      "target": 2,
+      "branch": 0,
+      "success": false,
+      "error": "No feasible rounded path returned",
+      "solver_settings": {
+        "max_rounded_paths": 50,
+        "max_rounding_trials": 75,
+        "solver_backend": "mosek"
+      },
+      "rounding_diagnostics": {
+        "rounded_path_count": 0,
+        "successful_rounded_path_count": 0,
+        "max_rounded_paths": 50,
+        "max_rounding_trials": 75,
+        "rounding_trials_attempted": null,
+        "trials_note": "Drake SamplePaths exposes a trial cap, not its actual attempt count"
+      }
+    },
+    {
+      "target": 3,
+      "branch": 0,
+      "success": true,
+      "error": null,
+      "solver_settings": {
+        "max_rounded_paths": 50,
+        "max_rounding_trials": 75,
+        "solver_backend": "mosek"
+      },
+      "rounding_diagnostics": {
+        "rounded_path_count": 1,
+        "successful_rounded_path_count": 1,
+        "max_rounded_paths": 50,
+        "max_rounding_trials": 75,
+        "rounding_trials_attempted": null,
+        "trials_note": "Drake SamplePaths exposes a trial cap, not its actual attempt count"
+      },
+      "cost": 0.0043086444333183295,
+      "quality": {
+        "lower_bound": 0.004225383149126327,
+        "upper_bound": 0.0043086444333183295,
+        "absolute_gap": 8.326128419200267e-05,
+        "relative_gap": 0.01970502585291429,
+        "relative_tolerance": 0.01,
+        "absolute_tolerance": 1e-06,
+        "scope": "fixed_start_to_supplied_target_sets_graph",
+        "within_tolerance": false,
+        "status": "gap_exceeds_tolerance"
+      },
+      "rounded_path_count": 1
+    }
+  ],
+  "stage1_rounding_diagnostics": {
+    "rounded_path_count": 2,
+    "successful_rounded_path_count": 1,
+    "rounding_trials_attempted": null
+  },
+  "stage1_quality": {
+    "lower_bound": null,
+    "upper_bound": 0.0043086444333183295,
+    "absolute_gap": null,
+    "relative_gap": null,
+    "relative_tolerance": 0.01,
+    "absolute_tolerance": 1e-06,
+    "scope": "sampled_full_pose_target_intersections_graph",
+    "within_tolerance": false,
+    "status": "bound_unavailable"
+  },
+  "stage1_cost": 0.0043086444333183295,
+  "selected_target": 3,
+  "selected_ssm_branch": 0,
+  "stage1_region_route": [
+    16
+  ],
+  "estimated_goal": [
+    0.44301832236103733,
+    -0.7496097719258867,
+    0.4620122149073582,
+    -0.631006107453679,
+    0.5372073289444153,
+    -0.4248048859629434,
+    0.3716597123878356
+  ],
+  "projection_distance": 1.3391386544568114e-05,
+  "projection_connection_baseline": {
+    "method": "comparison_only_stage1_path_plus_projection_segment",
+    "cost": 0.004308778347183775,
+    "connector_length": 1.3391386544568114e-05,
+    "connector_weight": 0.010000000000000009,
+    "collision_free": true,
+    "collision_samples": 47,
+    "waypoints": [
+      [
+        0.2,
+        -0.62,
+        0.3,
+        -0.55,
+        0.44,
+        -0.36,
+        0.12
+      ],
+      [
+        0.44301525756401,
+        -0.749604389905296,
+        0.46200659366519975,
+        -0.6310052402622442,
+        0.5371982788872781,
+        -0.4248065077141804,
+        0.37166462014816787
+      ],
+      [
+        0.44301832236103733,
+        -0.7496097719258867,
+        0.4620122149073582,
+        -0.631006107453679,
+        0.5372073289444153,
+        -0.4248048859629434,
+        0.3716597123878356
+      ]
+    ]
+  },
+  "stage2_rounding_diagnostics": {
+    "rounded_path_count": 1,
+    "successful_rounded_path_count": 1,
+    "max_rounded_paths": 50,
+    "max_rounding_trials": 75,
+    "rounding_trials_attempted": null,
+    "trials_note": "Drake SamplePaths exposes a trial cap, not its actual attempt count"
+  },
+  "stage2_seconds": 0.38903960500101675,
+  "waypoints": [
+    [
+      0.2,
+      -0.62,
+      0.3,
+      -0.55,
+      0.44,
+      -0.36,
+      0.12
+    ],
+    [
+      0.44301832236103733,
+      -0.7496097719258867,
+      0.4620122149073582,
+      -0.631006107453679,
+      0.5372073289444153,
+      -0.4248048859629434,
+      0.3716597123878356
+    ]
+  ],
+  "cost": 0.004308689987573309,
+  "collision_free": true,
+  "collision_samples": 45,
+  "endpoint_error": 5.438959822042073e-16,
+  "orientation_error_radians": 2.368453480561025e-16,
+  "start_error": 0.0,
+  "fixed_goal_error": 0.0,
+  "graph_path_valid": true,
+  "stage2_quality": {
+    "lower_bound": 0.004308689987573307,
+    "upper_bound": 0.004308689987573309,
+    "absolute_gap": 1.734723475976807e-18,
+    "relative_gap": 4.0261041777893586e-16,
+    "relative_tolerance": 0.01,
+    "absolute_tolerance": 1e-06,
+    "scope": "fixed_start_to_supplied_target_sets_graph",
+    "within_tolerance": true,
+    "status": "within_tolerance"
+  },
+  "stage2_native_cost": 0.004308689987573309,
+  "stage2_solution_source": "native_gcs",
+  "stage2_region_route": [
+    16
+  ],
+  "stage2_additional_route_results": [
+    {
+      "region_route": [
+        16
+      ],
+      "success": true,
+      "cost": 0.004308689987573309,
+      "solver_cost": 0.004308689987573308
+    }
+  ],
+  "stage2_rounded_path_count": 1,
+  "solver_name": "MOSEK",
+  "status": "success",
+  "message": "Validated collision-free seven-angle path and full goal pose.",
+  "total_seconds": 15.803785877000337,
+  "two_stage_total_seconds": 15.803785877000337
+}

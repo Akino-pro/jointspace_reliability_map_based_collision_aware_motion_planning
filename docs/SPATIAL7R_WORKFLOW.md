@@ -1,5 +1,27 @@
 # Spatial 7R pre-failure planning
 
+## Matched-stage budget sweep (2026-10-29)
+
+`python -m scripts.spatial7R_per_target_budget_sweep` runs only the primary
+independent-target method at 50/75, 100/150, 200/300, 300/450 and 400/600.
+Each first-stage target receives the full case budget; stage two uses the same
+budget, plus the retained first-stage route restriction. Both 7R defaults
+remain 200/300. The 4R API and CLI now explicitly default both stages to 200/300.
+
+All five fresh runs returned final cost 0.004308689987573309. Total measured
+times, including preprocessing, were 15.804, 16.765, 15.139, 14.985 and 14.849 s.
+All final paths passed collision, graph, position and orientation checks.
+The graph/task and target fingerprints matched across all runs: 24 regions,
+424 directed edges, 4 targets, one detected SSM branch and 92 samples.
+Each case sampled only two unique first-stage routes in total, with one
+successful restriction and one target returning a valid path. Stage two
+sampled one unique route. Larger caps did not produce additional unique
+routes or improve cost in this scene. Three missing target solutions do not
+prove infeasibility. Single-run timing differences do not establish a speed
+advantage for larger budgets; no global optimality is certified.
+
+See [full measured results and charts](../results/spatial7r/per_target_matched_stage_budget_sweep_20261029/README.md).
+
 Optional comparisons now include `--compare-union-hulls`,
 `--compare-nonlinear-goal` and `--compare-all`, alongside `--compare-sampled`.
 See [goal-set comparisons](GOAL_SET_COMPARISONS.md) for the terminal models,

@@ -28,6 +28,9 @@ def summarize(paths):
                    baseline_input_sha256=baseline.get("input_sha256"),
                    baseline_solver_settings=baseline.get("solver_settings"),
                    two_stage_solver_settings=report.get("stage1_solver_settings", report.get("solver_settings")),
+                   stage1_budget_mode=report.get("stage1_budget_mode", "per_target"),
+                   stage1_budget=report.get("stage1_budget"),
+                   stage1_rounding_diagnostics=report.get("stage1_rounding_diagnostics"),
                    stage1_quality=report.get("stage1_quality"),
                    stage2_quality=report.get("stage2_quality"),
                    sampled_quality=baseline.get("quality"),
@@ -47,6 +50,8 @@ def summarize(paths):
                             input_sha256=comparison.get("input_sha256"),
                             solver_settings=comparison.get("solver_settings"),
                             restriction_solver=comparison.get("restriction_solver"))
+            row[key]["stage1_rounding_diagnostics"] = comparison.get("stage1_rounding_diagnostics")
+            row[key]["stage2_rounding_diagnostics"] = comparison.get("stage2_rounding_diagnostics")
             if report.get("success") and comparison.get("success"):
                 row[key]["two_stage_minus_baseline_cost"] = report["cost"]-comparison["cost"]
         rows.append(row)
