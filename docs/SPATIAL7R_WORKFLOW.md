@@ -1,12 +1,127 @@
 # Spatial 7R pre-failure planning
 
-## Matched-stage budget sweep (2026-10-29)
+## Affine-dimension adjacency attempt
+
+The requested d-minus-one filter is implemented and tested. Applied to all
+2,856 regions, it keeps 38,094 of 869,670 directed edges (95.62% fewer).
+All regions remain in one connected component and all 23 target sets retain
+the exact original target hash. The 19,047 candidate unordered pairs passed
+affine tests: 18,204 dimension-six intersections and 843 dimension-seven
+overlaps. Tolerance is 1e-7 after normalizing halfspace normals. Shared
+filtering/preprocessing took 238.99 s, reusing the original adjacency cache.
+
+Both 200/300 methods now pass graph construction but still fail before the
+first native solve result within this VM's memory. At the 6 GiB worker limit,
+union/independent attempts lasted 34.08/37.29 s. Removing redundant regional
+and edge constraints preserves the same geometry, graph, targets and cost;
+it reduced regional rows 58,848->44,186 and edge membership rows
+591,087->93,552. At 7 GiB the compact union attempt lasted64.90s before SIGKILL,
+and the first independent target lasted48.45s before supervisor termination.
+These are aborted attempt times, not complete solve timings. No final path
+or new feasible cost is available. No arbitrary nearest-neighbor pruning,
+corridor cropping, reliability merging, or replacement seed trajectory was used.
+
+See [the full report and commands](../results/spatial7r/facet_graph_60cm90deg_comparison/README.md).
+Optional API inputs: `min_intersection_dimension`,
+`candidate_adjacency_checkpoint`, `intersection_dimension_tolerance`, and
+`compact_constraints`. Defaults preserve the existing planner behavior.
+178 regression tests:170 passed,eight optional MuJoCo skips.
+
+## Complete-graph attempts at 200/300
+
+The full new-scene graph was explicitly prepared without cropping after
+raising experiment-only guards: 2,856 regions, 869,670 directed edges and
+23 effective targets. Shared preprocessing took 264.93 s. Independent-target
+and union-hull workers were attempted sequentially at 200/300 in both stages.
+They stopped at the supervisor's 6 GiB RSS threshold during GCS construction:
+62.29 s for the first independent target and 65.29 s for the union graph.
+Neither reached relaxation, sampling or stage two; no new path/cost exists.
+See [complete measurements and logs](../results/spatial7r/full_graph_60cm90deg_comparison/README.md).
+
+An axis-bound contact diagnostic found that at least 831,576 edges (95.62%)
+have intersection-dimension upper bound below six. The original authors'
+optional d-minus-one intersection rule would leave at most 38,094 candidates
+for exact rank checks. That rule was not applied to these full-graph attempts.
+It is a possible next experiment, requiring connectivity and path-cost checks,
+not a guarantee of unchanged optima for arbitrary convex-region graphs.
+The vectorized adjacency broad phase preserves all original nonempty-contact
+edges and passes the existing exact all-pairs parity tests. Adjacency caching
+is keyed by the exact region geometry/reliability fingerprint.
+
+## Active task: 60 cm / base-Z 90 degrees / exact midpoint obstacle
+
+The current default task preserves the original start configuration and
+translation direction, doubles the position displacement to 0.60 m, and
+sets `R_goal = Rz(+90 degrees) @ R_start`. This is a rotation about the fixed
+base/world Z axis, not the local tool Z axis. The sphere radius remains 0.08 m;
+its centre is exactly `(p_start + p_goal)/2`, with no vertical offset.
+World positions (m): start (3.0205333342,-1.4946400076,0.5399182592),
+goal (3.1878890016,-0.9193011224,0.5711792222), obstacle centre
+(3.1042111679,-1.2069705650,0.5555487407).
+
+New artifacts are kept separate from the previous 30 cm / 20-degree task:
+`results/spatial7r/spatial7R_60cm90deg_scene.json`,
+`data/iris/spatial7R_60cm90deg_iris_regions.npz`,
+`results/spatial7r/spatial7R_60cm90deg_two_stage_path.json`, and
+`visualizations/spatial7R_60cm90deg_mujoco/`.
+Run `python -m scripts.spatial7R_midpoint_obstacle_experiment` to build the
+new IRIS coverage and solve the primary method at 200/300 in both stages.
+The auxiliary safe corridor supplies IRIS seeds only, not the final GCS path.
+The previous five-budget results below describe the historical task and
+must not be interpreted as performance for this new scene.
+
+The first attempt generated three original IRIS regions (162.14 s total),
+then stopped at `resource_limit`: reliability intersections produced 2,856
+regions against the configured limit of 160. No GCS call or new optimized
+trajectory was produced. This is a computational coverage/partition limit,
+not an infeasibility result. The saved report explicitly records failure.
+
+Run `python -m scripts.spatial7R_mujoco_viewer --scene-only` to inspect the
+new task without a connecting trajectory. Press S for the start robot pose
+and G for the goal pose; both fixed endpoint coordinate frames remain visible.
+Add `--render` for the paired endpoint image and obstacle close-up in
+`visualizations/spatial7R_60cm90deg_mujoco/`. Default viewer execution also
+falls back to this preview when the active task has no successful saved path.
+Both endpoints passed native MuJoCo contact checks. Twelve native MuJoCo
+tests passed; the Docker regression ran 172 tests with 164 passes and eight
+optional MuJoCo skips.
+
+## Historical 30 cm / 20-degree MuJoCo visualization
+
+Run `python -m scripts.spatial7R_mujoco_viewer --path results/spatial7r/per_target_matched_stage_budget_sweep_20261029/paths200_trials300.json --output-dir visualizations/spatial7R_mujoco_20261029` on the native host to replay
+the matched-budget experiment's 200/300 path with its saved seven-joint DH
+parameters and exact capsule/sphere geometry. Use `--render` to export PNG/GIF
+and start/goal side-by-side and close-up images into
+`visualizations/spatial7R_mujoco_20261029/`. This is kinematic path replay.
+
+The fixed start and goal tool coordinate frames are both shown and labeled
+START_X/Y/Z and GOAL_X/Y/Z: local X is red, Y green, Z blue. The blue and green
+spheres mark the start and goal tool positions; the larger red sphere is the
+actual obstacle. The task constrains full SE(3) pose (three position and three
+orientation degrees of freedom), not just the XYZ tool location. The replay
+report saves both homogeneous poses and verifies the final tool rotation.
+
+World coordinates in metres: start (3.020533,-1.494640,0.539918),
+goal (3.104211,-1.206971,0.555549), obstacle centre
+(3.062372,-1.350805,0.747733), radius 0.08. The task translation is 0.30 m
+and relative orientation change is 20 degrees. The original path and
+obstacle positions are preserved. Eleven native MuJoCo tests passed, including
+seven-joint random-pose FK/rotation and contact parity against the planner.
+The rendered replay passed 41 sampled collision/contact checks with maximum
+MuJoCo/planner tool-position difference 2.24e-15 m.
+
+Window controls: mouse rotate/zoom, Space pause, R restart, L toggle loop,
+T toggle path and frame-axis geometry, Esc close.
+
+## Historical 30 cm / 20-degree matched-stage budget sweep (2026-10-29)
 
 `python -m scripts.spatial7R_per_target_budget_sweep` runs only the primary
 independent-target method at 50/75, 100/150, 200/300, 300/450 and 400/600.
 Each first-stage target receives the full case budget; stage two uses the same
 budget, plus the retained first-stage route restriction. Both 7R defaults
 remain 200/300. The 4R API and CLI now explicitly default both stages to 200/300.
+The runner now defaults to the new 60 cm / 90-degree cache and a separate
+output directory. The following completed measurements used the previous scene.
 
 All five fresh runs returned final cost 0.004308689987573309. Total measured
 times, including preprocessing, were 15.804, 16.765, 15.139, 14.985 and 14.849 s.

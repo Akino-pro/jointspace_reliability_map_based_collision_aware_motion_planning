@@ -1,0 +1,6 @@
+BEGIN full graph union_hulls: each target 200/300; stage two 200/300
+7R geometry: 1 branches, 2856 regions, 38094 edges, 54 samples, 23 targets
+GCS model build: 2856 regions, 38094 edges, 23 targets
+GCS constraint compaction: {"edge_membership_rows_before": 591087, "edge_membership_rows_after": 93552, "region_rows_before": 58848, "region_rows_after": 44186}
+GCS region graph built in 5.67s
+GCS terminals attached; starting relaxation and rounding after 5.68s of model construction

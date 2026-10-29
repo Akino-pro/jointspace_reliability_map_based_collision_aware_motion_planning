@@ -1,0 +1,17 @@
+{
+  "method": "upper bound on affine intersection dimension from coordinate bounds, not exact rank test",
+  "tolerance": 1e-07,
+  "edges": 869670,
+  "dimension_upper_bound_counts": {
+    "0": 7936,
+    "1": 55936,
+    "2": 161856,
+    "3": 252112,
+    "4": 230064,
+    "5": 123672,
+    "6": 36408,
+    "7": 1686
+  },
+  "edges_with_upper_bound_below_6": 831576,
+  "fraction_with_upper_bound_below_6": 0.956197178240022
+}

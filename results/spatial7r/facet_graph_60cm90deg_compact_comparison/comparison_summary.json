@@ -1,0 +1,37 @@
+{
+  "status": "complete",
+  "budgets": [
+    200,
+    300
+  ],
+  "coverage": "complete existing 2856-region reliability partition; no cropping",
+  "rss_limit_bytes": 6442450944,
+  "runs": [
+    {
+      "method": "union_hulls",
+      "worker_wall_seconds": 37.4632420930011,
+      "peak_rss_bytes": 6496751616,
+      "exit_code": -15,
+      "status": "memory_limit_6GiB",
+      "log": "union_hulls.log",
+      "last_phase": "relaxation_or_rounding"
+    },
+    {
+      "method": "per_target",
+      "worker_wall_seconds": 41.64163401500082,
+      "peak_rss_bytes": 6479380480,
+      "exit_code": -15,
+      "status": "memory_limit_6GiB",
+      "log": "per_target.log",
+      "last_phase": "relaxation_or_rounding"
+    }
+  ],
+  "adjacency_policy": "intersection_dimension_at_least_6",
+  "compact_constraints": true,
+  "region_count": 2856,
+  "edge_count": 38094,
+  "target_count": 23,
+  "shared_preprocessing_seconds": 238.9936717239998,
+  "graph_task_sha256": "35bf92909221e31d5356937708d4413d20af98328c7a254a2db496d7a52e1cf3",
+  "hull_targets_sha256": "4c07ca8ba64af452e2f76fe8607a769f25eb56b21e6ff338985c14f49b072edf"
+}

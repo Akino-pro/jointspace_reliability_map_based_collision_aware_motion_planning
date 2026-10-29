@@ -38,6 +38,7 @@ class LinearGCS(BaseGCS):
         path_weights=None,
         full_dim_overlap=False,
         vertex_cost_weights=None,
+        compact_constraints=False,
     ):
         BaseGCS.__init__(self, regions)
 
@@ -67,6 +68,8 @@ class LinearGCS(BaseGCS):
 
         vertices = self.gcs.Vertices()
         self.edge_shifts = {}
+        self.compaction_stats = dict(edge_membership_rows_before=0, edge_membership_rows_after=0)
+        cost_cache = {}
         for edge_index, region_edge in enumerate(edges):
             ii, jj = region_edge
             shift = np.asarray(getattr(region_edge, "shift", np.zeros(self.dimension)))
@@ -74,23 +77,33 @@ class LinearGCS(BaseGCS):
             v = vertices[jj]
             edge = self.gcs.AddEdge(u, v, f"({u.name()}, {v.name()})_{edge_index}")
             self.edge_shifts[edge.name()] = shift
-            weighted_edge_cost = L2NormCost(
-                np.hstack((
-                    np.diag(-self.path_weights * self.vertex_cost_weights[ii]),
-                    np.diag(self.path_weights * self.vertex_cost_weights[ii]),
-                )),
-                shift * self.path_weights * self.vertex_cost_weights[ii]
-            )
+            cost_key = (ii, tuple(shift))
+            weighted_edge_cost = cost_cache.get(cost_key) if compact_constraints else None
+            if weighted_edge_cost is None:
+                weighted_edge_cost = L2NormCost(
+                    np.hstack((
+                        np.diag(-self.path_weights * self.vertex_cost_weights[ii]),
+                        np.diag(self.path_weights * self.vertex_cost_weights[ii]),
+                    )),
+                    shift * self.path_weights * self.vertex_cost_weights[ii]
+                )
+                if compact_constraints:
+                    cost_cache[cost_key] = weighted_edge_cost
 
             edge.AddCost(BindingCost(
                 weighted_edge_cost, np.append(u.x(), v.x())))
 
             # Constrain point in v to be in u
-            edge.AddConstraint(BindingConstraint(
-                LinearConstraint(u.set().A(),
-                                 -np.inf*np.ones(len(u.set().b())),
-                                 u.set().b()-u.set().A()@shift),
-                v.x()))
+            A, b = u.set().A(), u.set().b()-u.set().A()@shift
+            self.compaction_stats["edge_membership_rows_before"] += len(b)
+            if compact_constraints:
+                from gcs.halfspaces import nonimplied_rows
+                retained = nonimplied_rows(A, b, v.set().A(), v.set().b())
+                A, b = A[retained], b[retained]
+            self.compaction_stats["edge_membership_rows_after"] += len(b)
+            if len(b):
+                edge.AddConstraint(BindingConstraint(
+                    LinearConstraint(A, -np.inf*np.ones(len(b)), b), v.x()))
 
     def addSourceTarget(self, source, target, edges=None):
         source_edges, target_edges = super().addSourceTarget(source, target, edges)

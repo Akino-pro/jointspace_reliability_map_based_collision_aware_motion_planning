@@ -51,7 +51,8 @@ def solve_target_sets(regions, edges, start, targets, weights, rounding=True,
                       max_rounding_trials=100, rounding_seed=0,
                       relative_gap_tolerance=0.01, mip_time_limit=60.0,
                       mip_relative_gap=0.01, solver_backend=None,
-                      nonlinear_task=None, restriction_solver_backend="snopt", diagnostics=None):
+                      nonlinear_task=None, restriction_solver_backend="snopt", diagnostics=None,
+                      compact_constraints=False):
     """Use a direct terminal vertex for a single target; charge physical motion."""
     from pydrake.geometry.optimization import Point
     from pydrake.solvers import L2NormCost
@@ -66,8 +67,26 @@ def solve_target_sets(regions, edges, start, targets, weights, rounding=True,
     exact_solver = require_mixed_integer_solver() if not rounding else None
     dimension = len(start)
 
-    planner = LinearGCS([r.to_drake() for r in regions], edges=edges,
-                        vertex_cost_weights=weights)
+    build_began = time.perf_counter()
+    if len(edges) > 10000:
+        print(f"GCS model build: {len(regions)} regions, {len(edges)} edges, {len(targets)} targets", flush=True)
+    def drake_set(region):
+        if not compact_constraints:
+            return region.to_drake()
+        from gcs.halfspaces import compact_halfspaces
+        from pydrake.geometry.optimization import HPolyhedron
+        return HPolyhedron(*compact_halfspaces(region.A, region.b))
+    planner = LinearGCS([drake_set(r) for r in regions], edges=edges,
+                        vertex_cost_weights=weights, compact_constraints=compact_constraints)
+    if compact_constraints:
+        model_stats = dict(planner.compaction_stats,
+                           region_rows_before=sum(len(r.b) for r in regions),
+                           region_rows_after=sum(len(r.b()) for r in planner.regions))
+        print("GCS constraint compaction: "+json.dumps(model_stats), flush=True)
+        if diagnostics is not None:
+            diagnostics["model_compaction"] = model_stats
+    if len(edges) > 10000:
+        print(f"GCS region graph built in {time.perf_counter()-build_began:.2f}s", flush=True)
     planner.options.max_rounded_paths = max_rounded_paths
     planner.options.max_rounding_trials = max_rounding_trials
     planner.options.rounding_seed = rounding_seed
@@ -110,7 +129,7 @@ def solve_target_sets(regions, edges, start, targets, weights, rounding=True,
                 edge.AddConstraint(edge.xu()[axis] == edge.xv()[axis])
     target_vertices = {}
     for index, target in enumerate(targets):
-        vertex = planner.gcs.AddVertex(target["polytope"].to_drake(), f"local_target_{index}")
+        vertex = planner.gcs.AddVertex(drake_set(target["polytope"]), f"local_target_{index}")
         if nonlinear_task is not None:
             from scripts.goal_set_baselines import add_terminal_task_constraint
             add_terminal_task_constraint(vertex, nonlinear_task)
@@ -124,6 +143,9 @@ def solve_target_sets(regions, edges, start, targets, weights, rounding=True,
             planner.gcs.AddEdge(vertex, planner.target)
         else:
             planner.target = vertex
+    if len(edges) > 10000:
+        print(f"GCS terminals attached; starting relaxation and rounding after "
+              f"{time.perf_counter()-build_began:.2f}s of model construction", flush=True)
     waypoints, results = planner.SolvePath(rounding=rounding, preprocessing=True)
     if diagnostics is not None:
         diagnostics.update(

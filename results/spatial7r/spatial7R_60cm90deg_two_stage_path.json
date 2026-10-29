@@ -1,0 +1,204 @@
+{
+  "success": false,
+  "planner": "spatial7R_two_stage_gcs",
+  "robot": {
+    "a": [
+      0.4,
+      0.8,
+      0.2,
+      1,
+      0.6,
+      0.4,
+      0
+    ],
+    "d": [
+      -0.4,
+      -0.6,
+      0.2,
+      0.6,
+      -0.8,
+      0.2,
+      0
+    ],
+    "alpha": [
+      -1.0821041362364843,
+      -1.3788101090755203,
+      1.5707963267948966,
+      0.5061454830783556,
+      1.413716694115407,
+      -1.3962634015954636,
+      0
+    ],
+    "reference_CA": [
+      [
+        -1.8675022996339325,
+        1.8675022996339325
+      ],
+      [
+        -2.8623399732707,
+        2.4609142453120043
+      ],
+      [
+        -2.303834612632515,
+        2.303834612632515
+      ],
+      [
+        -2.6354471705114375,
+        1.780235837034216
+      ],
+      [
+        -2.007128639793479,
+        2.600540585471551
+      ],
+      [
+        -1.3089969389957472,
+        2.251474735072685
+      ],
+      [
+        0.2792526803190927,
+        3.368485456349056
+      ]
+    ],
+    "reliabilities": [
+      0.2,
+      0.3,
+      0.4,
+      0.5,
+      0.6,
+      0.7,
+      0.8
+    ]
+  },
+  "task": "full_pose_SE3",
+  "task_dimension": 6,
+  "ssm_regular_dimension": 1,
+  "ssm_branch_limit": 8,
+  "start_configuration": [
+    0.2,
+    -0.62,
+    0.3,
+    -0.55,
+    0.44,
+    -0.36,
+    0.12
+  ],
+  "start_point": [
+    3.0205333341656058,
+    -1.4946400075697015,
+    0.5399182591886
+  ],
+  "start_pose": [
+    [
+      0.9134005010928171,
+      0.3868562982223874,
+      -0.12665594786294715,
+      3.0205333341656058
+    ],
+    [
+      -0.342233411090386,
+      0.8982806048465608,
+      0.2756233794327605,
+      -1.4946400075697015
+    ],
+    [
+      0.2203992217246446,
+      -0.20840863581475658,
+      0.9528851051312549,
+      0.5399182591886
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "task_position_distance": 0.5999999999999993,
+  "task_orientation_difference_degrees": 90.00000000000001,
+  "goal_point": [
+    3.1878890016273402,
+    -0.9193011224223007,
+    0.5711792221581318
+  ],
+  "goal_pose": [
+    [
+      0.3422334110903859,
+      -0.8982806048465608,
+      -0.2756233794327611,
+      3.1878890016273402
+    ],
+    [
+      0.9134005010928175,
+      0.38685629822238754,
+      -0.1266559478629468,
+      -0.9193011224223007
+    ],
+    [
+      0.22039922172464482,
+      -0.20840863581475702,
+      0.9528851051312549,
+      0.5711792221581318
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "obstacles": [
+    {
+      "type": "sphere",
+      "center": [
+        3.104211167896473,
+        -1.2069705649960012,
+        0.5555487406733659
+      ],
+      "radius": 0.08
+    }
+  ],
+  "link_radius": 0.015,
+  "physical_joint_limits": null,
+  "iris_checkpoint": "data/iris/spatial7R_60cm90deg_iris_regions.npz",
+  "geometric_epsilon": 0.025,
+  "ssm_arc_spacing": 0.044,
+  "reliability_epsilon": 0.01,
+  "gcs_solve_calls": 0,
+  "coverage_is_complete": false,
+  "continuous_coverage_certified": false,
+  "global_optimality_certified": false,
+  "solver_settings": {
+    "max_rounded_paths": 200,
+    "max_rounding_trials": 300
+  },
+  "resource_limits": {
+    "partition_cells": 20000,
+    "regions": 160,
+    "directed_edges": 1500,
+    "targets": 128
+  },
+  "original_region_count": 3,
+  "iris_generation_seconds": 162.0644710609995,
+  "iris_coverage_radius": 0.65,
+  "ssm_branch_count": 1,
+  "ssm_trace": {
+    "branch_limit": 8,
+    "branch_count": 1,
+    "ik_attempt_budget": 80,
+    "ik_attempts": 80,
+    "failed_ik": 31,
+    "failed_traces": 0,
+    "duplicate_starts": 48,
+    "all_branches_certified": false,
+    "termination_reason": "ik_attempt_budget_exhausted"
+  },
+  "local_partition_cell_count": 3240,
+  "merged_partition_cell_count": 3240,
+  "reliability_rule": "union_of_branch_recovery_sets",
+  "reliability_partition_scope": "exact_refinement_restricted_to_iris_coverage",
+  "region_count": 2856,
+  "status": "resource_limit",
+  "message": "Reliability intersections produced 2856 regions; limit is 160.",
+  "total_seconds": 2.7343786539986468,
+  "two_stage_total_seconds": 2.7343786539986468
+}

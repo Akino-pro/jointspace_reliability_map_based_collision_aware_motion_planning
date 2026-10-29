@@ -1,0 +1,4 @@
+BEGIN full graph per_target: each target 200/300; stage two 200/300
+7R geometry: 1 branches, 2856 regions, 869670 edges, 54 samples, 23 targets
+7R stage 1: target 1/23
+GCS model build: 2856 regions, 869670 edges, 1 targets

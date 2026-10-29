@@ -1,0 +1,92 @@
+<mujoco model="spatial7r_60cm_baseZ90deg_pose_preview">
+  <compiler angle="radian" autolimits="false" />
+  <option gravity="0 0 0" timestep="0.002" />
+  <visual>
+    <global offwidth="1200" offheight="900" />
+    <headlight ambient="0.5 0.5 0.5" diffuse="0.7 0.7 0.7" />
+  </visual>
+  <asset>
+    <texture name="floor_texture" type="2d" builtin="checker" rgb1="0.17 0.20 0.24" rgb2="0.21 0.24 0.28" width="128" height="128" />
+    <material name="floor_mat" texture="floor_texture" texrepeat="8 8" />
+  </asset>
+  <worldbody>
+    <geom name="floor" type="plane" size="6 6 0.1" pos="0 0 -0.8316829376715346" material="floor_mat" contype="0" conaffinity="0" />
+    <light pos="0 -2 4.886153535105535" dir="0 0 -1" />
+    <geom name="base_mount" type="cylinder" size="0.07 0.035" rgba="0.65 0.7 0.75 1" contype="0" conaffinity="0" />
+    <geom name="obstacle0" type="sphere" pos="3.104211167896473 -1.206970564996001 0.5555487406733657" size="0.08" rgba="0.9 0.22 0.12 1" contype="2" conaffinity="1" />
+    <site name="start_marker" type="sphere" pos="3.020533334165606 -1.494640007569702 0.5399182591886" size="0.035" rgba="0.25 0.75 1 0.85" />
+    <site name="goal_marker" type="sphere" pos="3.187889001627341 -0.9193011224223004 0.5711792221581313" size="0.035" rgba="0.3 1 0.45 0.9" />
+    <body name="rotor0">
+      <joint name="joint1" type="hinge" axis="0 0 1" limited="false" />
+      <geom name="joint_marker1" type="sphere" size="0.028" rgba="0.85 0.89 0.94 1" contype="0" conaffinity="0" />
+      <geom name="arm_link1_0" size="0.015" rgba="0.1 0.55 0.95 1" contype="1" conaffinity="2" type="capsule" fromto="0 0 0 0 0 -0.4" />
+      <geom name="arm_link1_1" size="0.015" rgba="0.1 0.55 0.95 1" contype="1" conaffinity="2" type="capsule" fromto="0 0 -0.4 0.4 0 -0.4" />
+      <body name="dh_frame1" pos="0.4 0 -0.4" quat="0.8571673007021123 -0.5150380749100542 0 0">
+        <body name="rotor1">
+          <joint name="joint2" type="hinge" axis="0 0 1" limited="false" />
+          <geom name="joint_marker2" type="sphere" size="0.028" rgba="0.85 0.89 0.94 1" contype="0" conaffinity="0" />
+          <geom name="arm_link2_0" size="0.015" rgba="0.1 0.8 0.65 1" contype="1" conaffinity="2" type="capsule" fromto="0 0 0 0 0 -0.6" />
+          <geom name="arm_link2_1" size="0.015" rgba="0.1 0.8 0.65 1" contype="1" conaffinity="2" type="capsule" fromto="0 0 -0.6 0.8 0 -0.6" />
+          <body name="dh_frame2" pos="0.8 0 -0.6" quat="0.77162458338772 -0.636078220277764 0 0">
+            <body name="rotor2">
+              <joint name="joint3" type="hinge" axis="0 0 1" limited="false" />
+              <geom name="joint_marker3" type="sphere" size="0.028" rgba="0.85 0.89 0.94 1" contype="0" conaffinity="0" />
+              <geom name="arm_link3_0" size="0.015" rgba="1 0.68 0.15 1" contype="1" conaffinity="2" type="capsule" fromto="0 0 0 0 0 0.2" />
+              <geom name="arm_link3_1" size="0.015" rgba="1 0.68 0.15 1" contype="1" conaffinity="2" type="capsule" fromto="0 0 0.2 0.2 0 0.2" />
+              <body name="dh_frame3" pos="0.2 0 0.2" quat="0.7071067811865476 0.7071067811865476 0 0">
+                <body name="rotor3">
+                  <joint name="joint4" type="hinge" axis="0 0 1" limited="false" />
+                  <geom name="joint_marker4" type="sphere" size="0.028" rgba="0.85 0.89 0.94 1" contype="0" conaffinity="0" />
+                  <geom name="arm_link4_0" size="0.015" rgba="0.7 0.4 0.95 1" contype="1" conaffinity="2" type="capsule" fromto="0 0 0 0 0 0.6" />
+                  <geom name="arm_link4_1" size="0.015" rgba="0.7 0.4 0.95 1" contype="1" conaffinity="2" type="capsule" fromto="0 0 0.6 1 0 0.6" />
+                  <body name="dh_frame4" pos="1 0 0.6" quat="0.9681476403781077 0.2503800040544414 0 0">
+                    <body name="rotor4">
+                      <joint name="joint5" type="hinge" axis="0 0 1" limited="false" />
+                      <geom name="joint_marker5" type="sphere" size="0.028" rgba="0.85 0.89 0.94 1" contype="0" conaffinity="0" />
+                      <geom name="arm_link5_0" size="0.015" rgba="0.1 0.55 0.95 1" contype="1" conaffinity="2" type="capsule" fromto="0 0 0 0 0 -0.8" />
+                      <geom name="arm_link5_1" size="0.015" rgba="0.1 0.55 0.95 1" contype="1" conaffinity="2" type="capsule" fromto="0 0 -0.8 0.6 0 -0.8" />
+                      <body name="dh_frame5" pos="0.6 0 -0.8" quat="0.7604059656000309 0.6494480483301837 0 0">
+                        <body name="rotor5">
+                          <joint name="joint6" type="hinge" axis="0 0 1" limited="false" />
+                          <geom name="joint_marker6" type="sphere" size="0.028" rgba="0.85 0.89 0.94 1" contype="0" conaffinity="0" />
+                          <geom name="arm_link6_0" size="0.015" rgba="0.1 0.8 0.65 1" contype="1" conaffinity="2" type="capsule" fromto="0 0 0 0 0 0.2" />
+                          <geom name="arm_link6_1" size="0.015" rgba="0.1 0.8 0.65 1" contype="1" conaffinity="2" type="capsule" fromto="0 0 0.2 0.4 0 0.2" />
+                          <body name="dh_frame6" pos="0.4 0 0.2" quat="0.766044443118978 -0.6427876096865393 0 0">
+                            <body name="rotor6">
+                              <joint name="joint7" type="hinge" axis="0 0 1" limited="false" />
+                              <geom name="joint_marker7" type="sphere" size="0.028" rgba="0.85 0.89 0.94 1" contype="0" conaffinity="0" />
+                              <geom name="arm_link7_0" size="0.015" rgba="1 0.68 0.15 1" contype="1" conaffinity="2" type="sphere" pos="0 0 0" />
+                              <geom name="arm_link7_1" size="0.015" rgba="1 0.68 0.15 1" contype="1" conaffinity="2" type="sphere" pos="0 0 0" />
+                              <body name="dh_frame7" pos="0 0 0" quat="1 0 0 0">
+                                <site name="tool_tip" pos="0 0 0" size="0.025" rgba="1 1 0.9 1" />
+                              </body>
+                            </body>
+                          </body>
+                        </body>
+                      </body>
+                    </body>
+                  </body>
+                </body>
+              </body>
+            </body>
+          </body>
+        </body>
+      </body>
+    </body>
+    <geom name="start_axis0" type="capsule" size=".004" fromto="3.020533334165606 -1.494640007569702 0.5399182591886 3.184945424362313 -1.556242021565971 0.579590119099036" rgba="1 .25 .25 .9" contype="0" conaffinity="0" group="3" />
+    <site name="START_X" type="sphere" size=".003" pos="3.184945424362313 -1.556242021565971 0.579590119099036" rgba="1 .25 .25 .9" />
+    <geom name="start_axis1" type="capsule" size=".004" fromto="3.020533334165606 -1.494640007569702 0.5399182591886 3.090167467845636 -1.33294949869732 0.5024047047419439" rgba=".25 1 .25 .9" contype="0" conaffinity="0" group="3" />
+    <site name="START_Y" type="sphere" size=".003" pos="3.090167467845636 -1.33294949869732 0.5024047047419439" rgba=".25 1 .25 .9" />
+    <geom name="start_axis2" type="capsule" size=".004" fromto="3.020533334165606 -1.494640007569702 0.5399182591886 2.997735263550275 -1.445027799271805 0.711437578112226" rgba=".25 .5 1 .9" contype="0" conaffinity="0" group="3" />
+    <site name="START_Z" type="sphere" size=".003" pos="2.997735263550275 -1.445027799271805 0.711437578112226" rgba=".25 .5 1 .9" />
+    <geom name="goal_axis0" type="capsule" size=".004" fromto="3.187889001627341 -0.9193011224223004 0.5711792221581313 3.249491015623611 -0.7548890322255934 0.6108510820685673" rgba="1 .25 .25 .9" contype="0" conaffinity="0" group="3" />
+    <site name="GOAL_X" type="sphere" size=".003" pos="3.249491015623611 -0.7548890322255934 0.6108510820685673" rgba="1 .25 .25 .9" />
+    <geom name="goal_axis1" type="capsule" size=".004" fromto="3.187889001627341 -0.9193011224223004 0.5711792221581313 3.02619849275496 -0.8496669887422706 0.5336656677114752" rgba=".25 1 .25 .9" contype="0" conaffinity="0" group="3" />
+    <site name="GOAL_Y" type="sphere" size=".003" pos="3.02619849275496 -0.8496669887422706 0.5336656677114752" rgba=".25 1 .25 .9" />
+    <geom name="goal_axis2" type="capsule" size=".004" fromto="3.187889001627341 -0.9193011224223004 0.5711792221581313 3.138276793329444 -0.9420991930376309 0.7426985410817573" rgba=".25 .5 1 .9" contype="0" conaffinity="0" group="3" />
+    <site name="GOAL_Z" type="sphere" size=".003" pos="3.138276793329444 -0.9420991930376309 0.7426985410817573" rgba=".25 .5 1 .9" />
+  </worldbody>
+  <keyframe>
+    <key name="planned_start" qpos="0.2 -0.62 0.3 -0.55 0.44 -0.36 0.12" />
+  </keyframe>
+</mujoco>

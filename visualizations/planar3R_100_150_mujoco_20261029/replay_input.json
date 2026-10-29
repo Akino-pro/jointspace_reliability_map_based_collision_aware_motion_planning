@@ -1,0 +1,66 @@
+{
+  "link_lengths": [
+    1,
+    1,
+    1
+  ],
+  "link_radius": 0.02,
+  "obstacles": [
+    {
+      "type": "circle",
+      "center": [
+        0.75,
+        0.75
+      ],
+      "radius": 0.15
+    }
+  ],
+  "goal_point": [
+    1.5,
+    1.5
+  ],
+  "start_configuration": [
+    -2.972349782093813,
+    -2.26926174311021,
+    -1.2375903668686903
+  ],
+  "success": true,
+  "waypoints": [
+    [
+      -2.972349782093813,
+      -2.26926174311021,
+      -1.2375903668686903
+    ],
+    [
+      -2.865505783541928,
+      -1.9541214021782742,
+      -1.2281811359998007
+    ],
+    [
+      -0.42573778774333837,
+      -1.86352739391287,
+      -1.013470711719875
+    ],
+    [
+      0.6086749949598668,
+      -0.6277991075768086,
+      1.9158858301179487
+    ]
+  ],
+  "cost": 0.3817177694444778,
+  "stage1_solver_settings": {
+    "max_rounded_paths": 100,
+    "max_rounding_trials": 150,
+    "rounding_seed": 0,
+    "relative_gap_tolerance": 0.01,
+    "mip_time_limit": 60.0,
+    "mip_relative_gap": 0.01
+  },
+  "stage2_solver_settings": {
+    "max_rounded_paths": 100,
+    "max_rounding_trials": 150
+  },
+  "source_stage1_report": "results/planar3r/per_target_budget_sweep_20261029/paths100_trials150.json",
+  "source_stage2_replay": "results/diagnostics/stage2_matched_budget_independent_20261029/3r_independent_100_150.json",
+  "provenance": "Saved primary per-target stage one plus saved matched-budget fixed-endpoint stage-two replay; no fresh planning or timing measurement"
+}

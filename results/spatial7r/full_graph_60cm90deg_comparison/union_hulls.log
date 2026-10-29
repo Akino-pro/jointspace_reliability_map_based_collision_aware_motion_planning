@@ -1,0 +1,3 @@
+BEGIN full graph union_hulls: each target 200/300; stage two 200/300
+7R geometry: 1 branches, 2856 regions, 869670 edges, 54 samples, 23 targets
+GCS model build: 2856 regions, 869670 edges, 23 targets

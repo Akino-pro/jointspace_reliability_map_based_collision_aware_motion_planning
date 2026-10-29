@@ -70,7 +70,7 @@ def split_iris_regions(regions, reliability_regions, min_reliability=0.0):
     return children
 
 
-def polytope_adjacency(regions, periodic=False, broad_phase=True, statistics=None):
+def polytope_adjacency(regions, periodic=False, broad_phase=True, statistics=None, progress=None):
     """Conservative AABB screening, followed by exact intersection LPs.
 
     Optional 2pi translations connect chart seams, including simultaneous
@@ -106,8 +106,19 @@ def polytope_adjacency(regions, periodic=False, broad_phase=True, statistics=Non
                 bounds.append([opts[0].fun-tolerance, -opts[1].fun+tolerance])
             boxes.append(np.asarray(bounds))
     tested = candidates = 0
+    box_array = np.asarray(boxes)
     for i, first in enumerate(regions):
-        for j in range(i + 1, len(regions)):
+        if broad_phase and not periodic:
+            # Screen all later boxes in NumPy, preserving the exact pair order
+            # and the same conservative tolerances as the scalar test below.
+            later = box_array[i+1:]
+            overlap = np.all((box_array[i, :, 0] <= later[:, :, 1]) &
+                             (later[:, :, 0] <= box_array[i, :, 1]), axis=1)
+            indices = np.flatnonzero(overlap)+i+1
+        else:
+            indices = range(i+1, len(regions))
+        for j in indices:
+            j = int(j)
             second = regions[j]
             dimension = first.A.shape[1]
             if periodic:
@@ -133,6 +144,8 @@ def polytope_adjacency(regions, periodic=False, broad_phase=True, statistics=Non
                                  if periodic else ((i, j), (j, i)))
                 elif result.status != 2:
                     raise RuntimeError(f"Adjacency LP failed: {result.message}")
+        if progress is not None:
+            progress(i+1, len(regions), tested, len(edges))
     if statistics is not None:
         statistics.update(input_region_count=len(regions), region_pairs=len(regions)*(len(regions)-1)//2,
                           bounding_lp_count=bounding_lps,

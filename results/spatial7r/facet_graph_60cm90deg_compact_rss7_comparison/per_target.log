@@ -1,0 +1,7 @@
+BEGIN full graph per_target: each target 200/300; stage two 200/300
+7R geometry: 1 branches, 2856 regions, 38094 edges, 54 samples, 23 targets
+7R stage 1: target 1/23
+GCS model build: 2856 regions, 38094 edges, 1 targets
+GCS constraint compaction: {"edge_membership_rows_before": 591087, "edge_membership_rows_after": 93552, "region_rows_before": 58848, "region_rows_after": 44186}
+GCS region graph built in 5.80s
+GCS terminals attached; starting relaxation and rounding after 5.81s of model construction

@@ -191,6 +191,8 @@ def render(scene, model, data, points, times, output, speed=1, fps=24, width=960
     camera = camera_factory(scene)
     options = mujoco.MjvOption()
     options.geomgroup[3] = 1
+    if getattr(scene, "label_sites", False):
+        options.label = mujoco.mjtLabel.mjLABEL_SITE
     with mujoco.Renderer(model, height=height, width=width) as renderer:
         with imageio.get_writer(str(output/f"{prefix}_mujoco.gif"), format="GIF-PIL",
                                 mode="I", duration=1/fps, loop=0,
@@ -221,6 +223,9 @@ def show_viewer(scene, model, data, points, times, speed=1., fps=60, loop=True, 
     with mujoco.viewer.launch_passive(model, data, key_callback=commands.put) as viewer:
         with viewer.lock():
             viewer.opt.geomgroup[3] = 1
+            if getattr(scene, "label_sites", False):
+                import mujoco
+                viewer.opt.label = mujoco.mjtLabel.mjLABEL_SITE
             camera = camera_factory(scene)
             viewer.cam.lookat[:] = camera.lookat
             viewer.cam.distance = camera.distance

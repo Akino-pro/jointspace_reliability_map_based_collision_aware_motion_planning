@@ -73,7 +73,7 @@ def plot_results(folder, rows, matched=False):
         axis.set_xticks(x)
         axis.grid(alpha=.3)
         axis.legend(fontsize=8)
-    fig.suptitle("Spatial 7R full-pose 30cm/20deg: full per-target budgets; seed 0")
+    fig.suptitle("Spatial 7R full-pose 60cm/base-Z90deg: full per-target budgets; seed 0")
     fig.tight_layout()
     fig.savefig(folder / "cost_time.png", dpi=180)
     fig.savefig(folder / "cost_time.svg")
@@ -83,8 +83,8 @@ def plot_results(folder, rows, matched=False):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--output-dir", default="results/spatial7r/per_target_matched_stage_budget_sweep_20261029")
-    parser.add_argument("--iris-regions", default="data/iris/spatial7R_30cm20deg_iris_regions.npz")
+    parser.add_argument("--output-dir", default="results/spatial7r/per_target_matched_stage_budget_sweep_60cm90deg")
+    parser.add_argument("--iris-regions", default="data/iris/spatial7R_60cm90deg_iris_regions.npz")
     parser.add_argument("--matched-stage-budgets", action="store_true", default=True,
                         help="Set both stages to each case's budget instead of fixing stage two at200/300")
     args = parser.parse_args()

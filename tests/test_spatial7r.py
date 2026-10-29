@@ -31,12 +31,45 @@ def box(lower, upper):
 
 
 class Spatial7RTests(unittest.TestCase):
-    def test_default_task_has_30cm_translation_and_20_degree_orientation_change(self):
+    def test_union_only_does_not_run_primary_and_preserves_failed_status(self):
+        from scripts import spatial7R_two_stage_gcs_planner as planner
+        start = model.START_CONFIGURATION
+        region = box(start-.1, start+.1)
+        target = dict(polytope=sample_hull([start]), region=0, envelope=0)
+
+        def envelopes(branches, epsilon, **kwargs):
+            kwargs["sampling_report"].update(ssm_branch_sample_counts=[2], ssm_branch_arc_lengths=[.01])
+            return [SimpleNamespace(branch=0)]
+
+        from scripts.spatial7R_iris import scene_metadata
+        with patch.object(planner, "load_iris_checkpoint", return_value=([region],
+                          dict(model=scene_metadata([]), generation_seconds=0))), \
+                patch.object(model, "compute_ssms", return_value=([np.array([start, start])], {})), \
+                patch.object(planner, "local_reliability_regions", return_value=([region], {})), \
+                patch.object(planner, "polytope_adjacency", return_value=[]), \
+                patch.object(planner, "build_envelopes", side_effect=envelopes), \
+                patch.object(planner, "intersect_envelopes", return_value=[target]), \
+                patch.object(planner, "compare_goal_sets", return_value=dict(
+                    union_hull_baseline=dict(success=False, status="solver_failed", seconds=0))) as compare, \
+                patch.object(planner, "solve_target_sets") as primary:
+            report = planner.plan_before_failure(obstacles=[], union_hulls_only=True)
+        self.assertFalse(report["success"])
+        self.assertEqual(report["status"], "solver_failed")
+        self.assertFalse(report["primary_method_executed"])
+        primary.assert_not_called()
+        self.assertTrue(compare.call_args.kwargs["union_hulls"])
+        self.assertFalse(compare.call_args.kwargs["nonlinear_goal"])
+
+    def test_default_task_has_60cm_translation_base_z_90deg_and_midpoint_obstacle(self):
         start = model.pose(model.START_CONFIGURATION)
         goal = model.pose(model.GOAL_REFERENCE_CONFIGURATION)
-        self.assertAlmostEqual(np.linalg.norm(goal[:3, 3]-start[:3, 3]), .30, places=12)
+        self.assertAlmostEqual(np.linalg.norm(goal[:3, 3]-start[:3, 3]), .60, places=12)
         angle = np.linalg.norm(Rotation.from_matrix(goal[:3, :3] @ start[:3, :3].T).as_rotvec())
-        self.assertAlmostEqual(np.rad2deg(angle), 20., places=10)
+        self.assertAlmostEqual(np.rad2deg(angle), 90., places=10)
+        np.testing.assert_allclose(goal[:3, :3], Rotation.from_euler("z", 90, degrees=True).as_matrix()
+                                   @ start[:3, :3], atol=1e-12)
+        np.testing.assert_allclose(model.OBSTACLES[0]["center"],
+                                   (start[:3, 3]+goal[:3, 3])/2, atol=1e-12)
         self.assertTrue(model.collision_free(model.START_CONFIGURATION, model.OBSTACLES))
         self.assertTrue(model.collision_free(model.GOAL_REFERENCE_CONFIGURATION, model.OBSTACLES))
 

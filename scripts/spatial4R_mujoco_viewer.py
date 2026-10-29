@@ -51,24 +51,24 @@ def kinematics(scene, q):
     return transform, segments
 
 
-def load_scene(path):
+def load_scene(path, expected_joints=4):
     path = Path(path)
     if not path.exists() and not path.is_absolute():
         path = PROJECT / path
     saved = json.loads(path.read_text(encoding="utf-8"))
     if saved.get("success") is False:
-        raise ValueError("Expected a successful spatial 4R planning report")
+        raise ValueError("Expected a successful spatial planning report")
     points = np.asarray(saved["waypoints"], dtype=float)
     robot = saved["robot"]
     a, d, alpha = (np.asarray(robot[name], dtype=float) for name in ("a", "d", "alpha"))
     radius = float(saved["link_radius"])
     goal = np.asarray(saved["goal_point"], dtype=float)
-    if (points.ndim != 2 or points.shape[1] != 4 or not len(points)
+    if (points.ndim != 2 or points.shape[1] != expected_joints or not len(points)
             or not np.all(np.isfinite(points))
-            or any(v.shape != (4,) or not np.all(np.isfinite(v)) for v in (a, d, alpha))
+            or any(v.shape != (expected_joints,) or not np.all(np.isfinite(v)) for v in (a, d, alpha))
             or goal.shape != (3,) or not np.all(np.isfinite(goal))
             or not np.isfinite(radius) or radius <= 0):
-        raise ValueError("Expected finite 4R waypoints, standard DH arrays, XYZ goal and positive radius")
+        raise ValueError("Expected finite matching joint/DH arrays, XYZ goal and positive radius")
     obstacles = saved.get("obstacles", [])
     for obstacle in obstacles:
         center = np.asarray(obstacle.get("center"), dtype=float)
@@ -77,7 +77,7 @@ def load_scene(path):
                 or not np.all(np.isfinite(center)) or not np.isfinite(r) or r <= 0):
             raise ValueError("Expected spherical obstacles with finite XYZ centers and positive radii")
     failed = saved.get("failed_joint")
-    if failed is not None and (failed not in (1, 2, 3, 4) or np.ptp(points[:, failed-1]) > 1e-8):
+    if failed is not None and (failed not in range(1, expected_joints+1) or np.ptp(points[:, failed-1]) > 1e-8):
         raise ValueError("Post-failure replay must preserve the indicated locked joint")
     return SpatialReplayScene(points, a, d, alpha, obstacles, radius, goal,
                               str(path.resolve()), saved.get("robot_parameter_set", "spatial4R"), failed)
@@ -166,7 +166,7 @@ def make_mjcf(scene, points=None, times=None, width=960, height=720):
         ends = [np.zeros(3), np.array([0., 0., d]), np.array([a, 0., d])]
         for j, (first, second) in enumerate(zip(ends[:-1], ends[1:])):
             attrs = dict(name=f"arm_link{i+1}_{j}", size=str(scene.link_radius),
-                         rgba=colors[i], contype="1", conaffinity="2")
+                         rgba=colors[i % len(colors)], contype="1", conaffinity="2")
             if np.linalg.norm(second-first) <= 1e-12:
                 ET.SubElement(rotor, "geom", **attrs, type="sphere", pos=_numbers(first))
             else:

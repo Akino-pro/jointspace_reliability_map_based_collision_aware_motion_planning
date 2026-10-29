@@ -2,6 +2,130 @@ PROJECT AND CONVERSATION HANDOFF
 Updated: 2026-10-29
 Language: English, following the user's instruction that project documentation be in English.
 
+LATEST USER REQUEST: VISUALIZE PREVIOUS PLANAR3R RESULT
+- Rendered native MuJoCo3.4.0 visualization of primary per-target100/150
+  stage-one result plus saved matched-stage-two100/150 fixed-goal replay.
+  Verified graph/task hash equality;replay returns identical waypoints/cost
+  to original source(stage2there200/300). No fresh planning/timing claimed.
+  Source:results/planar3r/per_target_budget_sweep_20261029/paths100_trials150.json;
+  stage2source:results/diagnostics/stage2_matched_budget_independent_20261029/3r_independent_100_150.json.
+-43regions,20targets,cost.3817177694444778. Position-only task,toolstart(.5,.5),
+  goal(1.5,1.5),obstaclecirclecentre(.75,.75),radius.15m. Saved scene unchanged.
+- Output visualizations/planar3R_100_150_mujoco_20261029/:self-contained
+  replay_input.json,228frameGIF,PNGstart/middle/goal,paired start/goal overview,
+  sceneXML,replay_report.json and READMEwithprovenance/commands.
+ 567dense configurations:0analytic collisions,0negativeMuJoCocontacts,
+  endpoint error2.22e-16m. Prescribed path playback,no dynamics simulation.
+- Launched native interactive viewer PID3628 at half speed;interactive outputs
+  separated from checked exports.7R static preview window not modified.
+
+LATEST REQUEST: ACTUAL 7R INTERSECTION-DIMENSION FILTER ATTEMPTS
+- User explicitly authorized continuing 7R using d-minus-one adjacency.
+  Implemented scripts/gcs_intersection_dimension.py: coordinate dimension
+  upper-bound screening then original gcs.base.polytopeDimension on normalized
+  rows,tol1e-7. Threshold6 for7D. Same2856regions and23targets;targethashmatches
+  full graph. Connected component count1. Directed edges869670->38094(-95.62%).
+  434835unordered pairs,415788screened,19047affine tests:18204dim6,843dim7.
+  Filter219.076407911s;shared prep238.993671724s. Cached numeric graph policy
+  includes dimension threshold and tolerance. No ROI cropping or KNN pruning.
+- Runner spatial7R_full_graph_comparison --facet-adjacency and supervisor
+  support separate outputs.6GiB attempts union34.080038818s peak6484160512B;
+  first independent target37.292542511s peak6443188224B. Both completed
+  Python graph construction but supervisor killed during native SolvePath,
+  before first relaxation/rounding result. No paths/costs/stage2.
+- Tried opt-in exact redundant-constraint compaction. New gcs/halfspaces.py
+  retains tightest duplicate/scaled-axis rows and removes edge membership
+  rows proved implied by target rows/box support. LinearGCS shares source
+  cost evaluators; original regions,edges,weights,targets unchanged. Region
+  rows58848->44186;edge rows591087->93552. Defaults remainFalse. Added geometry
+  tests and solved weighted-GCS endpoint/cost parity regression.
+ 178Docker tests:170pass,8optionalMuJoCoskips.
+- Compact6GiB attempts union37.463242093s peak6496751616B;independent first
+ 41.641634015s peak6479380480B,both supervisor-terminated before first result.
+- Final compact7GiB attempts:union64.901378139s peak7493988352B,exit-9(SIGKILL;
+  NOT a supervisor termination);independent48.451091973s peak7534333952B,
+  exit-15 at7GiB RSS guard. Cgroup memory.events cumulative oom_kill1 saved,
+  consistent with memory pressure but snapshot does not identify victim PID.
+  VM~7.57GiB. No further benchmark worker remains running. Static MuJoCo
+  scene preview remains valid; no new path animation or fabricated cost.
+- Main report:results/spatial7r/facet_graph_60cm90deg_comparison/README.md;
+  exact JSON/logs in that folder and sibling compact_comparison and
+  compact_rss7_comparison folders. These times are ABORTED ATTEMPT times,
+  exclude shared preprocessing,and cannot establish method speed rankings.
+
+LATEST FULL-GRAPH TWO-METHOD ATTEMPTS AND OFFICIAL-GCS QUESTION
+- User explicitly requested BOTH independent and union-hull methods at200/300
+  on the complete2856-region graph, not a cropped corridor. Added experiment
+  runner spatial7R_full_graph_comparison and sequential process supervisor.
+- Prepared full graph:2856regions,869670directededges,23targets,54samples,
+  one SSM branch;264.929300255s shared preprocessing. Cached numeric adjacency
+  validates exact region fingerprint. No corner/face/contact edges removed.
+  Experiment-only limits4000regions,2millionedges,10000targets; defaults intact.
+- Real union worker65.288858041s,peak6458015744bytes;independent first target
+  62.289031019s,peak6456954880bytes. Both supervisor-terminated at6GiB RSS
+  while constructing GCS;neither entered relaxation/rounding/stage2;no costs.
+  Do not call these completed solve times or claim a speed winner or OS OOM.
+  Logs, full precision summary and README:
+  results/spatial7r/full_graph_60cm90deg_comparison/.
+- Added optional union_hulls_only and adjacency_checkpoint API parameters;
+  no primary solve in union-only mode; regression test checks failure status
+  is retained and primary solver is never called.173Docker tests:165pass,8skip.
+- User asks how official GCS handles high-dimensional edge explosion.
+  Verified primary sources: RobotLocomotion/gcs-science-robotics/gcs/base.py
+  has OPTIONAL findEdgesViaFullDimensionOverlaps:intersection affine dimension
+  >=d-1 (7R means6or7). Drake default auto AddRegions still uses nonempty
+  intersections;preprocessing removes impossible source-target edges but
+  occurs after graph construction. IRIS/clique-cover reduces region count;
+  our3IRISregions became2856due exact reliability subdivision, a different cost model.
+- Read-only diagnostic on cached full edges:coordinate-box intersection
+  dimension upper bounds{0:7936,1:55936,2:161856,3:252112,4:230064,
+  5:123672,6:36408,7:1686}.831576edges(95.6197%) upperbound<6;at most38094
+  candidates remain for exact affine-dimension test. Tolerance1e-7;NOT exact
+  ranks and NOT an applied graph change. Verify topology/cost before claiming
+  safe deletion of arbitrary lower-dimensional contacts.
+
+LATEST TASK CHANGE: 60CM / BASE-Z +90 DEG / MIDPOINT SPHERE (2026-10-29)
+- User requested twice the previous position distance,90deg about BASE Z,
+  and sphere centre exactly at endpoint midpoint. Start unchanged. New goal
+  p=(3.187889001627341,-.9193011224223004,.5711792221581313), rotation
+  Rz(+pi/2) @ Rstart. Sphere centre=(3.1042111678964734,-1.206970564996001,
+  .5555487406733657),radius.08 with NO vertical offset. Analytic regression
+  verifies .60m and the full rotation matrix, not just scalar rotation angle.
+- Updated model GOAL_REFERENCE_CONFIGURATION using refined full-pose IK;
+  changed default cache/output in pre/post-failure and sweep runner. Old
+  task caches/results/visualizations remain intact and historical. New files:
+  results/spatial7r/spatial7R_60cm90deg_scene.json and
+  spatial7R_60cm90deg_two_stage_path.json;cache data/iris/spatial7R_60cm90deg_iris_regions.npz.
+- Tried primary200/300: runner scripts/spatial7R_midpoint_obstacle_experiment.py
+  uses auxiliary safe corridor ONLY as IRIS seeds. Three IRIS regions took
+  162.14s;exact reliability refinement produced2856regions,over160limit.
+  Stopped with resource_limit BEFORE GCS;no new optimized path or performance
+  result. Do not claim the seed corridor as our planner's returned trajectory.
+- Visualization complete: scripts/spatial7R_mujoco_viewer --scene-only
+  displays endpoint poses without an interpolated route;S=start,G=goal.
+  Default viewer falls back to preview if active saved path has no success.
+  Rendered paired overview and obstacle close-up to
+  visualizations/spatial7R_60cm90deg_mujoco/. Native viewer PID16880 launched,
+  verified title spatial7r_60cm_baseZ90deg_pose_preview;old PID32556 closed
+  after verifying command line. Both endpoint XYZ frames remain labeled.
+-12 native MuJoCo tests pass. Docker172tests:164pass,8optionalMuJoCoskips.
+
+LATEST 7R MUJOCO VISUALIZATION (2026-10-29)
+- User requested native MuJoCo visualization of the latest experiment, then
+  explicitly requested both start and goal XYZ orientation axes (full 6D task).
+- Added scripts/spatial7R_mujoco_viewer.py, reusing spatial replay DH geometry
+  and generic render/viewer playback. Shared spatial loader now accepts an
+  explicit joint count (4 default); link palette cycles for seven joints.
+- Native MuJoCo 3.4.0 on configured Python310; source is matched-sweep
+  paths200_trials300.json. All saved geometry/path coordinates preserved.
+  Both fixed tool frames labeled START_X/Y/Z and GOAL_X/Y/Z; X red,Y green,
+  Z blue. Start position blue,goal green,obstacle red sphere. Full goal pose
+  and final tool rotation are validated.11 native MuJoCo tests passed.
+- Rendered108 GIF frames and PNG start/middle/goal, paired overview and
+  goal/obstacle close-up under visualizations/spatial7R_mujoco_20261029/.
+  Replay41 samples:0 collisions,0 negative contacts;FK discrepancy2.24e-15m.
+  Native interactive viewer launched; PID and stdout/stderr in same folder.
+
 LATEST 4R DEFAULTS AND 7R SWEEP (2026-10-29)
 - User requested 4R uniformly 200/300, then the 7R experiment. Both 4R API
   and CLI stage-two defaults now explicitly equal 200/300, independent of

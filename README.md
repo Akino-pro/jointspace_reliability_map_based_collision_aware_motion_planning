@@ -201,7 +201,14 @@ same two-stage GCS workflow with both rounding budgets 200/300. Exact reliabilit
 partitioning is restricted to original IRIS coverage to control seven-dimensional
 growth, with explicit resource limits and unioned recovery sets across branches.
 
-The current local example has exactly 30 cm translation and 20 degrees of
+The current 7R task has 60 cm translation and a +90-degree orientation change
+about base Z, with the 8 cm sphere centred exactly between the endpoint
+positions. New IRIS coverage generated three regions, but reliability
+partitioning reached 2,856 regions and stopped at the 160-region resource
+limit before GCS. Inspect the scene using
+`python -m scripts.spatial7R_mujoco_viewer --scene-only` (S: start, G: goal).
+
+The previous local example had exactly 30 cm translation and 20 degrees of
 relative rotation: one detected branch, 92 samples, 24 free regions and four
 targets. It completed in 32.16 s including IRIS generation, with final weighted
 cost 0.0043086900 and position/orientation errors near machine precision.

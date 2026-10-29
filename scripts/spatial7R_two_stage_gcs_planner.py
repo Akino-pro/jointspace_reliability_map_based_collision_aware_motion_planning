@@ -106,7 +106,7 @@ def local_reliability_regions(originals, branches, max_cells=MAX_PARTITION_CELLS
 
 
 def plan_before_failure(start=model.START_CONFIGURATION, goal_pose=None,
-                        checkpoint="data/iris/spatial7R_30cm20deg_iris_regions.npz",
+                        checkpoint="data/iris/spatial7R_60cm90deg_iris_regions.npz",
                         obstacles=None, generate_iris=False, geometry_only=False,
                         reference=model.GOAL_REFERENCE_CONFIGURATION, iris_radius=.16,
                         geometric_epsilon=GEOMETRIC_EPSILON, arc_spacing=SSM_ARC_SPACING,
@@ -115,7 +115,10 @@ def plan_before_failure(start=model.START_CONFIGURATION, goal_pose=None,
                         max_partition_cells=MAX_PARTITION_CELLS, max_regions=MAX_FREE_REGIONS,
                         max_edges=MAX_GRAPH_EDGES, max_targets=MAX_TARGETS, solver_backend="mosek",
                         compare_sampled=False, compare_union_hulls=False,
-                        compare_nonlinear_goal=False, nonlinear_solver="snopt"):
+                        compare_nonlinear_goal=False, nonlinear_solver="snopt",
+                        union_hulls_only=False, adjacency_checkpoint=None,
+                        min_intersection_dimension=None, candidate_adjacency_checkpoint=None,
+                        intersection_dimension_tolerance=1e-7, compact_constraints=False):
     began = time.perf_counter()
     supplied = np.asarray(start, dtype=float)
     goal = model.validate_pose(model.pose(reference) if goal_pose is None else goal_pose)
@@ -174,7 +177,47 @@ def plan_before_failure(start=model.START_CONFIGURATION, goal_pose=None,
         if len(regions) > max_regions:
             raise ResourceLimit(f"Reliability intersections produced {len(regions)} regions; limit is {max_regions}.")
         adjacency_statistics = {}
-        edges = polytope_adjacency(regions, statistics=adjacency_statistics)
+        adjacency_key = graph_task_fingerprint(
+            regions, [], start, [r.reliability for r in regions], dict(type="adjacency_only"))
+        base_adjacency_key = adjacency_key
+        if min_intersection_dimension is not None:
+            adjacency_key = graph_task_fingerprint(
+                regions, [], start, [r.reliability for r in regions],
+                dict(type="adjacency_with_dimension_filter", minimum_dimension=min_intersection_dimension,
+                     tolerance=intersection_dimension_tolerance))
+        cache_path = Path(adjacency_checkpoint) if adjacency_checkpoint is not None else None
+        if cache_path is not None and cache_path.exists():
+            with np.load(cache_path, allow_pickle=False) as cached:
+                if str(cached["key"]) != adjacency_key:
+                    raise ValueError("Adjacency cache does not match the exact partition geometry")
+                edges = [tuple(map(int, pair)) for pair in cached["edges"]]
+                adjacency_statistics = json.loads(str(cached["statistics"]))
+            report["adjacency_cache_hit"] = True
+        else:
+            def adjacency_progress(done, total, tested, edge_count):
+                if done % 100 == 0 or done == total:
+                    print(f"7R adjacency: {done}/{total} regions, {tested} LPs, {edge_count} edges", flush=True)
+            if candidate_adjacency_checkpoint is not None:
+                with np.load(candidate_adjacency_checkpoint, allow_pickle=False) as cached:
+                    if str(cached["key"]) != base_adjacency_key:
+                        raise ValueError("Candidate adjacency cache does not match partition geometry")
+                    edges = [tuple(map(int, pair)) for pair in cached["edges"]]
+                    adjacency_statistics = json.loads(str(cached["statistics"]))
+            else:
+                edges = polytope_adjacency(regions, statistics=adjacency_statistics, progress=adjacency_progress)
+            if min_intersection_dimension is not None:
+                from scripts.gcs_intersection_dimension import filter_intersection_edges
+                unfiltered_statistics = dict(adjacency_statistics)
+                adjacency_statistics = dict(unfiltered_adjacency=unfiltered_statistics)
+                edges = filter_intersection_edges(
+                    regions, edges, min_intersection_dimension, intersection_dimension_tolerance,
+                    statistics=adjacency_statistics)
+            report["adjacency_cache_hit"] = False
+            if cache_path is not None:
+                cache_path.parent.mkdir(parents=True, exist_ok=True)
+                np.savez_compressed(cache_path, key=np.asarray(adjacency_key),
+                                    edges=np.asarray(edges, dtype=np.int64).reshape(-1, 2),
+                                    statistics=np.asarray(json.dumps(adjacency_statistics)))
         report["adjacency_statistics"] = adjacency_statistics
         report["edge_count"] = len(edges)
         if len(edges) > max_edges:
@@ -184,6 +227,8 @@ def plan_before_failure(start=model.START_CONFIGURATION, goal_pose=None,
     graph = nx.Graph()
     graph.add_nodes_from(range(len(regions)))
     graph.add_edges_from(edges)
+    report.update(pre_connectivity_region_count=len(regions),
+                  connected_component_count=nx.number_connected_components(graph))
     sources = [i for i, r in enumerate(regions) if r.contains(start)]
     if not sources:
         return finish("no_path_in_iris_coverage", "The fixed start has no coverage; stopped before GCS.")
@@ -216,6 +261,8 @@ def plan_before_failure(start=model.START_CONFIGURATION, goal_pose=None,
         return finish("geometry_only", "Full-pose preprocessing complete; no GCS solve.", success=True)
     weights = [RELIABILITY_EPSILON+1-r.reliability for r in regions]
     settings = dict(max_rounded_paths=max_paths, max_rounding_trials=max_trials, solver_backend=solver_backend)
+    if compact_constraints:
+        settings["compact_constraints"] = True
     report.update(stage1_solver_settings=settings, stage2_solver_settings=dict(settings),
                   stage1_budget=dict(allocation="fixed_per_target", target_count=len(targets),
                                      total_max_rounded_paths=max_paths*len(targets),
@@ -227,7 +274,7 @@ def plan_before_failure(start=model.START_CONFIGURATION, goal_pose=None,
             lambda q: model.collision_free(q, obstacles),
             lambda p: model.validate_path(p, obstacles),
             lambda q: np.linalg.norm(model.pose_residual(q, goal)))
-    if compare_union_hulls or compare_nonlinear_goal:
+    if compare_union_hulls or compare_nonlinear_goal or union_hulls_only:
         task = dict(id=dict(type="full_pose_SE3", goal=goal.tolist()), dimension=6,
                     residual=lambda q: model.pose_residual(q, goal),
                     jacobian=lambda q: model.residual_jacobian(q, goal))
@@ -238,11 +285,18 @@ def plan_before_failure(start=model.START_CONFIGURATION, goal_pose=None,
                 position=lambda q: model.pose_residual(q, goal),
                 collision_free=lambda q: model.collision_free(q, obstacles)),
             lambda p: model.validate_path(p, obstacles), offsets,
-            union_hulls=compare_union_hulls, nonlinear_goal=compare_nonlinear_goal,
+            union_hulls=compare_union_hulls or union_hulls_only, nonlinear_goal=compare_nonlinear_goal,
             nonlinear_solver=nonlinear_solver))
+    if union_hulls_only:
+        baseline = report["union_hull_baseline"]
+        answer = finish(baseline["status"], "Executed only the union-hull two-stage comparison.",
+                        success=bool(baseline.get("success", False)), primary_method_executed=False)
+        answer["two_stage_total_seconds"] = answer["total_seconds"]
+        return answer
     first_began = time.perf_counter()
     candidates, best = [], None
     for index, target in enumerate(targets):
+        candidate_began = time.perf_counter()
         print(f"7R stage 1: target {index+1}/{len(targets)}", flush=True)
         error = None
         diagnostics = {}
@@ -263,6 +317,8 @@ def plan_before_failure(start=model.START_CONFIGURATION, goal_pose=None,
             if best is None or solved["cost"] < best["cost"]:
                 best = dict(solved, selected_target=index)
         candidates.append(item)
+        print(f"7R target {index+1}/{len(targets)}: cost={item.get('cost')}, "
+              f"{time.perf_counter()-candidate_began:.2f}s", flush=True)
     report.update(stage1_seconds=time.perf_counter()-first_began, stage1_candidates=candidates)
     report["stage1_rounding_diagnostics"] = dict(
         rounded_path_count=sum(c["rounding_diagnostics"].get("rounded_path_count", 0) for c in candidates),
@@ -330,7 +386,7 @@ def main():
     parser.add_argument("--q", type=float, nargs=7, default=model.START_CONFIGURATION.tolist())
     parser.add_argument("--goal-position", type=float, nargs=3)
     parser.add_argument("--goal-quaternion", type=float, nargs=4, help="Goal orientation quaternion x y z w")
-    parser.add_argument("--iris-regions", default="data/iris/spatial7R_30cm20deg_iris_regions.npz")
+    parser.add_argument("--iris-regions", default="data/iris/spatial7R_60cm90deg_iris_regions.npz")
     parser.add_argument("--generate-iris", action="store_true")
     parser.add_argument("--iris-radius", type=float, default=.16)
     parser.add_argument("--geometry-only", action="store_true")
@@ -346,7 +402,7 @@ def main():
     parser.add_argument("--max-rounded-paths", type=int, default=MAX_ROUNDED_PATHS)
     parser.add_argument("--max-rounding-trials", type=int, default=MAX_ROUNDING_TRIALS)
     parser.add_argument("--solver", choices=["mosek", "clarabel"], default="mosek")
-    parser.add_argument("--output", default="results/spatial7r/spatial7R_30cm20deg_two_stage_path.json")
+    parser.add_argument("--output", default="results/spatial7r/spatial7R_60cm90deg_two_stage_path.json")
     args = parser.parse_args()
     if (args.goal_position is None) != (args.goal_quaternion is None):
         parser.error("Full-pose planning requires both --goal-position and --goal-quaternion")

@@ -16,11 +16,11 @@ MAX_SSM_IK_ATTEMPTS = 80
 SSM_TRACE_STEP = .025
 LINK_RADIUS = .015
 START_CONFIGURATION = np.array([.20, -.62, .30, -.55, .44, -.36, .12])
-# Reachable full-pose benchmark: 0.30 m translation and 20 degrees rotation
+# Reachable full-pose benchmark: 0.60 m translation and +90 degrees about base Z
 # relative to START_CONFIGURATION; these values are checked by regression tests.
 GOAL_REFERENCE_CONFIGURATION = np.array([
-    .4430183223610375, -.7496097719258866, .46201221490735833,
-    -.6310061074536792, .537207328944415, -.42480488596294336, .3716597123878356,
+    .5952876562080038, -1.3217321088017597, .768067695761899,
+    -.08239295782395306, .7566153581833555, -.1892518155672116, 1.1307149220565549,
 ])
 
 
@@ -215,7 +215,7 @@ def reliability_lookup():
 
 def default_obstacles(start=START_CONFIGURATION, goal=None):
     target = pose(GOAL_REFERENCE_CONFIGURATION) if goal is None else goal
-    center = (position(start)+target[:3, 3])/2+np.array([0., 0., .20])
+    center = (position(start)+target[:3, 3])/2
     return [dict(type="sphere", center=center.tolist(), radius=.08)]
 
 

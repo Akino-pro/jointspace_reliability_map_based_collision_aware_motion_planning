@@ -29,8 +29,8 @@ MAX_ROUNDING_TRIALS = 300
 IK_MAX_STARTS = 256
 IK_TOLERANCE = 1e-8
 IK_SINGULAR_TOLERANCE = 1e-7
-DEFAULT_CHECKPOINT = "data/iris/spatial7R_30cm20deg_iris_regions.npz"
-DEFAULT_PATH = "results/spatial7r/spatial7R_30cm20deg_two_stage_path.json"
+DEFAULT_CHECKPOINT = "data/iris/spatial7R_60cm90deg_iris_regions.npz"
+DEFAULT_PATH = "results/spatial7r/spatial7R_60cm90deg_two_stage_path.json"
 
 
 def reach_exclusion(goal, failed_joint, angle):
