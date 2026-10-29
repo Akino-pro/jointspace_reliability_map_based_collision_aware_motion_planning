@@ -2,6 +2,40 @@ PROJECT AND CONVERSATION HANDOFF
 Updated: 2026-10-29
 Language: English, following the user's instruction that project documentation be in English.
 
+LATEST RAW IRIS PROJECTION REQUEST
+- User requested all theta1/theta2 collision-free region projections BEFORE
+  reliability intersections. Added scripts/planar3R_plot_iris_projection.py.
+  Loads all6 original regions directly from data/iris/planar3R_iris_regions.npz,
+  no reliability/cost subdivision,no connected filtering,no path overlay.
+  True projections from full3Dpolytope vertices,not boxes or fixedtheta3slice.
+  Colors/numbers identify IRIS1..6,notR. OutputsPNG/SVG,projection_report.json,
+  README in visualizations/planar3R_raw_iris_projection_20261029/.
+
+LATEST THETA1/THETA2 PROJECTION REQUEST
+- Added theta12_projection to scripts/planar3R_plot_saved_reliability_path.py.
+  Outputs theta1_theta2_reliability_path.png/svg in the same3Rreliabilityfolder.
+  Left:exact3Dregion projections filled by maximumR over feasibletheta3.
+  Right:outlines of only traversed regions. Both overlay actual savedpath,
+  direction arrows,start/goal,and actual3DsegmentR=.70,.91,1.00. Background
+  maximum is explicitly distinguished from actualpathR;whiteisoutsidecoverage.
+
+LATEST USER REQUEST: RELIABILITY MAP INCLUDING SAVED3R PATH
+- Added scripts/planar3R_plot_saved_reliability_path.py. Reconstructs exact
+ 43start-connected IRIS/reliability intersections via prepare_graph;checks
+ graph/task SHA against saved100/150stage2replay,region membership for each
+ segment and recomputed weighted cost. No planning run or path wrapping.
+- Output visualizations/planar3R_100_150_reliability_20261029/:
+ jointspace_reliability_path.png/svg(all43regions vs only path regions),
+ workspace_and_path_reliability.png/svg(physical trace colored by actualR
+ and R vs cumulative joint length),plot_report.json,and README.
+ Route[1,3,28],R[.70,.91,1.00],lengths[.3328927877482419,2.4508724393470835,
+ 3.3433761307814143],cost.3817177694444778. Actual halfspace polytopes rendered
+ via HalfspaceIntersection/ConvexHull,not boxes. Joint axes are degrees.
+- Colorred-yellow-green=R;blackline=path,bluestart,magentaend. Workspacefigure
+ only colors THIS path;does not collapse jointspaceR into an XY heatmap.
+ Optional Plotly unavailable locally;native --show Matplotlib windows launched
+ PID35216 for3Drotation and reliabilityprofile. MuJoCoviewer remains active.
+
 LATEST USER REQUEST: VISUALIZE PREVIOUS PLANAR3R RESULT
 - Rendered native MuJoCo3.4.0 visualization of primary per-target100/150
   stage-one result plus saved matched-stage-two100/150 fixed-goal replay.
