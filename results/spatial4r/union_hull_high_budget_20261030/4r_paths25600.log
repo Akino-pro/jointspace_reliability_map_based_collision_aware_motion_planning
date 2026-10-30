@@ -1,0 +1,3 @@
+Spatial geometry: 1 SSM branches; 81 -> 81 boxes; 56 free regions, 1202 edges; 153 samples; 13 targets
+INFO:drake:Solved GCS shortest path using MOSEK with convex_relaxation=true and preprocessing=true and no rounding.
+INFO:drake:Found 25600 unique paths, discarded 347 duplicate paths.

@@ -1,0 +1,62 @@
+{
+    "status":  "complete",
+    "first_method_rerun":  false,
+    "solver_fix":  "MOSEK primal form; unchanged geometry and tolerances",
+    "reference_cost":  0.07807983167132608,
+    "reference_seconds":  115.8543413260013,
+    "graph_task_sha256":  "0429dd3c31a8312948d9ae093d254772e98d7a8d2d8cdd9565f711f3c83a0ece",
+    "hull_targets_sha256":  "9ecfa314cee70d16473f9cb88c8d3489aac6ca7baf6c2046a115ba0873cb218c",
+    "runs":  [
+                 {
+                     "paths":  800,
+                     "trials":  1200,
+                     "success":  true,
+                     "cost":  0.08981672404792272,
+                     "total_seconds":  75.00460632499994,
+                     "stage1_seconds":  39.52200512399986,
+                     "stage2_seconds":  33.27956320699991,
+                     "task_error":  9.1551335970444749E-16,
+                     "collision_free":  true,
+                     "graph_valid":  true,
+                     "cost_valid":  true,
+                     "stage1_paths":  800,
+                     "stage2_paths":  800,
+                     "relative_cost_above_reference":  0.1503191301180389033993555351,
+                     "report":  "results/spatial4r/union_hull_primal_20261030/4r_paths800.json"
+                 },
+                 {
+                     "paths":  1600,
+                     "trials":  2400,
+                     "success":  true,
+                     "cost":  0.08981672404792272,
+                     "total_seconds":  88.87469197600012,
+                     "stage1_seconds":  48.66721217999998,
+                     "stage2_seconds":  37.907855487999996,
+                     "task_error":  9.1551335970444749E-16,
+                     "collision_free":  true,
+                     "graph_valid":  true,
+                     "cost_valid":  true,
+                     "stage1_paths":  1600,
+                     "stage2_paths":  1600,
+                     "relative_cost_above_reference":  0.1503191301180389033993555351,
+                     "report":  "results/spatial4r/union_hull_primal_20261030/4r_paths1600.json"
+                 },
+                 {
+                     "paths":  3200,
+                     "trials":  4800,
+                     "success":  true,
+                     "cost":  0.08981672404792272,
+                     "total_seconds":  106.75695329699988,
+                     "stage1_seconds":  60.12239442300006,
+                     "stage2_seconds":  44.406988831000035,
+                     "task_error":  9.1551335970444749E-16,
+                     "collision_free":  true,
+                     "graph_valid":  true,
+                     "cost_valid":  true,
+                     "stage1_paths":  3200,
+                     "stage2_paths":  3200,
+                     "relative_cost_above_reference":  0.1503191301180389033993555351,
+                     "report":  "results/spatial4r/union_hull_primal_20261030/4r_paths3200.json"
+                 }
+             ]
+}

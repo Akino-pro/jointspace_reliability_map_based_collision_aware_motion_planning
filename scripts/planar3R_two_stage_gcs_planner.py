@@ -52,7 +52,8 @@ def solve_target_sets(regions, edges, start, targets, weights, rounding=True,
                       relative_gap_tolerance=0.01, mip_time_limit=60.0,
                       mip_relative_gap=0.01, solver_backend=None,
                       nonlinear_task=None, restriction_solver_backend="snopt", diagnostics=None,
-                      compact_constraints=False):
+                      compact_constraints=False, mosek_solve_form=None, retain_rounded_results=True,
+                      mosek_threads=None):
     """Use a direct terminal vertex for a single target; charge physical motion."""
     from pydrake.geometry.optimization import Point
     from pydrake.solvers import L2NormCost
@@ -68,7 +69,7 @@ def solve_target_sets(regions, edges, start, targets, weights, rounding=True,
     dimension = len(start)
 
     build_began = time.perf_counter()
-    if len(edges) > 10000:
+    if len(edges) >= 1000:
         print(f"GCS model build: {len(regions)} regions, {len(edges)} edges, {len(targets)} targets", flush=True)
     def drake_set(region):
         if not compact_constraints:
@@ -78,6 +79,7 @@ def solve_target_sets(regions, edges, start, targets, weights, rounding=True,
         return HPolyhedron(*compact_halfspaces(region.A, region.b))
     planner = LinearGCS([drake_set(r) for r in regions], edges=edges,
                         vertex_cost_weights=weights, compact_constraints=compact_constraints)
+    planner.retain_rounded_results = retain_rounded_results
     if compact_constraints:
         model_stats = dict(planner.compaction_stats,
                            region_rows_before=sum(len(r.b) for r in regions),
@@ -85,7 +87,7 @@ def solve_target_sets(regions, edges, start, targets, weights, rounding=True,
         print("GCS constraint compaction: "+json.dumps(model_stats), flush=True)
         if diagnostics is not None:
             diagnostics["model_compaction"] = model_stats
-    if len(edges) > 10000:
+    if len(edges) >= 1000:
         print(f"GCS region graph built in {time.perf_counter()-build_began:.2f}s", flush=True)
     planner.options.max_rounded_paths = max_rounded_paths
     planner.options.max_rounding_trials = max_rounding_trials
@@ -115,6 +117,21 @@ def solve_target_sets(regions, edges, start, targets, weights, rounding=True,
         else:
             raise RuntimeError(f"No bounded-runtime configuration for MIP solver {exact_solver}")
         planner.setSolverOptions(solver_options)
+    if mosek_solve_form is not None or mosek_threads is not None:
+        if solver_backend != "mosek" or (mosek_solve_form is not None and mosek_solve_form not in ("primal", "dual")):
+            raise ValueError("MOSEK configuration requires mosek backend and primal or dual solve form")
+        if mosek_threads is not None and (not isinstance(mosek_threads, (int, np.integer)) or mosek_threads < 1):
+            raise ValueError("MOSEK thread count must be a positive integer")
+        from pydrake.solvers import MosekSolver, SolverOptions
+        solver_options = planner.options.solver_options
+        if solver_options is None:
+            solver_options = SolverOptions()
+        if mosek_solve_form is not None:
+            solver_options.SetOption(MosekSolver.id(), "MSK_IPAR_INTPNT_SOLVE_FORM",
+                                     1 if mosek_solve_form == "primal" else 2)
+        if mosek_threads is not None:
+            solver_options.SetOption(MosekSolver.id(), "MSK_IPAR_NUM_THREADS", int(mosek_threads))
+        planner.options.solver_options = solver_options
     vertices = list(planner.gcs.Vertices())
     planner.source = planner.gcs.AddVertex(Point(start), "fixed_start")
     multiple_targets = len(targets) > 1
@@ -143,11 +160,20 @@ def solve_target_sets(regions, edges, start, targets, weights, rounding=True,
             planner.gcs.AddEdge(vertex, planner.target)
         else:
             planner.target = vertex
-    if len(edges) > 10000:
+    if len(edges) >= 1000:
         print(f"GCS terminals attached; starting relaxation and rounding after "
               f"{time.perf_counter()-build_began:.2f}s of model construction", flush=True)
     waypoints, results = planner.SolvePath(rounding=rounding, preprocessing=True)
     if diagnostics is not None:
+        relaxed = results.get("relaxation_result")
+        if relaxed is not None:
+            diagnostics.update(relaxation_success=relaxed.is_success(),
+                               relaxation_termination=str(relaxed.get_solution_result()),
+                               relaxation_solver=relaxed.get_solver_id().name())
+            details = relaxed.get_solver_details()
+            diagnostics["relaxation_solver_details"] = {
+                key: float(getattr(details, key)) for key in ("rescode", "solution_status", "optimizer_time")
+                if hasattr(details, key)}
         diagnostics.update(
             rounded_path_count=results.get("rounded_path_count", 0),
             successful_rounded_path_count=results.get("successful_rounded_path_count", 0),
@@ -239,7 +265,11 @@ def solve_target_sets(regions, edges, start, targets, weights, rounding=True,
             "rounded_path_count": results.get("rounded_path_count", 0),
             "successful_rounded_path_count": results.get("successful_rounded_path_count", 0)}
     from scripts.periodic_graph import path_in_regions
-    if not path_in_regions(solved, regions, start, targets[selected]["polytope"]):
+    path_valid = path_in_regions(solved, regions, start, targets[selected]["polytope"])
+    if diagnostics is not None:
+        diagnostics.update(selected_path_valid=path_valid, selected_target=selected,
+                           selected_path_cost=float(actual_cost))
+    if not path_valid:
         return None
     return solved
 
@@ -430,6 +460,15 @@ def plan_two_stage(start, goal, obstacles, checkpoint_path='data/iris/planar3R_i
             rounding=rounding, nonlinear_solver=nonlinear_solver))
     if union_hulls_only:
         joint = report["union_hull_baseline"]
+        # Keep the primary experiment output usable by existing path viewers.
+        for key in ("waypoints", "endpoint", "collision_free", "collision_samples", "task_error",
+                    "graph_membership_valid", "cost_valid", "stage1_cost", "stage1_seconds",
+                    "stage2_seconds", "stage1_region_route", "stage2_rounding_diagnostics",
+                    "solver_name", "estimated_goal", "region_route", "route_spec", "quality",
+                    "selected_hull_target"):
+            if key in joint:
+                report[key] = joint[key]
+        report["stage2_quality"] = joint.get("quality")
         report.update(planner="planar3R_union_hull_two_stage_gcs", primary_method_executed=False,
                       stage1_mode="one_graph_all_hull_targets", stage1_budget=dict(
                           allocation="one_joint_target_call",
@@ -437,9 +476,11 @@ def plan_two_stage(start, goal, obstacles, checkpoint_path='data/iris/planar3R_i
                           total_max_rounding_trials=comparison_settings["max_rounding_trials"],
                           stage2_budget_independent=True),
                       stage1_rounding_diagnostics=joint.get("stage1_rounding_diagnostics"))
-        return finish(joint["status"], "Only the joint-hull two-stage method was executed.",
-                      success=joint["success"], cost=joint.get("cost"),
-                      gcs_solve_calls=joint["gcs_solve_calls"])
+        answer = finish(joint["status"], "Only the joint-hull two-stage method was executed.",
+                        success=joint["success"], cost=joint.get("cost"),
+                        gcs_solve_calls=joint["gcs_solve_calls"])
+        answer["two_stage_total_seconds"] = answer["total_seconds"]
+        return answer
     stage_started = time.perf_counter()
     report.update(stage1_mode="per_target_intersection", stage1_candidates=[],
                   stage1_gcs_solve_calls=0, stage2_gcs_solve_calls=0)
@@ -604,6 +645,8 @@ def main():
     from scripts.planar3R_gcs_planner import GOAL_POINT, OBSTACLES
 
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--method", choices=["union-hull", "per-target"], default="union-hull",
+                        help="Primary 3R experiment method (default: union-hull)")
     source = parser.add_mutually_exclusive_group()
     source.add_argument("--q", type=float, nargs=3, help="Fixed start configuration in radians")
     source.add_argument("--start-path", default=None, help="Read fixed start from saved path JSON")
@@ -623,14 +666,14 @@ def main():
     parser.add_argument("--min-reliability", type=float, default=0.0)
     parser.add_argument("--seed", type=int, default=0)
     parser.add_argument("--no-rounding", action="store_true")
-    parser.add_argument("--max-rounded-paths", type=int, default=STAGE1_MAX_ROUNDED_PATHS)
-    parser.add_argument("--max-rounding-trials", type=int, default=STAGE1_MAX_ROUNDING_TRIALS)
+    parser.add_argument("--max-rounded-paths", type=int, default=None)
+    parser.add_argument("--max-rounding-trials", type=int, default=None)
     parser.add_argument("--stage1-total-paths", type=int,
                         help="Optional total stage-one path cap, shared across all individual targets")
     parser.add_argument("--stage1-total-trials", type=int,
                         help="Total stage-one trial cap; supply together with --stage1-total-paths")
-    parser.add_argument("--stage2-max-rounded-paths", type=int, default=STAGE2_MAX_ROUNDED_PATHS)
-    parser.add_argument("--stage2-max-rounding-trials", type=int, default=STAGE2_MAX_ROUNDING_TRIALS)
+    parser.add_argument("--stage2-max-rounded-paths", type=int, default=None)
+    parser.add_argument("--stage2-max-rounding-trials", type=int, default=None)
     parser.add_argument("--rounding-seed", type=int, default=0)
     parser.add_argument("--relative-gap-tolerance", type=float, default=0.01,
                         help="Graph-model quality threshold; 0.01 means 1 percent")
@@ -651,6 +694,17 @@ def main():
                         help="Report hull and intersection counts without running either GCS stage")
     parser.add_argument("--output", default='results/planar3r/two_stage_path.json')
     args = parser.parse_args()
+    joint_only = args.union_hulls_only or args.method == "union-hull"
+    if joint_only and (args.compare_sampled or args.compare_nonlinear_goal or args.compare_all
+                       or args.stage1_total_paths is not None or args.stage1_total_trials is not None):
+        parser.error("Use --method per-target for comparisons or shared per-target budgets")
+    defaults = (800, 1200, 800, 1200) if joint_only else (
+        STAGE1_MAX_ROUNDED_PATHS, STAGE1_MAX_ROUNDING_TRIALS,
+        STAGE2_MAX_ROUNDED_PATHS, STAGE2_MAX_ROUNDING_TRIALS)
+    for name, value in zip(("max_rounded_paths", "max_rounding_trials",
+                            "stage2_max_rounded_paths", "stage2_max_rounding_trials"), defaults):
+        if getattr(args, name) is None:
+            setattr(args, name, value)
     try:
         start = args.q if args.q is not None else json.loads(
             Path(args.start_path or 'results/planar3r/iris_path.json').read_text(encoding="utf-8"))["waypoints"][args.waypoint_index]
@@ -669,7 +723,7 @@ def main():
                                 nonlinear_solver=args.nonlinear_solver,
                                 stage1_total_paths=args.stage1_total_paths,
                                 stage1_total_trials=args.stage1_total_trials,
-                                union_hulls_only=args.union_hulls_only)
+                                union_hulls_only=joint_only)
     except (ValueError, OSError, KeyError, IndexError) as exc:
         result = {"success": False, "status": "invalid_input", "message": str(exc)}
     Path(args.output).write_text(json.dumps(result, indent=2), encoding="utf-8")

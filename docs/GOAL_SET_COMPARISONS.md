@@ -1,5 +1,10 @@
 # Goal-set planning comparisons
 
+As of 2026-10-30 the primary 3R CLI defaults to union-hull, 800/1200 in
+both stages. Historical multi-method CLI commands below now need
+`--method per-target`. For the larger matched-budget sweep see
+[the results](../results/diagnostics/union_hull_large_budget_20261030/README.md).
+
 Matched-stage-two replays now reuse the saved stage-one endpoint for each
 completed sweep case and set stage two to that case's own budget. See
 [the final matched-budget summary](../results/diagnostics/stage2_matched_budget_summary_20261029/README.md).

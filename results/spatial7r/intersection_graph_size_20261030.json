@@ -1,0 +1,16 @@
+[
+  {
+    "source": "results/spatial7r/full_graph_60cm90deg_comparison/adjacency.npz",
+    "region_edges": 869670,
+    "intersection_vertices": 434835,
+    "intersection_undirected_edges": 184684472,
+    "max_region_degree": 1471
+  },
+  {
+    "source": "results/spatial7r/facet_graph_60cm90deg_comparison/adjacency.npz",
+    "region_edges": 38094,
+    "intersection_vertices": 19047,
+    "intersection_undirected_edges": 277236,
+    "max_region_degree": 33
+  }
+]

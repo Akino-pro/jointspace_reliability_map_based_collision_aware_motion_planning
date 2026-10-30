@@ -1,0 +1,16 @@
+BEGIN graph union_hulls: both stages 1000/1500
+7R geometry: 1 branches, 2856 regions, 869670 edges, 54 samples, 23 targets
+7R representative pruning: 2856 -> 314 regions, 869670 -> 3188 edges, 33.07s
+GCS model build: 314 regions, 3188 edges, 23 targets
+GCS constraint compaction: {"edge_membership_rows_before": 51337, "edge_membership_rows_after": 10259, "region_rows_before": 6186, "region_rows_after": 4945}
+GCS region graph built in 0.47s
+GCS terminals attached; starting relaxation and rounding after 0.48s of model construction
+INFO:drake:Solved GCS shortest path using MOSEK with convex_relaxation=true and preprocessing=true and no rounding.
+INFO:drake:Found 1000 unique paths, discarded 0 duplicate paths.
+GCS model build: 314 regions, 3188 edges, 1 targets
+GCS constraint compaction: {"edge_membership_rows_before": 51337, "edge_membership_rows_after": 10259, "region_rows_before": 6186, "region_rows_after": 4945}
+GCS region graph built in 0.51s
+GCS terminals attached; starting relaxation and rounding after 0.52s of model construction
+INFO:drake:Solved GCS shortest path using MOSEK with convex_relaxation=true and preprocessing=true and no rounding.
+INFO:drake:Found 1000 unique paths, discarded 0 duplicate paths.
+END {"success": true, "status": "success", "message": "Executed only the union-hull two-stage comparison.", "region_count": 314, "edge_count": 3188, "target_set_count": 23, "cost": null, "geometry_seconds": 19.83627801900002, "stage1_seconds": null, "stage2_seconds": null, "total_seconds": 621.3191927560001}

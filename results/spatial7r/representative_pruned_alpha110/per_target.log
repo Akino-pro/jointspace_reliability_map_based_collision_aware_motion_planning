@@ -1,0 +1,98 @@
+BEGIN full graph per_target: each target 200/300; stage two 200/300
+7R geometry: 1 branches, 2856 regions, 869670 edges, 54 samples, 23 targets
+7R representative pruning: 2856 -> 212 regions, 869670 -> 1403 edges, 12.79s
+7R stage 1: target 1/23
+INFO:drake:Solved GCS shortest path using MOSEK with convex_relaxation=true and preprocessing=true and no rounding.
+INFO:drake:Found 200 unique paths, discarded 0 duplicate paths.
+7R target 1/23: cost=0.6265089101747833, 23.13s
+7R stage 1: target 2/23
+INFO:drake:Solved GCS shortest path using MOSEK with convex_relaxation=true and preprocessing=true and no rounding.
+INFO:drake:Found 200 unique paths, discarded 0 duplicate paths.
+7R target 2/23: cost=0.5964067287027432, 18.46s
+7R stage 1: target 3/23
+INFO:drake:Solved GCS shortest path using MOSEK with convex_relaxation=true and preprocessing=true and no rounding.
+INFO:drake:Found 200 unique paths, discarded 0 duplicate paths.
+7R target 3/23: cost=0.5869376293418014, 18.42s
+7R stage 1: target 4/23
+INFO:drake:Solved GCS shortest path using MOSEK with convex_relaxation=true and preprocessing=true and no rounding.
+INFO:drake:Found 200 unique paths, discarded 0 duplicate paths.
+7R target 4/23: cost=0.5889286123341081, 21.25s
+7R stage 1: target 5/23
+INFO:drake:Solved GCS shortest path using MOSEK with convex_relaxation=true and preprocessing=true and no rounding.
+INFO:drake:Found 200 unique paths, discarded 0 duplicate paths.
+7R target 5/23: cost=0.6213659885409537, 21.89s
+7R stage 1: target 6/23
+INFO:drake:Solved GCS shortest path using MOSEK with convex_relaxation=true and preprocessing=true and no rounding.
+INFO:drake:Found 200 unique paths, discarded 0 duplicate paths.
+7R target 6/23: cost=0.6259197388831826, 18.78s
+7R stage 1: target 7/23
+INFO:drake:Solved GCS shortest path using MOSEK with convex_relaxation=true and preprocessing=true and no rounding.
+INFO:drake:Found 200 unique paths, discarded 0 duplicate paths.
+7R target 7/23: cost=0.645117508983446, 17.31s
+7R stage 1: target 8/23
+INFO:drake:Solved GCS shortest path using MOSEK with convex_relaxation=true and preprocessing=true and no rounding.
+INFO:drake:Found 200 unique paths, discarded 0 duplicate paths.
+7R target 8/23: cost=0.6224313357334934, 17.59s
+7R stage 1: target 9/23
+INFO:drake:Solved GCS shortest path using MOSEK with convex_relaxation=true and preprocessing=true and no rounding.
+INFO:drake:Found 200 unique paths, discarded 0 duplicate paths.
+7R target 9/23: cost=0.5902634759750668, 21.07s
+7R stage 1: target 10/23
+INFO:drake:Solved GCS shortest path using MOSEK with convex_relaxation=true and preprocessing=true and no rounding.
+INFO:drake:Found 200 unique paths, discarded 0 duplicate paths.
+7R target 10/23: cost=0.5896510918625958, 15.92s
+7R stage 1: target 11/23
+INFO:drake:Solved GCS shortest path using MOSEK with convex_relaxation=true and preprocessing=true and no rounding.
+INFO:drake:Found 200 unique paths, discarded 0 duplicate paths.
+7R target 11/23: cost=0.6140617419506021, 15.36s
+7R stage 1: target 12/23
+INFO:drake:Solved GCS shortest path using MOSEK with convex_relaxation=true and preprocessing=true and no rounding.
+INFO:drake:Found 200 unique paths, discarded 0 duplicate paths.
+7R target 12/23: cost=0.6482187339042157, 15.08s
+7R stage 1: target 13/23
+INFO:drake:Solved GCS shortest path using MOSEK with convex_relaxation=true and preprocessing=true and no rounding.
+INFO:drake:Found 200 unique paths, discarded 0 duplicate paths.
+7R target 13/23: cost=0.6207164984366863, 15.60s
+7R stage 1: target 14/23
+INFO:drake:Solved GCS shortest path using MOSEK with convex_relaxation=true and preprocessing=true and no rounding.
+INFO:drake:Found 200 unique paths, discarded 0 duplicate paths.
+7R target 14/23: cost=0.5766880094622693, 16.04s
+7R stage 1: target 15/23
+INFO:drake:Solved GCS shortest path using MOSEK with convex_relaxation=true and preprocessing=true and no rounding.
+INFO:drake:Found 200 unique paths, discarded 0 duplicate paths.
+7R target 15/23: cost=0.6446670543807344, 20.13s
+7R stage 1: target 16/23
+INFO:drake:Solved GCS shortest path using MOSEK with convex_relaxation=true and preprocessing=true and no rounding.
+INFO:drake:Found 200 unique paths, discarded 0 duplicate paths.
+7R target 16/23: cost=0.6463303493788597, 20.69s
+7R stage 1: target 17/23
+INFO:drake:Solved GCS shortest path using MOSEK with convex_relaxation=true and preprocessing=true and no rounding.
+INFO:drake:Found 200 unique paths, discarded 0 duplicate paths.
+7R target 17/23: cost=0.6087752405525507, 23.16s
+7R stage 1: target 18/23
+INFO:drake:Solved GCS shortest path using MOSEK with convex_relaxation=true and preprocessing=true and no rounding.
+INFO:drake:Found 200 unique paths, discarded 0 duplicate paths.
+7R target 18/23: cost=0.6216391059395205, 21.05s
+7R stage 1: target 19/23
+INFO:drake:Solved GCS shortest path using MOSEK with convex_relaxation=true and preprocessing=true and no rounding.
+INFO:drake:Found 200 unique paths, discarded 0 duplicate paths.
+7R target 19/23: cost=0.6217961718789929, 25.00s
+7R stage 1: target 20/23
+INFO:drake:Solved GCS shortest path using MOSEK with convex_relaxation=true and preprocessing=true and no rounding.
+INFO:drake:Found 200 unique paths, discarded 0 duplicate paths.
+7R target 20/23: cost=0.6133989357629328, 21.03s
+7R stage 1: target 21/23
+INFO:drake:Solved GCS shortest path using MOSEK with convex_relaxation=true and preprocessing=true and no rounding.
+INFO:drake:Found 200 unique paths, discarded 0 duplicate paths.
+7R target 21/23: cost=0.6308515375322683, 18.01s
+7R stage 1: target 22/23
+INFO:drake:Solved GCS shortest path using MOSEK with convex_relaxation=true and preprocessing=true and no rounding.
+INFO:drake:Found 200 unique paths, discarded 0 duplicate paths.
+7R target 22/23: cost=0.6133940204055353, 19.82s
+7R stage 1: target 23/23
+INFO:drake:Solved GCS shortest path using MOSEK with convex_relaxation=true and preprocessing=true and no rounding.
+INFO:drake:Found 200 unique paths, discarded 0 duplicate paths.
+7R target 23/23: cost=0.6356132395730244, 17.14s
+INFO:drake:Solved GCS shortest path using MOSEK with convex_relaxation=true and preprocessing=true and no rounding.
+INFO:drake:Found 200 unique paths, discarded 0 duplicate paths.
+END {"success": true, "status": "success", "message": "Validated collision-free seven-angle path and full goal pose.", "region_count": 212, "edge_count": 1403, "target_set_count": 23, "cost": 0.576688012520229, "geometry_seconds": 21.213239708999993, "stage1_seconds": 441.986424178, "stage2_seconds": 18.527776313000004, "total_seconds": 494.7661956779999}

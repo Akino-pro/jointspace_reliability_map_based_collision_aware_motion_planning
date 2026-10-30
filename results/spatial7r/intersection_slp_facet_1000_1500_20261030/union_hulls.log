@@ -1,0 +1,38 @@
+BEGIN graph union_hulls: both stages 1000/1500
+7R geometry: 1 branches, 2856 regions, 38094 edges, 54 samples, 23 targets
+Intersection representative: 19047 vertices, 277236 undirected within-region edges
+Intersection SLP 10: objective=39821.66919786, radius=0.0375
+Intersection SLP 20: objective=33168.73211331, radius=0.01875
+Intersection SLP 30: objective=31001.70687556, radius=0.009375
+Intersection SLP 40: objective=30124.50685985, radius=0.0046875
+Intersection SLP 50: objective=29661.97701983, radius=0.00234375
+Intersection SLP 60: objective=29443.06210486, radius=0.00234375
+Intersection SLP 70: objective=29240.91473018, radius=0.00117187
+Intersection SLP 80: objective=29148.90892012, radius=0.00117187
+Intersection pruning target 1/23: 1745/2000 successful samples
+Intersection pruning target 2/23: 1731/2000 successful samples
+Intersection pruning target 3/23: 1877/2000 successful samples
+Intersection pruning target 4/23: 1681/2000 successful samples
+Intersection pruning target 5/23: 1693/2000 successful samples
+Intersection pruning target 6/23: 1682/2000 successful samples
+Intersection pruning target 7/23: 1654/2000 successful samples
+Intersection pruning target 8/23: 1611/2000 successful samples
+Intersection pruning target 9/23: 1633/2000 successful samples
+Intersection pruning target 10/23: 1635/2000 successful samples
+Intersection pruning target 11/23: 1641/2000 successful samples
+Intersection pruning target 12/23: 1640/2000 successful samples
+Intersection pruning target 13/23: 1671/2000 successful samples
+Intersection pruning target 14/23: 1647/2000 successful samples
+Intersection pruning target 15/23: 1681/2000 successful samples
+Intersection pruning target 16/23: 1695/2000 successful samples
+Intersection pruning target 17/23: 1767/2000 successful samples
+Intersection pruning target 18/23: 1712/2000 successful samples
+Intersection pruning target 19/23: 1744/2000 successful samples
+Intersection pruning target 20/23: 1921/2000 successful samples
+Intersection pruning target 21/23: 1809/2000 successful samples
+Intersection pruning target 22/23: 1896/2000 successful samples
+Intersection pruning target 23/23: 1842/2000 successful samples
+7R representative pruning: 2856 -> 198 regions, 38094 -> 852 edges, 144.42s
+GCS constraint compaction: {"edge_membership_rows_before": 13717, "edge_membership_rows_after": 2552, "region_rows_before": 3954, "region_rows_after": 3167}
+INFO:drake:Solved GCS shortest path using MOSEK with convex_relaxation=true and preprocessing=true and no rounding.
+END {"success": false, "status": "solver_failed", "message": "Executed only the union-hull two-stage comparison.", "region_count": 198, "edge_count": 852, "target_set_count": 23, "cost": null, "geometry_seconds": 17.378767516000153, "stage1_seconds": null, "stage2_seconds": null, "total_seconds": 168.99876193700038}

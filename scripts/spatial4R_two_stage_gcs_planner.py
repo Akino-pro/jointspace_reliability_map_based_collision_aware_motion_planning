@@ -42,8 +42,16 @@ def plan_before_failure(start=model.START_CONFIGURATION, goal=None,
                         solver_backend="mosek", iris_radius=0.9, iris_seeds=None,
                         ssm_ik_attempts=model.MAX_SSM_IK_ATTEMPTS, ssm_seed=1, compare_sampled=False,
                         compare_union_hulls=False, compare_nonlinear_goal=False, nonlinear_solver="snopt",
-                        stage2_max_paths=MAX_ROUNDED_PATHS, stage2_max_trials=MAX_ROUNDING_TRIALS):
+                        stage2_max_paths=MAX_ROUNDED_PATHS, stage2_max_trials=MAX_ROUNDING_TRIALS,
+                        union_hulls_only=False, retain_rounded_results=True,
+                        representative_pruning=False, pruning_alpha=1.1,
+                        pruning_trials=2000, pruning_seed=0,
+                        pruning_method="centers", slp_cache=None, slp_iterations=80):
     began = time.perf_counter()
+    if union_hulls_only:
+        if compare_sampled or compare_nonlinear_goal:
+            raise ValueError("Union-hulls-only mode excludes other comparisons")
+        compare_union_hulls = True
     checkpoint = checkpoint or f"data/iris/spatial4R_{model.ROBOT_PARAMETER_SET}_iris_midpoint_regions.npz"
     supplied = np.asarray(start, dtype=float)
     goal = model.position(reference) if goal is None else np.asarray(goal, dtype=float)
@@ -146,7 +154,34 @@ def plan_before_failure(start=model.START_CONFIGURATION, goal=None,
         return finish("no_path_in_iris_coverage", "No sampled target hull intersects connected IRIS coverage.")
     if geometry_only:
         return finish("geometry_only", "Spatial preprocessing complete; no GCS solve performed.", success=True)
+    if representative_pruning:
+        if pruning_method == "intersection-slp":
+            from scripts.gcs_intersection_slp import prune_intersection_slp
+            regions, edges, targets, pruning = prune_intersection_slp(
+                regions, edges, start, targets, weights,
+                alpha=pruning_alpha, trials=pruning_trials, seed=pruning_seed,
+                cache=slp_cache, max_iterations=slp_iterations)
+        elif pruning_method == "centers":
+            from scripts.gcs_representative_pruning import prune_representative_paths
+            regions, edges, targets, pruning = prune_representative_paths(
+                regions, edges, start, targets, weights,
+                alpha=pruning_alpha, trials=pruning_trials, seed=pruning_seed)
+        else:
+            raise ValueError("Unknown representative pruning method")
+        weights = [RELIABILITY_EPSILON + 1-r.reliability for r in regions]
+        report.update(representative_pruning=pruning, region_count=len(regions), edge_count=len(edges),
+                      quality_scope="heuristically_pruned_graph_only",
+                      optimized_graph_task_sha256=graph_task_fingerprint(
+                          regions, edges, start, weights, dict(type="position_3D", goal=goal.tolist())))
+        print(f"4R representative pruning: {pruning['original_regions']} -> {len(regions)} regions, "
+              f"{pruning['original_edges']} -> {len(edges)} edges, {pruning['seconds']:.2f}s", flush=True)
     settings = dict(max_rounded_paths=max_paths, max_rounding_trials=max_trials, solver_backend=solver_backend)
+    if not retain_rounded_results:
+        settings["retain_rounded_results"] = False
+    if union_hulls_only and solver_backend == "mosek":
+        # Automatic dual form stalls on the 13-target union relaxation. The
+        # primal form solves the identical model without loosening tolerances.
+        settings["mosek_solve_form"] = "primal"
     second_settings = dict(settings, max_rounded_paths=stage2_max_paths, max_rounding_trials=stage2_max_trials)
     report.update(stage1_solver_settings=settings, stage2_solver_settings=second_settings,
                   stage1_budget=dict(allocation="fixed_per_target", target_count=len(targets),
@@ -160,16 +195,30 @@ def plan_before_failure(start=model.START_CONFIGURATION, goal=None,
             lambda p: model.validate_path(p, obstacles),
             lambda q: np.linalg.norm(model.position(q)-goal))
     if compare_union_hulls or compare_nonlinear_goal:
+        comparison_settings, comparison_second_settings = dict(settings), dict(second_settings)
+        if compare_union_hulls and solver_backend == "mosek":
+            comparison_settings["mosek_solve_form"] = "primal"
+            comparison_second_settings["mosek_solve_form"] = "primal"
         task = dict(id=dict(type="position_3D", goal=goal.tolist()), dimension=3,
                     residual=lambda q: model.position(q)-goal, jacobian=model.jacobian)
         report.update(compare_goal_sets(
-            regions, edges, start, targets, envelopes, weights, settings, second_settings, task,
+            regions, edges, start, targets, envelopes, weights, comparison_settings, comparison_second_settings, task,
             lambda p, e, r: project_to_local_ssm(
                 p, e, r, goal, obstacles, model.LINK_RADIUS,
                 position=model.position, collision_free=lambda q: model.collision_free(q, obstacles)),
             lambda p: model.validate_path(p, obstacles), offsets,
             union_hulls=compare_union_hulls, nonlinear_goal=compare_nonlinear_goal,
             nonlinear_solver=nonlinear_solver))
+    if union_hulls_only:
+        baseline = report["union_hull_baseline"]
+        if representative_pruning:
+            baseline["quality_scope"] = "heuristically_pruned_graph_only"
+        report["stage1_budget"] = dict(allocation="one_joint_target_call", target_count=len(targets),
+                                      total_max_rounded_paths=max_paths, total_max_rounding_trials=max_trials)
+        answer = finish(baseline["status"], "Executed only the union-hull two-stage comparison.",
+                        success=bool(baseline.get("success", False)), primary_method_executed=False)
+        answer["two_stage_total_seconds"] = answer["total_seconds"]
+        return answer
     candidates, best = [], None
     stage1_began = time.perf_counter()
     for index, target in enumerate(targets):
@@ -283,6 +332,16 @@ def main():
     parser.add_argument("--stage2-max-rounding-trials", type=int, default=MAX_ROUNDING_TRIALS,
                         help="Independent second-stage trial cap (default: 300)")
     parser.add_argument("--solver", choices=["mosek", "clarabel"], default="mosek")
+    parser.add_argument("--union-hulls-only", action="store_true",
+                        help="Run only union-hull; MOSEK uses primal solve form")
+    parser.add_argument("--representative-pruning", action="store_true")
+    parser.add_argument("--pruning-alpha", type=float, default=1.1)
+    parser.add_argument("--pruning-trials", type=int, default=2000,
+                        help="Representative path attempts PER TARGET, before GCS construction")
+    parser.add_argument("--pruning-seed", type=int, default=0)
+    parser.add_argument("--pruning-method", choices=["centers", "intersection-slp"], default="centers")
+    parser.add_argument("--slp-cache", help="Reusable offline optimized intersection representative graph")
+    parser.add_argument("--slp-iterations", type=int, default=80)
     parser.add_argument("--output", default=None)
     args = parser.parse_args()
     model.select_robot(args.robot)
@@ -304,7 +363,12 @@ def main():
                                      compare_nonlinear_goal=args.compare_nonlinear_goal or args.compare_all,
                                      nonlinear_solver=args.nonlinear_solver,
                                      stage2_max_paths=args.stage2_max_rounded_paths,
-                                     stage2_max_trials=args.stage2_max_rounding_trials)
+                                     stage2_max_trials=args.stage2_max_rounding_trials,
+                                     union_hulls_only=args.union_hulls_only,
+                                     representative_pruning=args.representative_pruning,
+                                     pruning_alpha=args.pruning_alpha, pruning_trials=args.pruning_trials,
+                                     pruning_seed=args.pruning_seed, pruning_method=args.pruning_method,
+                                     slp_cache=args.slp_cache, slp_iterations=args.slp_iterations)
     except (ValueError, OSError, RuntimeError) as exc:
         result = dict(success=False, status="planning_error", message=str(exc))
     Path(args.output).write_text(json.dumps(result, indent=2), encoding="utf-8")

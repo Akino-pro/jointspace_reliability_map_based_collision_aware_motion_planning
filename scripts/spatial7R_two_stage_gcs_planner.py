@@ -1,6 +1,7 @@
 """Seven-dimensional IRIS/reliability/two-stage GCS for a full-pose 7R task."""
 
 import argparse
+import gc
 import itertools
 import json
 import math
@@ -118,7 +119,10 @@ def plan_before_failure(start=model.START_CONFIGURATION, goal_pose=None,
                         compare_nonlinear_goal=False, nonlinear_solver="snopt",
                         union_hulls_only=False, adjacency_checkpoint=None,
                         min_intersection_dimension=None, candidate_adjacency_checkpoint=None,
-                        intersection_dimension_tolerance=1e-7, compact_constraints=False):
+                        intersection_dimension_tolerance=1e-7, compact_constraints=False,
+                        representative_pruning=False, pruning_alpha=1.1, pruning_trials=100,
+                        pruning_seed=0, pruning_method="centers", slp_cache=None, slp_iterations=80,
+                        retain_rounded_results=True, mosek_solve_form=None, mosek_threads=None):
     began = time.perf_counter()
     supplied = np.asarray(start, dtype=float)
     goal = model.validate_pose(model.pose(reference) if goal_pose is None else goal_pose)
@@ -236,6 +240,10 @@ def plan_before_failure(start=model.START_CONFIGURATION, goal_pose=None,
     mapping = {old: new for new, old in enumerate(keep)}
     edges = [(mapping[i], mapping[j]) for i, j in edges if i in mapping and j in mapping]
     regions = [regions[i] for i in keep]
+    # The full connectivity graph is no longer needed by either preprocessing
+    # or GCS. Do not keep its original adjacency dictionaries alive while solving.
+    del graph
+    gc.collect()
     envelopes = build_envelopes(branches, geometric_epsilon, arc_spacing=arc_spacing,
                                refine_sample=lambda q: model.refine_ik(q, goal), sampling_report=report)
     targets = intersect_envelopes(envelopes, regions)
@@ -259,8 +267,33 @@ def plan_before_failure(start=model.START_CONFIGURATION, goal_pose=None,
         return finish("resource_limit", f"Found {len(targets)} targets; limit is {max_targets}.")
     if geometry_only:
         return finish("geometry_only", "Full-pose preprocessing complete; no GCS solve.", success=True)
+    if representative_pruning:
+        if pruning_method == "intersection-slp":
+            from scripts.gcs_intersection_slp import prune_intersection_slp
+            regions, edges, targets, pruning = prune_intersection_slp(
+                regions, edges, start, targets, weights,
+                alpha=pruning_alpha, trials=pruning_trials, seed=pruning_seed,
+                cache=slp_cache, max_iterations=slp_iterations)
+        elif pruning_method == "centers":
+            from scripts.gcs_representative_pruning import prune_representative_paths
+            regions, edges, targets, pruning = prune_representative_paths(
+                regions, edges, start, targets, weights,
+                alpha=pruning_alpha, trials=pruning_trials, seed=pruning_seed)
+        else:
+            raise ValueError("Unknown representative pruning method")
+        report.update(representative_pruning=pruning, region_count=len(regions), edge_count=len(edges),
+                      quality_scope="heuristically_pruned_graph_only")
+        print(f"7R representative pruning: {pruning['original_regions']} -> {len(regions)} regions, "
+              f"{pruning['original_edges']} -> {len(edges)} edges, {pruning['seconds']:.2f}s", flush=True)
+        gc.collect()
     weights = [RELIABILITY_EPSILON+1-r.reliability for r in regions]
     settings = dict(max_rounded_paths=max_paths, max_rounding_trials=max_trials, solver_backend=solver_backend)
+    if not retain_rounded_results:
+        settings["retain_rounded_results"] = False
+    if mosek_solve_form is not None:
+        settings["mosek_solve_form"] = mosek_solve_form
+    if mosek_threads is not None:
+        settings["mosek_threads"] = mosek_threads
     if compact_constraints:
         settings["compact_constraints"] = True
     report.update(stage1_solver_settings=settings, stage2_solver_settings=dict(settings),
@@ -289,6 +322,8 @@ def plan_before_failure(start=model.START_CONFIGURATION, goal_pose=None,
             nonlinear_solver=nonlinear_solver))
     if union_hulls_only:
         baseline = report["union_hull_baseline"]
+        report["stage1_budget"] = dict(allocation="one_joint_target_call", target_count=len(targets),
+                                      total_max_rounded_paths=max_paths, total_max_rounding_trials=max_trials)
         answer = finish(baseline["status"], "Executed only the union-hull two-stage comparison.",
                         success=bool(baseline.get("success", False)), primary_method_executed=False)
         answer["two_stage_total_seconds"] = answer["total_seconds"]
@@ -328,7 +363,8 @@ def plan_before_failure(start=model.START_CONFIGURATION, goal_pose=None,
         return finish("stage1_solver_failed", "No feasible first-stage path returned; stopped.")
     lower = [c.get("quality", {}).get("lower_bound") for c in candidates]
     report["stage1_quality"] = bound_quality(min(lower) if all(v is not None for v in lower) else None,
-                                            best["cost"], scope="sampled_full_pose_target_intersections_graph")
+                                            best["cost"], scope=("heuristically_pruned_target_intersections_graph"
+                                            if representative_pruning else "sampled_full_pose_target_intersections_graph"))
     target = targets[best["selected_target"]]
     envelope, region = envelopes[target["envelope"]], regions[target["region"]]
     projected = project_to_local_ssm(best["waypoints"][-1], envelope, region, np.zeros(6),
@@ -402,6 +438,9 @@ def main():
     parser.add_argument("--max-rounded-paths", type=int, default=MAX_ROUNDED_PATHS)
     parser.add_argument("--max-rounding-trials", type=int, default=MAX_ROUNDING_TRIALS)
     parser.add_argument("--solver", choices=["mosek", "clarabel"], default="mosek")
+    parser.add_argument("--representative-pruning", action="store_true")
+    parser.add_argument("--pruning-alpha", type=float, default=1.1)
+    parser.add_argument("--pruning-trials", type=int, default=100)
     parser.add_argument("--output", default="results/spatial7r/spatial7R_60cm90deg_two_stage_path.json")
     args = parser.parse_args()
     if (args.goal_position is None) != (args.goal_quaternion is None):
@@ -420,7 +459,9 @@ def main():
                                       compare_sampled=args.compare_sampled or args.compare_all,
                                       compare_union_hulls=args.compare_union_hulls or args.compare_all,
                                       compare_nonlinear_goal=args.compare_nonlinear_goal or args.compare_all,
-                                      nonlinear_solver=args.nonlinear_solver)
+                                      nonlinear_solver=args.nonlinear_solver,
+                                      representative_pruning=args.representative_pruning,
+                                      pruning_alpha=args.pruning_alpha, pruning_trials=args.pruning_trials)
     except (ValueError, OSError, RuntimeError) as exc:
         result = dict(success=False, status="planning_error", message=str(exc))
     output = Path(args.output)

@@ -1,0 +1,49 @@
+{
+  "status": "complete",
+  "first_method_rerun": false,
+  "seed": 0,
+  "retain_rounded_results": false,
+  "budgets": [
+    [
+      25600,
+      38400
+    ]
+  ],
+  "stage2_budget_policy": "matches_stage_one",
+  "rss_limit_gib": 6,
+  "timing_note": "Fresh sequential single runs; cached IRIS; no repeated-run timing statistics.",
+  "references": {
+    "4r": {
+      "source": "results/spatial4r/per_target_matched_stage_budget_sweep_20261029/paths200_trials300.json",
+      "cost": 0.07807983167132608,
+      "total_seconds": 115.8543413260013,
+      "graph_task_sha256": "0429dd3c31a8312948d9ae093d254772e98d7a8d2d8cdd9565f711f3c83a0ece",
+      "hull_targets_sha256": "9ecfa314cee70d16473f9cb88c8d3489aac6ca7baf6c2046a115ba0873cb218c"
+    }
+  },
+  "runs": [
+    {
+      "robot": "4r",
+      "paths": 25600,
+      "trials": 38400,
+      "status": "success",
+      "success": true,
+      "cost": 0.07804594024879011,
+      "relative_cost_above_reference": -0.0004340611629215507,
+      "total_seconds": 403.2628309859997,
+      "wall_seconds": 404.2890608159996,
+      "peak_rss_gib": 4.2596435546875,
+      "stage1_seconds": 250.00082124900018,
+      "stage2_seconds": 150.94146741300028,
+      "stage1_routes": 25600,
+      "stage2_routes": 25600,
+      "task_error": 5.551115123125783e-16,
+      "collision_free": true,
+      "graph_valid": true,
+      "cost_valid": true,
+      "selected_target": 8,
+      "report": "4r_paths25600.json",
+      "exit_code": 0
+    }
+  ]
+}

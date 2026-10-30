@@ -6,7 +6,7 @@ and sampling-trial budgets. It does not change the task, region graph,
 reliability weights, endpoint projection or stage-two algorithm. Historical
 per-call defaults and saved reports are preserved.
 
-Enable with both `--stage1-total-paths B` and `--stage1-total-trials T`.
+Enable with `--method per-target`, `--stage1-total-paths B` and `--stage1-total-trials T`.
 Each of N targets receives floor(B/N) paths and floor(T/N) trials, with one
 additional unit assigned to the first remainder targets in the existing
 deterministic target order. Totals are exactly conserved, no targets are

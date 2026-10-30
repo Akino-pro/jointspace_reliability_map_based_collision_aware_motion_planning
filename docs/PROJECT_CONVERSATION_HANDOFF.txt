@@ -1,6 +1,404 @@
 PROJECT AND CONVERSATION HANDOFF
-Updated: 2026-10-29
+Updated: 2026-10-30
 Language: English, following the user's instruction that project documentation be in English.
+
+AUTHORITATIVE CURRENT SNAPSHOT -- 2026-10-30
+==========================================
+Read this snapshot FIRST. It supersedes older statements below about default
+methods, budgets, theory-only status, and whether code/experiments exist.
+The older chronological record is preserved, not deleted. Paths below are
+relative to the repository root unless explicitly absolute. Detailed JSON,
+CSV, logs, validation and reproduction commands remain in the linked reports.
+No benchmark was rerun just to write this handoff. No commit or push was made.
+
+1. CURRENT USER DECISIONS AND DEFAULTS
+- User adopted union-hull as the primary 3R experiment, 800 paths / 1200 trial
+  caps in BOTH stages. scripts/planar3R_two_stage_gcs_planner.py CLI now defaults
+  to --method union-hull. --method per-target explicitly restores the previous
+  approach and its 100/150 per-call defaults. Programmatic plan_two_stage()
+  retains its backward-compatible explicit/per-target behavior; historical
+  benchmark scripts retain their own settings. Do not silently reinterpret them.
+- --compare-all / sampled/nonlinear comparisons or shared per-target budgets
+  now require --method per-target at that CLI. --union-hulls-only still works.
+  Primary union-hull output exposes waypoints/cost at top level for playback,
+  and retains full nested union_hull_baseline details. The historical marker
+  primary_method_executed=False means the OLD per-target method did not run.
+- 4R and 7R primary method/budget defaults have NOT been switched automatically.
+  New pruning, SLP, numerical and memory options are opt-in experiments.
+- Requested sweeps run ONLY union-hull, reading saved first-method results;
+  they do not rerun per-target merely to construct a comparison.
+- The old paused 4R sweep is a historical job. New separate experiments do not
+  authorize resuming an explicitly paused job. No planning worker is currently
+  pending from this session; all outcomes below are saved.
+
+2. COMPUTE ENVIRONMENT AND WHAT THE MEMORY LIMIT MEANS
+- Workspace: D:\新建文件夹\jointspace_reliability_map_based_collision_aware_motion_planning
+- Native IDE SDK / MuJoCo interpreter:
+  C:\Users\14118\AppData\Local\Programs\Python\Python310\python.exe
+- Drake/SLP experiments use the EXISTING container planar3r-iris-validation,
+  /usr/bin/python3, working directory /workspace (bind-mounted to this repo),
+  MOSEKLM_LICENSE_FILE=/tmp/mosek.lic. No packages were installed in this session.
+- Docker Desktop executable on this host:
+  C:\Users\14118\AppData\Local\Programs\DockerDesktop\Docker Desktop.exe
+  If the Docker API is unavailable, start Desktop, then docker start
+  planar3r-iris-validation. Do not assume the Program Files Docker path exists.
+- Observed Windows physical RAM: 15.64 GiB (approximately a 16 GB machine).
+  Docker/WSL visible memory: 7.572 GiB; swap approximately 2 GiB. Container
+  HostConfig.Memory=0: no additional independent container memory cap was set.
+- 6 GiB was OUR supervisor's active worker-RSS termination threshold, not a
+  hardware limit. Supervisors allow up to 7 GiB on this VM. Raising it to 7 GiB
+  permitted the last successful center-pruned run at 6.84 GiB RSS. Do not claim
+  that every 6 GiB termination was an OS OOM or mathematical infeasibility.
+- Some near-limit exit -9 cases have no recorded definitive cause; do not
+  relabel them as confirmed supervisor memory kills. Failed times mean time
+  until termination, not successful solution time.
+- MOSEK internal threads and Drake GraphOfConvexSetsOptions.parallelism are
+  separate. The installed GCS default reports 20; setting MSK_IPAR_NUM_THREADS=1
+  did NOT change that outer parallelism. This session did not benchmark an
+  explicit outer-parallelism=1 variant. Native introspection confirmed it exists.
+- Before Python toolchain commands consult the python-tools skill/IDE environment.
+  Use the documented container for Drake, native configured SDK for MuJoCo.
+- Local paper text extraction is available WITHOUT Python packages via:
+  C:\Program Files\Git\mingw64\bin\pdftotext.exe
+
+3. GCS / GOAL MODEL AND SSM EXPLANATIONS CONFIRMED WITH THE USER
+- union-hull keeps separate local convex target sets connected to one zero-cost
+  dummy sink. It is NOT the single convex hull of all targets. One GCS query
+  chooses a target and route; it does not externally enumerate target solves.
+- This dummy-sink construction is NOT established novelty. Official Drake
+  GcsTrajectoryOptimization::SolvePath already creates a Dummy target when the
+  target subgraph has multiple regions. The bottom GraphOfConvexSets API takes
+  one source/target vertex; the high-level class handles the multi-region case.
+- Official GcsTrajectoryOptimization uses REGION vertices with Bezier segment
+  variables and edge continuity constraints. GCS can also support intersection
+  vertices, but these are a different construction, not the only official form.
+  For a fixed matching region sequence/cost, continuous motion can correspond;
+  full path spaces and finite convex-relaxation/rounding outcomes need not match.
+- Current envelopes: first arc-length resample SSM branches (spacing .044 rad),
+  IK-correct samples, split periodic seams/failed corrections, then recursively
+  split existing ordered samples by INDEX. Five points split into [1,2,3] and
+  [3,4,5], sharing the midpoint; this does not add a new continuous arc midpoint.
+- Accept a group when 2*max(sample distance to endpoint SEGMENT) <= epsilon,
+  default epsilon .025 in joint-space distance. Its convex hull uses ALL points,
+  not just the endpoint chord. A planar circular-arc example forms a polygon;
+  actual higher-dimensional joint samples need not be coplanar. SVD finds affine
+  rank, and ConvexHull constructs halfspaces in that affine space.
+- The distance bound is hull-to-SAMPLED POLYLINE, not a certificate to the
+  unknown continuous SSM or a task-space FK-error tolerance. A hull point need
+  not satisfy the true task. Local constrained IK projection chooses a real
+  goal, followed by a second full fixed-goal GCS solve and independent validation.
+- Favor wording such as final feasible cost / solution quality, not certified
+  accuracy or global optimality. Coverage, sampling and rounding remain finite.
+
+4. PAPER CONSULTED AND REPRODUCTION SCOPE
+- Clark & Xie, Plan Optimal Collision-Free Trajectories With Nonconvex Cost
+  Functions Using Graphs of Convex Sets, TRO 2025, DOI 10.1109/TRO.2025.3610175.
+  Local PDF: C:\Users\14118\Downloads\Plan_Optimal_Collision-Free_Trajectories_With_Nonconvex_Cost_Functions_Using_Graphs_of_Convex_Sets.pdf
+- Paper Eq.(29): optimize a representative point WITHIN each intersection
+  vertex to minimize the sum of all graph edge costs, using SLP. Adjacent
+  intersection points share a convex region, so their connecting segment lies
+  in that region. Offline graph precedes task-specific Dijkstra/path pruning.
+- Paper alpha examples: Fig.9 1.0/1.02/1.11, k=1000; 2D small/medium/large
+  networks respectively (1.02,1000)/(1.001,1250)/(1.0005,1500); another 2D
+  comparison uses (1.001,1500). 7R dexterity Table II: 1.0/1.02/1.05, k=1000.
+  7R gravity Table III: 1.0/1.04/1.075, k=1000. Physical example states alpha1.0.
+- Paper hardware: Apple M2 Pro, 16 GB RAM. No 6/7 GiB process watchdog is stated
+  in the paper; this is not proof that its implementation has no limits. It
+  explicitly describes lightweight representative preprocessing and loading
+  only reduced-graph regions for optimization. No offline peak RAM is reported.
+- Our original preprocessor uses Chebyshev REGION centers, weighted center
+  distances, one reverse Dijkstra per target, and one guaranteed representative
+  shortest path. Random simple paths then satisfy accumulated estimated cost
+  + Dijkstra remaining cost <= alpha*Cmin. Favor neighbors with probability
+  proportional to exp[-(next-edge cost + remaining cost)]. Dead ends are
+  discarded; retain only successful full paths and union their directed edges.
+  Trial count is attempts PER TARGET, not guaranteed distinct successful paths.
+- alpha controls allowed estimated detour; trial count controls exploration
+  within that range. It does not enumerate all admissible paths or prune by
+  geometric distance to a single initial path. Center costs are not admissible
+  lower bounds on continuous trajectory cost; pruning may remove good routes.
+- User discussed replacing alpha by a more global trimming percentage. An
+  edge-score quantile based on d(s,u)+c(u,v)+d(v,g), normalized per target, with
+  protected target routes, was proposed only. NOT implemented or tested.
+  Computing a longest path ratio is not the same as controlling retained edge
+  percentage; cycles/simple-path complexity complicate that normalization.
+
+5. NEW IMPLEMENTATION / MODIFIED CODE MAP
+- scripts/gcs_representative_pruning.py: center-based pre-model pruning,
+  deterministic seed, per-target shortest-route preservation, remapping, stats.
+  Thin target representative fallback uses the SAME original feasibility LP,
+  without inflating constraints. This fixes the 4R zero-radius target case.
+- scripts/gcs_intersection_slp.py: intersection vertices; within-region edges;
+  sparse trust-region SLP for sum w_r*||q_u-q_v||, w_r=.01+1-R_r. Our densities
+  are constant, a CONVEX special case of the paper's spatially varying costs.
+  Gradient norm is smoothed with epsilon1e-6. Initial radius .15; accept actual
+  smoothed decrease and actual/predicted ratio>=.1, halve on rejection, grow
+  x1.5 up to1 for ratio>.75. Default cap80; both 4R/7R reached iteration_limit,
+  NOT a convergence or optimum certificate. Unsmoothed objective is recorded.
+  --slp-iterations 0 is the intersection-center/no-SLP ablation.
+- This is reproduction of the REPRESENTATIVE/PREPROCESSING idea, NOT full
+  paper GCSGC: no ReLU fit/McCormick cost model, and final GCS still uses our
+  region vertices. Intersection paths are mapped to region transitions, with
+  consecutive duplicates removed and region loops shortcut. Transition union
+  can recombine paths; exact intersection-turn constraints are not retained.
+- Offline NPZ caches check geometry, weights and optimizer-setting fingerprints.
+  Capacity guard rejects >50000 intersection vertices or >2000000 representative
+  edges BEFORE allocating every set/edge; it never silently drops graph edges.
+- scripts/spatial4R_two_stage_gcs_planner.py: --union-hulls-only; opt-in
+  --representative-pruning, --pruning-method centers|intersection-slp,
+  --pruning-alpha, --pruning-trials, --pruning-seed, --slp-cache,
+  --slp-iterations. 4R union-hull MOSEK explicitly uses primal form, including
+  union comparisons. Ordinary per-target defaults remain unchanged.
+- scripts/spatial7R_two_stage_gcs_planner.py: same programmatic pruning choices;
+  optional compact constraints, retained-result policy, MOSEK form/thread settings.
+  It now releases the full connectivity graph after component filtering and
+  collects unreachable preprocessing objects before GCS allocation.
+- scripts/spatial7R_full_graph_comparison.py and *_supervisor.py: configurable
+  GCS budgets, methods list (union only when requested), pruning/SLP options,
+  MOSEK solve form/internal threads, full-adjacency compaction WHEN pre-model
+  pruning is enabled, 6/7 GiB RSS watchdog, phase/provenance summaries. Old
+  experiments retain their explicit defaults/outputs. New experiments use new dirs.
+- scripts/planar3R_two_stage_gcs_planner.py: new primary CLI policy above;
+  solve_target_sets supports compact constraints, mosek_solve_form,
+  mosek_threads, retain_rounded_results; records relaxation status/details and
+  independent selected_path_valid diagnostic. GCS phase logging starts at1000
+  edges so moderate graphs are not mislabeled as preprocessing failures.
+- gcs/base.py: optional bounded rounding-result history. Default retains history
+  for compatibility. False STILL solves and compares EVERY candidate, keeping
+  the best result and exact counts, but not all result objects. It does not
+  reduce sampling, alter seed/order or add a shortcut path planner.
+- New experiment/summary scripts:
+  scripts/union_hull_large_budget_sweep.py (--robots, --budgets, bounded history);
+  scripts/summarize_4r_union_hull_budgets.py (CSV/JSON/PNG/SVG/README);
+  scripts/spatial4R_union_hull_diagnose.py (controlled solver modes);
+  scripts/spatial4R_intersection_slp_experiment.py (ablation, no per-target runs).
+- Tests added: test_gcs_representative_pruning.py, test_gcs_intersection_slp.py,
+  test_planar3r_primary_cli.py, test_rounding_history.py. Regression groups passed
+  at each change: e.g.57 checks after4RSLP;29 after7RSLP; most recent49 checks
+  across test_spatial7r, test_gcs_halfspaces and test_two_stage_gcs. Do not sum
+  these into a fictitious unique-test total. No tests run for this documentation edit.
+- Topical docs: docs/INTERSECTION_SLP_PREPROCESSING.md,
+  docs/SPATIAL4R_UNION_HULL_SOLVER.md, docs/SPATIAL7R_REPRESENTATIVE_PRUNING.md.
+  README.md, TWO_STAGE_SSM_WORKFLOW.md, GOAL_SET_COMPARISONS.md and
+  SHARED_GCS_BUDGET.md were updated for methods/options/defaults.
+
+6. 3R LARGE-BUDGET UNION-HULL RESULTS AND ADOPTION
+- Same forward3R input graph/targets as the saved reference; stage budgets
+  match each other, seed0. First method was NOT rerun.
+  BOTH stages paths/trials | final feasible cost | fresh task seconds
+  800/1200  | .381717767938768 | 23.496241165
+  1600/2400 | .381717767938768 | 36.494802241
+  3200/4800 | .381717767938768 | 64.790047238
+- Saved per-target200/300 reference: .3817177694444778,104.294969833s;
+  historical per-target100/150 also reaches that cost in86.691366517s with
+  stage two fixed200/300. 800-path union matches cost numerically and is faster.
+- Sources: results/diagnostics/union_hull_large_budget_20261030/ (3r_paths*.json,
+  summary.csv/json, logs,README). Both graph and target fingerprints checked.
+- User then selected primary3R union-hull800/1200 BOTH stages. Actual default
+  CLI smoke run: results/planar3r/union_hull_primary_cli_20261030.json,
+  cost .381717767938768,total24.569101936s,top-level waypoints usable by viewers.
+
+7. 4R UNION-HULL: NUMERICAL FAILURE, FIX, AND LARGER BUDGETS
+- Current ftwmax midpoint example:56regions,1202directed region edges,13targets.
+  First-stage union adds source/target/sink:71vertices,1229directed edges.
+  Historical per-target200/300 BOTH stages:.07807983167132608,115.854341326s;
+  stage1 105.617512057s,stage2 7.831994562s,11/13targets returned paths,
+  actual stage1 2200routes;stage2 200routes plus retained stage1 route.
+- Original automatic-MOSEK union failed BEFORE sampling at all800/1600/3200
+  budgets. Diagnose result:kSolverSpecificError,MOSEKrescode0,solution_status0
+  (UNKNOWN), not an infeasibility proof. Primal form solved the SAME relaxation
+  OPTIMAL,lower bound .0687300216393. No geometry or tolerance relaxation.
+- Fixed MOSEK primal, matching budgets in BOTH stages:
+  paths/trials | final cost | successful task seconds
+  800/1200    | .08981672404792272 | 75.004606325
+  1600/2400   | .08981672404792272 | 88.874691976
+  3200/4800   | .08981672404792272 | 106.756953297
+  6400/9600   | .08981672404792272 | 143.670262249
+  12800/19200 | .07804591134848907 | 227.401427548
+  25600/38400 | .07804594024879011 | 403.262830986
+-12800 reaches/slightly improves the saved per-target cost, but is slower.
+  First25600attempt hit6GiB after255.655s. Completed retry disabled accumulated
+  result history, solved all25600candidates EACH stage,peak4.26GiB. Its403.263s
+  excludes that failed attempt. All successful finals pass validation.
+- Source directories:
+  results/diagnostics/union_hull_large_budget_20261030/ (initial failures and3R);
+  results/diagnostics/spatial4r_union_hull_solver_20261030/ (solver diagnostics);
+  results/spatial4r/union_hull_primal_20261030/ (800/1600/3200);
+  results/spatial4r/union_hull_high_budget_20261030/ (6400/12800,failed25600,
+    all_budgets_comparison.csv/json, cost_time.png/svg, README);
+  results/spatial4r/union_hull_high_budget_bounded_history_20261030/ (25600retry).
+
+8. 4R REGION-CENTER AND INTERSECTION/SLP PRUNING EXPERIMENTS
+- Region-center pruning:2000attempts per target,seed0; union-hull BOTH stages
+  2000paths/3000trials. Same full input graph and target fingerprints as reference.
+  alpha | retained regions/edges | final cost | task seconds
+  1.1 |10/18  | .09108059035902882 |5.118373991
+  1.5 |32/223 | .07805638437205757 |20.473276253
+  First case yields only8/4distinct GCS paths under the caps;second yields2000
+  EACH stage. Both validate. alpha1.1 removes original region7,used by the
+  historical low-cost route[3,7,5,13,48]. alpha1.5 cost is about.0300% LOWER
+  than the saved per-target reference and recorded task time about5.66x lower;
+  single-run evidence,not a global optimum or statistical speedup certificate.
+- Raw files:results/spatial4r/union_hull_pruned_alpha110_trials2000_paths2000_20261030.json
+  and union_hull_pruned_alpha150_trials2000_paths2000_20261030.json.
+  Summary/reproduction:results/spatial4r/union_hull_pruning_alpha_comparison_20261030.md.
+- Intersection representative graph:601vertices,13662UNDIRECTEDwithin-region
+  edges.80SLPiterations reduce collective true cost4015.661373320 to
+  1723.643017498;maxhalfspaceviolation1.11e-16;offline1.312s(SLP1.283s),
+  statusiteration_limit. Cache:data/representative/spatial4r_intersection_slp_80.npz.
+- Same2000representativeattempts/target and2000/3000GCS in both stages:
+  method / alpha | final regions/edges | cost | task seconds
+  intersection centers,noSLP /1.1 |46/358| .212506307988673 |37.421768508
+  intersection+SLP /1.02 |26/113| INVALID selected path |10.635068513
+  intersection+SLP /1.1  |44/277| .078046263610548 |27.578348297(cold)
+  intersection+SLP /1.5  |56/732| .091080590039117 |49.639456058(cache)
+- alpha1.02 relaxation and702restrictions reported success, but the selected
+  path FAILED independent original-region validation. Separate diagnostic:
+  selected_path_valid=False,target7,candidatecost.0780568041907. Do NOT count
+  this cost as a valid result or claim the task is infeasible. Tolerances unchanged.
+- Source:results/spatial4r/intersection_slp_20261030/summary.csv/json and cases;
+  cold1.1 file:results/spatial4r/union_hull_intersection_slp_alpha110_20261030.json.
+  Related logs in logs/spatial4r_intersection_slp*.log. Full implementation,
+  parameters,reproduction scope and caveats:docs/INTERSECTION_SLP_PREPROCESSING.md.
+- SLP improved the fixed-alpha intersection-center ablation, but the previously
+  tuned REGION-center alpha1.5 run was faster. Larger alpha does not guarantee
+  better finite-relaxation/rounding results. Do not auto-change4R defaults.
+
+9. CURRENT LARGE 7R CASE -- KEEP DISTINCT FROM OLD30cm/20degree CASE
+- Task60cm translation,+90degrees about baseZ;one discoveredSSMbranch,
+  54samples,23hulltargets,2856reliability-subdivided free regions.
+  Full nonempty adjacency869670DIRECTEDedges. Original IRIS/adjacency cached.
+- Complete up-to-date index including supervisor failures:
+  results/spatial7r/current_60cm90deg_all_methods_20261030.md / .csv / .json.
+  The old30cm20degree all-goal-comparison and budget sweeps are DIFFERENT tasks.
+  Sampled-point and native-nonlinear-terminal baselines have NOT run on this
+  large60cm90degree case. Do not mix old costs near.0043 into this comparison.
+- Before successful pruning:default160-regioncap stopped at2856 BEFORE GCS;
+  full2856/869670 graph union/per-target200/300 both hit6GiB during construction;
+  dimension>=6 adjacency2856/38094 both still hit6GiB during solve;
+  constraint-compacted versions also hit6GiB;7GiB trial per-target hit cap,
+  union exited-9 without a definitive recorded cause. These are NOT all OOM
+  or physical-infeasibility certificates. Originals remain in full_graph*,
+  facet_graph*, facet_graph*_compact* directories under results/spatial7r/.
+
+9a. REGION CENTERS,alpha1.1,100representativeattempts PER TARGET
+- Full2856/869670input ->212regions/1403directededges,all23targets.
+  union-hull BOTH stages200/300:cost.6163320926948782,total74.919765811s,
+    stage1 21.193993761,stage2 19.821983127,peak3.84GiB.
+  per-target200/300 EACH target,thenfixedgoal200/300:
+    cost.576688012520229,total494.766195678s,stage1 441.986424178,
+    stage2 18.527776313,peak4.10GiB;23/23first-stage targets succeeded.
+- Sources:results/spatial7r/representative_pruned_alpha110/ (both reports,
+  comparison_summary.json,logs),docs/SPATIAL7R_REPRESENTATIVE_PRUNING.md.
+
+9b. INTERSECTION+SLP,alpha1.1,2000representativeattempts PER TARGET
+- Full input converted literally would require434835intersectionvertices and
+  184684472UNDIRECTEDrepresentativeedges. Size-checked,NOTmaterialized.
+- Used EXISTING adjacency requiring intersection dimension>=6:all2856regions
+  and23targets remain,38094directed regionedges. Low-dimensional contacts are
+  excluded;admissible routes/optimum can change. This is not a matched comparison
+  against the full-nonempty-adjacency center method.
+- Intersectiongraph19047vertices/277236UNDIRECTEDedges.80SLPiterations reduce
+  collective cost105583.438186225 to29148.907740407,maxviolation1.08e-8,
+  statusiteration_limit.Offlineconstruction/SLP127.456s(SLP127.022s),cache:
+  data/representative/spatial7r_facet_intersection_slp_80.npz.
+- Pruning leaves198regions/852directededges. union-hull BOTH stages1000/1500:
+  cost.5977706314971731,total91.543830246s USING offline cache;
+  geometry17.1649s,querypruning16.7047s,stage1 34.1425s,stage2 23.3506s,
+  peak2.84GiB. Eachstage1000uniquepaths;allfinalchecks pass.
+- Initial cold run with MOSEK automatic form failed relaxation UNKNOWN BEFORE
+  sampling,total168.999s including offlineSLP. Preserved in
+  results/spatial7r/intersection_slp_facet_1000_1500_20261030/.
+  Successful SAME-graph primal-form retry:
+  results/spatial7r/intersection_slp_facet_1000_1500_primal_20261030/README.md,
+  union_hulls.json,comparison_summary.json,union_hulls.log.
+  91.544s EXCLUDES already cached offlineSLP and failed attempt;not a successful
+  cold-run total.Uses redundant-constraint compaction and bounded result history.
+
+9c. LATEST:REGION CENTERS,alpha1.1,1000representativeattempts PER TARGET
+- User explicitly requested full-center pruning1000attempts,targetqueryunion
+  with BOTH stages1000paths/1500trials. FULL2856/869670input,23targets,seed0;
+  no facet filter or SLP. Pruning33.072s ->314regions/3188directededges.
+- Three6GiB attempts hit cap AFTER pruning, before completingstage1 GCS:
+  originalconstraints~101.3s;compacted~97.3s;compacted/primal/MOSEKthread1~96.6s.
+  Sources respectively:
+  results/spatial7r/center_alpha110_search1000_gcs1000_1500_20261030/;
+  .../center_alpha110_search1000_gcs1000_1500_compact_20261030/;
+  .../center_alpha110_search1000_gcs1000_1500_compact_primal_thread1_20261030/.
+  Some old phase labels lacked small-graph logging;logs show pruning already
+  finished. Do not call these failures of representative path sampling or stage2.
+- SUCCESS after releasing unused original connectivity graph,collecting unreachable
+  objects,and using7GiB guard,exact same314/3188graph,targetsets/costs:
+  compactrows(edge51337->10259,region6186->4945),MOSEKprimal,internalthread1,
+  defaultGCSouterparallelism,boundedroundinghistory,no loosened tolerances.
+  Finalcost.5800115979314839,task621.319192756s,peak6.84GiB.
+  geometry19.836278019,pruning33.072322436,stage1 299.945823490,
+  stage2 268.120328139. Stage1 generated1000unique/999solver-successful;
+  stage2 generated1000unique/1000successful;selectedtarget22;taskresidual0.0;
+  collision/graph/cost checks passed. TasktimeEXCLUDES threefailedattempts.
+- The cost is .5763% ABOVE savedper-target .576688012520229. Better than old
+  center-union .61633209, but slower in this memory-constrained solver setup.
+  Input graph/targethash match oldcenterreference,but selectedgraphs,budgets,
+  numericform/threads/memorymanagement differ;not a strict timing ablation.
+- Main detailed result/reproduction:
+  results/spatial7r/center_alpha110_search1000_gcs1000_1500_rss7_released_20261030/README.md
+  and union_hulls.json / comparison_summary.json / union_hulls.log beside it.
+- Among currentVALID7Rruns:lowestcost remainsper-target .57668801;
+  shortestrecordedtasktime center-union100attempts74.9s;
+  lowestRSS intersection/SLP-union2.84GiB. No validated original-full-graph
+  unpruned solve exists. No global continuous-goal optimum has been certified.
+
+10. VISUALIZATION AND REPLAY PROVENANCE
+-4Ruser-viewed per-target .0780798316713 source:
+  results/spatial4r/per_target_matched_stage_budget_sweep_20261029/paths200_trials300.json.
+  Native command: configured Python -m scripts.spatial4R_mujoco_viewer --path
+  that file --speed 0.5. Output:visualizations/spatial4R_per_target_007807983/;
+  logs/spatial4r_per_target_mujoco_stdout.log and *_stderr.log.
+-7Ruser-viewed INTERSECTION/SLP .597770631497 (not latestcenter .5800116):
+  rawresult results/spatial7r/intersection_slp_facet_1000_1500_primal_20261030/union_hulls.json.
+  Nestedunionreport is flattened to a SEPARATE self-contained replay file,
+  preserving robot,goal_pose,obstacles,waypoints and sourceprovenance:
+  visualizations/spatial7R_intersection_slp_1000_1500/replay_input.json.
+  Native command: configured Python -m scripts.spatial7R_mujoco_viewer --path
+  thatreplayfile --output-dir visualizations/spatial7R_intersection_slp_1000_1500
+  --speed 0.3. It passed sampled MuJoCo/capsule/FK checks before GUI launch.
+  Outputs XML/replay_report.json;logs/spatial7r_intersection_slp_mujoco_*.
+  No GIF export or visualization of newestcenter .5800116 was requested/run.
+- Native viewers were launched (4RPID35540,7RPID26672);both no longer existed
+  when this handoff was checked. Do not claim a window is still open or reuse
+  stalePIDs. Start afresh when requested. Spacepause,Rrestart,Ttrace,Lloop,
+  mousecamera,Escclose. Prescribed kinematic playback,not dynamic tracking.
+- Generic spatial loader expects TOP-LEVEL waypoints; rawnestedunionresults
+  may need replay_input extraction,as done above. Do not overwrite originalreports.
+
+11. RECORD-KEEPING / NEXT-AGENT GUARDRAILS
+- Complete case parameters,full precision,failed attempts,solver diagnostics,
+  trialcaps vs actualuniquepaths,validation and reproduction commands are in
+  the cited JSON/CSV/README/logs. This snapshot is the index,not a replacement
+  for raw evidence. Costs are region-weighted joint-space lengths;compare only
+  compatible scenes and declared graph/goal models.
+- docs/HANDOFF_20261030_RECORD_INDEX.json provides an existence-checked index
+  of critical reports and the uncommitted workspace status snapshot. Original
+  experiment reports remain authoritative for full numerical precision.
+- Times are measured sequential single runs unless explicitly marked replay,
+  cachedoffline,failed/untiltermination,or stitchedestimate. Never add failed
+  attempt times to successful tasktime silently or call cachedtime coldtime.
+- Existing coverage/SSM completeness/global optimality flags remainFALSE.
+  No claim of novelty for dummy-sink modeling or standard GCS convex goals.
+- All current changes and artifacts remain uncommitted/unpushed. Preserve the
+  earlier unrelated untracked .DS_Store files under obs_avoid_ft_mp_Landon;
+  do not blanket clean/reset/stage the workspace. MuJoCo generated an existing
+  visualization replay_report change as well as new separate outputfolders.
+- Open research limitations:complete final-intersection GCS not implemented;
+  SLP not convergence-certified;percentage-based pruning onlydiscussed;
+  samplehulls do not certify continuousSSMcoverage;defaultGCSouterparallelism
+  can affect memory;current7Rmethods differ in adjacency/budgets/settings.
+- Latest user request here was to consolidate ALL this into the handoff.
+  It does not itself request more solves,parameter changes,or deployments.
+
+END OF AUTHORITATIVE 2026-10-30 SNAPSHOT
+Everything below is preserved historical context; newer dated decisions above
+override old statements labeled current/latest/default/theory-only.
 
 LATEST RAW IRIS PROJECTION REQUEST
 - User requested all theta1/theta2 collision-free region projections BEFORE
@@ -1763,7 +2161,7 @@ replaced with independent per-intersection GCS solves:
 - Compare against the current sampled-endpoint workflow on the same scene.
 - Do not add an online repeated epsilon/GCS search unless the user requests it.
 
-CURRENT HANDOFF STATUS
+HISTORICAL HANDOFF STATUS (SUPERSEDED BY THE 2026-10-30 SNAPSHOT ABOVE)
 - Latest full rerun: BOTH stages now default to 200 paths / 300 trials.
   See two_stage_all_paths200_trials300.json. All 20 first-stage targets
   succeeded with 200 routes each; 13 target costs improved by more than 1e-8

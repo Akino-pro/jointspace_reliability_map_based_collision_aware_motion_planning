@@ -1,0 +1,5 @@
+Geometry: 1 reliability branches; 27 -> 27 boxes after equal-reliability merging; 43 free regions, 824 directed edges; 301 SSM samples, 20 targets
+INFO:drake:Solved GCS shortest path using MOSEK with convex_relaxation=true and preprocessing=true and no rounding.
+INFO:drake:Found 1600 unique paths, discarded 32 duplicate paths.
+INFO:drake:Solved GCS shortest path using MOSEK with convex_relaxation=true and preprocessing=true and no rounding.
+INFO:drake:Found 1600 unique paths, discarded 77 duplicate paths.

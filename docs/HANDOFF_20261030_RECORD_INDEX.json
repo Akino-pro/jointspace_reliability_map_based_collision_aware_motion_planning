@@ -1,0 +1,239 @@
+{
+    "session_date":  "2026-10-30",
+    "main_handoff":  "docs/PROJECT_CONVERSATION_HANDOFF.txt",
+    "scope":  "Current session record index; not a claim that all workspace changes originated in this session",
+    "critical_files_checked":  41,
+    "critical_files":  [
+                           {
+                               "path":  "README.md",
+                               "bytes":  15838
+                           },
+                           {
+                               "path":  "docs/PROJECT_CONVERSATION_HANDOFF.txt",
+                               "bytes":  154987
+                           },
+                           {
+                               "path":  "docs/INTERSECTION_SLP_PREPROCESSING.md",
+                               "bytes":  6782
+                           },
+                           {
+                               "path":  "docs/SPATIAL4R_UNION_HULL_SOLVER.md",
+                               "bytes":  2519
+                           },
+                           {
+                               "path":  "docs/SPATIAL7R_REPRESENTATIVE_PRUNING.md",
+                               "bytes":  4019
+                           },
+                           {
+                               "path":  "scripts/gcs_representative_pruning.py",
+                               "bytes":  5878
+                           },
+                           {
+                               "path":  "scripts/gcs_intersection_slp.py",
+                               "bytes":  13117
+                           },
+                           {
+                               "path":  "scripts/union_hull_large_budget_sweep.py",
+                               "bytes":  8015
+                           },
+                           {
+                               "path":  "scripts/spatial4R_intersection_slp_experiment.py",
+                               "bytes":  3847
+                           },
+                           {
+                               "path":  "scripts/spatial4R_union_hull_diagnose.py",
+                               "bytes":  3175
+                           },
+                           {
+                               "path":  "scripts/summarize_4r_union_hull_budgets.py",
+                               "bytes":  7179
+                           },
+                           {
+                               "path":  "tests/test_gcs_intersection_slp.py",
+                               "bytes":  3554
+                           },
+                           {
+                               "path":  "tests/test_gcs_representative_pruning.py",
+                               "bytes":  2728
+                           },
+                           {
+                               "path":  "tests/test_planar3r_primary_cli.py",
+                               "bytes":  1524
+                           },
+                           {
+                               "path":  "tests/test_rounding_history.py",
+                               "bytes":  2498
+                           },
+                           {
+                               "path":  "results/diagnostics/union_hull_large_budget_20261030/summary.json",
+                               "bytes":  5232
+                           },
+                           {
+                               "path":  "results/planar3r/union_hull_primary_cli_20261030.json",
+                               "bytes":  12952
+                           },
+                           {
+                               "path":  "results/diagnostics/spatial4r_union_hull_solver_20261030/primal.json",
+                               "bytes":  320
+                           },
+                           {
+                               "path":  "results/spatial4r/union_hull_primal_20261030/4r_paths800.json",
+                               "bytes":  11662
+                           },
+                           {
+                               "path":  "results/spatial4r/union_hull_primal_20261030/4r_paths1600.json",
+                               "bytes":  11677
+                           },
+                           {
+                               "path":  "results/spatial4r/union_hull_primal_20261030/4r_paths3200.json",
+                               "bytes":  11679
+                           },
+                           {
+                               "path":  "results/spatial4r/union_hull_high_budget_20261030/summary.json",
+                               "bytes":  2844
+                           },
+                           {
+                               "path":  "results/spatial4r/union_hull_high_budget_20261030/all_budgets_comparison.json",
+                               "bytes":  3792
+                           },
+                           {
+                               "path":  "results/spatial4r/union_hull_high_budget_bounded_history_20261030/summary.json",
+                               "bytes":  1472
+                           },
+                           {
+                               "path":  "results/spatial4r/union_hull_pruned_alpha110_trials2000_paths2000_20261030.json",
+                               "bytes":  14969
+                           },
+                           {
+                               "path":  "results/spatial4r/union_hull_pruned_alpha150_trials2000_paths2000_20261030.json",
+                               "bytes":  15243
+                           },
+                           {
+                               "path":  "results/spatial4r/intersection_slp_20261030/summary.json",
+                               "bytes":  4158
+                           },
+                           {
+                               "path":  "results/spatial4r/intersection_slp_20261030/intersection_slp_alpha102_validation_diagnostic.json",
+                               "bytes":  31293
+                           },
+                           {
+                               "path":  "results/spatial7r/current_60cm90deg_all_methods_20261030.md",
+                               "bytes":  6123
+                           },
+                           {
+                               "path":  "results/spatial7r/current_60cm90deg_all_methods_20261030.json",
+                               "bytes":  9602
+                           },
+                           {
+                               "path":  "results/spatial7r/representative_pruned_alpha110/comparison_summary.json",
+                               "bytes":  17057
+                           },
+                           {
+                               "path":  "results/spatial7r/intersection_slp_facet_1000_1500_20261030/comparison_summary.json",
+                               "bytes":  32232
+                           },
+                           {
+                               "path":  "results/spatial7r/intersection_slp_facet_1000_1500_primal_20261030/comparison_summary.json",
+                               "bytes":  32294
+                           },
+                           {
+                               "path":  "results/spatial7r/center_alpha110_search1000_gcs1000_1500_20261030/comparison_summary.json",
+                               "bytes":  875
+                           },
+                           {
+                               "path":  "results/spatial7r/center_alpha110_search1000_gcs1000_1500_compact_20261030/comparison_summary.json",
+                               "bytes":  878
+                           },
+                           {
+                               "path":  "results/spatial7r/center_alpha110_search1000_gcs1000_1500_compact_primal_thread1_20261030/comparison_summary.json",
+                               "bytes":  878
+                           },
+                           {
+                               "path":  "results/spatial7r/center_alpha110_search1000_gcs1000_1500_rss7_released_20261030/comparison_summary.json",
+                               "bytes":  11757
+                           },
+                           {
+                               "path":  "data/representative/spatial4r_intersection_slp_80.npz",
+                               "bytes":  45902
+                           },
+                           {
+                               "path":  "data/representative/spatial7r_facet_intersection_slp_80.npz",
+                               "bytes":  1210709
+                           },
+                           {
+                               "path":  "visualizations/spatial7R_intersection_slp_1000_1500/replay_input.json",
+                               "bytes":  186619
+                           },
+                           {
+                               "path":  "visualizations/spatial7R_intersection_slp_1000_1500/replay_report.json",
+                               "bytes":  2061
+                           }
+                       ],
+    "workspace_status":  [
+                             " M README.md",
+                             " M docs/GOAL_SET_COMPARISONS.md",
+                             " M docs/PROJECT_CONVERSATION_HANDOFF.txt",
+                             " M docs/SHARED_GCS_BUDGET.md",
+                             " M docs/TWO_STAGE_SSM_WORKFLOW.md",
+                             " M gcs/base.py",
+                             " M scripts/planar3R_two_stage_gcs_planner.py",
+                             " M scripts/spatial4R_two_stage_gcs_planner.py",
+                             " M scripts/spatial7R_full_graph_comparison.py",
+                             " M scripts/spatial7R_full_graph_supervisor.py",
+                             " M scripts/spatial7R_two_stage_gcs_planner.py",
+                             " M visualizations/spatial4R_midpoint_mujoco/replay_report.json",
+                             "?? data/representative/",
+                             "?? docs/INTERSECTION_SLP_PREPROCESSING.md",
+                             "?? docs/SPATIAL4R_UNION_HULL_SOLVER.md",
+                             "?? docs/SPATIAL7R_REPRESENTATIVE_PRUNING.md",
+                             "?? logs/planar3r_union_hull_primary_cli_20261030.log",
+                             "?? logs/spatial4r_intersection_slp_alpha102_validation_diagnostic.log",
+                             "?? logs/spatial4r_intersection_slp_alpha110_20261030.log",
+                             "?? logs/spatial4r_intersection_slp_experiment_20261030.log",
+                             "?? logs/spatial4r_per_target_mujoco_stderr.log",
+                             "?? logs/spatial4r_per_target_mujoco_stdout.log",
+                             "?? logs/spatial4r_union_hull_pruned_alpha110_trials2000_paths2000_20261030.log",
+                             "?? logs/spatial4r_union_hull_pruned_alpha150_trials2000_paths2000_20261030.log",
+                             "?? logs/spatial7r_intersection_slp_mujoco_stderr.log",
+                             "?? logs/spatial7r_intersection_slp_mujoco_stdout.log",
+                             "?? obs_avoid_ft_mp_Landon/.DS_Store",
+                             "?? obs_avoid_ft_mp_Landon/arms/.DS_Store",
+                             "?? obs_avoid_ft_mp_Landon/exp/.DS_Store",
+                             "?? obs_avoid_ft_mp_Landon/exp/3R/.DS_Store",
+                             "?? results/diagnostics/spatial4r_union_hull_solver_20261030/",
+                             "?? results/diagnostics/union_hull_large_budget_20261030/",
+                             "?? results/planar3r/union_hull_primary_cli_20261030.json",
+                             "?? results/spatial4r/intersection_slp_20261030/",
+                             "?? results/spatial4r/union_hull_high_budget_20261030/",
+                             "?? results/spatial4r/union_hull_high_budget_bounded_history_20261030/",
+                             "?? results/spatial4r/union_hull_intersection_slp_alpha110_20261030.json",
+                             "?? results/spatial4r/union_hull_primal_20261030/",
+                             "?? results/spatial4r/union_hull_pruned_alpha110_trials2000_paths2000_20261030.json",
+                             "?? results/spatial4r/union_hull_pruned_alpha150_trials2000_paths2000_20261030.json",
+                             "?? results/spatial4r/union_hull_pruning_alpha_comparison_20261030.md",
+                             "?? results/spatial7r/center_alpha110_search1000_gcs1000_1500_20261030/",
+                             "?? results/spatial7r/center_alpha110_search1000_gcs1000_1500_compact_20261030/",
+                             "?? results/spatial7r/center_alpha110_search1000_gcs1000_1500_compact_primal_thread1_20261030/",
+                             "?? results/spatial7r/center_alpha110_search1000_gcs1000_1500_rss7_released_20261030/",
+                             "?? results/spatial7r/current_60cm90deg_all_methods_20261030.csv",
+                             "?? results/spatial7r/current_60cm90deg_all_methods_20261030.json",
+                             "?? results/spatial7r/current_60cm90deg_all_methods_20261030.md",
+                             "?? results/spatial7r/intersection_graph_size_20261030.json",
+                             "?? results/spatial7r/intersection_slp_facet_1000_1500_20261030/",
+                             "?? results/spatial7r/intersection_slp_facet_1000_1500_primal_20261030/",
+                             "?? results/spatial7r/representative_pruned_alpha110/",
+                             "?? scripts/gcs_intersection_slp.py",
+                             "?? scripts/gcs_representative_pruning.py",
+                             "?? scripts/spatial4R_intersection_slp_experiment.py",
+                             "?? scripts/spatial4R_union_hull_diagnose.py",
+                             "?? scripts/summarize_4r_union_hull_budgets.py",
+                             "?? scripts/union_hull_large_budget_sweep.py",
+                             "?? tests/test_gcs_intersection_slp.py",
+                             "?? tests/test_gcs_representative_pruning.py",
+                             "?? tests/test_planar3r_primary_cli.py",
+                             "?? tests/test_rounding_history.py",
+                             "?? visualizations/spatial4R_per_target_007807983/",
+                             "?? visualizations/spatial7R_intersection_slp_1000_1500/"
+                         ],
+    "committed_or_pushed":  false
+}

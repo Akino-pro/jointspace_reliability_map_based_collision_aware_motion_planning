@@ -1,0 +1,1036 @@
+{
+  "success": false,
+  "planner": "spatial4R_two_stage_gcs",
+  "robot": {
+    "alpha": [
+      1.4835298641951802,
+      -0.9250245035569946,
+      -1.5533430342749535,
+      1.1868238913561442
+    ],
+    "d": [
+      -0.29,
+      0,
+      0.05,
+      1
+    ],
+    "a": [
+      0.5,
+      0.48,
+      0.76,
+      0.95
+    ],
+    "reference_CA": [
+      [
+        -2.548180707911721,
+        2.548180707911721
+      ],
+      [
+        -4.084070449666731,
+        0.17453292519943295
+      ],
+      [
+        -2.007128639793479,
+        2.303834612632515
+      ],
+      [
+        -1.7627825445142729,
+        2.0594885173533086
+      ]
+    ],
+    "reliabilities": [
+      0.9,
+      0.7,
+      0.5,
+      0.3
+    ]
+  },
+  "robot_parameter_set": "ftwmax",
+  "position_task_only": true,
+  "physical_joint_limits": null,
+  "start_configuration": [
+    0.2,
+    -0.8,
+    0.6,
+    -0.3
+  ],
+  "start_point": [
+    2.0780462171327434,
+    1.6396001579405586,
+    -0.39026242826544744
+  ],
+  "goal_point": [
+    0.8408788051720951,
+    2.5945928524838324,
+    -0.6250625832937884
+  ],
+  "obstacles": [
+    {
+      "type": "sphere",
+      "center": [
+        1.4594625111524193,
+        2.1170965052121957,
+        -0.5076625057796179
+      ],
+      "radius": 0.1
+    }
+  ],
+  "link_radius": 0.015,
+  "iris_checkpoint": "data/iris/spatial4R_ftwmax_iris_midpoint_regions.npz",
+  "geometric_epsilon": 0.025,
+  "ssm_arc_spacing": 0.044,
+  "reliability_epsilon": 0.01,
+  "solver_settings": {
+    "max_rounded_paths": 2000,
+    "max_rounding_trials": 3000,
+    "rounding_seed": 0
+  },
+  "gcs_solve_calls": 0,
+  "continuous_coverage_certified": false,
+  "global_optimality_certified": false,
+  "ssm_branch_count": 1,
+  "ssm_trace": {
+    "ik_attempts": 80,
+    "failed_traces": 0,
+    "ik_attempt_budget": 80,
+    "branch_limit": 4,
+    "branch_count": 1,
+    "failed_ik": 47,
+    "duplicate_starts": 32,
+    "random_seed": 1,
+    "duplicate_tolerance": 0.005,
+    "termination_reason": "ik_attempt_budget_exhausted",
+    "all_branches_certified": false
+  },
+  "original_region_count": 3,
+  "iris_generation_seconds": 70.696690348,
+  "iris_coverage_radius": 0.9,
+  "coverage_is_complete": false,
+  "adjacency_statistics": {
+    "input_region_count": 56,
+    "region_pairs": 1540,
+    "bounding_lp_count": 0,
+    "candidate_intersections": 724,
+    "intersection_lp_count": 724,
+    "directed_edges": 1202,
+    "periodic": false,
+    "periodic_directed_edges": 0
+  },
+  "sampling_mode": "fixed_arc_spacing",
+  "ssm_branch_arc_lengths": [
+    6.727211580906791
+  ],
+  "ssm_total_arc_length": 6.727211580906791,
+  "ssm_branch_sample_counts": [
+    153
+  ],
+  "sample_refinement_failures": 0,
+  "graph_task_sha256": "0429dd3c31a8312948d9ae093d254772e98d7a8d2d8cdd9565f711f3c83a0ece",
+  "hull_targets_sha256": "9ecfa314cee70d16473f9cb88c8d3489aac6ca7baf6c2046a115ba0873cb218c",
+  "ssm_branch_summaries": [
+    {
+      "branch": 0,
+      "bounding_box": [
+        [
+          0.7914447347605025,
+          1.7746154404238599
+        ],
+        [
+          -0.7710196000355833,
+          0.35817408000361883
+        ],
+        [
+          -1.4034512168883968,
+          0.38763877653474754
+        ],
+        [
+          -1.0035917151146254,
+          0.9363846642423548
+        ]
+      ],
+      "arc_length": 6.727211580906791,
+      "sample_count": 153,
+      "envelope_count": 32,
+      "target_set_count": 13
+    }
+  ],
+  "unmerged_reliability_partition_count": 81,
+  "reliability_partition_count": 81,
+  "reliability_rule": "union_of_branch_recovery_sets",
+  "region_count": 26,
+  "edge_count": 113,
+  "envelope_count": 32,
+  "target_set_count": 13,
+  "actual_sample_count": 153,
+  "geometry_seconds": 2.2146116610001627,
+  "representative_pruning": {
+    "method": "intersection_vertices_trust_region_slp",
+    "representative": {
+      "intersection_vertices": 601,
+      "representative_undirected_edges": 13662,
+      "optimization": {
+        "initial_cost": 4015.6613733203462,
+        "final_cost": 1723.6430174979555,
+        "initial_smoothed_cost": 4015.662149124519,
+        "final_smoothed_cost": 1723.6432731589832,
+        "smoothing": 1e-06,
+        "iterations": 80,
+        "accepted_iterations": 63,
+        "status": "iteration_limit",
+        "history": [
+          {
+            "iteration": 1,
+            "objective": 4015.662149124519,
+            "candidate": 3543.4356757517767,
+            "trust_radius": 0.15,
+            "accepted": true,
+            "ratio": 0.6346827492728343
+          },
+          {
+            "iteration": 2,
+            "objective": 3543.4356757517767,
+            "candidate": 2978.0634290934763,
+            "trust_radius": 0.15,
+            "accepted": true,
+            "ratio": 0.8082263958549996
+          },
+          {
+            "iteration": 3,
+            "objective": 2978.0634290934763,
+            "candidate": 2794.6261739746456,
+            "trust_radius": 0.22499999999999998,
+            "accepted": true,
+            "ratio": 0.23246378351542532
+          },
+          {
+            "iteration": 4,
+            "objective": 2794.6261739746456,
+            "candidate": 2327.993636945962,
+            "trust_radius": 0.22499999999999998,
+            "accepted": true,
+            "ratio": 0.4625275464184748
+          },
+          {
+            "iteration": 5,
+            "objective": 2327.993636945962,
+            "candidate": 2438.3993689997255,
+            "trust_radius": 0.22499999999999998,
+            "accepted": false,
+            "ratio": -0.14836946771993922
+          },
+          {
+            "iteration": 6,
+            "objective": 2327.993636945962,
+            "candidate": 2211.4314058589503,
+            "trust_radius": 0.11249999999999999,
+            "accepted": true,
+            "ratio": 0.29741363784637637
+          },
+          {
+            "iteration": 7,
+            "objective": 2211.4314058589503,
+            "candidate": 1901.125641785478,
+            "trust_radius": 0.11249999999999999,
+            "accepted": true,
+            "ratio": 0.6801177558727985
+          },
+          {
+            "iteration": 8,
+            "objective": 1901.125641785478,
+            "candidate": 2015.0463461564798,
+            "trust_radius": 0.11249999999999999,
+            "accepted": false,
+            "ratio": -0.4895234106731308
+          },
+          {
+            "iteration": 9,
+            "objective": 1901.125641785478,
+            "candidate": 1910.7939545997706,
+            "trust_radius": 0.056249999999999994,
+            "accepted": false,
+            "ratio": -0.0808565044101574
+          },
+          {
+            "iteration": 10,
+            "objective": 1901.125641785478,
+            "candidate": 1890.2998066340776,
+            "trust_radius": 0.028124999999999997,
+            "accepted": true,
+            "ratio": 0.17953592024829265
+          },
+          {
+            "iteration": 11,
+            "objective": 1890.2998066340776,
+            "candidate": 1837.9699804081197,
+            "trust_radius": 0.028124999999999997,
+            "accepted": true,
+            "ratio": 0.5648650342951864
+          },
+          {
+            "iteration": 12,
+            "objective": 1837.9699804081197,
+            "candidate": 1819.313579025157,
+            "trust_radius": 0.028124999999999997,
+            "accepted": true,
+            "ratio": 0.22990730431143624
+          },
+          {
+            "iteration": 13,
+            "objective": 1819.313579025157,
+            "candidate": 1774.1990449366028,
+            "trust_radius": 0.028124999999999997,
+            "accepted": true,
+            "ratio": 0.48858721821167284
+          },
+          {
+            "iteration": 14,
+            "objective": 1774.1990449366028,
+            "candidate": 1774.9134120932385,
+            "trust_radius": 0.028124999999999997,
+            "accepted": false,
+            "ratio": -0.010060016544555432
+          },
+          {
+            "iteration": 15,
+            "objective": 1774.1990449366028,
+            "candidate": 1760.3652316394225,
+            "trust_radius": 0.014062499999999999,
+            "accepted": true,
+            "ratio": 0.386484472465522
+          },
+          {
+            "iteration": 16,
+            "objective": 1760.3652316394225,
+            "candidate": 1723.7863665581328,
+            "trust_radius": 0.014062499999999999,
+            "accepted": true,
+            "ratio": 0.8361316382919226
+          },
+          {
+            "iteration": 17,
+            "objective": 1723.7863665581328,
+            "candidate": 1745.8045755004698,
+            "trust_radius": 0.021093749999999998,
+            "accepted": false,
+            "ratio": -0.9030213335343318
+          },
+          {
+            "iteration": 18,
+            "objective": 1723.7863665581328,
+            "candidate": 1731.0528833449282,
+            "trust_radius": 0.010546874999999999,
+            "accepted": false,
+            "ratio": -0.5533720177384697
+          },
+          {
+            "iteration": 19,
+            "objective": 1723.7863665581328,
+            "candidate": 1725.9860860315353,
+            "trust_radius": 0.0052734374999999995,
+            "accepted": false,
+            "ratio": -0.3344990693913704
+          },
+          {
+            "iteration": 20,
+            "objective": 1723.7863665581328,
+            "candidate": 1724.5650893343977,
+            "trust_radius": 0.0026367187499999997,
+            "accepted": false,
+            "ratio": -0.2365416369872935
+          },
+          {
+            "iteration": 21,
+            "objective": 1723.7863665581328,
+            "candidate": 1724.1088554661835,
+            "trust_radius": 0.0013183593749999999,
+            "accepted": false,
+            "ratio": -0.1955420328552333
+          },
+          {
+            "iteration": 22,
+            "objective": 1723.7863665581328,
+            "candidate": 1723.930242793813,
+            "trust_radius": 0.0006591796874999999,
+            "accepted": false,
+            "ratio": -0.17410771515122664
+          },
+          {
+            "iteration": 23,
+            "objective": 1723.7863665581328,
+            "candidate": 1723.8523851430455,
+            "trust_radius": 0.00032958984374999997,
+            "accepted": false,
+            "ratio": -0.1591300277028411
+          },
+          {
+            "iteration": 24,
+            "objective": 1723.7863665581328,
+            "candidate": 1723.816347618277,
+            "trust_radius": 0.00016479492187499998,
+            "accepted": false,
+            "ratio": -0.14437898261721865
+          },
+          {
+            "iteration": 25,
+            "objective": 1723.7863665581328,
+            "candidate": 1723.8001014393499,
+            "trust_radius": 8.239746093749999e-05,
+            "accepted": false,
+            "ratio": -0.1322853939754981
+          },
+          {
+            "iteration": 26,
+            "objective": 1723.7863665581328,
+            "candidate": 1723.7925632785877,
+            "trust_radius": 4.1198730468749996e-05,
+            "accepted": false,
+            "ratio": -0.11936551816956784
+          },
+          {
+            "iteration": 27,
+            "objective": 1723.7863665581328,
+            "candidate": 1723.788900338308,
+            "trust_radius": 2.0599365234374998e-05,
+            "accepted": false,
+            "ratio": -0.09761485473789032
+          },
+          {
+            "iteration": 28,
+            "objective": 1723.7863665581328,
+            "candidate": 1723.787105701279,
+            "trust_radius": 1.0299682617187499e-05,
+            "accepted": false,
+            "ratio": -0.056951547374064666
+          },
+          {
+            "iteration": 29,
+            "objective": 1723.7863665581328,
+            "candidate": 1723.7862454924236,
+            "trust_radius": 5.1498413085937495e-06,
+            "accepted": false,
+            "ratio": 0.018656411845409802
+          },
+          {
+            "iteration": 30,
+            "objective": 1723.7863665581328,
+            "candidate": 1723.7858784069388,
+            "trust_radius": 2.5749206542968747e-06,
+            "accepted": true,
+            "ratio": 0.15044969841835357
+          },
+          {
+            "iteration": 31,
+            "objective": 1723.7858784069388,
+            "candidate": 1723.781858337965,
+            "trust_radius": 2.5749206542968747e-06,
+            "accepted": true,
+            "ratio": 0.6296196172894927
+          },
+          {
+            "iteration": 32,
+            "objective": 1723.781858337965,
+            "candidate": 1723.780322321227,
+            "trust_radius": 2.5749206542968747e-06,
+            "accepted": true,
+            "ratio": 0.2934257528364659
+          },
+          {
+            "iteration": 33,
+            "objective": 1723.780322321227,
+            "candidate": 1723.7761549507202,
+            "trust_radius": 2.5749206542968747e-06,
+            "accepted": true,
+            "ratio": 0.6323206051830579
+          },
+          {
+            "iteration": 34,
+            "objective": 1723.7761549507202,
+            "candidate": 1723.774591679976,
+            "trust_radius": 2.5749206542968747e-06,
+            "accepted": true,
+            "ratio": 0.2980743646015695
+          },
+          {
+            "iteration": 35,
+            "objective": 1723.774591679976,
+            "candidate": 1723.7704402849577,
+            "trust_radius": 2.5749206542968747e-06,
+            "accepted": true,
+            "ratio": 0.6309502516970596
+          },
+          {
+            "iteration": 36,
+            "objective": 1723.7704402849577,
+            "candidate": 1723.76889019253,
+            "trust_radius": 2.5749206542968747e-06,
+            "accepted": true,
+            "ratio": 0.29539144902326775
+          },
+          {
+            "iteration": 37,
+            "objective": 1723.76889019253,
+            "candidate": 1723.7647214416927,
+            "trust_radius": 2.5749206542968747e-06,
+            "accepted": true,
+            "ratio": 0.6327966867217304
+          },
+          {
+            "iteration": 38,
+            "objective": 1723.7647214416927,
+            "candidate": 1723.7631827773505,
+            "trust_radius": 2.5749206542968747e-06,
+            "accepted": true,
+            "ratio": 0.2936467856681901
+          },
+          {
+            "iteration": 39,
+            "objective": 1723.7631827773505,
+            "candidate": 1723.7589680187755,
+            "trust_radius": 2.5749206542968747e-06,
+            "accepted": true,
+            "ratio": 0.6392551411396666
+          },
+          {
+            "iteration": 40,
+            "objective": 1723.7589680187755,
+            "candidate": 1723.757469248902,
+            "trust_radius": 2.5749206542968747e-06,
+            "accepted": true,
+            "ratio": 0.28743926802928343
+          },
+          {
+            "iteration": 41,
+            "objective": 1723.757469248902,
+            "candidate": 1723.7532733039825,
+            "trust_radius": 2.5749206542968747e-06,
+            "accepted": true,
+            "ratio": 0.6357832374004029
+          },
+          {
+            "iteration": 42,
+            "objective": 1723.7532733039825,
+            "candidate": 1723.7517371951587,
+            "trust_radius": 2.5749206542968747e-06,
+            "accepted": true,
+            "ratio": 0.2936862549839438
+          },
+          {
+            "iteration": 43,
+            "objective": 1723.7517371951587,
+            "candidate": 1723.7475699931788,
+            "trust_radius": 2.5749206542968747e-06,
+            "accepted": true,
+            "ratio": 0.6327677228728013
+          },
+          {
+            "iteration": 44,
+            "objective": 1723.7475699931788,
+            "candidate": 1723.7460093212271,
+            "trust_radius": 2.5749206542968747e-06,
+            "accepted": true,
+            "ratio": 0.29772779910188724
+          },
+          {
+            "iteration": 45,
+            "objective": 1723.7460093212271,
+            "candidate": 1723.7418560261815,
+            "trust_radius": 2.5749206542968747e-06,
+            "accepted": true,
+            "ratio": 0.6314812666371428
+          },
+          {
+            "iteration": 46,
+            "objective": 1723.7418560261815,
+            "candidate": 1723.7403115741229,
+            "trust_radius": 2.5749206542968747e-06,
+            "accepted": true,
+            "ratio": 0.2945663171427673
+          },
+          {
+            "iteration": 47,
+            "objective": 1723.7403115741229,
+            "candidate": 1723.7361433659605,
+            "trust_radius": 2.5749206542968747e-06,
+            "accepted": true,
+            "ratio": 0.6327699598524851
+          },
+          {
+            "iteration": 48,
+            "objective": 1723.7361433659605,
+            "candidate": 1723.73460771473,
+            "trust_radius": 2.5749206542968747e-06,
+            "accepted": true,
+            "ratio": 0.2931599716966993
+          },
+          {
+            "iteration": 49,
+            "objective": 1723.73460771473,
+            "candidate": 1723.7303933851113,
+            "trust_radius": 2.5749206542968747e-06,
+            "accepted": true,
+            "ratio": 0.639230569324512
+          },
+          {
+            "iteration": 50,
+            "objective": 1723.7303933851113,
+            "candidate": 1723.7288976242933,
+            "trust_radius": 2.5749206542968747e-06,
+            "accepted": true,
+            "ratio": 0.28694707583954615
+          },
+          {
+            "iteration": 51,
+            "objective": 1723.7288976242933,
+            "candidate": 1723.7247020427246,
+            "trust_radius": 2.5749206542968747e-06,
+            "accepted": true,
+            "ratio": 0.635759572736431
+          },
+          {
+            "iteration": 52,
+            "objective": 1723.7247020427246,
+            "candidate": 1723.723168935992,
+            "trust_radius": 2.5749206542968747e-06,
+            "accepted": true,
+            "ratio": 0.2931973080072565
+          },
+          {
+            "iteration": 53,
+            "objective": 1723.723168935992,
+            "candidate": 1723.7190020535845,
+            "trust_radius": 2.5749206542968747e-06,
+            "accepted": true,
+            "ratio": 0.6327437771511936
+          },
+          {
+            "iteration": 54,
+            "objective": 1723.7190020535845,
+            "candidate": 1723.7174428566593,
+            "trust_radius": 2.5749206542968747e-06,
+            "accepted": true,
+            "ratio": 0.2975314118012514
+          },
+          {
+            "iteration": 55,
+            "objective": 1723.7174428566593,
+            "candidate": 1723.7132913621924,
+            "trust_radius": 2.5749206542968747e-06,
+            "accepted": true,
+            "ratio": 0.6313824521066551
+          },
+          {
+            "iteration": 56,
+            "objective": 1723.7132913621924,
+            "candidate": 1723.711746849836,
+            "trust_radius": 2.5749206542968747e-06,
+            "accepted": true,
+            "ratio": 0.29466006017944046
+          },
+          {
+            "iteration": 57,
+            "objective": 1723.711746849836,
+            "candidate": 1723.7075819253669,
+            "trust_radius": 2.5749206542968747e-06,
+            "accepted": true,
+            "ratio": 0.6325968367345762
+          },
+          {
+            "iteration": 58,
+            "objective": 1723.7075819253669,
+            "candidate": 1723.7060461874717,
+            "trust_radius": 2.5749206542968747e-06,
+            "accepted": true,
+            "ratio": 0.2932565317137641
+          },
+          {
+            "iteration": 59,
+            "objective": 1723.7060461874717,
+            "candidate": 1723.7018351192924,
+            "trust_radius": 2.5749206542968747e-06,
+            "accepted": true,
+            "ratio": 0.6390617088944067
+          },
+          {
+            "iteration": 60,
+            "objective": 1723.7018351192924,
+            "candidate": 1723.7003392527927,
+            "trust_radius": 2.5749206542968747e-06,
+            "accepted": true,
+            "ratio": 0.28704475334881563
+          },
+          {
+            "iteration": 61,
+            "objective": 1723.7003392527927,
+            "candidate": 1723.6961469254466,
+            "trust_radius": 2.5749206542968747e-06,
+            "accepted": true,
+            "ratio": 0.6355889196235962
+          },
+          {
+            "iteration": 62,
+            "objective": 1723.6961469254466,
+            "candidate": 1723.6946136995177,
+            "trust_radius": 2.5749206542968747e-06,
+            "accepted": true,
+            "ratio": 0.2932979814167611
+          },
+          {
+            "iteration": 63,
+            "objective": 1723.6946136995177,
+            "candidate": 1723.690450063559,
+            "trust_radius": 2.5749206542968747e-06,
+            "accepted": true,
+            "ratio": 0.6325713026697383
+          },
+          {
+            "iteration": 64,
+            "objective": 1723.690450063559,
+            "candidate": 1723.6888922402115,
+            "trust_radius": 2.5749206542968747e-06,
+            "accepted": true,
+            "ratio": 0.2973471279897487
+          },
+          {
+            "iteration": 65,
+            "objective": 1723.6888922402115,
+            "candidate": 1723.6847424841217,
+            "trust_radius": 2.5749206542968747e-06,
+            "accepted": true,
+            "ratio": 0.6312839044633269
+          },
+          {
+            "iteration": 66,
+            "objective": 1723.6847424841217,
+            "candidate": 1723.6831993472429,
+            "trust_radius": 2.5749206542968747e-06,
+            "accepted": true,
+            "ratio": 0.2944742916581341
+          },
+          {
+            "iteration": 67,
+            "objective": 1723.6831993472429,
+            "candidate": 1723.679034871195,
+            "trust_radius": 2.5749206542968747e-06,
+            "accepted": true,
+            "ratio": 0.6326945741304327
+          },
+          {
+            "iteration": 68,
+            "objective": 1723.679034871195,
+            "candidate": 1723.6775026996386,
+            "trust_radius": 2.5749206542968747e-06,
+            "accepted": true,
+            "ratio": 0.2927355628435573
+          },
+          {
+            "iteration": 69,
+            "objective": 1723.6775026996386,
+            "candidate": 1723.6732911774618,
+            "trust_radius": 2.5749206542968747e-06,
+            "accepted": true,
+            "ratio": 0.6392042474666149
+          },
+          {
+            "iteration": 70,
+            "objective": 1723.6732911774618,
+            "candidate": 1723.6717988786108,
+            "trust_radius": 2.5749206542968747e-06,
+            "accepted": true,
+            "ratio": 0.28651729291076056
+          },
+          {
+            "iteration": 71,
+            "objective": 1723.6717988786108,
+            "candidate": 1723.667606086919,
+            "trust_radius": 2.5749206542968747e-06,
+            "accepted": true,
+            "ratio": 0.6357313821372911
+          },
+          {
+            "iteration": 72,
+            "objective": 1723.667606086919,
+            "candidate": 1723.6660764382323,
+            "trust_radius": 2.5749206542968747e-06,
+            "accepted": true,
+            "ratio": 0.29277388284550154
+          },
+          {
+            "iteration": 73,
+            "objective": 1723.6660764382323,
+            "candidate": 1723.6619128419775,
+            "trust_radius": 2.5749206542968747e-06,
+            "accepted": true,
+            "ratio": 0.6326355764144751
+          },
+          {
+            "iteration": 74,
+            "objective": 1723.6619128419775,
+            "candidate": 1723.6603581026022,
+            "trust_radius": 2.5749206542968747e-06,
+            "accepted": true,
+            "ratio": 0.29688688570017435
+          },
+          {
+            "iteration": 75,
+            "objective": 1723.6603581026022,
+            "candidate": 1723.6562083745855,
+            "trust_radius": 2.5749206542968747e-06,
+            "accepted": true,
+            "ratio": 0.6313486295822356
+          },
+          {
+            "iteration": 76,
+            "objective": 1723.6562083745855,
+            "candidate": 1723.6546683243294,
+            "trust_radius": 2.5749206542968747e-06,
+            "accepted": true,
+            "ratio": 0.294012429347113
+          },
+          {
+            "iteration": 77,
+            "objective": 1723.6546683243294,
+            "candidate": 1723.6505051493325,
+            "trust_radius": 2.5749206542968747e-06,
+            "accepted": true,
+            "ratio": 0.6325644752234655
+          },
+          {
+            "iteration": 78,
+            "objective": 1723.6505051493325,
+            "candidate": 1723.6489738824766,
+            "trust_radius": 2.5749206542968747e-06,
+            "accepted": true,
+            "ratio": 0.29260572602321927
+          },
+          {
+            "iteration": 79,
+            "objective": 1723.6489738824766,
+            "candidate": 1723.6447645507585,
+            "trust_radius": 2.5749206542968747e-06,
+            "accepted": true,
+            "ratio": 0.639031732206799
+          },
+          {
+            "iteration": 80,
+            "objective": 1723.6447645507585,
+            "candidate": 1723.6432731589832,
+            "trust_radius": 2.5749206542968747e-06,
+            "accepted": true,
+            "ratio": 0.2863857307685493
+          }
+        ],
+        "max_constraint_violation": 1.1102230246251565e-16,
+        "max_iterations": 80,
+        "seconds": 1.2830479300000661
+      },
+      "cache_hit": true,
+      "seconds": 1.3120170849997521,
+      "load_seconds": 0.0169956710005863
+    },
+    "alpha": 1.02,
+    "trials_per_target": 2000,
+    "seed": 0,
+    "targets": [
+      {
+        "target": 0,
+        "reachable": true,
+        "minimum_surrogate_cost": 0.15995449105944887,
+        "sampled_paths": 1738
+      },
+      {
+        "target": 1,
+        "reachable": true,
+        "minimum_surrogate_cost": 0.16142931545312447,
+        "sampled_paths": 1671
+      },
+      {
+        "target": 2,
+        "reachable": true,
+        "minimum_surrogate_cost": 0.16346177387401203,
+        "sampled_paths": 1666
+      },
+      {
+        "target": 3,
+        "reachable": true,
+        "minimum_surrogate_cost": 0.16527578350689895,
+        "sampled_paths": 1697
+      },
+      {
+        "target": 4,
+        "reachable": true,
+        "minimum_surrogate_cost": 0.16708276537991595,
+        "sampled_paths": 1770
+      },
+      {
+        "target": 5,
+        "reachable": true,
+        "minimum_surrogate_cost": 0.16883036899278972,
+        "sampled_paths": 1769
+      },
+      {
+        "target": 6,
+        "reachable": true,
+        "minimum_surrogate_cost": 0.1547504998106205,
+        "sampled_paths": 1064
+      },
+      {
+        "target": 7,
+        "reachable": true,
+        "minimum_surrogate_cost": 0.1553843047028629,
+        "sampled_paths": 1074
+      },
+      {
+        "target": 8,
+        "reachable": true,
+        "minimum_surrogate_cost": 0.15674813006529925,
+        "sampled_paths": 1073
+      },
+      {
+        "target": 9,
+        "reachable": true,
+        "minimum_surrogate_cost": 0.158642789053624,
+        "sampled_paths": 1133
+      },
+      {
+        "target": 10,
+        "reachable": true,
+        "minimum_surrogate_cost": 0.17604795665857667,
+        "sampled_paths": 1693
+      },
+      {
+        "target": 11,
+        "reachable": true,
+        "minimum_surrogate_cost": 0.15850893628201326,
+        "sampled_paths": 1667
+      },
+      {
+        "target": 12,
+        "reachable": true,
+        "minimum_surrogate_cost": 0.1590822207345555,
+        "sampled_paths": 1790
+      }
+    ],
+    "original_regions": 56,
+    "original_edges": 1202,
+    "retained_regions": 26,
+    "retained_edges": 113,
+    "retained_original_region_indices": [
+      1,
+      3,
+      5,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      36,
+      38,
+      44,
+      46,
+      48,
+      50
+    ],
+    "preserves_full_graph_optimality": false,
+    "final_gcs_formulation": "existing_region_vertices",
+    "seconds": 5.209951963999629
+  },
+  "quality_scope": "heuristically_pruned_graph_only",
+  "optimized_graph_task_sha256": "2e5353fc036e005d730da8c16dd45289643d96be76471aebb80d1ff844ff20ac",
+  "stage1_solver_settings": {
+    "max_rounded_paths": 2000,
+    "max_rounding_trials": 3000,
+    "solver_backend": "mosek",
+    "mosek_solve_form": "primal"
+  },
+  "stage2_solver_settings": {
+    "max_rounded_paths": 2000,
+    "max_rounding_trials": 3000,
+    "solver_backend": "mosek",
+    "mosek_solve_form": "primal"
+  },
+  "stage1_budget": {
+    "allocation": "one_joint_target_call",
+    "target_count": 13,
+    "total_max_rounded_paths": 2000,
+    "total_max_rounding_trials": 3000
+  },
+  "union_hull_baseline": {
+    "success": false,
+    "method": "one_graph_all_hull_targets_two_stage",
+    "gcs_solve_calls": 1,
+    "solver_settings": {
+      "max_rounded_paths": 2000,
+      "max_rounding_trials": 3000,
+      "solver_backend": "mosek",
+      "mosek_solve_form": "primal"
+    },
+    "global_optimality_certified": false,
+    "input_sha256": "e05812a48ee96226b424a3b291ceea78c60d3ddff863c347af2033e7ba048ac9",
+    "graph_task_sha256": "2e5353fc036e005d730da8c16dd45289643d96be76471aebb80d1ff844ff20ac",
+    "hull_targets_sha256": "a537f5477471fe6ac71eb9841ac3b7a687495e42d8edcd82c8c30570f7e32fc1",
+    "task": {
+      "type": "position_3D",
+      "goal": [
+        0.8408788051720951,
+        2.5945928524838324,
+        -0.6250625832937884
+      ]
+    },
+    "path_coordinates": "input_winding_restored",
+    "angle_winding_offsets": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "stage2_solver_settings": {
+      "max_rounded_paths": 2000,
+      "max_rounding_trials": 3000,
+      "solver_backend": "mosek",
+      "mosek_solve_form": "primal"
+    },
+    "target_count": 13,
+    "scope": "same_hull_targets_projection_and_fixed_goal_replanning",
+    "stage1_rounding_diagnostics": {
+      "relaxation_success": true,
+      "relaxation_termination": "SolutionResult.kSolutionFound",
+      "relaxation_solver": "MOSEK",
+      "relaxation_solver_details": {
+        "rescode": 0.0,
+        "solution_status": 1.0,
+        "optimizer_time": 0.25651781000033225
+      },
+      "rounded_path_count": 702,
+      "successful_rounded_path_count": 702,
+      "max_rounded_paths": 2000,
+      "max_rounding_trials": 3000,
+      "rounding_trials_attempted": null,
+      "trials_note": "Drake SamplePaths exposes a trial cap, not its actual attempt count",
+      "selected_path_valid": false,
+      "selected_target": 7,
+      "selected_path_cost": 0.0780568041907066
+    },
+    "stage1_seconds": 2.7847149680001166,
+    "status": "solver_failed",
+    "message": "No feasible rounded path returned",
+    "seconds": 2.7847237959995255,
+    "quality_scope": "heuristically_pruned_graph_only"
+  },
+  "status": "solver_failed",
+  "message": "Executed only the union-hull two-stage comparison.",
+  "total_seconds": 10.224454300999241,
+  "primary_method_executed": false,
+  "two_stage_total_seconds": 10.224454300999241
+}

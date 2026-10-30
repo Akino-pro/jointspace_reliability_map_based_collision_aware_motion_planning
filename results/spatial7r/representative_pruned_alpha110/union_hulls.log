@@ -1,0 +1,8 @@
+BEGIN full graph union_hulls: each target 200/300; stage two 200/300
+7R geometry: 1 branches, 2856 regions, 869670 edges, 54 samples, 23 targets
+7R representative pruning: 2856 -> 212 regions, 869670 -> 1403 edges, 12.78s
+INFO:drake:Solved GCS shortest path using MOSEK with convex_relaxation=true and preprocessing=true and no rounding.
+INFO:drake:Found 200 unique paths, discarded 0 duplicate paths.
+INFO:drake:Solved GCS shortest path using MOSEK with convex_relaxation=true and preprocessing=true and no rounding.
+INFO:drake:Found 200 unique paths, discarded 0 duplicate paths.
+END {"success": true, "status": "success", "message": "Executed only the union-hull two-stage comparison.", "region_count": 212, "edge_count": 1403, "target_set_count": 23, "cost": null, "geometry_seconds": 20.925269289, "stage1_seconds": null, "stage2_seconds": null, "total_seconds": 74.91976581099999}

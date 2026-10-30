@@ -1,0 +1,14 @@
+{
+  "mode": "default",
+  "success": false,
+  "termination": "SolutionResult.kSolverSpecificError",
+  "seconds": 9.815032065999958,
+  "vertices": 71,
+  "edges": 1229,
+  "solver": "MOSEK",
+  "details": {
+    "rescode": 0.0,
+    "solution_status": 0.0,
+    "optimizer_time": 5.0806872089999615
+  }
+}

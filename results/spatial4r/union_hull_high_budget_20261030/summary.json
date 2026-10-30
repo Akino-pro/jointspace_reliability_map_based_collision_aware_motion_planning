@@ -1,0 +1,102 @@
+{
+  "status": "complete",
+  "first_method_rerun": false,
+  "seed": 0,
+  "budgets": [
+    [
+      6400,
+      9600
+    ],
+    [
+      12800,
+      19200
+    ],
+    [
+      25600,
+      38400
+    ]
+  ],
+  "stage2_budget_policy": "matches_stage_one",
+  "rss_limit_gib": 6,
+  "timing_note": "Fresh sequential single runs; cached IRIS; no repeated-run timing statistics.",
+  "references": {
+    "4r": {
+      "source": "results/spatial4r/per_target_matched_stage_budget_sweep_20261029/paths200_trials300.json",
+      "cost": 0.07807983167132608,
+      "total_seconds": 115.8543413260013,
+      "graph_task_sha256": "0429dd3c31a8312948d9ae093d254772e98d7a8d2d8cdd9565f711f3c83a0ece",
+      "hull_targets_sha256": "9ecfa314cee70d16473f9cb88c8d3489aac6ca7baf6c2046a115ba0873cb218c"
+    }
+  },
+  "runs": [
+    {
+      "robot": "4r",
+      "paths": 6400,
+      "trials": 9600,
+      "status": "success",
+      "success": true,
+      "cost": 0.08981672404792272,
+      "relative_cost_above_reference": 0.15031913011803888,
+      "total_seconds": 143.67026224899973,
+      "wall_seconds": 144.933229192,
+      "peak_rss_gib": 4.155384063720703,
+      "stage1_seconds": 83.38232130400002,
+      "stage2_seconds": 58.01833628099985,
+      "stage1_routes": 6400,
+      "stage2_routes": 6400,
+      "task_error": 9.155133597044475e-16,
+      "collision_free": true,
+      "graph_valid": true,
+      "cost_valid": true,
+      "selected_target": 8,
+      "report": "4r_paths6400.json",
+      "exit_code": 0
+    },
+    {
+      "robot": "4r",
+      "paths": 12800,
+      "trials": 19200,
+      "status": "success",
+      "success": true,
+      "cost": 0.07804591134848907,
+      "relative_cost_above_reference": -0.00043443130077180925,
+      "total_seconds": 227.4014275479999,
+      "wall_seconds": 228.25175276100026,
+      "peak_rss_gib": 5.016704559326172,
+      "stage1_seconds": 137.18707810800015,
+      "stage2_seconds": 87.84323536000011,
+      "stage1_routes": 12800,
+      "stage2_routes": 12800,
+      "task_error": 5.661048867003676e-16,
+      "collision_free": true,
+      "graph_valid": true,
+      "cost_valid": true,
+      "selected_target": 8,
+      "report": "4r_paths12800.json",
+      "exit_code": 0
+    },
+    {
+      "robot": "4r",
+      "paths": 25600,
+      "trials": 38400,
+      "status": "memory_limit",
+      "success": false,
+      "cost": null,
+      "relative_cost_above_reference": null,
+      "total_seconds": null,
+      "wall_seconds": 255.65549549099978,
+      "peak_rss_gib": 6.010189056396484,
+      "stage1_seconds": null,
+      "stage2_seconds": null,
+      "stage1_routes": null,
+      "stage2_routes": null,
+      "task_error": null,
+      "collision_free": null,
+      "graph_valid": null,
+      "cost_valid": null,
+      "selected_target": null,
+      "report": "4r_paths25600.json",
+      "exit_code": -15
+    }
+  ]
+}

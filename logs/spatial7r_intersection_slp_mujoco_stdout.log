@@ -1,0 +1,90 @@
+MuJoCo controls: Space pause/resume | R restart | L loop | T trace | mouse rotate/zoom | Esc close
+{
+  "source": "D:\\\u65b0\u5efa\u6587\u4ef6\u5939\\jointspace_reliability_map_based_collision_aware_motion_planning\\visualizations\\spatial7R_intersection_slp_1000_1500\\replay_input.json",
+  "robot": "spatial7R",
+  "mujoco_version": "3.4.0",
+  "sampled_configurations": 201,
+  "collision_samples": 0,
+  "mujoco_contact_samples": 0,
+  "maximum_mujoco_fk_error": 2.6272671962866384e-15,
+  "endpoint_error": 0.0,
+  "angular_windings_preserved": true,
+  "method": "prescribed GCS segments; sampled capsule-sphere checks, not dynamic tracking",
+  "start_point": [
+    3.0205333341656058,
+    -1.4946400075697015,
+    0.5399182591886
+  ],
+  "start_pose": [
+    [
+      0.9134005010928171,
+      0.3868562982223874,
+      -0.12665594786294715,
+      3.0205333341656058
+    ],
+    [
+      -0.342233411090386,
+      0.8982806048465608,
+      0.2756233794327605,
+      -1.4946400075697015
+    ],
+    [
+      0.2203992217246446,
+      -0.20840863581475658,
+      0.9528851051312549,
+      0.5399182591886
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "goal_pose": [
+    [
+      0.3422334110903859,
+      -0.8982806048465608,
+      -0.2756233794327611,
+      3.1878890016273402
+    ],
+    [
+      0.9134005010928175,
+      0.38685629822238754,
+      -0.1266559478629468,
+      -0.9193011224223007
+    ],
+    [
+      0.22039922172464482,
+      -0.20840863581475702,
+      0.9528851051312549,
+      0.5711792221581318
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "orientation_axes": "Local tool XYZ axes in world coordinates; X red, Y green, Z blue",
+  "goal_point": [
+    3.1878890016273402,
+    -0.9193011224223007,
+    0.5711792221581318
+  ],
+  "obstacles": [
+    {
+      "type": "sphere",
+      "center": [
+        3.104211167896473,
+        -1.2069705649960012,
+        0.5555487406733659
+      ],
+      "radius": 0.08
+    }
+  ],
+  "goal_rotation_matrix_error": 0.0,
+  "playback_speed": 0.3,
+  "duration_seconds": 3.331282111975667
+}

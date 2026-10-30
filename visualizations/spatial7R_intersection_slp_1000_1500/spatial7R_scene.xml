@@ -1,0 +1,225 @@
+<mujoco model="spatial7r_full_pose_gcs_replay">
+  <compiler angle="radian" autolimits="false" />
+  <option gravity="0 0 0" timestep="0.002" />
+  <visual>
+    <global offwidth="1200" offheight="900" />
+    <headlight ambient="0.5 0.5 0.5" diffuse="0.7 0.7 0.7" />
+  </visual>
+  <asset>
+    <texture name="floor_texture" type="2d" builtin="checker" rgb1="0.17 0.20 0.24" rgb2="0.21 0.24 0.28" width="128" height="128" />
+    <material name="floor_mat" texture="floor_texture" texrepeat="8 8" />
+  </asset>
+  <worldbody>
+    <geom name="floor" type="plane" size="6 6 0.1" pos="0 0 -0.8316829376715346" material="floor_mat" contype="0" conaffinity="0" />
+    <light pos="0 -2 4.992699477045576" dir="0 0 -1" />
+    <geom name="base_mount" type="cylinder" size="0.07 0.035" rgba="0.65 0.7 0.75 1" contype="0" conaffinity="0" />
+    <geom name="obstacle0" type="sphere" pos="3.104211167896473 -1.206970564996001 0.5555487406733659" size="0.08" rgba="0.9 0.22 0.12 1" contype="2" conaffinity="1" />
+    <site name="start_marker" type="sphere" pos="3.020533334165606 -1.494640007569702 0.5399182591886" size="0.035" rgba="0.25 0.75 1 0.85" />
+    <site name="goal_marker" type="sphere" pos="3.18788900162734 -0.9193011224223007 0.5711792221581318" size="0.035" rgba="0.3 1 0.45 0.9" />
+    <geom name="trace0" type="capsule" size="0.006" fromto="3.020533334165606 -1.494640007569702 0.5399182591886 3.015495998261008 -1.493357598511571 0.5515450817049103" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace1" type="capsule" size="0.006" fromto="3.015495998261008 -1.493357598511571 0.5515450817049103 3.010385690013197 -1.492151381683623 0.5628691324905759" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace2" type="capsule" size="0.006" fromto="3.010385690013197 -1.492151381683623 0.5628691324905759 3.005207202624684 -1.491021626334556 0.5738871410615274" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace3" type="capsule" size="0.006" fromto="3.005207202624684 -1.491021626334556 0.5738871410615274 2.999965356651083 -1.489968467439642 0.5845959243887103" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace4" type="capsule" size="0.006" fromto="2.999965356651083 -1.489968467439642 0.5845959243887103 2.994664996004003 -1.488991904863079 0.5949923878376318" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace5" type="capsule" size="0.006" fromto="2.994664996004003 -1.488991904863079 0.5949923878376318 2.989310983926603 -1.488091802631502 0.6050735260796384" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace6" type="capsule" size="0.006" fromto="2.989310983926603 -1.488091802631502 0.6050735260796384 2.983908198944954 -1.487267888319427 0.6148364239746265" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace7" type="capsule" size="0.006" fromto="2.983908198944954 -1.487267888319427 0.6148364239746265 2.978461530798323 -1.486519752547301 0.6242782574248906" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace8" type="capsule" size="0.006" fromto="2.978461530798323 -1.486519752547301 0.6242782574248906 2.972975876351536 -1.485846848592781 0.6333962941998355" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace9" type="capsule" size="0.006" fromto="2.972975876351536 -1.485846848592781 0.6333962941998355 2.967456135492601 -1.485248492115744 0.6421878947312818" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace10" type="capsule" size="0.006" fromto="2.967456135492601 -1.485248492115744 0.6421878947312818 2.961907207018768 -1.484723860997442 0.6506505128791074" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace11" type="capsule" size="0.006" fromto="2.961907207018768 -1.484723860997442 0.6506505128791074 2.956333984514226 -1.484271995294166 0.6587816966669692" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace12" type="capsule" size="0.006" fromto="2.956333984514226 -1.484271995294166 0.6587816966669692 2.950741352222654 -1.483891797305628 0.6665790889878876" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace13" type="capsule" size="0.006" fromto="2.950741352222654 -1.483891797305628 0.6665790889878876 2.945134180917822 -1.483582031758255 0.6740404282794351" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace14" type="capsule" size="0.006" fromto="2.945134180917822 -1.483582031758255 0.6740404282794351 2.939517323775474 -1.483341326103443 0.6811635491683479" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace15" type="capsule" size="0.006" fromto="2.939517323775474 -1.483341326103443 0.6811635491683479 2.933895612249724 -1.483168170930748 0.6879463830843243" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace16" type="capsule" size="0.006" fromto="2.933895612249724 -1.483168170930748 0.6879463830843243 2.928273851957147 -1.483060920495913 0.6943869588428413" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace17" type="capsule" size="0.006" fromto="2.928273851957147 -1.483060920495913 0.6943869588428413 2.92265681857182 -1.483017793363529 0.7004834031967804" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace18" type="capsule" size="0.006" fromto="2.92265681857182 -1.483017793363529 0.7004834031967804 2.917049253734525 -1.483036873164034 0.7062339413567154" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace19" type="capsule" size="0.006" fromto="2.917049253734525 -1.483036873164034 0.7062339413567154 2.911455860979268 -1.483116109464672 0.7116368974796775" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace20" type="capsule" size="0.006" fromto="2.911455860979268 -1.483116109464672 0.7116368974796775 2.905881301680372 -1.48325331875395 0.7166906951262683" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace21" type="capsule" size="0.006" fromto="2.905881301680372 -1.48325331875395 0.7166906951262683 2.900330191023281 -1.483446185539035 0.721393857685961" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace22" type="capsule" size="0.006" fromto="2.900330191023281 -1.483446185539035 0.721393857685961 2.894807094002244 -1.483692263555433 0.7257450087704784" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace23" type="capsule" size="0.006" fromto="2.894807094002244 -1.483692263555433 0.7257450087704784 2.889316521448048 -1.483988977088242 0.7297428725751216" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace24" type="capsule" size="0.006" fromto="2.889316521448048 -1.483988977088242 0.7297428725751216 2.883862926088888 -1.484333622404126 0.7333862742079494" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace25" type="capsule" size="0.006" fromto="2.883862926088888 -1.484333622404126 0.7333862742079494 2.878450698647508 -1.484723369293143 0.7366741399867076" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace26" type="capsule" size="0.006" fromto="2.878450698647508 -1.484723369293143 0.7366741399867076 2.873084163977681 -1.485155262719395 0.7396054977034335" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace27" type="capsule" size="0.006" fromto="2.873084163977681 -1.485155262719395 0.7396054977034335 2.867767577243065 -1.485626224579449 0.7421794768566568" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace28" type="capsule" size="0.006" fromto="2.867767577243065 -1.485626224579449 0.7421794768566568 2.862505120141471 -1.486133055567346 0.7443953088511441" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace29" type="capsule" size="0.006" fromto="2.862505120141471 -1.486133055567346 0.7443953088511441 2.857300897177516 -1.486672437144983 0.7462523271651319" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace30" type="capsule" size="0.006" fromto="2.857300897177516 -1.486672437144983 0.7462523271651319 2.840059887316747 -1.507188085924615 0.7557555434892935" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace31" type="capsule" size="0.006" fromto="2.840059887316747 -1.507188085924615 0.7557555434892935 2.821381370309734 -1.529659773657261 0.7657693709359422" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace32" type="capsule" size="0.006" fromto="2.821381370309734 -1.529659773657261 0.7657693709359422 2.802494310956008 -1.552038177797476 0.7754762109284578" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace33" type="capsule" size="0.006" fromto="2.802494310956008 -1.552038177797476 0.7754762109284578 2.783242860126883 -1.574794357731561 0.7845448333054625" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace34" type="capsule" size="0.006" fromto="2.783242860126883 -1.574794357731561 0.7845448333054625 2.763109076709813 -1.599459120708603 0.7918613312407614" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace35" type="capsule" size="0.006" fromto="2.763109076709813 -1.599459120708603 0.7918613312407614 2.742786022762715 -1.623980236070948 0.7988210932454338" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace36" type="capsule" size="0.006" fromto="2.742786022762715 -1.623980236070948 0.7988210932454338 2.722279307123312 -1.648354005115394 0.8054239334149129" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace37" type="capsule" size="0.006" fromto="2.722279307123312 -1.648354005115394 0.8054239334149129 2.701594559811483 -1.672576783677211 0.8116697725778029" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace38" type="capsule" size="0.006" fromto="2.701594559811483 -1.672576783677211 0.8116697725778029 2.680737429807015 -1.696644983177268 0.8175586380299461" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace39" type="capsule" size="0.006" fromto="2.680737429807015 -1.696644983177268 0.8175586380299461 2.659713582821495 -1.720555071643823 0.8230906632213341" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace40" type="capsule" size="0.006" fromto="2.659713582821495 -1.720555071643823 0.8230906632213341 2.6385286990655 -1.744303574708448 0.8282660873959716" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace41" type="capsule" size="0.006" fromto="2.6385286990655 -1.744303574708448 0.8282660873959716 2.617188471012141 -1.767887076575596 0.8330852551848174" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace42" type="capsule" size="0.006" fromto="2.617188471012141 -1.767887076575596 0.8330852551848174 2.595698601158127 -1.791302220965315 0.8375486161519802" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace43" type="capsule" size="0.006" fromto="2.595698601158127 -1.791302220965315 0.8375486161519802 2.574064799783426 -1.814545712028631 0.8416567242943318" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace44" type="capsule" size="0.006" fromto="2.574064799783426 -1.814545712028631 0.8416567242943318 2.552292782710662 -1.837614315235131 0.8454102374947677" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace45" type="capsule" size="0.006" fromto="2.552292782710662 -1.837614315235131 0.8454102374947677 2.574547265977768 -1.827354451298553 0.8304498696590819" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace46" type="capsule" size="0.006" fromto="2.574547265977768 -1.827354451298553 0.8304498696590819 2.599038200492393 -1.814911572986065 0.8141671380830907" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace47" type="capsule" size="0.006" fromto="2.599038200492393 -1.814911572986065 0.8141671380830907 2.62322560436065 -1.80218195822761 0.7976229208838986" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace48" type="capsule" size="0.006" fromto="2.62322560436065 -1.80218195822761 0.7976229208838986 2.647103511358969 -1.789165985547534 0.7808243127460321" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace49" type="capsule" size="0.006" fromto="2.647103511358969 -1.789165985547534 0.7808243127460321 2.67066606115192 -1.7758641160998 0.7637784956737883" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace50" type="capsule" size="0.006" fromto="2.67066606115192 -1.7758641160998 0.7637784956737883 2.69390750087268 -1.762276894320715 0.7464927362989342" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace51" type="capsule" size="0.006" fromto="2.69390750087268 -1.762276894320715 0.7464927362989342 2.71682218666182 -1.748404948552435 0.7289743831569963" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace52" type="capsule" size="0.006" fromto="2.71682218666182 -1.748404948552435 0.7289743831569963 2.739404585163989 -1.734248991636848 0.7112308639331649" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace53" type="capsule" size="0.006" fromto="2.739404585163989 -1.734248991636848 0.7112308639331649 2.761649274982033 -1.719809821479436 0.6932696826788375" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace54" type="capsule" size="0.006" fromto="2.761649274982033 -1.719809821479436 0.6932696826788375 2.783550948088129 -1.705088321582733 0.6750984169998533" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace55" type="capsule" size="0.006" fromto="2.783550948088129 -1.705088321582733 0.6750984169998533 2.805104411191531 -1.690085461549004 0.656724715217476" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace56" type="capsule" size="0.006" fromto="2.805104411191531 -1.690085461549004 0.656724715217476 2.826304587062535 -1.674802297551798 0.6381562935031857" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace57" type="capsule" size="0.006" fromto="2.826304587062535 -1.674802297551798 0.6381562935031857 2.843121706592677 -1.663105056080935 0.6218407030327238" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace58" type="capsule" size="0.006" fromto="2.843121706592677 -1.663105056080935 0.6218407030327238 2.848177462642823 -1.662418284989115 0.6124683979118539" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace59" type="capsule" size="0.006" fromto="2.848177462642823 -1.662418284989115 0.6124683979118539 2.853186955378945 -1.661692837072956 0.6030650820851374" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace60" type="capsule" size="0.006" fromto="2.853186955378945 -1.661692837072956 0.6030650820851374 2.858149913368971 -1.660928574860354 0.5936312766289686" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace61" type="capsule" size="0.006" fromto="2.858149913368971 -1.660928574860354 0.5936312766289686 2.863066068991258 -1.660125363458738 0.5841675056652941" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace62" type="capsule" size="0.006" fromto="2.863066068991258 -1.660125363458738 0.5841675056652941 2.867935158456774 -1.659283070580472 0.5746742963139304" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace63" type="capsule" size="0.006" fromto="2.867935158456774 -1.659283070580472 0.5746742963139304 2.872756921830827 -1.658401566567989 0.5651521786445314" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace64" type="capsule" size="0.006" fromto="2.872756921830827 -1.658401566567989 0.5651521786445314 2.877531103054356 -1.657480724418645 0.5556016856281949" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace65" type="capsule" size="0.006" fromto="2.877531103054356 -1.657480724418645 0.5556016856281949 2.882257449964766 -1.656520419809288 0.5460233530887333" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace66" type="capsule" size="0.006" fromto="2.882257449964766 -1.656520419809288 0.5460233530887333 2.888101457141207 -1.653128610568965 0.5380078614466071" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace67" type="capsule" size="0.006" fromto="2.888101457141207 -1.653128610568965 0.5380078614466071 2.897537794360217 -1.642168968352355 0.5349534366115786" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace68" type="capsule" size="0.006" fromto="2.897537794360217 -1.642168968352355 0.5349534366115786 2.906895143535552 -1.631138066081451 0.5318668129947171" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace69" type="capsule" size="0.006" fromto="2.906895143535552 -1.631138066081451 0.5318668129947171 2.91617271320189 -1.620036523992495 0.5287484021568479" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace70" type="capsule" size="0.006" fromto="2.91617271320189 -1.620036523992495 0.5287484021568479 2.925369719305301 -1.608864969904624 0.5255986187290811" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace71" type="capsule" size="0.006" fromto="2.925369719305301 -1.608864969904624 0.5255986187290811 2.934485385289559 -1.597624039163071 0.522417880353234" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace72" type="capsule" size="0.006" fromto="2.934485385289559 -1.597624039163071 0.522417880353234 2.943518942181619 -1.586314374581417 0.5192066076219216" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace73" type="capsule" size="0.006" fromto="2.943518942181619 -1.586314374581417 0.5192066076219216 2.952469628676248 -1.574936626382921 0.5159652240183217" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace74" type="capsule" size="0.006" fromto="2.952469628676248 -1.574936626382921 0.5159652240183217 2.96133669121979 -1.563491452140925 0.5126941558556219" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace75" type="capsule" size="0.006" fromto="2.96133669121979 -1.563491452140925 0.5126941558556219 2.97011938409308 -1.551979516718342 0.5093938322161549" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace76" type="capsule" size="0.006" fromto="2.97011938409308 -1.551979516718342 0.5093938322161549 2.978816969493472 -1.540401492206236 0.5060646848902363" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace77" type="capsule" size="0.006" fromto="2.978816969493472 -1.540401492206236 0.5060646848902363 2.987428717615973 -1.528758057861488 0.502707148314703" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace78" type="capsule" size="0.006" fromto="2.987428717615973 -1.528758057861488 0.502707148314703 2.995953906733496 -1.51704990004358 0.4993216595111691" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace79" type="capsule" size="0.006" fromto="2.995953906733496 -1.51704990004358 0.4993216595111691 3.004391823276194 -1.505277712150478 0.4959086580240022" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace80" type="capsule" size="0.006" fromto="3.004391823276194 -1.505277712150478 0.4959086580240022 3.012741761909885 -1.493442194553631 0.4924685858580286" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace81" type="capsule" size="0.006" fromto="3.012741761909885 -1.493442194553631 0.4924685858580286 3.021003025613546 -1.481544054532102 0.4890018874159755" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace82" type="capsule" size="0.006" fromto="3.021003025613546 -1.481544054532102 0.4890018874159755 3.029174925755879 -1.469584006205825 0.4855090094356656" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace83" type="capsule" size="0.006" fromto="3.029174925755879 -1.469584006205825 0.4855090094356656 3.037256782170929 -1.457562770467998 0.4819904009269516" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace84" type="capsule" size="0.006" fromto="3.037256782170929 -1.457562770467998 0.4819904009269516 3.045247923232746 -1.445481074916626 0.478446513108429" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace85" type="capsule" size="0.006" fromto="3.045247923232746 -1.445481074916626 0.478446513108429 3.05314768592909 -1.433339653785215 0.4748777993439057" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace86" type="capsule" size="0.006" fromto="3.05314768592909 -1.433339653785215 0.4748777993439057 3.060955415934165 -1.421139247872631 0.471284715078656" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace87" type="capsule" size="0.006" fromto="3.060955415934165 -1.421139247872631 0.471284715078656 3.068670467680365 -1.408880604472122 0.4676677177754613" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace88" type="capsule" size="0.006" fromto="3.068670467680365 -1.408880604472122 0.4676677177754613 3.076292204429046 -1.396564477299518 0.4640272668504389" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace89" type="capsule" size="0.006" fromto="3.076292204429046 -1.396564477299518 0.4640272668504389 3.083819998340281 -1.38419162642062 0.4603638236086835" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace90" type="capsule" size="0.006" fromto="3.083819998340281 -1.38419162642062 0.4603638236086835 3.091253230541632 -1.371762818177777 0.4566778511797115" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace91" type="capsule" size="0.006" fromto="3.091253230541632 -1.371762818177777 0.4566778511797115 3.098591291195886 -1.35927882511567 0.4529698144527249" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace92" type="capsule" size="0.006" fromto="3.098591291195886 -1.35927882511567 0.4529698144527249 3.105833579567789 -1.346740425906292 0.4492401800117087" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace93" type="capsule" size="0.006" fromto="3.105833579567789 -1.346740425906292 0.4492401800117087 3.112979504089732 -1.334148405273166 0.4454894160703564" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace94" type="capsule" size="0.006" fromto="3.112979504089732 -1.334148405273166 0.4454894160703564 3.120028482426408 -1.32150355391477 0.4417179924068458" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace95" type="capsule" size="0.006" fromto="3.120028482426408 -1.32150355391477 0.4417179924068458 3.126979941538425 -1.308806668427207 0.4379263802984612" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace96" type="capsule" size="0.006" fromto="3.126979941538425 -1.308806668427207 0.4379263802984612 3.133833317744861 -1.296058551226117 0.4341150524560827" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace97" type="capsule" size="0.006" fromto="3.133833317744861 -1.296058551226117 0.4341150524560827 3.140588056784755 -1.283260010467841 0.4302844829585392" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace98" type="capsule" size="0.006" fromto="3.140588056784755 -1.283260010467841 0.4302844829585392 3.147243613877531 -1.270411859969843 0.4264351471868414" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace99" type="capsule" size="0.006" fromto="3.147243613877531 -1.270411859969843 0.4264351471868414 3.153799453782358 -1.257514919130409 0.4225675217582996" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace100" type="capsule" size="0.006" fromto="3.153799453782358 -1.257514919130409 0.4225675217582996 3.160255050856398 -1.244570012847619 0.4186820844605372" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace101" type="capsule" size="0.006" fromto="3.160255050856398 -1.244570012847619 0.4186820844605372 3.166609889111995 -1.231577971437608 0.4147793141854053" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace102" type="capsule" size="0.006" fromto="3.166609889111995 -1.231577971437608 0.4147793141854053 3.17286346227275 -1.218539630552131 0.4108596908628067" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace103" type="capsule" size="0.006" fromto="3.17286346227275 -1.218539630552131 0.4108596908628067 3.179015273828482 -1.205455831095428 0.4069236953944449" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace104" type="capsule" size="0.006" fromto="3.179015273828482 -1.205455831095428 0.4069236953944449 3.185064837089108 -1.192327419140409 0.4029718095874954" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace105" type="capsule" size="0.006" fromto="3.185064837089108 -1.192327419140409 0.4029718095874954 3.191011675237373 -1.179155245844166 0.3990045160882144" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace106" type="capsule" size="0.006" fromto="3.191011675237373 -1.179155245844166 0.3990045160882144 3.196855321380474 -1.165940167362812 0.3950222983154963" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace107" type="capsule" size="0.006" fromto="3.196855321380474 -1.165940167362812 0.3950222983154963 3.202595318600551 -1.152683044765688 0.3910256403943775" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace108" type="capsule" size="0.006" fromto="3.202595318600551 -1.152683044765688 0.3910256403943775 3.20823122000404 -1.139384743948894 0.3870150270895109" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace109" type="capsule" size="0.006" fromto="3.20823122000404 -1.139384743948894 0.3870150270895109 3.213762588769881 -1.126046135548213 0.3829909437385984" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace110" type="capsule" size="0.006" fromto="3.213762588769881 -1.126046135548213 0.3829909437385984 3.219188998196581 -1.112668094851391 0.3789538761858156" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace111" type="capsule" size="0.006" fromto="3.219188998196581 -1.112668094851391 0.3789538761858156 3.22451003174812 -1.099251501709817 0.3749043107152142" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace112" type="capsule" size="0.006" fromto="3.22451003174812 -1.099251501709817 0.3749043107152142 3.2297252830987 -1.085797240449589 0.370842733984121" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace113" type="capsule" size="0.006" fromto="3.2297252830987 -1.085797240449589 0.370842733984121 3.234834356176328 -1.072306199781985 0.3667696329565453" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace114" type="capsule" size="0.006" fromto="3.234834356176328 -1.072306199781985 0.3667696329565453 3.239836865205223 -1.058779272713359 0.3626854948365963" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace115" type="capsule" size="0.006" fromto="3.239836865205223 -1.058779272713359 0.3626854948365963 3.24473243474706 -1.045217356454455 0.3585908070019168" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace116" type="capsule" size="0.006" fromto="3.24473243474706 -1.045217356454455 0.3585908070019168 3.249520699741011 -1.03162135232916 0.3544860569371566" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace117" type="capsule" size="0.006" fromto="3.249520699741011 -1.03162135232916 0.3544860569371566 3.25420130554263 -1.017992165682704 0.350371732167473" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace118" type="capsule" size="0.006" fromto="3.25420130554263 -1.017992165682704 0.350371732167473 3.258773907961516 -1.004330705789325 0.3462483201920818" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace119" type="capsule" size="0.006" fromto="3.258773907961516 -1.004330705789325 0.3462483201920818 3.263238173297808 -0.9906378857593904 0.3421163084178702" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace120" type="capsule" size="0.006" fromto="3.263238173297808 -0.9906378857593904 0.3421163084178702 3.267593778377452 -0.9769146224460059 0.3379761840930556" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace121" type="capsule" size="0.006" fromto="3.267593778377452 -0.9769146224460059 0.3379761840930556 3.26256520276948 -0.9712184488987374 0.3568282152943366" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace122" type="capsule" size="0.006" fromto="3.26256520276948 -0.9712184488987374 0.3568282152943366 3.256954973531782 -0.9659280858861033 0.3765159127636208" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace123" type="capsule" size="0.006" fromto="3.256954973531782 -0.9659280858861033 0.3765159127636208 3.251108258787473 -0.9607461974440944 0.396174046237997" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace124" type="capsule" size="0.006" fromto="3.251108258787473 -0.9607461974440944 0.396174046237997 3.24502519642177 -0.9556747370801648 0.4157990929465874" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace125" type="capsule" size="0.006" fromto="3.24502519642177 -0.9556747370801648 0.4157990929465874 3.238705985666163 -0.9507156239865228 0.435387509089215" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace126" type="capsule" size="0.006" fromto="3.238705985666163 -0.9507156239865228 0.435387509089215 3.232150887188043 -0.9458707420792498 0.4549357310163658" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace127" type="capsule" size="0.006" fromto="3.232150887188043 -0.9458707420792498 0.4549357310163658 3.225360223151344 -0.9411419390467501 0.4744401764228237" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace128" type="capsule" size="0.006" fromto="3.225360223151344 -0.9411419390467501 0.4744401764228237 3.218334377248149 -0.9365310254081315 0.4938972455544495" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace129" type="capsule" size="0.006" fromto="3.218334377248149 -0.9365310254081315 0.4938972455544495 3.211073794701259 -0.9320397735820922 0.5133033224275813" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace130" type="capsule" size="0.006" fromto="3.211073794701259 -0.9320397735820922 0.5133033224275813 3.203578982237686 -0.927669916966906 0.532654776060528" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace131" type="capsule" size="0.006" fromto="3.203578982237686 -0.927669916966906 0.532654776060528 3.195850508033116 -0.9234231490320877 0.5519479617165954" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <geom name="trace132" type="capsule" size="0.006" fromto="3.195850508033116 -0.9234231490320877 0.5519479617165954 3.18788900162734 -0.9193011224223007 0.5711792221581318" rgba="0.5 0.85 1 0.65" contype="0" conaffinity="0" group="3" />
+    <body name="rotor0">
+      <joint name="joint1" type="hinge" axis="0 0 1" limited="false" />
+      <geom name="joint_marker1" type="sphere" size="0.028" rgba="0.85 0.89 0.94 1" contype="0" conaffinity="0" />
+      <geom name="arm_link1_0" size="0.015" rgba="0.1 0.55 0.95 1" contype="1" conaffinity="2" type="capsule" fromto="0 0 0 0 0 -0.4" />
+      <geom name="arm_link1_1" size="0.015" rgba="0.1 0.55 0.95 1" contype="1" conaffinity="2" type="capsule" fromto="0 0 -0.4 0.4 0 -0.4" />
+      <body name="dh_frame1" pos="0.4 0 -0.4" quat="0.8571673007021123 -0.5150380749100542 0 0">
+        <body name="rotor1">
+          <joint name="joint2" type="hinge" axis="0 0 1" limited="false" />
+          <geom name="joint_marker2" type="sphere" size="0.028" rgba="0.85 0.89 0.94 1" contype="0" conaffinity="0" />
+          <geom name="arm_link2_0" size="0.015" rgba="0.1 0.8 0.65 1" contype="1" conaffinity="2" type="capsule" fromto="0 0 0 0 0 -0.6" />
+          <geom name="arm_link2_1" size="0.015" rgba="0.1 0.8 0.65 1" contype="1" conaffinity="2" type="capsule" fromto="0 0 -0.6 0.8 0 -0.6" />
+          <body name="dh_frame2" pos="0.8 0 -0.6" quat="0.77162458338772 -0.636078220277764 0 0">
+            <body name="rotor2">
+              <joint name="joint3" type="hinge" axis="0 0 1" limited="false" />
+              <geom name="joint_marker3" type="sphere" size="0.028" rgba="0.85 0.89 0.94 1" contype="0" conaffinity="0" />
+              <geom name="arm_link3_0" size="0.015" rgba="1 0.68 0.15 1" contype="1" conaffinity="2" type="capsule" fromto="0 0 0 0 0 0.2" />
+              <geom name="arm_link3_1" size="0.015" rgba="1 0.68 0.15 1" contype="1" conaffinity="2" type="capsule" fromto="0 0 0.2 0.2 0 0.2" />
+              <body name="dh_frame3" pos="0.2 0 0.2" quat="0.7071067811865476 0.7071067811865476 0 0">
+                <body name="rotor3">
+                  <joint name="joint4" type="hinge" axis="0 0 1" limited="false" />
+                  <geom name="joint_marker4" type="sphere" size="0.028" rgba="0.85 0.89 0.94 1" contype="0" conaffinity="0" />
+                  <geom name="arm_link4_0" size="0.015" rgba="0.7 0.4 0.95 1" contype="1" conaffinity="2" type="capsule" fromto="0 0 0 0 0 0.6" />
+                  <geom name="arm_link4_1" size="0.015" rgba="0.7 0.4 0.95 1" contype="1" conaffinity="2" type="capsule" fromto="0 0 0.6 1 0 0.6" />
+                  <body name="dh_frame4" pos="1 0 0.6" quat="0.9681476403781077 0.2503800040544414 0 0">
+                    <body name="rotor4">
+                      <joint name="joint5" type="hinge" axis="0 0 1" limited="false" />
+                      <geom name="joint_marker5" type="sphere" size="0.028" rgba="0.85 0.89 0.94 1" contype="0" conaffinity="0" />
+                      <geom name="arm_link5_0" size="0.015" rgba="0.1 0.55 0.95 1" contype="1" conaffinity="2" type="capsule" fromto="0 0 0 0 0 -0.8" />
+                      <geom name="arm_link5_1" size="0.015" rgba="0.1 0.55 0.95 1" contype="1" conaffinity="2" type="capsule" fromto="0 0 -0.8 0.6 0 -0.8" />
+                      <body name="dh_frame5" pos="0.6 0 -0.8" quat="0.7604059656000309 0.6494480483301837 0 0">
+                        <body name="rotor5">
+                          <joint name="joint6" type="hinge" axis="0 0 1" limited="false" />
+                          <geom name="joint_marker6" type="sphere" size="0.028" rgba="0.85 0.89 0.94 1" contype="0" conaffinity="0" />
+                          <geom name="arm_link6_0" size="0.015" rgba="0.1 0.8 0.65 1" contype="1" conaffinity="2" type="capsule" fromto="0 0 0 0 0 0.2" />
+                          <geom name="arm_link6_1" size="0.015" rgba="0.1 0.8 0.65 1" contype="1" conaffinity="2" type="capsule" fromto="0 0 0.2 0.4 0 0.2" />
+                          <body name="dh_frame6" pos="0.4 0 0.2" quat="0.766044443118978 -0.6427876096865393 0 0">
+                            <body name="rotor6">
+                              <joint name="joint7" type="hinge" axis="0 0 1" limited="false" />
+                              <geom name="joint_marker7" type="sphere" size="0.028" rgba="0.85 0.89 0.94 1" contype="0" conaffinity="0" />
+                              <geom name="arm_link7_0" size="0.015" rgba="1 0.68 0.15 1" contype="1" conaffinity="2" type="sphere" pos="0 0 0" />
+                              <geom name="arm_link7_1" size="0.015" rgba="1 0.68 0.15 1" contype="1" conaffinity="2" type="sphere" pos="0 0 0" />
+                              <body name="dh_frame7" pos="0 0 0" quat="1 0 0 0">
+                                <site name="tool_tip" pos="0 0 0" size="0.025" rgba="1 1 0.9 1" />
+                              </body>
+                            </body>
+                          </body>
+                        </body>
+                      </body>
+                    </body>
+                  </body>
+                </body>
+              </body>
+            </body>
+          </body>
+        </body>
+      </body>
+    </body>
+    <geom name="start_axis0" type="capsule" size=".004" fromto="3.020533334165606 -1.494640007569702 0.5399182591886 3.184945424362313 -1.556242021565971 0.579590119099036" rgba="1 .25 .25 .9" contype="0" conaffinity="0" group="3" />
+    <site name="START_X" type="sphere" size=".003" pos="3.184945424362313 -1.556242021565971 0.579590119099036" rgba="1 .25 .25 .9" />
+    <geom name="start_axis1" type="capsule" size=".004" fromto="3.020533334165606 -1.494640007569702 0.5399182591886 3.090167467845636 -1.33294949869732 0.5024047047419439" rgba=".25 1 .25 .9" contype="0" conaffinity="0" group="3" />
+    <site name="START_Y" type="sphere" size=".003" pos="3.090167467845636 -1.33294949869732 0.5024047047419439" rgba=".25 1 .25 .9" />
+    <geom name="start_axis2" type="capsule" size=".004" fromto="3.020533334165606 -1.494640007569702 0.5399182591886 2.997735263550275 -1.445027799271805 0.711437578112226" rgba=".25 .5 1 .9" contype="0" conaffinity="0" group="3" />
+    <site name="START_Z" type="sphere" size=".003" pos="2.997735263550275 -1.445027799271805 0.711437578112226" rgba=".25 .5 1 .9" />
+    <geom name="goal_axis0" type="capsule" size=".004" fromto="3.18788900162734 -0.9193011224223007 0.5711792221581318 3.24949101562361 -0.7548890322255936 0.6108510820685679" rgba="1 .25 .25 .9" contype="0" conaffinity="0" group="3" />
+    <site name="GOAL_X" type="sphere" size=".003" pos="3.24949101562361 -0.7548890322255936 0.6108510820685679" rgba="1 .25 .25 .9" />
+    <geom name="goal_axis1" type="capsule" size=".004" fromto="3.18788900162734 -0.9193011224223007 0.5711792221581318 3.026198492754959 -0.8496669887422709 0.5336656677114755" rgba=".25 1 .25 .9" contype="0" conaffinity="0" group="3" />
+    <site name="GOAL_Y" type="sphere" size=".003" pos="3.026198492754959 -0.8496669887422709 0.5336656677114755" rgba=".25 1 .25 .9" />
+    <geom name="goal_axis2" type="capsule" size=".004" fromto="3.18788900162734 -0.9193011224223007 0.5711792221581318 3.138276793329443 -0.9420991930376311 0.7426985410817577" rgba=".25 .5 1 .9" contype="0" conaffinity="0" group="3" />
+    <site name="GOAL_Z" type="sphere" size=".003" pos="3.138276793329443 -0.9420991930376311 0.7426985410817577" rgba=".25 .5 1 .9" />
+  </worldbody>
+  <keyframe>
+    <key name="planned_start" qpos="0.2 -0.62 0.3 -0.55 0.44 -0.36 0.12" />
+  </keyframe>
+</mujoco>

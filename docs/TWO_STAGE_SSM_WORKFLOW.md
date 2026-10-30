@@ -1,6 +1,16 @@
 # Adaptive SSM targets and two-stage GCS
 
-Current defaults (updated2026-10-29): geometric epsilon0.025, fixed SSM arc
+Current primary 3R CLI policy (updated 2026-10-30): **union-hull**, with
+**800 paths / 1200 trial cap in both stages**, geometric epsilon 0.025 and
+SSM arc spacing 0.044. Run `python -m scripts.planar3R_two_stage_gcs_planner`
+in the configured Drake container. `--method per-target` explicitly selects
+the previous method with its historical 100/150 per-call defaults.
+The programmatic `plan_two_stage` interface and old benchmark scripts retain
+their explicit method selection for reproducibility. The primary union-hull
+report exposes waypoints and costs at top level for existing viewers, as well
+as the complete nested union-hull diagnostics.
+
+Historical per-target defaults (updated2026-10-29): geometric epsilon0.025, fixed SSM arc
 spacing0.044radians, stage one100paths/150trials PER TARGET, and stage two
 100paths/150trials. Both defaults were explicitly selected by the user after
 the forward3R sweep and matched-stage-two replay. The lower budget

@@ -82,6 +82,18 @@ Other reliability-map and animation scripts remain available for independent
 research and historical visualization. Grid-based planning and the fallback
 planner have been removed.
 
+For the 7R full-graph memory bottleneck, an opt-in representative graph path
+pruner runs before Drake model construction. See
+[the implementation and reproduction guide](docs/SPATIAL7R_REPRESENTATIVE_PRUNING.md).
+
+An opt-in 4R variant builds intersection-vertex representatives and optimizes
+them with SLP before pruning. See [the SLP implementation and measured comparison](docs/INTERSECTION_SLP_PREPROCESSING.md)
+for its reproduction scope and convergence limits.
+
+The primary 3R CLI now uses union-hull with 800 paths / 1200 trial cap in
+both stages. Use `--method per-target` for the historical independent-target
+method. Existing benchmark scripts retain their explicit settings.
+
 An additional fixed-start workflow implements adaptive local SSM hulls, one GCS
 solve per effective target intersection, continuous IK projection, and a second full GCS solve to
 the selected fixed goal. See [docs/TWO_STAGE_SSM_WORKFLOW.md](docs/TWO_STAGE_SSM_WORKFLOW.md)

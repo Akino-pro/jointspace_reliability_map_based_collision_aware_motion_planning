@@ -72,6 +72,7 @@ class BaseGCS:
         self.regions = regions.copy()
         self.rounding_fn = []
         self.rounding_kwargs = {}
+        self.retain_rounded_results = True
         for r in self.regions:
             assert r.ambient_dimension() == self.dimension
 
@@ -218,17 +219,22 @@ class BaseGCS:
             paths = self.gcs.SamplePaths(self.source, self.target, relaxed, self.options)
             best_path, best_result, best_cost = None, None, np.inf
             rounded_results = []
+            successful_count = 0
             for candidate in paths:
                 result = self.gcs.SolveConvexRestriction(candidate, self.options,
                                                         initial_guess=relaxed)
-                rounded_results.append(result)
-                if result.is_success() and result.get_optimal_cost() < best_cost:
+                if self.retain_rounded_results:
+                    rounded_results.append(result)
+                success = result.is_success()
+                successful_count += int(success)
+                if success and result.get_optimal_cost() < best_cost:
                     best_path, best_result = candidate, result
                     best_cost = result.get_optimal_cost()
             results_dict.update(best_path=best_path, best_result=best_result,
                                 rounded_paths=paths, rounded_results=rounded_results,
                                 rounded_path_count=len(paths),
-                                successful_rounded_path_count=sum(r.is_success() for r in rounded_results))
+                                successful_rounded_path_count=successful_count,
+                                rounded_results_retained=self.retain_rounded_results)
             if best_result is not None:
                 results_dict.update(rounded_cost=best_cost,
                                     rounded_solver_time=solver_time(best_result))

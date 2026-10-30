@@ -1,0 +1,2 @@
+robot,paths,trials,status,success,cost,relative_cost_above_reference,total_seconds,wall_seconds,peak_rss_gib,stage1_seconds,stage2_seconds,stage1_routes,stage2_routes,task_error,collision_free,graph_valid,cost_valid,selected_target,report,exit_code
+4r,25600,38400,success,True,0.07804594024879011,-0.0004340611629215507,403.2628309859997,404.2890608159996,4.2596435546875,250.00082124900018,150.94146741300028,25600,25600,5.551115123125783e-16,True,True,True,8,4r_paths25600.json,0

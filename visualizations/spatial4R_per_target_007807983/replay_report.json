@@ -1,0 +1,16 @@
+{
+  "source": "D:\\\u65b0\u5efa\u6587\u4ef6\u5939\\jointspace_reliability_map_based_collision_aware_motion_planning\\results\\spatial4r\\per_target_matched_stage_budget_sweep_20261029\\paths200_trials300.json",
+  "robot": "ftwmax",
+  "mujoco_version": "3.4.0",
+  "failed_joint": null,
+  "waypoints": 6,
+  "duration_seconds": 1.443794299028979,
+  "playback_speed": 0.5,
+  "sampled_configurations": 88,
+  "collision_samples": 0,
+  "mujoco_contact_samples": 0,
+  "maximum_mujoco_fk_error": 1.7422013638940487e-15,
+  "endpoint_error": 9.155133597044475e-16,
+  "angular_windings_preserved": true,
+  "method": "prescribed GCS segments; sampled capsule-sphere checks, not dynamic tracking"
+}

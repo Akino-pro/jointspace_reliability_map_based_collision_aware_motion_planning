@@ -1,0 +1,29 @@
+{
+  "status": "complete",
+  "budgets": [
+    1000,
+    1500
+  ],
+  "coverage": "complete existing 2856-region reliability partition; no cropping",
+  "rss_limit_bytes": 6442450944,
+  "runs": [
+    {
+      "method": "union_hulls",
+      "worker_wall_seconds": 97.28730838499905,
+      "peak_rss_bytes": 6472855552,
+      "exit_code": -15,
+      "status": "memory_limit_6GiB",
+      "log": "union_hulls.log",
+      "last_phase": "gcs_model_or_solve"
+    }
+  ],
+  "adjacency_policy": "nonempty_intersection",
+  "compact_constraints": true,
+  "representative_pruning": true,
+  "region_count": 2856,
+  "edge_count": 869670,
+  "target_count": 23,
+  "shared_preprocessing_seconds": 264.92930025500027,
+  "graph_task_sha256": "166884ec239f506fe422b472e681d9fbb3ea8a4fe792d915ebab1b8fa99ceebb",
+  "hull_targets_sha256": "4c07ca8ba64af452e2f76fe8607a769f25eb56b21e6ff338985c14f49b072edf"
+}

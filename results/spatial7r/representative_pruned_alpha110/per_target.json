@@ -1,0 +1,2233 @@
+{
+  "success": true,
+  "planner": "spatial7R_two_stage_gcs",
+  "robot": {
+    "a": [
+      0.4,
+      0.8,
+      0.2,
+      1,
+      0.6,
+      0.4,
+      0
+    ],
+    "d": [
+      -0.4,
+      -0.6,
+      0.2,
+      0.6,
+      -0.8,
+      0.2,
+      0
+    ],
+    "alpha": [
+      -1.0821041362364843,
+      -1.3788101090755203,
+      1.5707963267948966,
+      0.5061454830783556,
+      1.413716694115407,
+      -1.3962634015954636,
+      0
+    ],
+    "reference_CA": [
+      [
+        -1.8675022996339325,
+        1.8675022996339325
+      ],
+      [
+        -2.8623399732707,
+        2.4609142453120043
+      ],
+      [
+        -2.303834612632515,
+        2.303834612632515
+      ],
+      [
+        -2.6354471705114375,
+        1.780235837034216
+      ],
+      [
+        -2.007128639793479,
+        2.600540585471551
+      ],
+      [
+        -1.3089969389957472,
+        2.251474735072685
+      ],
+      [
+        0.2792526803190927,
+        3.368485456349056
+      ]
+    ],
+    "reliabilities": [
+      0.2,
+      0.3,
+      0.4,
+      0.5,
+      0.6,
+      0.7,
+      0.8
+    ]
+  },
+  "task": "full_pose_SE3",
+  "task_dimension": 6,
+  "ssm_regular_dimension": 1,
+  "ssm_branch_limit": 8,
+  "start_configuration": [
+    0.2,
+    -0.62,
+    0.3,
+    -0.55,
+    0.44,
+    -0.36,
+    0.12
+  ],
+  "start_point": [
+    3.0205333341656058,
+    -1.4946400075697015,
+    0.5399182591886
+  ],
+  "start_pose": [
+    [
+      0.9134005010928171,
+      0.3868562982223874,
+      -0.12665594786294715,
+      3.0205333341656058
+    ],
+    [
+      -0.342233411090386,
+      0.8982806048465608,
+      0.2756233794327605,
+      -1.4946400075697015
+    ],
+    [
+      0.2203992217246446,
+      -0.20840863581475658,
+      0.9528851051312549,
+      0.5399182591886
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "task_position_distance": 0.5999999999999993,
+  "task_orientation_difference_degrees": 90.00000000000001,
+  "goal_point": [
+    3.1878890016273402,
+    -0.9193011224223007,
+    0.5711792221581318
+  ],
+  "goal_pose": [
+    [
+      0.3422334110903859,
+      -0.8982806048465608,
+      -0.2756233794327611,
+      3.1878890016273402
+    ],
+    [
+      0.9134005010928175,
+      0.38685629822238754,
+      -0.1266559478629468,
+      -0.9193011224223007
+    ],
+    [
+      0.22039922172464482,
+      -0.20840863581475702,
+      0.9528851051312549,
+      0.5711792221581318
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "obstacles": [
+    {
+      "type": "sphere",
+      "center": [
+        3.104211167896473,
+        -1.2069705649960012,
+        0.5555487406733659
+      ],
+      "radius": 0.08
+    }
+  ],
+  "link_radius": 0.015,
+  "physical_joint_limits": null,
+  "iris_checkpoint": "data/iris/spatial7R_60cm90deg_iris_regions.npz",
+  "geometric_epsilon": 0.025,
+  "ssm_arc_spacing": 0.044,
+  "reliability_epsilon": 0.01,
+  "gcs_solve_calls": 24,
+  "coverage_is_complete": false,
+  "continuous_coverage_certified": false,
+  "global_optimality_certified": false,
+  "solver_settings": {
+    "max_rounded_paths": 200,
+    "max_rounding_trials": 300
+  },
+  "resource_limits": {
+    "partition_cells": 20000,
+    "regions": 4000,
+    "directed_edges": 2000000,
+    "targets": 10000
+  },
+  "original_region_count": 3,
+  "iris_generation_seconds": 162.0644710609995,
+  "iris_coverage_radius": 0.65,
+  "ssm_branch_count": 1,
+  "ssm_trace": {
+    "branch_limit": 8,
+    "branch_count": 1,
+    "ik_attempt_budget": 80,
+    "ik_attempts": 80,
+    "failed_ik": 31,
+    "failed_traces": 0,
+    "duplicate_starts": 48,
+    "all_branches_certified": false,
+    "termination_reason": "ik_attempt_budget_exhausted"
+  },
+  "local_partition_cell_count": 3240,
+  "merged_partition_cell_count": 3240,
+  "reliability_rule": "union_of_branch_recovery_sets",
+  "reliability_partition_scope": "exact_refinement_restricted_to_iris_coverage",
+  "region_count": 212,
+  "adjacency_cache_hit": true,
+  "adjacency_statistics": {
+    "input_region_count": 2856,
+    "region_pairs": 4076940,
+    "bounding_lp_count": 0,
+    "candidate_intersections": 650244,
+    "intersection_lp_count": 650244,
+    "directed_edges": 869670,
+    "periodic": false,
+    "periodic_directed_edges": 0
+  },
+  "edge_count": 1403,
+  "pre_connectivity_region_count": 2856,
+  "connected_component_count": 1,
+  "sampling_mode": "fixed_arc_spacing",
+  "ssm_branch_arc_lengths": [
+    2.332917458563215
+  ],
+  "ssm_total_arc_length": 2.332917458563215,
+  "ssm_branch_sample_counts": [
+    54
+  ],
+  "sample_refinement_failures": 0,
+  "graph_task_sha256": "166884ec239f506fe422b472e681d9fbb3ea8a4fe792d915ebab1b8fa99ceebb",
+  "hull_targets_sha256": "4c07ca8ba64af452e2f76fe8607a769f25eb56b21e6ff338985c14f49b072edf",
+  "envelope_count": 18,
+  "target_set_count": 23,
+  "actual_sample_count": 54,
+  "geometry_seconds": 21.213239708999993,
+  "ssm_branch_summaries": [
+    {
+      "branch": 0,
+      "arc_length": 2.332917458563215,
+      "sample_count": 54,
+      "envelope_count": 18,
+      "target_set_count": 23
+    }
+  ],
+  "representative_pruning": {
+    "method": "feasible_center_surrogate_path_union",
+    "alpha": 1.1,
+    "trials_per_target": 100,
+    "seed": 0,
+    "original_regions": 2856,
+    "original_edges": 869670,
+    "retained_regions": 212,
+    "retained_edges": 1403,
+    "retained_original_region_indices": [
+      204,
+      222,
+      223,
+      241,
+      246,
+      247,
+      264,
+      265,
+      276,
+      282,
+      283,
+      366,
+      372,
+      384,
+      390,
+      402,
+      426,
+      438,
+      444,
+      456,
+      463,
+      484,
+      486,
+      488,
+      490,
+      491,
+      496,
+      500,
+      502,
+      503,
+      504,
+      505,
+      574,
+      576,
+      578,
+      579,
+      582,
+      583,
+      588,
+      589,
+      590,
+      591,
+      592,
+      593,
+      594,
+      595,
+      596,
+      597,
+      598,
+      599,
+      600,
+      602,
+      603,
+      604,
+      605,
+      606,
+      607,
+      608,
+      609,
+      610,
+      611,
+      612,
+      613,
+      614,
+      615,
+      616,
+      617,
+      618,
+      620,
+      621,
+      622,
+      623,
+      626,
+      627,
+      628,
+      632,
+      633,
+      640,
+      641,
+      646,
+      647,
+      658,
+      659,
+      660,
+      664,
+      665,
+      666,
+      675,
+      677,
+      680,
+      681,
+      682,
+      683,
+      748,
+      749,
+      766,
+      767,
+      784,
+      785,
+      790,
+      791,
+      802,
+      803,
+      808,
+      809,
+      818,
+      820,
+      826,
+      827,
+      837,
+      838,
+      944,
+      945,
+      961,
+      1210,
+      1211,
+      1212,
+      1213,
+      1214,
+      1220,
+      1228,
+      1229,
+      1230,
+      1232,
+      1238,
+      1241,
+      1249,
+      1265,
+      1268,
+      1274,
+      1286,
+      1292,
+      1295,
+      1303,
+      1304,
+      1305,
+      1307,
+      1309,
+      1310,
+      1311,
+      1312,
+      1313,
+      1314,
+      1316,
+      1317,
+      1318,
+      1319,
+      1320,
+      1321,
+      1322,
+      1323,
+      1324,
+      1325,
+      1326,
+      1327,
+      1328,
+      1329,
+      1334,
+      1335,
+      1339,
+      1340,
+      1341,
+      1342,
+      1343,
+      1344,
+      1351,
+      1352,
+      1355,
+      1358,
+      1360,
+      1361,
+      1362,
+      1366,
+      1367,
+      1370,
+      1375,
+      1376,
+      1377,
+      1960,
+      1975,
+      2067,
+      2068,
+      2101,
+      2104,
+      2118,
+      2119,
+      2121,
+      2122,
+      2124,
+      2125,
+      2127,
+      2128,
+      2130,
+      2131,
+      2134,
+      2137,
+      2139,
+      2140,
+      2142,
+      2143,
+      2173,
+      2175,
+      2176,
+      2194,
+      2280,
+      2283,
+      2284,
+      2292,
+      2293,
+      2338,
+      2355,
+      2554
+    ],
+    "targets": [
+      {
+        "target": 0,
+        "reachable": true,
+        "minimum_surrogate_cost": 1.8946903613089259,
+        "sampled_paths": 78
+      },
+      {
+        "target": 1,
+        "reachable": true,
+        "minimum_surrogate_cost": 1.895205490578082,
+        "sampled_paths": 81
+      },
+      {
+        "target": 2,
+        "reachable": true,
+        "minimum_surrogate_cost": 1.9513649417164285,
+        "sampled_paths": 86
+      },
+      {
+        "target": 3,
+        "reachable": true,
+        "minimum_surrogate_cost": 1.8958640258597066,
+        "sampled_paths": 81
+      },
+      {
+        "target": 4,
+        "reachable": true,
+        "minimum_surrogate_cost": 1.9254705345605048,
+        "sampled_paths": 78
+      },
+      {
+        "target": 5,
+        "reachable": true,
+        "minimum_surrogate_cost": 1.8965386535025024,
+        "sampled_paths": 78
+      },
+      {
+        "target": 6,
+        "reachable": true,
+        "minimum_surrogate_cost": 1.9255408480606333,
+        "sampled_paths": 83
+      },
+      {
+        "target": 7,
+        "reachable": true,
+        "minimum_surrogate_cost": 1.8969673281216195,
+        "sampled_paths": 80
+      },
+      {
+        "target": 8,
+        "reachable": true,
+        "minimum_surrogate_cost": 1.8972339444517834,
+        "sampled_paths": 82
+      },
+      {
+        "target": 9,
+        "reachable": true,
+        "minimum_surrogate_cost": 1.8978014442999858,
+        "sampled_paths": 83
+      },
+      {
+        "target": 10,
+        "reachable": true,
+        "minimum_surrogate_cost": 1.8978807729735117,
+        "sampled_paths": 75
+      },
+      {
+        "target": 11,
+        "reachable": true,
+        "minimum_surrogate_cost": 1.8979325039223474,
+        "sampled_paths": 76
+      },
+      {
+        "target": 12,
+        "reachable": true,
+        "minimum_surrogate_cost": 1.8974829889609113,
+        "sampled_paths": 79
+      },
+      {
+        "target": 13,
+        "reachable": true,
+        "minimum_surrogate_cost": 1.897312418818346,
+        "sampled_paths": 71
+      },
+      {
+        "target": 14,
+        "reachable": true,
+        "minimum_surrogate_cost": 1.8953678129262863,
+        "sampled_paths": 77
+      },
+      {
+        "target": 15,
+        "reachable": true,
+        "minimum_surrogate_cost": 1.894754820959653,
+        "sampled_paths": 76
+      },
+      {
+        "target": 16,
+        "reachable": true,
+        "minimum_surrogate_cost": 1.9530044016374142,
+        "sampled_paths": 82
+      },
+      {
+        "target": 17,
+        "reachable": true,
+        "minimum_surrogate_cost": 1.8944776698447436,
+        "sampled_paths": 87
+      },
+      {
+        "target": 18,
+        "reachable": true,
+        "minimum_surrogate_cost": 1.8933339630132615,
+        "sampled_paths": 75
+      },
+      {
+        "target": 19,
+        "reachable": true,
+        "minimum_surrogate_cost": 1.900405349692565,
+        "sampled_paths": 75
+      },
+      {
+        "target": 20,
+        "reachable": true,
+        "minimum_surrogate_cost": 1.8932414164840037,
+        "sampled_paths": 81
+      },
+      {
+        "target": 21,
+        "reachable": true,
+        "minimum_surrogate_cost": 1.900414937121087,
+        "sampled_paths": 85
+      },
+      {
+        "target": 22,
+        "reachable": true,
+        "minimum_surrogate_cost": 1.8934874587672703,
+        "sampled_paths": 79
+      }
+    ],
+    "preserves_full_graph_optimality": false,
+    "seconds": 12.787676508000004
+  },
+  "quality_scope": "heuristically_pruned_graph_only",
+  "stage1_solver_settings": {
+    "max_rounded_paths": 200,
+    "max_rounding_trials": 300,
+    "solver_backend": "mosek"
+  },
+  "stage2_solver_settings": {
+    "max_rounded_paths": 200,
+    "max_rounding_trials": 300,
+    "solver_backend": "mosek"
+  },
+  "stage1_budget": {
+    "allocation": "fixed_per_target",
+    "target_count": 23,
+    "total_max_rounded_paths": 4600,
+    "total_max_rounding_trials": 6900
+  },
+  "stage1_seconds": 441.986424178,
+  "stage1_candidates": [
+    {
+      "target": 0,
+      "branch": 0,
+      "success": true,
+      "error": null,
+      "solver_settings": {
+        "max_rounded_paths": 200,
+        "max_rounding_trials": 300,
+        "solver_backend": "mosek"
+      },
+      "rounding_diagnostics": {
+        "rounded_path_count": 200,
+        "successful_rounded_path_count": 200,
+        "max_rounded_paths": 200,
+        "max_rounding_trials": 300,
+        "rounding_trials_attempted": null,
+        "trials_note": "Drake SamplePaths exposes a trial cap, not its actual attempt count"
+      },
+      "cost": 0.6265089101747833,
+      "quality": {
+        "lower_bound": 0.5208156623147792,
+        "upper_bound": 0.6265089101747833,
+        "absolute_gap": 0.10569324786000411,
+        "relative_gap": 0.20293792124116936,
+        "relative_tolerance": 0.01,
+        "absolute_tolerance": 1e-06,
+        "scope": "fixed_start_to_supplied_target_sets_graph",
+        "within_tolerance": false,
+        "status": "gap_exceeds_tolerance"
+      },
+      "rounded_path_count": 200
+    },
+    {
+      "target": 1,
+      "branch": 0,
+      "success": true,
+      "error": null,
+      "solver_settings": {
+        "max_rounded_paths": 200,
+        "max_rounding_trials": 300,
+        "solver_backend": "mosek"
+      },
+      "rounding_diagnostics": {
+        "rounded_path_count": 200,
+        "successful_rounded_path_count": 200,
+        "max_rounded_paths": 200,
+        "max_rounding_trials": 300,
+        "rounding_trials_attempted": null,
+        "trials_note": "Drake SamplePaths exposes a trial cap, not its actual attempt count"
+      },
+      "cost": 0.5964067287027432,
+      "quality": {
+        "lower_bound": 0.5206585909043168,
+        "upper_bound": 0.5964067287027432,
+        "absolute_gap": 0.07574813779842648,
+        "relative_gap": 0.14548523566443367,
+        "relative_tolerance": 0.01,
+        "absolute_tolerance": 1e-06,
+        "scope": "fixed_start_to_supplied_target_sets_graph",
+        "within_tolerance": false,
+        "status": "gap_exceeds_tolerance"
+      },
+      "rounded_path_count": 200
+    },
+    {
+      "target": 2,
+      "branch": 0,
+      "success": true,
+      "error": null,
+      "solver_settings": {
+        "max_rounded_paths": 200,
+        "max_rounding_trials": 300,
+        "solver_backend": "mosek"
+      },
+      "rounding_diagnostics": {
+        "rounded_path_count": 200,
+        "successful_rounded_path_count": 200,
+        "max_rounded_paths": 200,
+        "max_rounding_trials": 300,
+        "rounding_trials_attempted": null,
+        "trials_note": "Drake SamplePaths exposes a trial cap, not its actual attempt count"
+      },
+      "cost": 0.5869376293418014,
+      "quality": {
+        "lower_bound": 0.5207247473946794,
+        "upper_bound": 0.5869376293418014,
+        "absolute_gap": 0.06621288194712194,
+        "relative_gap": 0.12715524329965516,
+        "relative_tolerance": 0.01,
+        "absolute_tolerance": 1e-06,
+        "scope": "fixed_start_to_supplied_target_sets_graph",
+        "within_tolerance": false,
+        "status": "gap_exceeds_tolerance"
+      },
+      "rounded_path_count": 200
+    },
+    {
+      "target": 3,
+      "branch": 0,
+      "success": true,
+      "error": null,
+      "solver_settings": {
+        "max_rounded_paths": 200,
+        "max_rounding_trials": 300,
+        "solver_backend": "mosek"
+      },
+      "rounding_diagnostics": {
+        "rounded_path_count": 200,
+        "successful_rounded_path_count": 200,
+        "max_rounded_paths": 200,
+        "max_rounding_trials": 300,
+        "rounding_trials_attempted": null,
+        "trials_note": "Drake SamplePaths exposes a trial cap, not its actual attempt count"
+      },
+      "cost": 0.5889286123341081,
+      "quality": {
+        "lower_bound": 0.5205768340598949,
+        "upper_bound": 0.5889286123341081,
+        "absolute_gap": 0.06835177827421324,
+        "relative_gap": 0.13130007676513133,
+        "relative_tolerance": 0.01,
+        "absolute_tolerance": 1e-06,
+        "scope": "fixed_start_to_supplied_target_sets_graph",
+        "within_tolerance": false,
+        "status": "gap_exceeds_tolerance"
+      },
+      "rounded_path_count": 200
+    },
+    {
+      "target": 4,
+      "branch": 0,
+      "success": true,
+      "error": null,
+      "solver_settings": {
+        "max_rounded_paths": 200,
+        "max_rounding_trials": 300,
+        "solver_backend": "mosek"
+      },
+      "rounding_diagnostics": {
+        "rounded_path_count": 200,
+        "successful_rounded_path_count": 200,
+        "max_rounded_paths": 200,
+        "max_rounding_trials": 300,
+        "rounding_trials_attempted": null,
+        "trials_note": "Drake SamplePaths exposes a trial cap, not its actual attempt count"
+      },
+      "cost": 0.6213659885409537,
+      "quality": {
+        "lower_bound": 0.5208336695653139,
+        "upper_bound": 0.6213659885409537,
+        "absolute_gap": 0.10053231897563986,
+        "relative_gap": 0.19302192782494998,
+        "relative_tolerance": 0.01,
+        "absolute_tolerance": 1e-06,
+        "scope": "fixed_start_to_supplied_target_sets_graph",
+        "within_tolerance": false,
+        "status": "gap_exceeds_tolerance"
+      },
+      "rounded_path_count": 200
+    },
+    {
+      "target": 5,
+      "branch": 0,
+      "success": true,
+      "error": null,
+      "solver_settings": {
+        "max_rounded_paths": 200,
+        "max_rounding_trials": 300,
+        "solver_backend": "mosek"
+      },
+      "rounding_diagnostics": {
+        "rounded_path_count": 200,
+        "successful_rounded_path_count": 200,
+        "max_rounded_paths": 200,
+        "max_rounding_trials": 300,
+        "rounding_trials_attempted": null,
+        "trials_note": "Drake SamplePaths exposes a trial cap, not its actual attempt count"
+      },
+      "cost": 0.6259197388831826,
+      "quality": {
+        "lower_bound": 0.5206183216177501,
+        "upper_bound": 0.6259197388831826,
+        "absolute_gap": 0.10530141726543252,
+        "relative_gap": 0.20226221954352813,
+        "relative_tolerance": 0.01,
+        "absolute_tolerance": 1e-06,
+        "scope": "fixed_start_to_supplied_target_sets_graph",
+        "within_tolerance": false,
+        "status": "gap_exceeds_tolerance"
+      },
+      "rounded_path_count": 200
+    },
+    {
+      "target": 6,
+      "branch": 0,
+      "success": true,
+      "error": null,
+      "solver_settings": {
+        "max_rounded_paths": 200,
+        "max_rounding_trials": 300,
+        "solver_backend": "mosek"
+      },
+      "rounding_diagnostics": {
+        "rounded_path_count": 200,
+        "successful_rounded_path_count": 200,
+        "max_rounded_paths": 200,
+        "max_rounding_trials": 300,
+        "rounding_trials_attempted": null,
+        "trials_note": "Drake SamplePaths exposes a trial cap, not its actual attempt count"
+      },
+      "cost": 0.645117508983446,
+      "quality": {
+        "lower_bound": 0.5208276213920088,
+        "upper_bound": 0.645117508983446,
+        "absolute_gap": 0.12428988759143722,
+        "relative_gap": 0.2386392013143415,
+        "relative_tolerance": 0.01,
+        "absolute_tolerance": 1e-06,
+        "scope": "fixed_start_to_supplied_target_sets_graph",
+        "within_tolerance": false,
+        "status": "gap_exceeds_tolerance"
+      },
+      "rounded_path_count": 200
+    },
+    {
+      "target": 7,
+      "branch": 0,
+      "success": true,
+      "error": null,
+      "solver_settings": {
+        "max_rounded_paths": 200,
+        "max_rounding_trials": 300,
+        "solver_backend": "mosek"
+      },
+      "rounding_diagnostics": {
+        "rounded_path_count": 200,
+        "successful_rounded_path_count": 200,
+        "max_rounded_paths": 200,
+        "max_rounding_trials": 300,
+        "rounding_trials_attempted": null,
+        "trials_note": "Drake SamplePaths exposes a trial cap, not its actual attempt count"
+      },
+      "cost": 0.6224313357334934,
+      "quality": {
+        "lower_bound": 0.5208359133368459,
+        "upper_bound": 0.6224313357334934,
+        "absolute_gap": 0.10159542239664754,
+        "relative_gap": 0.1950622447399122,
+        "relative_tolerance": 0.01,
+        "absolute_tolerance": 1e-06,
+        "scope": "fixed_start_to_supplied_target_sets_graph",
+        "within_tolerance": false,
+        "status": "gap_exceeds_tolerance"
+      },
+      "rounded_path_count": 200
+    },
+    {
+      "target": 8,
+      "branch": 0,
+      "success": true,
+      "error": null,
+      "solver_settings": {
+        "max_rounded_paths": 200,
+        "max_rounding_trials": 300,
+        "solver_backend": "mosek"
+      },
+      "rounding_diagnostics": {
+        "rounded_path_count": 200,
+        "successful_rounded_path_count": 200,
+        "max_rounded_paths": 200,
+        "max_rounding_trials": 300,
+        "rounding_trials_attempted": null,
+        "trials_note": "Drake SamplePaths exposes a trial cap, not its actual attempt count"
+      },
+      "cost": 0.5902634759750668,
+      "quality": {
+        "lower_bound": 0.521154953294349,
+        "upper_bound": 0.5902634759750668,
+        "absolute_gap": 0.06910852268071777,
+        "relative_gap": 0.13260647767783026,
+        "relative_tolerance": 0.01,
+        "absolute_tolerance": 1e-06,
+        "scope": "fixed_start_to_supplied_target_sets_graph",
+        "within_tolerance": false,
+        "status": "gap_exceeds_tolerance"
+      },
+      "rounded_path_count": 200
+    },
+    {
+      "target": 9,
+      "branch": 0,
+      "success": true,
+      "error": null,
+      "solver_settings": {
+        "max_rounded_paths": 200,
+        "max_rounding_trials": 300,
+        "solver_backend": "mosek"
+      },
+      "rounding_diagnostics": {
+        "rounded_path_count": 200,
+        "successful_rounded_path_count": 200,
+        "max_rounded_paths": 200,
+        "max_rounding_trials": 300,
+        "rounding_trials_attempted": null,
+        "trials_note": "Drake SamplePaths exposes a trial cap, not its actual attempt count"
+      },
+      "cost": 0.5896510918625958,
+      "quality": {
+        "lower_bound": 0.5218104659004367,
+        "upper_bound": 0.5896510918625958,
+        "absolute_gap": 0.06784062596215912,
+        "relative_gap": 0.13001009062762522,
+        "relative_tolerance": 0.01,
+        "absolute_tolerance": 1e-06,
+        "scope": "fixed_start_to_supplied_target_sets_graph",
+        "within_tolerance": false,
+        "status": "gap_exceeds_tolerance"
+      },
+      "rounded_path_count": 200
+    },
+    {
+      "target": 10,
+      "branch": 0,
+      "success": true,
+      "error": null,
+      "solver_settings": {
+        "max_rounded_paths": 200,
+        "max_rounding_trials": 300,
+        "solver_backend": "mosek"
+      },
+      "rounding_diagnostics": {
+        "rounded_path_count": 200,
+        "successful_rounded_path_count": 200,
+        "max_rounded_paths": 200,
+        "max_rounding_trials": 300,
+        "rounding_trials_attempted": null,
+        "trials_note": "Drake SamplePaths exposes a trial cap, not its actual attempt count"
+      },
+      "cost": 0.6140617419506021,
+      "quality": {
+        "lower_bound": 0.5223393890928631,
+        "upper_bound": 0.6140617419506021,
+        "absolute_gap": 0.091722352857739,
+        "relative_gap": 0.1755991502326322,
+        "relative_tolerance": 0.01,
+        "absolute_tolerance": 1e-06,
+        "scope": "fixed_start_to_supplied_target_sets_graph",
+        "within_tolerance": false,
+        "status": "gap_exceeds_tolerance"
+      },
+      "rounded_path_count": 200
+    },
+    {
+      "target": 11,
+      "branch": 0,
+      "success": true,
+      "error": null,
+      "solver_settings": {
+        "max_rounded_paths": 200,
+        "max_rounding_trials": 300,
+        "solver_backend": "mosek"
+      },
+      "rounding_diagnostics": {
+        "rounded_path_count": 200,
+        "successful_rounded_path_count": 200,
+        "max_rounded_paths": 200,
+        "max_rounding_trials": 300,
+        "rounding_trials_attempted": null,
+        "trials_note": "Drake SamplePaths exposes a trial cap, not its actual attempt count"
+      },
+      "cost": 0.6482187339042157,
+      "quality": {
+        "lower_bound": 0.522788257599785,
+        "upper_bound": 0.6482187339042157,
+        "absolute_gap": 0.12543047630443072,
+        "relative_gap": 0.23992596329593288,
+        "relative_tolerance": 0.01,
+        "absolute_tolerance": 1e-06,
+        "scope": "fixed_start_to_supplied_target_sets_graph",
+        "within_tolerance": false,
+        "status": "gap_exceeds_tolerance"
+      },
+      "rounded_path_count": 200
+    },
+    {
+      "target": 12,
+      "branch": 0,
+      "success": true,
+      "error": null,
+      "solver_settings": {
+        "max_rounded_paths": 200,
+        "max_rounding_trials": 300,
+        "solver_backend": "mosek"
+      },
+      "rounding_diagnostics": {
+        "rounded_path_count": 200,
+        "successful_rounded_path_count": 200,
+        "max_rounded_paths": 200,
+        "max_rounding_trials": 300,
+        "rounding_trials_attempted": null,
+        "trials_note": "Drake SamplePaths exposes a trial cap, not its actual attempt count"
+      },
+      "cost": 0.6207164984366863,
+      "quality": {
+        "lower_bound": 0.5231285863712405,
+        "upper_bound": 0.6207164984366863,
+        "absolute_gap": 0.09758791206544581,
+        "relative_gap": 0.18654670115120056,
+        "relative_tolerance": 0.01,
+        "absolute_tolerance": 1e-06,
+        "scope": "fixed_start_to_supplied_target_sets_graph",
+        "within_tolerance": false,
+        "status": "gap_exceeds_tolerance"
+      },
+      "rounded_path_count": 200
+    },
+    {
+      "target": 13,
+      "branch": 0,
+      "success": true,
+      "error": null,
+      "solver_settings": {
+        "max_rounded_paths": 200,
+        "max_rounding_trials": 300,
+        "solver_backend": "mosek"
+      },
+      "rounding_diagnostics": {
+        "rounded_path_count": 200,
+        "successful_rounded_path_count": 200,
+        "max_rounded_paths": 200,
+        "max_rounding_trials": 300,
+        "rounding_trials_attempted": null,
+        "trials_note": "Drake SamplePaths exposes a trial cap, not its actual attempt count"
+      },
+      "cost": 0.5766880094622693,
+      "quality": {
+        "lower_bound": 0.5230654719625346,
+        "upper_bound": 0.5766880094622693,
+        "absolute_gap": 0.05362253749973467,
+        "relative_gap": 0.10251591889356342,
+        "relative_tolerance": 0.01,
+        "absolute_tolerance": 1e-06,
+        "scope": "fixed_start_to_supplied_target_sets_graph",
+        "within_tolerance": false,
+        "status": "gap_exceeds_tolerance"
+      },
+      "rounded_path_count": 200
+    },
+    {
+      "target": 14,
+      "branch": 0,
+      "success": true,
+      "error": null,
+      "solver_settings": {
+        "max_rounded_paths": 200,
+        "max_rounding_trials": 300,
+        "solver_backend": "mosek"
+      },
+      "rounding_diagnostics": {
+        "rounded_path_count": 200,
+        "successful_rounded_path_count": 200,
+        "max_rounded_paths": 200,
+        "max_rounding_trials": 300,
+        "rounding_trials_attempted": null,
+        "trials_note": "Drake SamplePaths exposes a trial cap, not its actual attempt count"
+      },
+      "cost": 0.6446670543807344,
+      "quality": {
+        "lower_bound": 0.522702785511643,
+        "upper_bound": 0.6446670543807344,
+        "absolute_gap": 0.1219642688690914,
+        "relative_gap": 0.23333387969170236,
+        "relative_tolerance": 0.01,
+        "absolute_tolerance": 1e-06,
+        "scope": "fixed_start_to_supplied_target_sets_graph",
+        "within_tolerance": false,
+        "status": "gap_exceeds_tolerance"
+      },
+      "rounded_path_count": 200
+    },
+    {
+      "target": 15,
+      "branch": 0,
+      "success": true,
+      "error": null,
+      "solver_settings": {
+        "max_rounded_paths": 200,
+        "max_rounding_trials": 300,
+        "solver_backend": "mosek"
+      },
+      "rounding_diagnostics": {
+        "rounded_path_count": 200,
+        "successful_rounded_path_count": 200,
+        "max_rounded_paths": 200,
+        "max_rounding_trials": 300,
+        "rounding_trials_attempted": null,
+        "trials_note": "Drake SamplePaths exposes a trial cap, not its actual attempt count"
+      },
+      "cost": 0.6463303493788597,
+      "quality": {
+        "lower_bound": 0.5223504593825429,
+        "upper_bound": 0.6463303493788597,
+        "absolute_gap": 0.12397988999631682,
+        "relative_gap": 0.2373500161996034,
+        "relative_tolerance": 0.01,
+        "absolute_tolerance": 1e-06,
+        "scope": "fixed_start_to_supplied_target_sets_graph",
+        "within_tolerance": false,
+        "status": "gap_exceeds_tolerance"
+      },
+      "rounded_path_count": 200
+    },
+    {
+      "target": 16,
+      "branch": 0,
+      "success": true,
+      "error": null,
+      "solver_settings": {
+        "max_rounded_paths": 200,
+        "max_rounding_trials": 300,
+        "solver_backend": "mosek"
+      },
+      "rounding_diagnostics": {
+        "rounded_path_count": 200,
+        "successful_rounded_path_count": 200,
+        "max_rounded_paths": 200,
+        "max_rounding_trials": 300,
+        "rounding_trials_attempted": null,
+        "trials_note": "Drake SamplePaths exposes a trial cap, not its actual attempt count"
+      },
+      "cost": 0.6087752405525507,
+      "quality": {
+        "lower_bound": 0.5218736215162113,
+        "upper_bound": 0.6087752405525507,
+        "absolute_gap": 0.08690161903633942,
+        "relative_gap": 0.16651851224796949,
+        "relative_tolerance": 0.01,
+        "absolute_tolerance": 1e-06,
+        "scope": "fixed_start_to_supplied_target_sets_graph",
+        "within_tolerance": false,
+        "status": "gap_exceeds_tolerance"
+      },
+      "rounded_path_count": 200
+    },
+    {
+      "target": 17,
+      "branch": 0,
+      "success": true,
+      "error": null,
+      "solver_settings": {
+        "max_rounded_paths": 200,
+        "max_rounding_trials": 300,
+        "solver_backend": "mosek"
+      },
+      "rounding_diagnostics": {
+        "rounded_path_count": 200,
+        "successful_rounded_path_count": 200,
+        "max_rounded_paths": 200,
+        "max_rounding_trials": 300,
+        "rounding_trials_attempted": null,
+        "trials_note": "Drake SamplePaths exposes a trial cap, not its actual attempt count"
+      },
+      "cost": 0.6216391059395205,
+      "quality": {
+        "lower_bound": 0.5218736960481952,
+        "upper_bound": 0.6216391059395205,
+        "absolute_gap": 0.09976540989132532,
+        "relative_gap": 0.1911677301362051,
+        "relative_tolerance": 0.01,
+        "absolute_tolerance": 1e-06,
+        "scope": "fixed_start_to_supplied_target_sets_graph",
+        "within_tolerance": false,
+        "status": "gap_exceeds_tolerance"
+      },
+      "rounded_path_count": 200
+    },
+    {
+      "target": 18,
+      "branch": 0,
+      "success": true,
+      "error": null,
+      "solver_settings": {
+        "max_rounded_paths": 200,
+        "max_rounding_trials": 300,
+        "solver_backend": "mosek"
+      },
+      "rounding_diagnostics": {
+        "rounded_path_count": 200,
+        "successful_rounded_path_count": 200,
+        "max_rounded_paths": 200,
+        "max_rounding_trials": 300,
+        "rounding_trials_attempted": null,
+        "trials_note": "Drake SamplePaths exposes a trial cap, not its actual attempt count"
+      },
+      "cost": 0.6217961718789929,
+      "quality": {
+        "lower_bound": 0.5215543555203661,
+        "upper_bound": 0.6217961718789929,
+        "absolute_gap": 0.10024181635862683,
+        "relative_gap": 0.19219821538756665,
+        "relative_tolerance": 0.01,
+        "absolute_tolerance": 1e-06,
+        "scope": "fixed_start_to_supplied_target_sets_graph",
+        "within_tolerance": false,
+        "status": "gap_exceeds_tolerance"
+      },
+      "rounded_path_count": 200
+    },
+    {
+      "target": 19,
+      "branch": 0,
+      "success": true,
+      "error": null,
+      "solver_settings": {
+        "max_rounded_paths": 200,
+        "max_rounding_trials": 300,
+        "solver_backend": "mosek"
+      },
+      "rounding_diagnostics": {
+        "rounded_path_count": 200,
+        "successful_rounded_path_count": 200,
+        "max_rounded_paths": 200,
+        "max_rounding_trials": 300,
+        "rounding_trials_attempted": null,
+        "trials_note": "Drake SamplePaths exposes a trial cap, not its actual attempt count"
+      },
+      "cost": 0.6133989357629328,
+      "quality": {
+        "lower_bound": 0.5212690594201145,
+        "upper_bound": 0.6133989357629328,
+        "absolute_gap": 0.09212987634281833,
+        "relative_gap": 0.17674150168304287,
+        "relative_tolerance": 0.01,
+        "absolute_tolerance": 1e-06,
+        "scope": "fixed_start_to_supplied_target_sets_graph",
+        "within_tolerance": false,
+        "status": "gap_exceeds_tolerance"
+      },
+      "rounded_path_count": 200
+    },
+    {
+      "target": 20,
+      "branch": 0,
+      "success": true,
+      "error": null,
+      "solver_settings": {
+        "max_rounded_paths": 200,
+        "max_rounding_trials": 300,
+        "solver_backend": "mosek"
+      },
+      "rounding_diagnostics": {
+        "rounded_path_count": 200,
+        "successful_rounded_path_count": 200,
+        "max_rounded_paths": 200,
+        "max_rounding_trials": 300,
+        "rounding_trials_attempted": null,
+        "trials_note": "Drake SamplePaths exposes a trial cap, not its actual attempt count"
+      },
+      "cost": 0.6308515375322683,
+      "quality": {
+        "lower_bound": 0.5212708656658744,
+        "upper_bound": 0.6308515375322683,
+        "absolute_gap": 0.10958067186639386,
+        "relative_gap": 0.21021829356684815,
+        "relative_tolerance": 0.01,
+        "absolute_tolerance": 1e-06,
+        "scope": "fixed_start_to_supplied_target_sets_graph",
+        "within_tolerance": false,
+        "status": "gap_exceeds_tolerance"
+      },
+      "rounded_path_count": 200
+    },
+    {
+      "target": 21,
+      "branch": 0,
+      "success": true,
+      "error": null,
+      "solver_settings": {
+        "max_rounded_paths": 200,
+        "max_rounding_trials": 300,
+        "solver_backend": "mosek"
+      },
+      "rounding_diagnostics": {
+        "rounded_path_count": 200,
+        "successful_rounded_path_count": 200,
+        "max_rounded_paths": 200,
+        "max_rounding_trials": 300,
+        "rounding_trials_attempted": null,
+        "trials_note": "Drake SamplePaths exposes a trial cap, not its actual attempt count"
+      },
+      "cost": 0.6133940204055353,
+      "quality": {
+        "lower_bound": 0.521266665608952,
+        "upper_bound": 0.6133940204055353,
+        "absolute_gap": 0.0921273547965833,
+        "relative_gap": 0.17673747598833825,
+        "relative_tolerance": 0.01,
+        "absolute_tolerance": 1e-06,
+        "scope": "fixed_start_to_supplied_target_sets_graph",
+        "within_tolerance": false,
+        "status": "gap_exceeds_tolerance"
+      },
+      "rounded_path_count": 200
+    },
+    {
+      "target": 22,
+      "branch": 0,
+      "success": true,
+      "error": null,
+      "solver_settings": {
+        "max_rounded_paths": 200,
+        "max_rounding_trials": 300,
+        "solver_backend": "mosek"
+      },
+      "rounding_diagnostics": {
+        "rounded_path_count": 200,
+        "successful_rounded_path_count": 200,
+        "max_rounded_paths": 200,
+        "max_rounding_trials": 300,
+        "rounding_trials_attempted": null,
+        "trials_note": "Drake SamplePaths exposes a trial cap, not its actual attempt count"
+      },
+      "cost": 0.6356132395730244,
+      "quality": {
+        "lower_bound": 0.5210051654754112,
+        "upper_bound": 0.6356132395730244,
+        "absolute_gap": 0.1146080740976132,
+        "relative_gap": 0.2199749286420887,
+        "relative_tolerance": 0.01,
+        "absolute_tolerance": 1e-06,
+        "scope": "fixed_start_to_supplied_target_sets_graph",
+        "within_tolerance": false,
+        "status": "gap_exceeds_tolerance"
+      },
+      "rounded_path_count": 200
+    }
+  ],
+  "stage1_rounding_diagnostics": {
+    "rounded_path_count": 4600,
+    "successful_rounded_path_count": 4600,
+    "rounding_trials_attempted": null
+  },
+  "stage1_quality": {
+    "lower_bound": 0.5205768340598949,
+    "upper_bound": 0.5766880094622693,
+    "absolute_gap": 0.056111175402374425,
+    "relative_gap": 0.1077865393370896,
+    "relative_tolerance": 0.01,
+    "absolute_tolerance": 1e-06,
+    "scope": "heuristically_pruned_target_intersections_graph",
+    "within_tolerance": false,
+    "status": "gap_exceeds_tolerance"
+  },
+  "stage1_cost": 0.5766880094622693,
+  "selected_target": 13,
+  "selected_ssm_branch": 0,
+  "stage1_region_route": [
+    126,
+    166,
+    173,
+    146,
+    134,
+    141,
+    171,
+    142,
+    170,
+    177,
+    155,
+    147,
+    128,
+    130,
+    123,
+    163,
+    152,
+    164,
+    160,
+    153,
+    63,
+    59,
+    82,
+    46,
+    79,
+    48,
+    80,
+    41,
+    81,
+    66,
+    85,
+    47,
+    96,
+    64,
+    206,
+    187
+  ],
+  "estimated_goal": [
+    0.565173901736566,
+    -1.2533800163213575,
+    0.5803414662030391,
+    0.15920451297540783,
+    0.11575953691685692,
+    -0.18781486977758988,
+    1.4630615084502017
+  ],
+  "projection_distance": 6.828046819415853e-07,
+  "projection_connection_baseline": {
+    "method": "comparison_only_stage1_path_plus_projection_segment",
+    "cost": 0.5766880162903161,
+    "connector_length": 6.828046819415853e-07,
+    "connector_weight": 0.010000000000000009,
+    "collision_free": true,
+    "collision_samples": 330,
+    "waypoints": [
+      [
+        0.2,
+        -0.62,
+        0.3,
+        -0.55,
+        0.44,
+        -0.36,
+        0.12
+      ],
+      [
+        0.48277491040319553,
+        -0.8402100426880982,
+        0.5723212955535809,
+        -0.5494088208365536,
+        0.37084444202832867,
+        -0.24551991229810533,
+        0.1360642212242157
+      ],
+      [
+        0.48277491234751746,
+        -0.8402100698512879,
+        0.5723213240995326,
+        -0.5494088121860957,
+        0.370844437627309,
+        -0.24551990754452083,
+        0.1360642238209811
+      ],
+      [
+        0.48278142625075815,
+        -1.1638932119200183,
+        0.5723277610779618,
+        -0.4452130427360187,
+        0.3189882793135398,
+        -0.20125727217969,
+        0.16706914603131678
+      ],
+      [
+        0.4827749125594842,
+        -1.163893213155899,
+        0.5723213240995326,
+        -0.31785717557142645,
+        0.2556058080120304,
+        -0.14715616975338727,
+        0.20496569715319943
+      ],
+      [
+        0.48277491254132154,
+        -1.1638932130214312,
+        0.5723213235984068,
+        -0.3178571749593426,
+        0.25560580783934245,
+        -0.14715616949129126,
+        0.20496569726660835
+      ],
+      [
+        0.48277491241246145,
+        -1.1638932119200183,
+        0.5723213234051527,
+        -0.31785717336173874,
+        0.2556058071164536,
+        -0.14715616775193752,
+        0.20496569780058627
+      ],
+      [
+        0.4827749124103167,
+        -1.1638932119200183,
+        0.5723213234304071,
+        -0.31785717333141184,
+        0.2556058071012317,
+        -0.14715616764138031,
+        0.20496569781403126
+      ],
+      [
+        0.48277491240421344,
+        -1.1638932119200183,
+        0.5723213237581789,
+        -0.3178571732027009,
+        0.25560580702966723,
+        -0.14715616775193752,
+        0.2049656978922843
+      ],
+      [
+        0.48277491240341575,
+        -1.163893211598032,
+        0.5723213240995326,
+        -0.3178571731724806,
+        0.2556058070102891,
+        -0.14715616775193752,
+        0.20496569791993147
+      ],
+      [
+        0.48277491240298664,
+        -1.1638932119200183,
+        0.572321324209318,
+        -0.31785717315121065,
+        0.25560580699087193,
+        -0.14715616775193752,
+        0.2049656979592537
+      ],
+      [
+        0.4827749109238326,
+        -1.1638932123132726,
+        0.7755986143028174,
+        -0.3178571749593426,
+        0.09623505111834532,
+        -0.14715616775193752,
+        0.7699997987345731
+      ],
+      [
+        0.48277491040319553,
+        -1.1638932119200183,
+        0.7755986149208163,
+        -0.3178571751860488,
+        0.09623505090727495,
+        -0.14715616775193752,
+        0.7699997989833004
+      ],
+      [
+        0.48277491021899205,
+        -1.1638932116742218,
+        0.7755986151761864,
+        -0.3178571751493468,
+        0.09623505088912489,
+        -0.1471561679082165,
+        0.7699997989958756
+      ],
+      [
+        0.4827749102143416,
+        -1.1638932119200183,
+        0.7755986150977785,
+        -0.31785717511314865,
+        0.09623505087902827,
+        -0.14715616795493347,
+        0.7699997990008872
+      ],
+      [
+        0.48277491040319553,
+        -1.1638932118485215,
+        0.7755986151927312,
+        -0.3178571749593426,
+        0.09623505083293554,
+        -0.14715616803851733,
+        0.7699997990187855
+      ],
+      [
+        0.48277491246234944,
+        -1.1638932139253775,
+        0.7755986151761864,
+        -0.3178571727801255,
+        0.09623504790825832,
+        -0.14715616882866356,
+        0.769999799950229
+      ],
+      [
+        0.4827749152107051,
+        -1.1638932165757367,
+        0.7755986151761864,
+        -0.3178571700961886,
+        0.09623504790825832,
+        -0.14715616775193752,
+        0.769999801792514
+      ],
+      [
+        0.4827749152782359,
+        -1.1638932166399953,
+        0.7755986151943073,
+        -0.3178571700311155,
+        0.09623504790825832,
+        -0.14715616775193752,
+        0.7699998018523742
+      ],
+      [
+        0.4827749153259374,
+        -1.1638932166838891,
+        0.7755986151761864,
+        -0.3178571699864979,
+        0.0962350476715471,
+        -0.14715616775193752,
+        0.7699998019145857
+      ],
+      [
+        0.4827749154179993,
+        -1.1638932167608862,
+        0.7755986144834816,
+        -0.3178571699080635,
+        0.09623504790825832,
+        -0.14715616775193752,
+        0.7699998021364377
+      ],
+      [
+        0.5052718672043205,
+        -1.1638932266744988,
+        0.7755986142506563,
+        -0.31785717377482875,
+        0.09623504790825832,
+        -0.14715616775193752,
+        1.1167041251242331
+      ],
+      [
+        0.5052718672314793,
+        -1.1638932266242816,
+        0.7755986151761864,
+        -0.317857174348584,
+        0.09623504753360582,
+        -0.14715616775193752,
+        1.1167041263659216
+      ],
+      [
+        0.5052718672412753,
+        -1.1638932265898927,
+        0.7755986151761864,
+        -0.3178571749593426,
+        0.09623504790825832,
+        -0.14715616812116336,
+        1.1167041263659216
+      ],
+      [
+        0.5052718672740197,
+        -1.163893226424305,
+        0.7755986151761864,
+        -0.3178571759948565,
+        0.09623504872007348,
+        -0.14715616794749795,
+        1.1167041255451755
+      ],
+      [
+        0.5052718672772105,
+        -1.1638932264022461,
+        0.7755986151761864,
+        -0.3178571760381275,
+        0.0962350487199746,
+        -0.14715616775193752,
+        1.1167041255884158
+      ],
+      [
+        0.5052718672885282,
+        -1.1638932262986519,
+        0.7755986151761864,
+        -0.31785717596418456,
+        0.0962350484120834,
+        -0.14715616775193752,
+        1.1167041263659216
+      ],
+      [
+        0.505271867296179,
+        -1.1638932262115558,
+        0.7755986151761864,
+        -0.31785717573883415,
+        0.09623504790825832,
+        -0.14715616810032545,
+        1.1167041264558426
+      ],
+      [
+        0.50527186731112,
+        -1.1638932260169192,
+        0.7755986151761864,
+        -0.3178571749593426,
+        0.09623504761558947,
+        -0.14715616807583878,
+        1.1167041263659216
+      ],
+      [
+        0.5052718673178727,
+        -1.1638932259195087,
+        0.7755986151761864,
+        -0.3178571745548699,
+        0.09623504790825832,
+        -0.14715616775193752,
+        1.1167041263659216
+      ],
+      [
+        0.5052718679312704,
+        -1.1638932158762945,
+        0.7755986151761864,
+        -0.31785717422511556,
+        0.09623505026212734,
+        -0.14715616775193752,
+        1.1167041346788429
+      ],
+      [
+        0.5052718679526818,
+        -1.1638932153804242,
+        0.7755986151761864,
+        -0.3178571749593426,
+        0.0962350501154107,
+        -0.1471561686410467,
+        1.1167041349153466
+      ],
+      [
+        0.505271868075846,
+        -1.1638932119200183,
+        0.7755986124587826,
+        -0.3178571749593426,
+        0.09623504790825832,
+        -0.14715617076918638,
+        1.116704135876062
+      ],
+      [
+        0.5052718680782847,
+        -1.1638932119200183,
+        0.7755986124318652,
+        -0.31785717471211244,
+        0.09623504790825832,
+        -0.14715617079078322,
+        1.1167041358883922
+      ],
+      [
+        0.5985466717101845,
+        -1.1638932119200183,
+        0.6638050838150041,
+        0.04255552241014313,
+        0.1250491910615923,
+        -0.17961722798740692,
+        1.3291600314187642
+      ],
+      [
+        0.59854667171071,
+        -1.1638932119200183,
+        0.6638050838105073,
+        0.04255552241807778,
+        0.12504919106179685,
+        -0.1796172279879439,
+        1.3291600314260827
+      ],
+      [
+        0.5651740837282805,
+        -1.2533798160350884,
+        0.5803413728548175,
+        0.15920410266292567,
+        0.1157592483331782,
+        -0.18781498076077063,
+        1.4630618553199617
+      ],
+      [
+        0.565173901736566,
+        -1.2533800163213575,
+        0.5803414662030391,
+        0.15920451297540783,
+        0.11575953691685692,
+        -0.18781486977758988,
+        1.4630615084502017
+      ]
+    ]
+  },
+  "stage2_rounding_diagnostics": {
+    "rounded_path_count": 200,
+    "successful_rounded_path_count": 200,
+    "max_rounded_paths": 200,
+    "max_rounding_trials": 300,
+    "rounding_trials_attempted": null,
+    "trials_note": "Drake SamplePaths exposes a trial cap, not its actual attempt count"
+  },
+  "stage2_seconds": 18.527776313000004,
+  "waypoints": [
+    [
+      0.2,
+      -0.62,
+      0.3,
+      -0.55,
+      0.44,
+      -0.36,
+      0.12
+    ],
+    [
+      0.48277491040319553,
+      -0.8402100487302098,
+      0.5723212862651696,
+      -0.549408827861137,
+      0.37084443691998586,
+      -0.24551991229810533,
+      0.13606421912578362
+    ],
+    [
+      0.482774912971547,
+      -0.840210084731601,
+      0.5723213240995326,
+      -0.5494088163988581,
+      0.3708444310870578,
+      -0.24551990600118523,
+      0.13606422256625816
+    ],
+    [
+      0.48278361516087526,
+      -1.1638932119200183,
+      0.5723299221438877,
+      -0.44521305778861664,
+      0.3189882806892295,
+      -0.20125728077035207,
+      0.16706915678040712
+    ],
+    [
+      0.4827749132407933,
+      -1.16389321354077,
+      0.5723213240995326,
+      -0.3178571757612814,
+      0.2556058016018589,
+      -0.14715617038302958,
+      0.20496571054970342
+    ],
+    [
+      0.4827749132166033,
+      -1.163893213365347,
+      0.5723213234414624,
+      -0.3178571749593426,
+      0.25560580137620814,
+      -0.1471561700406273,
+      0.20496571069783823
+    ],
+    [
+      0.48277491304730863,
+      -1.1638932119200183,
+      0.5723213231880068,
+      -0.31785717285515935,
+      0.25560580042583714,
+      -0.14715616775193752,
+      0.20496571140036332
+    ],
+    [
+      0.4827749130445072,
+      -1.1638932119200183,
+      0.572321323220945,
+      -0.31785717281559733,
+      0.255605800406011,
+      -0.14715616760725078,
+      0.2049657114178911
+    ],
+    [
+      0.48277491303643816,
+      -1.1638932119200183,
+      0.5723213236506621,
+      -0.3178571726468988,
+      0.2556058003124908,
+      -0.14715616775193752,
+      0.204965711520388
+    ],
+    [
+      0.48277491303541475,
+      -1.1638932114934881,
+      0.5723213240995326,
+      -0.3178571726073725,
+      0.25560580028728036,
+      -0.14715616775193752,
+      0.20496571155649074
+    ],
+    [
+      0.48277491303504266,
+      -1.1638932119200183,
+      0.5723213242401418,
+      -0.3178571725794634,
+      0.2556058002621398,
+      -0.14715616775193752,
+      0.20496571160775537
+    ],
+    [
+      0.482774911082186,
+      -1.1638932124302257,
+      0.7755986140302499,
+      -0.3178571749593426,
+      0.09623505213315062,
+      -0.14715616775193752,
+      0.7699997345369343
+    ],
+    [
+      0.48277491040319553,
+      -1.1638932119200183,
+      0.7755986148397658,
+      -0.3178571752537102,
+      0.096235051857187,
+      -0.14715616775193752,
+      0.7699997348625607
+    ],
+    [
+      0.4827749101602457,
+      -1.163893211593351,
+      0.7755986151761864,
+      -0.3178571752058185,
+      0.096235051833651,
+      -0.14715616795418368,
+      0.7699997348788922
+    ],
+    [
+      0.48277491015421503,
+      -1.1638932119200183,
+      0.7755986150694277,
+      -0.3178571751584897,
+      0.0962350518204985,
+      -0.14715616801497775,
+      0.7699997348854136
+    ],
+    [
+      0.48277491040319553,
+      -1.1638932118198235,
+      0.775598615192917,
+      -0.3178571749593426,
+      0.09623505176034364,
+      -0.14715616812378984,
+      0.7699997349087092
+    ],
+    [
+      0.4827749131122393,
+      -1.1638932145531176,
+      0.7755986151761864,
+      -0.31785717208997377,
+      0.09623504790825832,
+      -0.14715616916578036,
+      0.7699997361353252
+    ],
+    [
+      0.4827749167397251,
+      -1.1638932180488284,
+      0.7755986151761864,
+      -0.3178571685514132,
+      0.09623504790825832,
+      -0.14715616775193752,
+      0.7699997385665552
+    ],
+    [
+      0.4827749168279355,
+      -1.1638932181326822,
+      0.7755986151958076,
+      -0.31785716846657713,
+      0.09623504790825832,
+      -0.14715616775193752,
+      0.7699997386449852
+    ],
+    [
+      0.4827749168901107,
+      -1.1638932181899186,
+      0.7755986151761864,
+      -0.3178571684085465,
+      0.0962350475986631,
+      -0.14715616775193752,
+      0.7699997387264285
+    ],
+    [
+      0.48277491700985836,
+      -1.1638932182904782,
+      0.7755986142667892,
+      -0.3178571683064967,
+      0.09623504790825832,
+      -0.14715616775193752,
+      0.7699997390172486
+    ],
+    [
+      0.505269143651925,
+      -1.1638932313707309,
+      0.7755986139598778,
+      -0.3178571734033428,
+      0.09623504790825832,
+      -0.14715616775193752,
+      1.116704124730587
+    ],
+    [
+      0.5052691436880833,
+      -1.1638932313052837,
+      0.7755986151761864,
+      -0.3178571741569942,
+      0.09623504741694089,
+      -0.14715616775193752,
+      1.1167041263659216
+    ],
+    [
+      0.5052691437009127,
+      -1.1638932312602734,
+      0.7755986151761864,
+      -0.3178571749593426,
+      0.09623504790825832,
+      -0.14715616823450645,
+      1.1167041263659216
+    ],
+    [
+      0.5052691437432381,
+      -1.1638932310427068,
+      0.7755986151761864,
+      -0.3178571763176929,
+      0.09623504897285794,
+      -0.14715616800655695,
+      1.1167041252842436
+    ],
+    [
+      0.5052691437473661,
+      -1.1638932310138355,
+      0.7755986151761864,
+      -0.317857176374371,
+      0.09623504897269444,
+      -0.14715616775193752,
+      1.1167041253408385
+    ],
+    [
+      0.505269143762327,
+      -1.1638932308780878,
+      0.7755986151761864,
+      -0.31785717627724935,
+      0.09623504856851266,
+      -0.14715616775193752,
+      1.1167041263659216
+    ],
+    [
+      0.5052691437725416,
+      -1.1638932307641774,
+      0.7755986151761864,
+      -0.31785717598158386,
+      0.09623504790825832,
+      -0.14715616820731614,
+      1.1167041264788988
+    ],
+    [
+      0.5052691437923323,
+      -1.1638932305090712,
+      0.7755986151761864,
+      -0.3178571749593426,
+      0.09623504752479575,
+      -0.14715616817494176,
+      1.1167041263659216
+    ],
+    [
+      0.5052691438011311,
+      -1.1638932303815646,
+      0.7755986151761864,
+      -0.31785717442837685,
+      0.09623504790825832,
+      -0.14715616775193752,
+      1.1167041263659216
+    ],
+    [
+      0.50526914460926,
+      -1.1638932171240393,
+      0.7755986151761864,
+      -0.3178571739937894,
+      0.09623505100833936,
+      -0.14715616775193752,
+      1.1167041373235573
+    ],
+    [
+      0.5052691446374863,
+      -1.1638932164736597,
+      0.7755986151761864,
+      -0.3178571749593426,
+      0.09623505081549127,
+      -0.1471561689178643,
+      1.1167041376333202
+    ],
+    [
+      0.505269144799382,
+      -1.1638932119200183,
+      0.775598611596902,
+      -0.3178571749593426,
+      0.09623504790825832,
+      -0.14715617171914858,
+      1.1167041388973522
+    ],
+    [
+      0.5052691448025595,
+      -1.1638932119200183,
+      0.7755986115617626,
+      -0.3178571746350562,
+      0.09623504790825832,
+      -0.14715617174730067,
+      1.1167041389134391
+    ],
+    [
+      0.5985460003493233,
+      -1.1638932119200183,
+      0.6638048324432245,
+      0.04255641825938691,
+      0.12504951794184307,
+      -0.17961720326198596,
+      1.3291600177699259
+    ],
+    [
+      0.5985460003502298,
+      -1.1638932119200183,
+      0.6638048324368112,
+      0.042556418269857885,
+      0.12504951794214922,
+      -0.17961720326261224,
+      1.329160017779624
+    ],
+    [
+      0.565173901736566,
+      -1.2533800163213575,
+      0.5803414662030391,
+      0.15920451297540783,
+      0.11575953691685692,
+      -0.18781486977758988,
+      1.4630615084502017
+    ]
+  ],
+  "cost": 0.576688012520229,
+  "collision_free": true,
+  "collision_samples": 328,
+  "endpoint_error": 9.42055475210265e-16,
+  "orientation_error_radians": 4.489550152768946e-16,
+  "start_error": 0.0,
+  "fixed_goal_error": 0.0,
+  "graph_path_valid": true,
+  "stage2_quality": {
+    "lower_bound": 0.523165418229476,
+    "upper_bound": 0.576688012520229,
+    "absolute_gap": 0.05352259429075301,
+    "relative_gap": 0.10230529852658647,
+    "relative_tolerance": 0.01,
+    "absolute_tolerance": 1e-06,
+    "scope": "fixed_start_to_supplied_target_sets_graph",
+    "within_tolerance": false,
+    "status": "gap_exceeds_tolerance"
+  },
+  "stage2_native_cost": 0.5901417538064359,
+  "stage2_solution_source": "stage1_route_convex_restriction",
+  "stage2_region_route": [
+    126,
+    166,
+    173,
+    146,
+    134,
+    141,
+    171,
+    142,
+    170,
+    177,
+    155,
+    147,
+    128,
+    130,
+    123,
+    163,
+    152,
+    164,
+    160,
+    153,
+    63,
+    59,
+    82,
+    46,
+    79,
+    48,
+    80,
+    41,
+    81,
+    66,
+    85,
+    47,
+    96,
+    64,
+    206,
+    187
+  ],
+  "stage2_additional_route_results": [
+    {
+      "region_route": [
+        126,
+        166,
+        173,
+        146,
+        134,
+        141,
+        171,
+        142,
+        170,
+        177,
+        155,
+        147,
+        128,
+        130,
+        123,
+        163,
+        152,
+        164,
+        160,
+        153,
+        63,
+        59,
+        82,
+        46,
+        79,
+        48,
+        80,
+        41,
+        81,
+        66,
+        85,
+        47,
+        96,
+        64,
+        206,
+        187
+      ],
+      "success": true,
+      "cost": 0.576688012520229,
+      "solver_cost": 0.5766880135416221
+    }
+  ],
+  "stage2_rounded_path_count": 200,
+  "solver_name": "MOSEK",
+  "status": "success",
+  "message": "Validated collision-free seven-angle path and full goal pose.",
+  "total_seconds": 494.7661956779999,
+  "two_stage_total_seconds": 494.7661956779999
+}

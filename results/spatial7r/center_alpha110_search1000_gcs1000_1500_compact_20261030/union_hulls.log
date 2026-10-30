@@ -1,0 +1,4 @@
+BEGIN graph union_hulls: both stages 1000/1500
+7R geometry: 1 branches, 2856 regions, 869670 edges, 54 samples, 23 targets
+7R representative pruning: 2856 -> 314 regions, 869670 -> 3188 edges, 33.44s
+GCS constraint compaction: {"edge_membership_rows_before": 51337, "edge_membership_rows_after": 10259, "region_rows_before": 6186, "region_rows_after": 4945}

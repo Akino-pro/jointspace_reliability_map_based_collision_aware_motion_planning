@@ -1,0 +1,15 @@
+{
+  "mode": "primal",
+  "success": true,
+  "termination": "SolutionResult.kSolutionFound",
+  "seconds": 33.548240433000046,
+  "vertices": 71,
+  "edges": 1229,
+  "solver": "MOSEK",
+  "details": {
+    "rescode": 0.0,
+    "solution_status": 1.0,
+    "optimizer_time": 29.428549058000044
+  },
+  "cost": 0.06873002163927269
+}

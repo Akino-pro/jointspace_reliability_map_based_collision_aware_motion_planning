@@ -1,0 +1,80 @@
+Spatial geometry: 1 SSM branches; 81 -> 81 boxes; 56 free regions, 1202 edges; 153 samples; 13 targets
+Problem
+  Name                   :                 
+  Objective sense        : minimize        
+  Type                   : CONIC (conic optimization problem)
+  Constraints            : 76203           
+  Affine conic cons.     : 1200 (6000 rows)
+  Disjunctive cons.      : 0               
+  Cones                  : 0               
+  Scalar variables       : 12126           
+  Matrix variables       : 0               
+  Integer variables      : 0               
+
+Optimizer started.
+Presolve started.
+Linear dependency checker started.
+Linear dependency checker terminated.
+Eliminator started.
+Freed constraints in eliminator : 12037
+Eliminator terminated.
+Eliminator started.
+Freed constraints in eliminator : 1034
+Eliminator terminated.
+Eliminator - tries                  : 2                 time                   : 0.00            
+Lin. dep.  - tries                  : 1                 time                   : 0.02            
+Lin. dep.  - primal attempts        : 1                 successes              : 1               
+Lin. dep.  - dual attempts          : 0                 successes              : 0               
+Lin. dep.  - primal deps.           : 1                 dual deps.             : 0               
+Presolve terminated. Time: 0.22    
+Optimizer  - threads                : 20              
+Optimizer  - solved problem         : the primal      
+Optimizer  - Constraints            : 42642           
+Optimizer  - Cones                  : 1201            
+Optimizer  - Scalar variables       : 51999             conic                  : 10580           
+Optimizer  - Semi-definite variables: 0                 scalarized             : 0               
+Factor     - setup time             : 1.70            
+Factor     - dense det. time        : 0.80              GP order time          : 0.10            
+Factor     - nonzeros before factor : 1.92e+06          after factor           : 4.16e+06        
+Factor     - dense dim.             : 6521              flops                  : 9.68e+10        
+Factor     - GP saved nzs           : 2.49e+06          GP saved flops         : 1.24e+10        
+ITE PFEAS    DFEAS    GFEAS    PRSTATUS   POBJ              DOBJ              MU       TIME  
+0   1.0e+00  1.0e+00  1.2e+03  0.00e+00   1.200000000e+03   0.000000000e+00   1.0e+00  1.98  
+1   8.6e-01  8.6e-01  8.5e+02  2.53e+00   8.239352626e+02   2.713690541e-01   8.6e-01  3.74  
+2   1.1e-01  1.1e-01  1.6e+01  2.27e+00   2.419320746e+01   -2.613228987e+01  1.1e-01  4.86  
+3   7.6e-02  7.6e-02  8.7e+00  1.82e+00   1.451048751e+01   -1.488024438e+01  7.6e-02  5.75  
+4   2.3e-02  2.3e-02  1.2e+00  1.58e+00   3.140015143e+00   -3.532379806e+00  2.3e-02  6.80  
+5   4.0e-03  5.7e-03  7.1e-02  1.26e+00   4.428339946e-01   -5.817750397e-01  4.0e-03  7.80  
+6   2.7e-03  3.2e-03  3.9e-02  1.08e+00   3.179644847e-01   -3.701949476e-01  2.7e-03  8.59  
+7   1.7e-03  2.0e-03  1.9e-02  1.06e+00   2.228455381e-01   -1.960458905e-01  1.7e-03  9.41  
+8   9.2e-04  1.2e-03  7.4e-03  1.04e+00   1.517083956e-01   -7.445894456e-02  9.2e-04  10.22 
+9   1.7e-04  4.6e-04  5.8e-04  1.02e+00   8.402736968e-02   4.147288172e-02   1.7e-04  11.12 
+10  1.2e-04  5.2e-04  3.5e-04  1.01e+00   7.961430193e-02   4.912945509e-02   1.2e-04  11.91 
+11  6.8e-05  6.7e-04  1.4e-04  1.00e+00   7.462095845e-02   5.803722973e-02   6.8e-05  12.77 
+12  4.9e-05  4.8e-04  8.6e-05  9.98e-01   7.303020547e-02   6.099835759e-02   4.9e-05  14.26 
+13  1.7e-05  2.0e-04  1.8e-05  9.97e-01   7.023865901e-02   6.604961408e-02   1.7e-05  15.11 
+14  1.1e-05  1.3e-04  9.7e-06  9.96e-01   6.975026150e-02   6.692520955e-02   1.1e-05  15.97 
+15  1.1e-05  1.3e-04  9.0e-06  9.80e-01   6.968332191e-02   6.699468069e-02   1.1e-05  16.77 
+16  5.6e-06  6.5e-05  3.3e-06  9.72e-01   6.926102548e-02   6.787017376e-02   5.6e-06  17.67 
+17  4.2e-06  4.9e-05  2.1e-06  9.95e-01   6.912725032e-02   6.809001682e-02   4.2e-06  18.54 
+18  3.4e-06  4.8e-05  1.6e-06  9.84e-01   6.906142526e-02   6.820075414e-02   3.4e-06  19.36 
+19  1.9e-06  4.8e-05  6.6e-07  9.96e-01   6.890602217e-02   6.842980728e-02   1.9e-06  20.30 
+20  1.8e-06  4.6e-05  6.2e-07  9.89e-01   6.889737286e-02   6.843828017e-02   1.8e-06  21.10 
+21  1.3e-06  3.5e-05  3.8e-07  1.00e+00   6.884607970e-02   6.851648024e-02   1.3e-06  22.01 
+22  8.8e-07  2.3e-05  2.1e-07  9.98e-01   6.880289083e-02   6.858305094e-02   8.8e-07  22.88 
+23  6.0e-07  7.8e-06  4.2e-08  9.68e-01   6.874673795e-02   6.866996149e-02   3.0e-07  24.50 
+24  3.8e-07  3.6e-06  1.3e-08  9.35e-01   6.873650746e-02   6.870105596e-02   1.3e-07  25.38 
+25  1.1e-07  3.9e-07  4.3e-10  9.63e-01   6.872985728e-02   6.872618544e-02   1.4e-08  26.32 
+26  1.1e-08  9.0e-08  2.5e-11  9.98e-01   6.873002318e-02   6.872947740e-02   2.1e-09  27.34 
+27  3.6e-08  6.6e-09  4.9e-13  1.00e+00   6.873002099e-02   6.872998080e-02   1.5e-10  28.33 
+28  5.1e-09  2.8e-10  2.6e-15  1.00e+00   6.873002164e-02   6.873002041e-02   4.6e-12  29.39 
+Optimizer terminated. Time: 29.43   
+
+
+Interior-point solution summary
+  Problem status  : PRIMAL_AND_DUAL_FEASIBLE
+  Solution status : OPTIMAL
+  Primal.  obj: 6.8730021639e-02    nrm: 4e+00    Viol.  con: 1e-09    var: 0e+00    acc: 1e-10  
+  Dual.    obj: 6.8730020412e-02    nrm: 4e+01    Viol.  con: 3e-12    var: 6e-11    acc: 0e+00  
+INFO:drake:Solved GCS shortest path using MOSEK with convex_relaxation=true and preprocessing=true and no rounding.
+RESULT {"mode": "primal", "success": true, "termination": "SolutionResult.kSolutionFound", "seconds": 33.548240433000046, "vertices": 71, "edges": 1229, "solver": "MOSEK", "details": {"rescode": 0.0, "solution_status": 1.0, "optimizer_time": 29.428549058000044}, "cost": 0.06873002163927269}

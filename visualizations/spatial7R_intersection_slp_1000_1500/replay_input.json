@@ -1,0 +1,2230 @@
+{
+    "success":  true,
+    "planner":  "spatial7R_two_stage_gcs",
+    "robot":  {
+                  "a":  [
+                            0.4,
+                            0.8,
+                            0.2,
+                            1,
+                            0.6,
+                            0.4,
+                            0
+                        ],
+                  "d":  [
+                            -0.4,
+                            -0.6,
+                            0.2,
+                            0.6,
+                            -0.8,
+                            0.2,
+                            0
+                        ],
+                  "alpha":  [
+                                -1.0821041362364843,
+                                -1.3788101090755203,
+                                1.5707963267948966,
+                                0.5061454830783556,
+                                1.413716694115407,
+                                -1.3962634015954636,
+                                0
+                            ],
+                  "reference_CA":  [
+                                       [
+                                           -1.8675022996339325,
+                                           1.8675022996339325
+                                       ],
+                                       [
+                                           -2.8623399732707,
+                                           2.4609142453120043
+                                       ],
+                                       [
+                                           -2.303834612632515,
+                                           2.303834612632515
+                                       ],
+                                       [
+                                           -2.6354471705114375,
+                                           1.780235837034216
+                                       ],
+                                       [
+                                           -2.007128639793479,
+                                           2.600540585471551
+                                       ],
+                                       [
+                                           -1.3089969389957472,
+                                           2.251474735072685
+                                       ],
+                                       [
+                                           0.2792526803190927,
+                                           3.368485456349056
+                                       ]
+                                   ],
+                  "reliabilities":  [
+                                        0.2,
+                                        0.3,
+                                        0.4,
+                                        0.5,
+                                        0.6,
+                                        0.7,
+                                        0.8
+                                    ]
+              },
+    "task":  "full_pose_SE3",
+    "task_dimension":  6,
+    "ssm_regular_dimension":  1,
+    "ssm_branch_limit":  8,
+    "start_configuration":  [
+                                0.2,
+                                -0.62,
+                                0.3,
+                                -0.55,
+                                0.44,
+                                -0.36,
+                                0.12
+                            ],
+    "start_point":  [
+                        3.0205333341656058,
+                        -1.4946400075697015,
+                        0.5399182591886
+                    ],
+    "start_pose":  [
+                       [
+                           0.9134005010928171,
+                           0.3868562982223874,
+                           -0.12665594786294715,
+                           3.0205333341656058
+                       ],
+                       [
+                           -0.342233411090386,
+                           0.8982806048465608,
+                           0.2756233794327605,
+                           -1.4946400075697015
+                       ],
+                       [
+                           0.2203992217246446,
+                           -0.20840863581475658,
+                           0.9528851051312549,
+                           0.5399182591886
+                       ],
+                       [
+                           0.0,
+                           0.0,
+                           0.0,
+                           1.0
+                       ]
+                   ],
+    "task_position_distance":  0.5999999999999993,
+    "task_orientation_difference_degrees":  90.00000000000001,
+    "goal_point":  [
+                       3.1878890016273402,
+                       -0.9193011224223007,
+                       0.5711792221581318
+                   ],
+    "goal_pose":  [
+                      [
+                          0.3422334110903859,
+                          -0.8982806048465608,
+                          -0.2756233794327611,
+                          3.1878890016273402
+                      ],
+                      [
+                          0.9134005010928175,
+                          0.38685629822238754,
+                          -0.1266559478629468,
+                          -0.9193011224223007
+                      ],
+                      [
+                          0.22039922172464482,
+                          -0.20840863581475702,
+                          0.9528851051312549,
+                          0.5711792221581318
+                      ],
+                      [
+                          0.0,
+                          0.0,
+                          0.0,
+                          1.0
+                      ]
+                  ],
+    "obstacles":  [
+                      {
+                          "type":  "sphere",
+                          "center":  [
+                                         3.104211167896473,
+                                         -1.2069705649960012,
+                                         0.5555487406733659
+                                     ],
+                          "radius":  0.08
+                      }
+                  ],
+    "link_radius":  0.015,
+    "physical_joint_limits":  null,
+    "iris_checkpoint":  "data/iris/spatial7R_60cm90deg_iris_regions.npz",
+    "geometric_epsilon":  0.025,
+    "ssm_arc_spacing":  0.044,
+    "reliability_epsilon":  0.01,
+    "gcs_solve_calls":  0,
+    "coverage_is_complete":  false,
+    "continuous_coverage_certified":  false,
+    "global_optimality_certified":  false,
+    "solver_settings":  {
+                            "max_rounded_paths":  1000,
+                            "max_rounding_trials":  1500
+                        },
+    "resource_limits":  {
+                            "partition_cells":  20000,
+                            "regions":  4000,
+                            "directed_edges":  2000000,
+                            "targets":  10000
+                        },
+    "original_region_count":  3,
+    "iris_generation_seconds":  162.0644710609995,
+    "iris_coverage_radius":  0.65,
+    "ssm_branch_count":  1,
+    "ssm_trace":  {
+                      "branch_limit":  8,
+                      "branch_count":  1,
+                      "ik_attempt_budget":  80,
+                      "ik_attempts":  80,
+                      "failed_ik":  31,
+                      "failed_traces":  0,
+                      "duplicate_starts":  48,
+                      "all_branches_certified":  false,
+                      "termination_reason":  "ik_attempt_budget_exhausted"
+                  },
+    "local_partition_cell_count":  3240,
+    "merged_partition_cell_count":  3240,
+    "reliability_rule":  "union_of_branch_recovery_sets",
+    "reliability_partition_scope":  "exact_refinement_restricted_to_iris_coverage",
+    "region_count":  198,
+    "adjacency_cache_hit":  true,
+    "adjacency_statistics":  {
+                                 "unfiltered_adjacency":  {
+                                                              "input_region_count":  2856,
+                                                              "region_pairs":  4076940,
+                                                              "bounding_lp_count":  0,
+                                                              "candidate_intersections":  650244,
+                                                              "intersection_lp_count":  650244,
+                                                              "directed_edges":  869670,
+                                                              "periodic":  false,
+                                                              "periodic_directed_edges":  0
+                                                          },
+                                 "rule":  "intersection_affine_dimension_at_least_k",
+                                 "minimum_dimension":  6,
+                                 "tolerance":  1E-07,
+                                 "halfspace_normals_normalized":  true,
+                                 "candidate_directed_edges":  869670,
+                                 "directed_edges":  38094,
+                                 "tested_unordered_pairs":  434835,
+                                 "coordinate_screened_pairs":  415788,
+                                 "affine_dimension_test_pairs":  19047,
+                                 "tested_dimension_histogram":  {
+                                                                    "6":  18204,
+                                                                    "7":  843
+                                                                },
+                                 "dimension_filter_seconds":  219.07640791099948
+                             },
+    "edge_count":  852,
+    "pre_connectivity_region_count":  2856,
+    "connected_component_count":  1,
+    "sampling_mode":  "fixed_arc_spacing",
+    "ssm_branch_arc_lengths":  [
+                                   2.332917458563215
+                               ],
+    "ssm_total_arc_length":  2.332917458563215,
+    "ssm_branch_sample_counts":  [
+                                     54
+                                 ],
+    "sample_refinement_failures":  0,
+    "graph_task_sha256":  "35bf92909221e31d5356937708d4413d20af98328c7a254a2db496d7a52e1cf3",
+    "hull_targets_sha256":  "4c07ca8ba64af452e2f76fe8607a769f25eb56b21e6ff338985c14f49b072edf",
+    "envelope_count":  18,
+    "target_set_count":  23,
+    "actual_sample_count":  54,
+    "geometry_seconds":  17.164899772000354,
+    "ssm_branch_summaries":  [
+                                 {
+                                     "branch":  0,
+                                     "arc_length":  2.332917458563215,
+                                     "sample_count":  54,
+                                     "envelope_count":  18,
+                                     "target_set_count":  23
+                                 }
+                             ],
+    "representative_pruning":  {
+                                   "method":  "intersection_vertices_trust_region_slp",
+                                   "representative":  {
+                                                          "intersection_vertices":  19047,
+                                                          "representative_undirected_edges":  277236,
+                                                          "optimization":  {
+                                                                               "initial_cost":  105583.43818622547,
+                                                                               "final_cost":  29148.907740407423,
+                                                                               "initial_smoothed_cost":  105583.45143986231,
+                                                                               "final_smoothed_cost":  29148.908920115362,
+                                                                               "smoothing":  1E-06,
+                                                                               "iterations":  80,
+                                                                               "accepted_iterations":  73,
+                                                                               "status":  "iteration_limit",
+                                                                               "history":  [
+                                                                                               {
+                                                                                                   "iteration":  1,
+                                                                                                   "objective":  105583.45143986231,
+                                                                                                   "candidate":  77179.1395799848,
+                                                                                                   "trust_radius":  0.15,
+                                                                                                   "accepted":  true,
+                                                                                                   "ratio":  0.6897255182325605
+                                                                                               },
+                                                                                               {
+                                                                                                   "iteration":  2,
+                                                                                                   "objective":  77179.1395799848,
+                                                                                                   "candidate":  68315.21928037076,
+                                                                                                   "trust_radius":  0.15,
+                                                                                                   "accepted":  true,
+                                                                                                   "ratio":  0.2475012553595472
+                                                                                               },
+                                                                                               {
+                                                                                                   "iteration":  3,
+                                                                                                   "objective":  68315.21928037076,
+                                                                                                   "candidate":  58213.39294572482,
+                                                                                                   "trust_radius":  0.15,
+                                                                                                   "accepted":  true,
+                                                                                                   "ratio":  0.2444587452972617
+                                                                                               },
+                                                                                               {
+                                                                                                   "iteration":  4,
+                                                                                                   "objective":  58213.39294572482,
+                                                                                                   "candidate":  61237.87765311247,
+                                                                                                   "trust_radius":  0.15,
+                                                                                                   "accepted":  false,
+                                                                                                   "ratio":  -0.0805521561558699
+                                                                                               },
+                                                                                               {
+                                                                                                   "iteration":  5,
+                                                                                                   "objective":  58213.39294572482,
+                                                                                                   "candidate":  49083.560051420034,
+                                                                                                   "trust_radius":  0.075,
+                                                                                                   "accepted":  true,
+                                                                                                   "ratio":  0.46702322889059383
+                                                                                               },
+                                                                                               {
+                                                                                                   "iteration":  6,
+                                                                                                   "objective":  49083.560051420034,
+                                                                                                   "candidate":  47557.195577561855,
+                                                                                                   "trust_radius":  0.075,
+                                                                                                   "accepted":  false,
+                                                                                                   "ratio":  0.09776621109569397
+                                                                                               },
+                                                                                               {
+                                                                                                   "iteration":  7,
+                                                                                                   "objective":  49083.560051420034,
+                                                                                                   "candidate":  44653.97232889504,
+                                                                                                   "trust_radius":  0.0375,
+                                                                                                   "accepted":  true,
+                                                                                                   "ratio":  0.5565867043896867
+                                                                                               },
+                                                                                               {
+                                                                                                   "iteration":  8,
+                                                                                                   "objective":  44653.97232889504,
+                                                                                                   "candidate":  42619.09799579105,
+                                                                                                   "trust_radius":  0.0375,
+                                                                                                   "accepted":  true,
+                                                                                                   "ratio":  0.3116631446535605
+                                                                                               },
+                                                                                               {
+                                                                                                   "iteration":  9,
+                                                                                                   "objective":  42619.09799579105,
+                                                                                                   "candidate":  40940.527861106515,
+                                                                                                   "trust_radius":  0.0375,
+                                                                                                   "accepted":  true,
+                                                                                                   "ratio":  0.2484182752765044
+                                                                                               },
+                                                                                               {
+                                                                                                   "iteration":  10,
+                                                                                                   "objective":  40940.527861106515,
+                                                                                                   "candidate":  39821.6691978622,
+                                                                                                   "trust_radius":  0.0375,
+                                                                                                   "accepted":  true,
+                                                                                                   "ratio":  0.16654389551250792
+                                                                                               },
+                                                                                               {
+                                                                                                   "iteration":  11,
+                                                                                                   "objective":  39821.6691978622,
+                                                                                                   "candidate":  38533.60610891413,
+                                                                                                   "trust_radius":  0.0375,
+                                                                                                   "accepted":  true,
+                                                                                                   "ratio":  0.184155374367358
+                                                                                               },
+                                                                                               {
+                                                                                                   "iteration":  12,
+                                                                                                   "objective":  38533.60610891413,
+                                                                                                   "candidate":  37900.77064097181,
+                                                                                                   "trust_radius":  0.0375,
+                                                                                                   "accepted":  false,
+                                                                                                   "ratio":  0.0932535942328103
+                                                                                               },
+                                                                                               {
+                                                                                                   "iteration":  13,
+                                                                                                   "objective":  38533.60610891413,
+                                                                                                   "candidate":  36566.154741811624,
+                                                                                                   "trust_radius":  0.01875,
+                                                                                                   "accepted":  true,
+                                                                                                   "ratio":  0.5757650591176706
+                                                                                               },
+                                                                                               {
+                                                                                                   "iteration":  14,
+                                                                                                   "objective":  36566.154741811624,
+                                                                                                   "candidate":  35755.02354491381,
+                                                                                                   "trust_radius":  0.01875,
+                                                                                                   "accepted":  true,
+                                                                                                   "ratio":  0.33208058090816545
+                                                                                               },
+                                                                                               {
+                                                                                                   "iteration":  15,
+                                                                                                   "objective":  35755.02354491381,
+                                                                                                   "candidate":  35167.040868220785,
+                                                                                                   "trust_radius":  0.01875,
+                                                                                                   "accepted":  true,
+                                                                                                   "ratio":  0.24190411517452476
+                                                                                               },
+                                                                                               {
+                                                                                                   "iteration":  16,
+                                                                                                   "objective":  35167.040868220785,
+                                                                                                   "candidate":  34678.33617494728,
+                                                                                                   "trust_radius":  0.01875,
+                                                                                                   "accepted":  true,
+                                                                                                   "ratio":  0.19274255494530046
+                                                                                               },
+                                                                                               {
+                                                                                                   "iteration":  17,
+                                                                                                   "objective":  34678.33617494728,
+                                                                                                   "candidate":  34189.47110510187,
+                                                                                                   "trust_radius":  0.01875,
+                                                                                                   "accepted":  true,
+                                                                                                   "ratio":  0.18632402831583347
+                                                                                               },
+                                                                                               {
+                                                                                                   "iteration":  18,
+                                                                                                   "objective":  34189.47110510187,
+                                                                                                   "candidate":  33825.87113927044,
+                                                                                                   "trust_radius":  0.01875,
+                                                                                                   "accepted":  true,
+                                                                                                   "ratio":  0.1401469897681041
+                                                                                               },
+                                                                                               {
+                                                                                                   "iteration":  19,
+                                                                                                   "objective":  33825.87113927044,
+                                                                                                   "candidate":  33452.83106635948,
+                                                                                                   "trust_radius":  0.01875,
+                                                                                                   "accepted":  true,
+                                                                                                   "ratio":  0.13985852646082036
+                                                                                               },
+                                                                                               {
+                                                                                                   "iteration":  20,
+                                                                                                   "objective":  33452.83106635948,
+                                                                                                   "candidate":  33168.73211330946,
+                                                                                                   "trust_radius":  0.01875,
+                                                                                                   "accepted":  true,
+                                                                                                   "ratio":  0.10730770994979037
+                                                                                               },
+                                                                                               {
+                                                                                                   "iteration":  21,
+                                                                                                   "objective":  33168.73211330946,
+                                                                                                   "candidate":  32864.90692351924,
+                                                                                                   "trust_radius":  0.01875,
+                                                                                                   "accepted":  true,
+                                                                                                   "ratio":  0.11211927187670603
+                                                                                               },
+                                                                                               {
+                                                                                                   "iteration":  22,
+                                                                                                   "objective":  32864.90692351924,
+                                                                                                   "candidate":  32649.477375771967,
+                                                                                                   "trust_radius":  0.01875,
+                                                                                                   "accepted":  false,
+                                                                                                   "ratio":  0.08033598603524797
+                                                                                               },
+                                                                                               {
+                                                                                                   "iteration":  23,
+                                                                                                   "objective":  32864.90692351924,
+                                                                                                   "candidate":  32079.42193336116,
+                                                                                                   "trust_radius":  0.009375,
+                                                                                                   "accepted":  true,
+                                                                                                   "ratio":  0.5827979449097435
+                                                                                               },
+                                                                                               {
+                                                                                                   "iteration":  24,
+                                                                                                   "objective":  32079.42193336116,
+                                                                                                   "candidate":  31811.191746678625,
+                                                                                                   "trust_radius":  0.009375,
+                                                                                                   "accepted":  true,
+                                                                                                   "ratio":  0.30470852531201603
+                                                                                               },
+                                                                                               {
+                                                                                                   "iteration":  25,
+                                                                                                   "objective":  31811.191746678625,
+                                                                                                   "candidate":  31661.60992384145,
+                                                                                                   "trust_radius":  0.009375,
+                                                                                                   "accepted":  true,
+                                                                                                   "ratio":  0.17249084532203737
+                                                                                               },
+                                                                                               {
+                                                                                                   "iteration":  26,
+                                                                                                   "objective":  31661.60992384145,
+                                                                                                   "candidate":  31507.1379447606,
+                                                                                                   "trust_radius":  0.009375,
+                                                                                                   "accepted":  true,
+                                                                                                   "ratio":  0.16275536919804587
+                                                                                               },
+                                                                                               {
+                                                                                                   "iteration":  27,
+                                                                                                   "objective":  31507.1379447606,
+                                                                                                   "candidate":  31358.40510855496,
+                                                                                                   "trust_radius":  0.009375,
+                                                                                                   "accepted":  true,
+                                                                                                   "ratio":  0.15222644337883964
+                                                                                               },
+                                                                                               {
+                                                                                                   "iteration":  28,
+                                                                                                   "objective":  31358.40510855496,
+                                                                                                   "candidate":  31238.361134608163,
+                                                                                                   "trust_radius":  0.009375,
+                                                                                                   "accepted":  true,
+                                                                                                   "ratio":  0.12229488030405766
+                                                                                               },
+                                                                                               {
+                                                                                                   "iteration":  29,
+                                                                                                   "objective":  31238.361134608163,
+                                                                                                   "candidate":  31106.859556955056,
+                                                                                                   "trust_radius":  0.009375,
+                                                                                                   "accepted":  true,
+                                                                                                   "ratio":  0.1296876780642597
+                                                                                               },
+                                                                                               {
+                                                                                                   "iteration":  30,
+                                                                                                   "objective":  31106.859556955056,
+                                                                                                   "candidate":  31001.706875560656,
+                                                                                                   "trust_radius":  0.009375,
+                                                                                                   "accepted":  true,
+                                                                                                   "ratio":  0.10513100804437756
+                                                                                               },
+                                                                                               {
+                                                                                                   "iteration":  31,
+                                                                                                   "objective":  31001.706875560656,
+                                                                                                   "candidate":  30891.73678391005,
+                                                                                                   "trust_radius":  0.009375,
+                                                                                                   "accepted":  true,
+                                                                                                   "ratio":  0.10716732549225423
+                                                                                               },
+                                                                                               {
+                                                                                                   "iteration":  32,
+                                                                                                   "objective":  30891.73678391005,
+                                                                                                   "candidate":  30793.878926422683,
+                                                                                                   "trust_radius":  0.009375,
+                                                                                                   "accepted":  false,
+                                                                                                   "ratio":  0.09572586978028859
+                                                                                               },
+                                                                                               {
+                                                                                                   "iteration":  33,
+                                                                                                   "objective":  30891.73678391005,
+                                                                                                   "candidate":  30588.169620654782,
+                                                                                                   "trust_radius":  0.0046875,
+                                                                                                   "accepted":  true,
+                                                                                                   "ratio":  0.5915198558214226
+                                                                                               },
+                                                                                               {
+                                                                                                   "iteration":  34,
+                                                                                                   "objective":  30588.169620654782,
+                                                                                                   "candidate":  30466.8166725343,
+                                                                                                   "trust_radius":  0.0046875,
+                                                                                                   "accepted":  true,
+                                                                                                   "ratio":  0.350421733377813
+                                                                                               },
+                                                                                               {
+                                                                                                   "iteration":  35,
+                                                                                                   "objective":  30466.8166725343,
+                                                                                                   "candidate":  30416.140842065117,
+                                                                                                   "trust_radius":  0.0046875,
+                                                                                                   "accepted":  true,
+                                                                                                   "ratio":  0.15585004326097937
+                                                                                               },
+                                                                                               {
+                                                                                                   "iteration":  36,
+                                                                                                   "objective":  30416.140842065117,
+                                                                                                   "candidate":  30348.9807718093,
+                                                                                                   "trust_radius":  0.0046875,
+                                                                                                   "accepted":  true,
+                                                                                                   "ratio":  0.18211464860381307
+                                                                                               },
+                                                                                               {
+                                                                                                   "iteration":  37,
+                                                                                                   "objective":  30348.9807718093,
+                                                                                                   "candidate":  30294.484149075157,
+                                                                                                   "trust_radius":  0.0046875,
+                                                                                                   "accepted":  true,
+                                                                                                   "ratio":  0.1445235908028623
+                                                                                               },
+                                                                                               {
+                                                                                                   "iteration":  38,
+                                                                                                   "objective":  30294.484149075157,
+                                                                                                   "candidate":  30231.611469489097,
+                                                                                                   "trust_radius":  0.0046875,
+                                                                                                   "accepted":  true,
+                                                                                                   "ratio":  0.16255630336691704
+                                                                                               },
+                                                                                               {
+                                                                                                   "iteration":  39,
+                                                                                                   "objective":  30231.611469489097,
+                                                                                                   "candidate":  30182.87421410353,
+                                                                                                   "trust_radius":  0.0046875,
+                                                                                                   "accepted":  true,
+                                                                                                   "ratio":  0.12585918373647817
+                                                                                               },
+                                                                                               {
+                                                                                                   "iteration":  40,
+                                                                                                   "objective":  30182.87421410353,
+                                                                                                   "candidate":  30124.506859849178,
+                                                                                                   "trust_radius":  0.0046875,
+                                                                                                   "accepted":  true,
+                                                                                                   "ratio":  0.14770564464389335
+                                                                                               },
+                                                                                               {
+                                                                                                   "iteration":  41,
+                                                                                                   "objective":  30124.506859849178,
+                                                                                                   "candidate":  30078.345568846526,
+                                                                                                   "trust_radius":  0.0046875,
+                                                                                                   "accepted":  true,
+                                                                                                   "ratio":  0.11685294268559722
+                                                                                               },
+                                                                                               {
+                                                                                                   "iteration":  42,
+                                                                                                   "objective":  30078.345568846526,
+                                                                                                   "candidate":  30026.45885182122,
+                                                                                                   "trust_radius":  0.0046875,
+                                                                                                   "accepted":  true,
+                                                                                                   "ratio":  0.12982824923241273
+                                                                                               },
+                                                                                               {
+                                                                                                   "iteration":  43,
+                                                                                                   "objective":  30026.45885182122,
+                                                                                                   "candidate":  29982.270965872453,
+                                                                                                   "trust_radius":  0.0046875,
+                                                                                                   "accepted":  true,
+                                                                                                   "ratio":  0.10994991039052086
+                                                                                               },
+                                                                                               {
+                                                                                                   "iteration":  44,
+                                                                                                   "objective":  29982.270965872453,
+                                                                                                   "candidate":  29935.478139815652,
+                                                                                                   "trust_radius":  0.0046875,
+                                                                                                   "accepted":  true,
+                                                                                                   "ratio":  0.11609052888041564
+                                                                                               },
+                                                                                               {
+                                                                                                   "iteration":  45,
+                                                                                                   "objective":  29935.478139815652,
+                                                                                                   "candidate":  29894.180393773884,
+                                                                                                   "trust_radius":  0.0046875,
+                                                                                                   "accepted":  true,
+                                                                                                   "ratio":  0.1016193537620511
+                                                                                               },
+                                                                                               {
+                                                                                                   "iteration":  46,
+                                                                                                   "objective":  29894.180393773884,
+                                                                                                   "candidate":  29851.87233846159,
+                                                                                                   "trust_radius":  0.0046875,
+                                                                                                   "accepted":  true,
+                                                                                                   "ratio":  0.10398416690484565
+                                                                                               },
+                                                                                               {
+                                                                                                   "iteration":  47,
+                                                                                                   "objective":  29851.87233846159,
+                                                                                                   "candidate":  29812.169544082713,
+                                                                                                   "trust_radius":  0.0046875,
+                                                                                                   "accepted":  false,
+                                                                                                   "ratio":  0.09664363777197135
+                                                                                               },
+                                                                                               {
+                                                                                                   "iteration":  48,
+                                                                                                   "objective":  29851.87233846159,
+                                                                                                   "candidate":  29729.46351098262,
+                                                                                                   "trust_radius":  0.00234375,
+                                                                                                   "accepted":  true,
+                                                                                                   "ratio":  0.5930957633844833
+                                                                                               },
+                                                                                               {
+                                                                                                   "iteration":  49,
+                                                                                                   "objective":  29729.46351098262,
+                                                                                                   "candidate":  29679.376243195267,
+                                                                                                   "trust_radius":  0.00234375,
+                                                                                                   "accepted":  true,
+                                                                                                   "ratio":  0.35133056990876055
+                                                                                               },
+                                                                                               {
+                                                                                                   "iteration":  50,
+                                                                                                   "objective":  29679.376243195267,
+                                                                                                   "candidate":  29661.97701983169,
+                                                                                                   "trust_radius":  0.00234375,
+                                                                                                   "accepted":  true,
+                                                                                                   "ratio":  0.13088949956364132
+                                                                                               },
+                                                                                               {
+                                                                                                   "iteration":  51,
+                                                                                                   "objective":  29661.97701983169,
+                                                                                                   "candidate":  29636.08017346917,
+                                                                                                   "trust_radius":  0.00234375,
+                                                                                                   "accepted":  true,
+                                                                                                   "ratio":  0.16824573317633426
+                                                                                               },
+                                                                                               {
+                                                                                                   "iteration":  52,
+                                                                                                   "objective":  29636.08017346917,
+                                                                                                   "candidate":  29614.30087235403,
+                                                                                                   "trust_radius":  0.00234375,
+                                                                                                   "accepted":  true,
+                                                                                                   "ratio":  0.13860521568102213
+                                                                                               },
+                                                                                               {
+                                                                                                   "iteration":  53,
+                                                                                                   "objective":  29614.30087235403,
+                                                                                                   "candidate":  29589.810017734468,
+                                                                                                   "trust_radius":  0.00234375,
+                                                                                                   "accepted":  true,
+                                                                                                   "ratio":  0.15272514625363937
+                                                                                               },
+                                                                                               {
+                                                                                                   "iteration":  54,
+                                                                                                   "objective":  29589.810017734468,
+                                                                                                   "candidate":  29568.50898397445,
+                                                                                                   "trust_radius":  0.00234375,
+                                                                                                   "accepted":  true,
+                                                                                                   "ratio":  0.13164156757813905
+                                                                                               },
+                                                                                               {
+                                                                                                   "iteration":  55,
+                                                                                                   "objective":  29568.50898397445,
+                                                                                                   "candidate":  29545.01611122553,
+                                                                                                   "trust_radius":  0.00234375,
+                                                                                                   "accepted":  true,
+                                                                                                   "ratio":  0.14432426767253945
+                                                                                               },
+                                                                                               {
+                                                                                                   "iteration":  56,
+                                                                                                   "objective":  29545.01611122553,
+                                                                                                   "candidate":  29524.57873959134,
+                                                                                                   "trust_radius":  0.00234375,
+                                                                                                   "accepted":  true,
+                                                                                                   "ratio":  0.1245681162651647
+                                                                                               },
+                                                                                               {
+                                                                                                   "iteration":  57,
+                                                                                                   "objective":  29524.57873959134,
+                                                                                                   "candidate":  29502.73927134558,
+                                                                                                   "trust_radius":  0.00234375,
+                                                                                                   "accepted":  true,
+                                                                                                   "ratio":  0.1326674604589955
+                                                                                               },
+                                                                                               {
+                                                                                                   "iteration":  58,
+                                                                                                   "objective":  29502.73927134558,
+                                                                                                   "candidate":  29483.06495684835,
+                                                                                                   "trust_radius":  0.00234375,
+                                                                                                   "accepted":  true,
+                                                                                                   "ratio":  0.11830862896968808
+                                                                                               },
+                                                                                               {
+                                                                                                   "iteration":  59,
+                                                                                                   "objective":  29483.06495684835,
+                                                                                                   "candidate":  29461.544420945313,
+                                                                                                   "trust_radius":  0.00234375,
+                                                                                                   "accepted":  true,
+                                                                                                   "ratio":  0.12957124800895675
+                                                                                               },
+                                                                                               {
+                                                                                                   "iteration":  60,
+                                                                                                   "objective":  29461.544420945313,
+                                                                                                   "candidate":  29443.062104864955,
+                                                                                                   "trust_radius":  0.00234375,
+                                                                                                   "accepted":  true,
+                                                                                                   "ratio":  0.11070774321612985
+                                                                                               },
+                                                                                               {
+                                                                                                   "iteration":  61,
+                                                                                                   "objective":  29443.062104864955,
+                                                                                                   "candidate":  29422.44353107825,
+                                                                                                   "trust_radius":  0.00234375,
+                                                                                                   "accepted":  true,
+                                                                                                   "ratio":  0.12346699018773043
+                                                                                               },
+                                                                                               {
+                                                                                                   "iteration":  62,
+                                                                                                   "objective":  29422.44353107825,
+                                                                                                   "candidate":  29404.790995473704,
+                                                                                                   "trust_radius":  0.00234375,
+                                                                                                   "accepted":  true,
+                                                                                                   "ratio":  0.10521979935682482
+                                                                                               },
+                                                                                               {
+                                                                                                   "iteration":  63,
+                                                                                                   "objective":  29404.790995473704,
+                                                                                                   "candidate":  29385.280670700122,
+                                                                                                   "trust_radius":  0.00234375,
+                                                                                                   "accepted":  true,
+                                                                                                   "ratio":  0.11617694701293634
+                                                                                               },
+                                                                                               {
+                                                                                                   "iteration":  64,
+                                                                                                   "objective":  29385.280670700122,
+                                                                                                   "candidate":  29368.07274785093,
+                                                                                                   "trust_radius":  0.00234375,
+                                                                                                   "accepted":  true,
+                                                                                                   "ratio":  0.10197426678869498
+                                                                                               },
+                                                                                               {
+                                                                                                   "iteration":  65,
+                                                                                                   "objective":  29368.07274785093,
+                                                                                                   "candidate":  29349.06537702492,
+                                                                                                   "trust_radius":  0.00234375,
+                                                                                                   "accepted":  true,
+                                                                                                   "ratio":  0.11262460928266027
+                                                                                               },
+                                                                                               {
+                                                                                                   "iteration":  66,
+                                                                                                   "objective":  29349.06537702492,
+                                                                                                   "candidate":  29332.098963434422,
+                                                                                                   "trust_radius":  0.00234375,
+                                                                                                   "accepted":  true,
+                                                                                                   "ratio":  0.10008776204069152
+                                                                                               },
+                                                                                               {
+                                                                                                   "iteration":  67,
+                                                                                                   "objective":  29332.098963434422,
+                                                                                                   "candidate":  29313.75116983896,
+                                                                                                   "trust_radius":  0.00234375,
+                                                                                                   "accepted":  true,
+                                                                                                   "ratio":  0.10828909467921462
+                                                                                               },
+                                                                                               {
+                                                                                                   "iteration":  68,
+                                                                                                   "objective":  29313.75116983896,
+                                                                                                   "candidate":  29297.52147630461,
+                                                                                                   "trust_radius":  0.00234375,
+                                                                                                   "accepted":  false,
+                                                                                                   "ratio":  0.09534445663127922
+                                                                                               },
+                                                                                               {
+                                                                                                   "iteration":  69,
+                                                                                                   "objective":  29313.75116983896,
+                                                                                                   "candidate":  29262.72891166041,
+                                                                                                   "trust_radius":  0.001171875,
+                                                                                                   "accepted":  true,
+                                                                                                   "ratio":  0.5968773569851504
+                                                                                               },
+                                                                                               {
+                                                                                                   "iteration":  70,
+                                                                                                   "objective":  29262.72891166041,
+                                                                                                   "candidate":  29240.91473018397,
+                                                                                                   "trust_radius":  0.001171875,
+                                                                                                   "accepted":  true,
+                                                                                                   "ratio":  0.36096203772652313
+                                                                                               },
+                                                                                               {
+                                                                                                   "iteration":  71,
+                                                                                                   "objective":  29240.91473018397,
+                                                                                                   "candidate":  29234.91470564326,
+                                                                                                   "trust_radius":  0.001171875,
+                                                                                                   "accepted":  true,
+                                                                                                   "ratio":  0.1076757710710361
+                                                                                               },
+                                                                                               {
+                                                                                                   "iteration":  72,
+                                                                                                   "objective":  29234.91470564326,
+                                                                                                   "candidate":  29223.10845894804,
+                                                                                                   "trust_radius":  0.001171875,
+                                                                                                   "accepted":  true,
+                                                                                                   "ratio":  0.1781101585519601
+                                                                                               },
+                                                                                               {
+                                                                                                   "iteration":  73,
+                                                                                                   "objective":  29223.10845894804,
+                                                                                                   "candidate":  29215.423343692797,
+                                                                                                   "trust_radius":  0.001171875,
+                                                                                                   "accepted":  true,
+                                                                                                   "ratio":  0.11524398053388113
+                                                                                               },
+                                                                                               {
+                                                                                                   "iteration":  74,
+                                                                                                   "objective":  29215.423343692797,
+                                                                                                   "candidate":  29204.057003946844,
+                                                                                                   "trust_radius":  0.001171875,
+                                                                                                   "accepted":  true,
+                                                                                                   "ratio":  0.1641033225844535
+                                                                                               },
+                                                                                               {
+                                                                                                   "iteration":  75,
+                                                                                                   "objective":  29204.057003946844,
+                                                                                                   "candidate":  29195.81671661603,
+                                                                                                   "trust_radius":  0.001171875,
+                                                                                                   "accepted":  true,
+                                                                                                   "ratio":  0.11913151526068766
+                                                                                               },
+                                                                                               {
+                                                                                                   "iteration":  76,
+                                                                                                   "objective":  29195.81671661603,
+                                                                                                   "candidate":  29185.262507638992,
+                                                                                                   "trust_radius":  0.001171875,
+                                                                                                   "accepted":  true,
+                                                                                                   "ratio":  0.15042793202456467
+                                                                                               },
+                                                                                               {
+                                                                                                   "iteration":  77,
+                                                                                                   "objective":  29185.262507638992,
+                                                                                                   "candidate":  29176.852672771805,
+                                                                                                   "trust_radius":  0.001171875,
+                                                                                                   "accepted":  true,
+                                                                                                   "ratio":  0.11988642293905762
+                                                                                               },
+                                                                                               {
+                                                                                                   "iteration":  78,
+                                                                                                   "objective":  29176.852672771805,
+                                                                                                   "candidate":  29166.633020494606,
+                                                                                                   "trust_radius":  0.001171875,
+                                                                                                   "accepted":  true,
+                                                                                                   "ratio":  0.14379984579449145
+                                                                                               },
+                                                                                               {
+                                                                                                   "iteration":  79,
+                                                                                                   "objective":  29166.633020494606,
+                                                                                                   "candidate":  29158.646404434203,
+                                                                                                   "trust_radius":  0.001171875,
+                                                                                                   "accepted":  true,
+                                                                                                   "ratio":  0.11273146229024388
+                                                                                               },
+                                                                                               {
+                                                                                                   "iteration":  80,
+                                                                                                   "objective":  29158.646404434203,
+                                                                                                   "candidate":  29148.908920115362,
+                                                                                                   "trust_radius":  0.001171875,
+                                                                                                   "accepted":  true,
+                                                                                                   "ratio":  0.1361371824725191
+                                                                                               }
+                                                                                           ],
+                                                                               "max_constraint_violation":  1.0820222107188471E-08,
+                                                                               "max_iterations":  80,
+                                                                               "seconds":  127.02199423099955
+                                                                           },
+                                                          "cache_hit":  true,
+                                                          "seconds":  127.45631415099979,
+                                                          "load_seconds":  0.2899291470002936
+                                                      },
+                                   "alpha":  1.1,
+                                   "trials_per_target":  2000,
+                                   "seed":  0,
+                                   "targets":  [
+                                                   {
+                                                       "target":  0,
+                                                       "reachable":  true,
+                                                       "minimum_surrogate_cost":  0.7826353042044083,
+                                                       "sampled_paths":  1745
+                                                   },
+                                                   {
+                                                       "target":  1,
+                                                       "reachable":  true,
+                                                       "minimum_surrogate_cost":  0.782969463121305,
+                                                       "sampled_paths":  1731
+                                                   },
+                                                   {
+                                                       "target":  2,
+                                                       "reachable":  true,
+                                                       "minimum_surrogate_cost":  0.8165052957397254,
+                                                       "sampled_paths":  1877
+                                                   },
+                                                   {
+                                                       "target":  3,
+                                                       "reachable":  true,
+                                                       "minimum_surrogate_cost":  0.783504331641432,
+                                                       "sampled_paths":  1681
+                                                   },
+                                                   {
+                                                       "target":  4,
+                                                       "reachable":  true,
+                                                       "minimum_surrogate_cost":  0.8093034058198241,
+                                                       "sampled_paths":  1693
+                                                   },
+                                                   {
+                                                       "target":  5,
+                                                       "reachable":  true,
+                                                       "minimum_surrogate_cost":  0.7842309944706578,
+                                                       "sampled_paths":  1682
+                                                   },
+                                                   {
+                                                       "target":  6,
+                                                       "reachable":  true,
+                                                       "minimum_surrogate_cost":  0.8093850129353928,
+                                                       "sampled_paths":  1654
+                                                   },
+                                                   {
+                                                       "target":  7,
+                                                       "reachable":  true,
+                                                       "minimum_surrogate_cost":  0.7848193565440502,
+                                                       "sampled_paths":  1611
+                                                   },
+                                                   {
+                                                       "target":  8,
+                                                       "reachable":  true,
+                                                       "minimum_surrogate_cost":  0.7852331449148151,
+                                                       "sampled_paths":  1633
+                                                   },
+                                                   {
+                                                       "target":  9,
+                                                       "reachable":  true,
+                                                       "minimum_surrogate_cost":  0.786269456732384,
+                                                       "sampled_paths":  1635
+                                                   },
+                                                   {
+                                                       "target":  10,
+                                                       "reachable":  true,
+                                                       "minimum_surrogate_cost":  0.7864567443941116,
+                                                       "sampled_paths":  1641
+                                                   },
+                                                   {
+                                                       "target":  11,
+                                                       "reachable":  true,
+                                                       "minimum_surrogate_cost":  0.7870206431843302,
+                                                       "sampled_paths":  1640
+                                                   },
+                                                   {
+                                                       "target":  12,
+                                                       "reachable":  true,
+                                                       "minimum_surrogate_cost":  0.7869879527879355,
+                                                       "sampled_paths":  1671
+                                                   },
+                                                   {
+                                                       "target":  13,
+                                                       "reachable":  true,
+                                                       "minimum_surrogate_cost":  0.7869306017953219,
+                                                       "sampled_paths":  1647
+                                                   },
+                                                   {
+                                                       "target":  14,
+                                                       "reachable":  true,
+                                                       "minimum_surrogate_cost":  0.7855267099484999,
+                                                       "sampled_paths":  1681
+                                                   },
+                                                   {
+                                                       "target":  15,
+                                                       "reachable":  true,
+                                                       "minimum_surrogate_cost":  0.7849774771148508,
+                                                       "sampled_paths":  1695
+                                                   },
+                                                   {
+                                                       "target":  16,
+                                                       "reachable":  true,
+                                                       "minimum_surrogate_cost":  0.835459406068582,
+                                                       "sampled_paths":  1767
+                                                   },
+                                                   {
+                                                       "target":  17,
+                                                       "reachable":  true,
+                                                       "minimum_surrogate_cost":  0.7847134003264061,
+                                                       "sampled_paths":  1712
+                                                   },
+                                                   {
+                                                       "target":  18,
+                                                       "reachable":  true,
+                                                       "minimum_surrogate_cost":  0.7832854904429568,
+                                                       "sampled_paths":  1744
+                                                   },
+                                                   {
+                                                       "target":  19,
+                                                       "reachable":  true,
+                                                       "minimum_surrogate_cost":  0.7848341690253164,
+                                                       "sampled_paths":  1921
+                                                   },
+                                                   {
+                                                       "target":  20,
+                                                       "reachable":  true,
+                                                       "minimum_surrogate_cost":  0.7826160735893184,
+                                                       "sampled_paths":  1809
+                                                   },
+                                                   {
+                                                       "target":  21,
+                                                       "reachable":  true,
+                                                       "minimum_surrogate_cost":  0.7848288739788318,
+                                                       "sampled_paths":  1896
+                                                   },
+                                                   {
+                                                       "target":  22,
+                                                       "reachable":  true,
+                                                       "minimum_surrogate_cost":  0.7823587193023189,
+                                                       "sampled_paths":  1842
+                                                   }
+                                               ],
+                                   "original_regions":  2856,
+                                   "original_edges":  38094,
+                                   "retained_regions":  198,
+                                   "retained_edges":  852,
+                                   "retained_original_region_indices":  [
+                                                                            202,
+                                                                            208,
+                                                                            210,
+                                                                            212,
+                                                                            220,
+                                                                            222,
+                                                                            226,
+                                                                            229,
+                                                                            231,
+                                                                            244,
+                                                                            246,
+                                                                            262,
+                                                                            276,
+                                                                            310,
+                                                                            364,
+                                                                            366,
+                                                                            382,
+                                                                            384,
+                                                                            501,
+                                                                            502,
+                                                                            503,
+                                                                            588,
+                                                                            590,
+                                                                            594,
+                                                                            595,
+                                                                            596,
+                                                                            597,
+                                                                            598,
+                                                                            600,
+                                                                            602,
+                                                                            606,
+                                                                            608,
+                                                                            610,
+                                                                            612,
+                                                                            613,
+                                                                            614,
+                                                                            615,
+                                                                            616,
+                                                                            617,
+                                                                            618,
+                                                                            619,
+                                                                            620,
+                                                                            621,
+                                                                            623,
+                                                                            630,
+                                                                            631,
+                                                                            632,
+                                                                            633,
+                                                                            638,
+                                                                            640,
+                                                                            644,
+                                                                            645,
+                                                                            646,
+                                                                            656,
+                                                                            658,
+                                                                            662,
+                                                                            663,
+                                                                            664,
+                                                                            665,
+                                                                            667,
+                                                                            668,
+                                                                            669,
+                                                                            671,
+                                                                            682,
+                                                                            683,
+                                                                            716,
+                                                                            746,
+                                                                            748,
+                                                                            752,
+                                                                            754,
+                                                                            764,
+                                                                            766,
+                                                                            768,
+                                                                            770,
+                                                                            771,
+                                                                            772,
+                                                                            773,
+                                                                            774,
+                                                                            775,
+                                                                            777,
+                                                                            778,
+                                                                            779,
+                                                                            790,
+                                                                            791,
+                                                                            800,
+                                                                            818,
+                                                                            820,
+                                                                            825,
+                                                                            956,
+                                                                            957,
+                                                                            958,
+                                                                            959,
+                                                                            1002,
+                                                                            1003,
+                                                                            1210,
+                                                                            1211,
+                                                                            1213,
+                                                                            1214,
+                                                                            1215,
+                                                                            1219,
+                                                                            1220,
+                                                                            1222,
+                                                                            1224,
+                                                                            1246,
+                                                                            1249,
+                                                                            1255,
+                                                                            1264,
+                                                                            1265,
+                                                                            1267,
+                                                                            1273,
+                                                                            1274,
+                                                                            1303,
+                                                                            1304,
+                                                                            1312,
+                                                                            1313,
+                                                                            1315,
+                                                                            1316,
+                                                                            1317,
+                                                                            1318,
+                                                                            1319,
+                                                                            1320,
+                                                                            1321,
+                                                                            1324,
+                                                                            1325,
+                                                                            1326,
+                                                                            1327,
+                                                                            1328,
+                                                                            1329,
+                                                                            1330,
+                                                                            1331,
+                                                                            1333,
+                                                                            1334,
+                                                                            1339,
+                                                                            1340,
+                                                                            1341,
+                                                                            1342,
+                                                                            1343,
+                                                                            1344,
+                                                                            1351,
+                                                                            1352,
+                                                                            1357,
+                                                                            1360,
+                                                                            1361,
+                                                                            1363,
+                                                                            1364,
+                                                                            1366,
+                                                                            1367,
+                                                                            1368,
+                                                                            1372,
+                                                                            1373,
+                                                                            1375,
+                                                                            1376,
+                                                                            1377,
+                                                                            1378,
+                                                                            1387,
+                                                                            1388,
+                                                                            1641,
+                                                                            1644,
+                                                                            1645,
+                                                                            1956,
+                                                                            1959,
+                                                                            1960,
+                                                                            2100,
+                                                                            2101,
+                                                                            2103,
+                                                                            2104,
+                                                                            2109,
+                                                                            2118,
+                                                                            2119,
+                                                                            2121,
+                                                                            2122,
+                                                                            2124,
+                                                                            2125,
+                                                                            2127,
+                                                                            2128,
+                                                                            2130,
+                                                                            2131,
+                                                                            2133,
+                                                                            2136,
+                                                                            2137,
+                                                                            2139,
+                                                                            2140,
+                                                                            2154,
+                                                                            2172,
+                                                                            2173,
+                                                                            2175,
+                                                                            2176,
+                                                                            2178,
+                                                                            2262,
+                                                                            2280,
+                                                                            2281,
+                                                                            2283,
+                                                                            2284,
+                                                                            2292,
+                                                                            2604,
+                                                                            2605,
+                                                                            2607,
+                                                                            2608
+                                                                        ],
+                                   "preserves_full_graph_optimality":  false,
+                                   "final_gcs_formulation":  "existing_region_vertices",
+                                   "seconds":  16.704722259000846
+                               },
+    "quality_scope":  "heuristically_pruned_graph_only",
+    "stage1_solver_settings":  {
+                                   "max_rounded_paths":  1000,
+                                   "max_rounding_trials":  1500,
+                                   "solver_backend":  "mosek",
+                                   "retain_rounded_results":  false,
+                                   "mosek_solve_form":  "primal",
+                                   "compact_constraints":  true
+                               },
+    "stage2_solver_settings":  {
+                                   "max_rounded_paths":  1000,
+                                   "max_rounding_trials":  1500,
+                                   "solver_backend":  "mosek",
+                                   "retain_rounded_results":  false,
+                                   "mosek_solve_form":  "primal",
+                                   "compact_constraints":  true
+                               },
+    "stage1_budget":  {
+                          "allocation":  "one_joint_target_call",
+                          "target_count":  23,
+                          "total_max_rounded_paths":  1000,
+                          "total_max_rounding_trials":  1500
+                      },
+    "union_hull_baseline":  {
+                                "success":  true,
+                                "method":  "one_graph_all_hull_targets_two_stage",
+                                "gcs_solve_calls":  2,
+                                "solver_settings":  {
+                                                        "max_rounded_paths":  1000,
+                                                        "max_rounding_trials":  1500,
+                                                        "solver_backend":  "mosek",
+                                                        "retain_rounded_results":  false,
+                                                        "mosek_solve_form":  "primal",
+                                                        "compact_constraints":  true
+                                                    },
+                                "global_optimality_certified":  false,
+                                "input_sha256":  "1ea0100be5105e199d04a0eedcc25c08a2ad8a245708656db332d4bf7ae9bfae",
+                                "graph_task_sha256":  "a31d74443ddcc82b1fbe5c54a5e57e67f8367e27b45be7c2b47015c6f7dc0bbc",
+                                "hull_targets_sha256":  "ef2628963335883cb0865f8c272f2e3f1c8535c66aecb2aa869f08a7dbd7d506",
+                                "task":  {
+                                             "type":  "full_pose_SE3",
+                                             "goal":  [
+                                                          [
+                                                              0.3422334110903859,
+                                                              -0.8982806048465608,
+                                                              -0.2756233794327611,
+                                                              3.1878890016273402
+                                                          ],
+                                                          [
+                                                              0.9134005010928175,
+                                                              0.38685629822238754,
+                                                              -0.1266559478629468,
+                                                              -0.9193011224223007
+                                                          ],
+                                                          [
+                                                              0.22039922172464482,
+                                                              -0.20840863581475702,
+                                                              0.9528851051312549,
+                                                              0.5711792221581318
+                                                          ],
+                                                          [
+                                                              0.0,
+                                                              0.0,
+                                                              0.0,
+                                                              1.0
+                                                          ]
+                                                      ]
+                                         },
+                                "path_coordinates":  "input_winding_restored",
+                                "angle_winding_offsets":  [
+                                                              0.0,
+                                                              0.0,
+                                                              0.0,
+                                                              0.0,
+                                                              0.0,
+                                                              0.0,
+                                                              0.0
+                                                          ],
+                                "stage2_solver_settings":  {
+                                                               "max_rounded_paths":  1000,
+                                                               "max_rounding_trials":  1500,
+                                                               "solver_backend":  "mosek",
+                                                               "retain_rounded_results":  false,
+                                                               "mosek_solve_form":  "primal",
+                                                               "compact_constraints":  true
+                                                           },
+                                "target_count":  23,
+                                "scope":  "same_hull_targets_projection_and_fixed_goal_replanning",
+                                "stage1_rounding_diagnostics":  {
+                                                                    "model_compaction":  {
+                                                                                             "edge_membership_rows_before":  13717,
+                                                                                             "edge_membership_rows_after":  2552,
+                                                                                             "region_rows_before":  3954,
+                                                                                             "region_rows_after":  3167
+                                                                                         },
+                                                                    "relaxation_success":  true,
+                                                                    "relaxation_termination":  "SolutionResult.kSolutionFound",
+                                                                    "relaxation_solver":  "MOSEK",
+                                                                    "relaxation_solver_details":  {
+                                                                                                      "rescode":  0.0,
+                                                                                                      "solution_status":  1.0,
+                                                                                                      "optimizer_time":  9.474773292000464
+                                                                                                  },
+                                                                    "rounded_path_count":  1000,
+                                                                    "successful_rounded_path_count":  999,
+                                                                    "max_rounded_paths":  1000,
+                                                                    "max_rounding_trials":  1500,
+                                                                    "rounding_trials_attempted":  null,
+                                                                    "trials_note":  "Drake SamplePaths exposes a trial cap, not its actual attempt count",
+                                                                    "selected_path_valid":  true,
+                                                                    "selected_target":  22,
+                                                                    "selected_path_cost":  0.5983792472149276
+                                                                },
+                                "stage1_seconds":  34.1425023569991,
+                                "stage1_region_route":  [
+                                                            104,
+                                                            138,
+                                                            139,
+                                                            112,
+                                                            119,
+                                                            126,
+                                                            35,
+                                                            171,
+                                                            172,
+                                                            78,
+                                                            38,
+                                                            36,
+                                                            91,
+                                                            196,
+                                                            92,
+                                                            90,
+                                                            197,
+                                                            170
+                                                        ],
+                                "stage1_route_spec":  {
+                                                          "regions":  [
+                                                                          104,
+                                                                          138,
+                                                                          139,
+                                                                          112,
+                                                                          119,
+                                                                          126,
+                                                                          35,
+                                                                          171,
+                                                                          172,
+                                                                          78,
+                                                                          38,
+                                                                          36,
+                                                                          91,
+                                                                          196,
+                                                                          92,
+                                                                          90,
+                                                                          197,
+                                                                          170
+                                                                      ],
+                                                          "shifts":  [
+                                                                         [
+                                                                             0.0,
+                                                                             0.0,
+                                                                             0.0,
+                                                                             0.0,
+                                                                             0.0,
+                                                                             0.0,
+                                                                             0.0
+                                                                         ],
+                                                                         [
+                                                                             0.0,
+                                                                             0.0,
+                                                                             0.0,
+                                                                             0.0,
+                                                                             0.0,
+                                                                             0.0,
+                                                                             0.0
+                                                                         ],
+                                                                         [
+                                                                             0.0,
+                                                                             0.0,
+                                                                             0.0,
+                                                                             0.0,
+                                                                             0.0,
+                                                                             0.0,
+                                                                             0.0
+                                                                         ],
+                                                                         [
+                                                                             0.0,
+                                                                             0.0,
+                                                                             0.0,
+                                                                             0.0,
+                                                                             0.0,
+                                                                             0.0,
+                                                                             0.0
+                                                                         ],
+                                                                         [
+                                                                             0.0,
+                                                                             0.0,
+                                                                             0.0,
+                                                                             0.0,
+                                                                             0.0,
+                                                                             0.0,
+                                                                             0.0
+                                                                         ],
+                                                                         [
+                                                                             0.0,
+                                                                             0.0,
+                                                                             0.0,
+                                                                             0.0,
+                                                                             0.0,
+                                                                             0.0,
+                                                                             0.0
+                                                                         ],
+                                                                         [
+                                                                             0.0,
+                                                                             0.0,
+                                                                             0.0,
+                                                                             0.0,
+                                                                             0.0,
+                                                                             0.0,
+                                                                             0.0
+                                                                         ],
+                                                                         [
+                                                                             0.0,
+                                                                             0.0,
+                                                                             0.0,
+                                                                             0.0,
+                                                                             0.0,
+                                                                             0.0,
+                                                                             0.0
+                                                                         ],
+                                                                         [
+                                                                             0.0,
+                                                                             0.0,
+                                                                             0.0,
+                                                                             0.0,
+                                                                             0.0,
+                                                                             0.0,
+                                                                             0.0
+                                                                         ],
+                                                                         [
+                                                                             0.0,
+                                                                             0.0,
+                                                                             0.0,
+                                                                             0.0,
+                                                                             0.0,
+                                                                             0.0,
+                                                                             0.0
+                                                                         ],
+                                                                         [
+                                                                             0.0,
+                                                                             0.0,
+                                                                             0.0,
+                                                                             0.0,
+                                                                             0.0,
+                                                                             0.0,
+                                                                             0.0
+                                                                         ],
+                                                                         [
+                                                                             0.0,
+                                                                             0.0,
+                                                                             0.0,
+                                                                             0.0,
+                                                                             0.0,
+                                                                             0.0,
+                                                                             0.0
+                                                                         ],
+                                                                         [
+                                                                             0.0,
+                                                                             0.0,
+                                                                             0.0,
+                                                                             0.0,
+                                                                             0.0,
+                                                                             0.0,
+                                                                             0.0
+                                                                         ],
+                                                                         [
+                                                                             0.0,
+                                                                             0.0,
+                                                                             0.0,
+                                                                             0.0,
+                                                                             0.0,
+                                                                             0.0,
+                                                                             0.0
+                                                                         ],
+                                                                         [
+                                                                             0.0,
+                                                                             0.0,
+                                                                             0.0,
+                                                                             0.0,
+                                                                             0.0,
+                                                                             0.0,
+                                                                             0.0
+                                                                         ],
+                                                                         [
+                                                                             0.0,
+                                                                             0.0,
+                                                                             0.0,
+                                                                             0.0,
+                                                                             0.0,
+                                                                             0.0,
+                                                                             0.0
+                                                                         ],
+                                                                         [
+                                                                             0.0,
+                                                                             0.0,
+                                                                             0.0,
+                                                                             0.0,
+                                                                             0.0,
+                                                                             0.0,
+                                                                             0.0
+                                                                         ],
+                                                                         [
+                                                                             0.0,
+                                                                             0.0,
+                                                                             0.0,
+                                                                             0.0,
+                                                                             0.0,
+                                                                             0.0,
+                                                                             0.0
+                                                                         ]
+                                                                     ]
+                                                      },
+                                "stage1_waypoints":  [
+                                                         [
+                                                             0.2,
+                                                             -0.62,
+                                                             0.3,
+                                                             -0.55,
+                                                             0.44,
+                                                             -0.36,
+                                                             0.12
+                                                         ],
+                                                         [
+                                                             0.48277491040319553,
+                                                             -0.9403288839536625,
+                                                             0.5087765707194609,
+                                                             -0.5620632610751748,
+                                                             0.3706822478611773,
+                                                             -0.26867474748704046,
+                                                             0.1374869298486333
+                                                         ],
+                                                         [
+                                                             0.4827837294557798,
+                                                             -0.9923313981059796,
+                                                             0.5235574908022055,
+                                                             -0.5486537399487375,
+                                                             0.36867256223469047,
+                                                             -0.24551991229810533,
+                                                             0.14118244623688142
+                                                         ],
+                                                         [
+                                                             0.4827951681285509,
+                                                             -1.1638932119200183,
+                                                             0.5723213201881017,
+                                                             -0.5044142962643352,
+                                                             0.3620424022968268,
+                                                             -0.24454586116589502,
+                                                             0.15337434806586203
+                                                         ],
+                                                         [
+                                                             0.4827951681300297,
+                                                             -1.1638932138174118,
+                                                             0.5723213240995326,
+                                                             -0.5044142936301937,
+                                                             0.3620424019263573,
+                                                             -0.24454586098413358,
+                                                             0.15337434874581699
+                                                         ],
+                                                         [
+                                                             0.4827749137006353,
+                                                             -1.1638933891250962,
+                                                             0.629350355350341,
+                                                             -0.3178571749593426,
+                                                             0.33408310659734713,
+                                                             -0.24043914498204386,
+                                                             0.20478742488906215
+                                                         ],
+                                                         [
+                                                             0.4888660814119933,
+                                                             -1.1638933775504325,
+                                                             0.6811822908970946,
+                                                             -0.30144124009297923,
+                                                             0.3421625423965299,
+                                                             -0.22638700063446082,
+                                                             0.37836917730543523
+                                                         ],
+                                                         [
+                                                             0.6562916468779487,
+                                                             -1.1638932306247893,
+                                                             0.7561547292527628,
+                                                             -0.1867236939575338,
+                                                             0.4184329020041624,
+                                                             -0.14715616775193752,
+                                                             1.1167041157244926
+                                                         ],
+                                                         [
+                                                             0.6562916483699563,
+                                                             -1.1638932279491774,
+                                                             0.7561547298509939,
+                                                             -0.18672369296273644,
+                                                             0.41843290268707206,
+                                                             -0.14715616098277193,
+                                                             1.1167041263659216
+                                                         ],
+                                                         [
+                                                             0.6562916523451446,
+                                                             -1.1638932119200183,
+                                                             0.7561547316008054,
+                                                             -0.18672369029165634,
+                                                             0.41843290452553944,
+                                                             -0.1471561565569918,
+                                                             1.1167041457833948
+                                                         ],
+                                                         [
+                                                             0.6562916523738572,
+                                                             -1.1638932119200183,
+                                                             0.7561547316121313,
+                                                             -0.18672369027283783,
+                                                             0.4184329045390107,
+                                                             -0.14715615668610885,
+                                                             1.1167041454428126
+                                                         ],
+                                                         [
+                                                             0.6562916549997013,
+                                                             -1.1638932188385405,
+                                                             0.7561547323506816,
+                                                             -0.18672368879282786,
+                                                             0.4184329056385364,
+                                                             -0.14715616775193752,
+                                                             1.1167041490019693
+                                                         ],
+                                                         [
+                                                             0.7347295987152611,
+                                                             -1.1638934834321002,
+                                                             0.7755986130099892,
+                                                             -0.13820268047550013,
+                                                             0.45536454690498007,
+                                                             -0.20458372415956566,
+                                                             1.1167041272860874
+                                                         ],
+                                                         [
+                                                             0.7347296001652676,
+                                                             -1.1638934834375754,
+                                                             0.7755986139759355,
+                                                             -0.13820268045301257,
+                                                             0.455364546930241,
+                                                             -0.20458372412672288,
+                                                             1.1167041263659216
+                                                         ],
+                                                         [
+                                                             0.7347296004897825,
+                                                             -1.1638934834479717,
+                                                             0.7755986151761864,
+                                                             -0.1382026804372302,
+                                                             0.45536454695635514,
+                                                             -0.20458372414151907,
+                                                             1.1167041255325827
+                                                         ],
+                                                         [
+                                                             0.7347296004918054,
+                                                             -1.1638934834513048,
+                                                             0.7755986151761864,
+                                                             -0.13820268043448167,
+                                                             0.455364546962759,
+                                                             -0.2045837241434179,
+                                                             1.1167041255303858
+                                                         ],
+                                                         [
+                                                             0.7347296001684237,
+                                                             -1.1638934834735817,
+                                                             0.7755986138923039,
+                                                             -0.13820268042399309,
+                                                             0.45536454700054935,
+                                                             -0.2045837241470455,
+                                                             1.1167041263659216
+                                                         ],
+                                                         [
+                                                             0.7347295987152611,
+                                                             -1.1638934835073136,
+                                                             0.7755986128261763,
+                                                             -0.13820268041483652,
+                                                             0.4553645470516783,
+                                                             -0.20458372414442316,
+                                                             1.1167041273000706
+                                                         ],
+                                                         [
+                                                             0.595311336564854,
+                                                             -1.3217282456596582,
+                                                             0.7680755104956863,
+                                                             -0.08244171007294372,
+                                                             0.7566308990479859,
+                                                             -0.18925906130170758,
+                                                             1.1307239732420762
+                                                         ]
+                                                     ],
+                                "stage1_cost":  0.5983792472149276,
+                                "stage1_quality":  {
+                                                       "lower_bound":  0.47512179898294016,
+                                                       "upper_bound":  0.5983792472149276,
+                                                       "absolute_gap":  0.12325744823198748,
+                                                       "relative_gap":  0.259422843775714,
+                                                       "relative_tolerance":  0.01,
+                                                       "absolute_tolerance":  1E-06,
+                                                       "scope":  "fixed_start_to_supplied_target_sets_graph",
+                                                       "within_tolerance":  false,
+                                                       "status":  "gap_exceeds_tolerance"
+                                                   },
+                                "selected_hull_target":  22,
+                                "selected_ssm_branch":  0,
+                                "projection_seconds":  0.07702044600046065,
+                                "estimated_goal":  [
+                                                       0.5952876562080038,
+                                                       -1.3217321088017597,
+                                                       0.768067695761899,
+                                                       -0.08239295782395306,
+                                                       0.7566153581833555,
+                                                       -0.1892518155672116,
+                                                       1.1307149220565549
+                                                   ],
+                                "stage2_rounding_diagnostics":  {
+                                                                    "model_compaction":  {
+                                                                                             "edge_membership_rows_before":  13717,
+                                                                                             "edge_membership_rows_after":  2552,
+                                                                                             "region_rows_before":  3954,
+                                                                                             "region_rows_after":  3167
+                                                                                         },
+                                                                    "relaxation_success":  true,
+                                                                    "relaxation_termination":  "SolutionResult.kSolutionFound",
+                                                                    "relaxation_solver":  "MOSEK",
+                                                                    "relaxation_solver_details":  {
+                                                                                                      "rescode":  0.0,
+                                                                                                      "solution_status":  1.0,
+                                                                                                      "optimizer_time":  5.985324544000832
+                                                                                                  },
+                                                                    "rounded_path_count":  1000,
+                                                                    "successful_rounded_path_count":  1000,
+                                                                    "max_rounded_paths":  1000,
+                                                                    "max_rounding_trials":  1500,
+                                                                    "rounding_trials_attempted":  null,
+                                                                    "trials_note":  "Drake SamplePaths exposes a trial cap, not its actual attempt count",
+                                                                    "selected_path_valid":  true,
+                                                                    "selected_target":  0,
+                                                                    "selected_path_cost":  0.5977706314971731
+                                                                },
+                                "stage2_seconds":  23.3506150000012,
+                                "status":  "success",
+                                "collision_free":  true,
+                                "collision_samples":  237,
+                                "task_error":  0.0,
+                                "graph_membership_valid":  true,
+                                "recomputed_cost":  0.5977706314971731,
+                                "cost_valid":  true,
+                                "cost":  0.5977706314971731,
+                                "quality":  {
+                                                "lower_bound":  0.4758084611460101,
+                                                "upper_bound":  0.5977706314971731,
+                                                "absolute_gap":  0.12196217035116302,
+                                                "relative_gap":  0.256326190705837,
+                                                "relative_tolerance":  0.01,
+                                                "absolute_tolerance":  1E-06,
+                                                "scope":  "fixed_start_to_supplied_target_sets_graph",
+                                                "within_tolerance":  false,
+                                                "status":  "gap_exceeds_tolerance"
+                                            },
+                                "waypoints":  [
+                                                  [
+                                                      0.2,
+                                                      -0.62,
+                                                      0.3,
+                                                      -0.55,
+                                                      0.44,
+                                                      -0.36,
+                                                      0.12
+                                                  ],
+                                                  [
+                                                      0.48277491040319553,
+                                                      -0.9411213212102861,
+                                                      0.509236796436954,
+                                                      -0.5627655655697555,
+                                                      0.3736280346700273,
+                                                      -0.26869708583533597,
+                                                      0.1363846220540696
+                                                  ],
+                                                  [
+                                                      0.48278031179620823,
+                                                      -0.9932497065148421,
+                                                      0.5239985086283157,
+                                                      -0.5494311122217054,
+                                                      0.3722934095043913,
+                                                      -0.24551991229810533,
+                                                      0.1398488088753664
+                                                  ],
+                                                  [
+                                                      0.4827878692431457,
+                                                      -1.1638932119200183,
+                                                      0.5723213232636414,
+                                                      -0.5057804625755142,
+                                                      0.36792448431264446,
+                                                      -0.24550947222521394,
+                                                      0.15118890671504998
+                                                  ],
+                                                  [
+                                                      0.4827878692432616,
+                                                      -1.163893212157467,
+                                                      0.5723213240995326,
+                                                      -0.5057804619539625,
+                                                      0.36792448425608915,
+                                                      -0.24550947206564971,
+                                                      0.1511889068655277
+                                                  ],
+                                                  [
+                                                      0.4827749088697814,
+                                                      -1.1638932707071696,
+                                                      0.6402913304954352,
+                                                      -0.3178571749593426,
+                                                      0.3491155387244082,
+                                                      -0.2455168120418652,
+                                                      0.2000099082676239
+                                                  ],
+                                                  [
+                                                      0.4827749232686762,
+                                                      -1.1638932795109618,
+                                                      0.6855551419799724,
+                                                      -0.31212058426765393,
+                                                      0.39824224620479953,
+                                                      -0.2455189534952968,
+                                                      0.3305904642543222
+                                                  ],
+                                                  [
+                                                      0.5455897050363746,
+                                                      -1.1638932123258123,
+                                                      0.7755984793633893,
+                                                      -0.17559573547874188,
+                                                      0.7614971047829022,
+                                                      -0.22916293825057643,
+                                                      1.1167041213486524
+                                                  ],
+                                                  [
+                                                      0.5455897050950425,
+                                                      -1.1638932119200183,
+                                                      0.7755984794329545,
+                                                      -0.1755957353509901,
+                                                      0.7614971058364084,
+                                                      -0.22916293822942552,
+                                                      1.116704122466303
+                                                  ],
+                                                  [
+                                                      0.5455897050978444,
+                                                      -1.1638932119200183,
+                                                      0.7755984794352476,
+                                                      -0.17559573534403677,
+                                                      0.7614971053776456,
+                                                      -0.22916293822740802,
+                                                      1.1167041232768835
+                                                  ],
+                                                  [
+                                                      0.5455897052401174,
+                                                      -1.1638932129681545,
+                                                      0.7755984794142975,
+                                                      -0.1755957351168179,
+                                                      0.7614971054628805,
+                                                      -0.2291629381416998,
+                                                      1.1167041263659216
+                                                  ],
+                                                  [
+                                                      0.5455897057201134,
+                                                      -1.163893213381117,
+                                                      0.7755984798779687,
+                                                      -0.17559573501361228,
+                                                      0.7614971047829022,
+                                                      -0.22916293819869427,
+                                                      1.1167041267941515
+                                                  ],
+                                                  [
+                                                      0.5952876562080038,
+                                                      -1.3217321088017597,
+                                                      0.768067695761899,
+                                                      -0.08239295782395306,
+                                                      0.7566153581833555,
+                                                      -0.1892518155672116,
+                                                      1.1307149220565549
+                                                  ]
+                                              ],
+                                "region_route":  [
+                                                     104,
+                                                     138,
+                                                     139,
+                                                     112,
+                                                     119,
+                                                     126,
+                                                     35,
+                                                     175,
+                                                     80,
+                                                     41,
+                                                     176,
+                                                     170
+                                                 ],
+                                "route_spec":  {
+                                                   "regions":  [
+                                                                   104,
+                                                                   138,
+                                                                   139,
+                                                                   112,
+                                                                   119,
+                                                                   126,
+                                                                   35,
+                                                                   175,
+                                                                   80,
+                                                                   41,
+                                                                   176,
+                                                                   170
+                                                               ],
+                                                   "shifts":  [
+                                                                  [
+                                                                      0.0,
+                                                                      0.0,
+                                                                      0.0,
+                                                                      0.0,
+                                                                      0.0,
+                                                                      0.0,
+                                                                      0.0
+                                                                  ],
+                                                                  [
+                                                                      0.0,
+                                                                      0.0,
+                                                                      0.0,
+                                                                      0.0,
+                                                                      0.0,
+                                                                      0.0,
+                                                                      0.0
+                                                                  ],
+                                                                  [
+                                                                      0.0,
+                                                                      0.0,
+                                                                      0.0,
+                                                                      0.0,
+                                                                      0.0,
+                                                                      0.0,
+                                                                      0.0
+                                                                  ],
+                                                                  [
+                                                                      0.0,
+                                                                      0.0,
+                                                                      0.0,
+                                                                      0.0,
+                                                                      0.0,
+                                                                      0.0,
+                                                                      0.0
+                                                                  ],
+                                                                  [
+                                                                      0.0,
+                                                                      0.0,
+                                                                      0.0,
+                                                                      0.0,
+                                                                      0.0,
+                                                                      0.0,
+                                                                      0.0
+                                                                  ],
+                                                                  [
+                                                                      0.0,
+                                                                      0.0,
+                                                                      0.0,
+                                                                      0.0,
+                                                                      0.0,
+                                                                      0.0,
+                                                                      0.0
+                                                                  ],
+                                                                  [
+                                                                      0.0,
+                                                                      0.0,
+                                                                      0.0,
+                                                                      0.0,
+                                                                      0.0,
+                                                                      0.0,
+                                                                      0.0
+                                                                  ],
+                                                                  [
+                                                                      0.0,
+                                                                      0.0,
+                                                                      0.0,
+                                                                      0.0,
+                                                                      0.0,
+                                                                      0.0,
+                                                                      0.0
+                                                                  ],
+                                                                  [
+                                                                      0.0,
+                                                                      0.0,
+                                                                      0.0,
+                                                                      0.0,
+                                                                      0.0,
+                                                                      0.0,
+                                                                      0.0
+                                                                  ],
+                                                                  [
+                                                                      0.0,
+                                                                      0.0,
+                                                                      0.0,
+                                                                      0.0,
+                                                                      0.0,
+                                                                      0.0,
+                                                                      0.0
+                                                                  ],
+                                                                  [
+                                                                      0.0,
+                                                                      0.0,
+                                                                      0.0,
+                                                                      0.0,
+                                                                      0.0,
+                                                                      0.0,
+                                                                      0.0
+                                                                  ],
+                                                                  [
+                                                                      0.0,
+                                                                      0.0,
+                                                                      0.0,
+                                                                      0.0,
+                                                                      0.0,
+                                                                      0.0,
+                                                                      0.0
+                                                                  ]
+                                                              ]
+                                               },
+                                "endpoint":  [
+                                                 0.5952876562080038,
+                                                 -1.3217321088017597,
+                                                 0.768067695761899,
+                                                 -0.08239295782395306,
+                                                 0.7566153581833555,
+                                                 -0.1892518155672116,
+                                                 1.1307149220565549
+                                             ],
+                                "selected_target":  0,
+                                "rounded_path_count":  1000,
+                                "solver_name":  "MOSEK",
+                                "seconds":  57.622391255001276
+                            },
+    "status":  "success",
+    "message":  "Executed only the union-hull two-stage comparison.",
+    "total_seconds":  91.54383024600065,
+    "primary_method_executed":  false,
+    "two_stage_total_seconds":  91.54383024600065,
+    "waypoints":  [
+                      [
+                          0.2,
+                          -0.62,
+                          0.3,
+                          -0.55,
+                          0.44,
+                          -0.36,
+                          0.12
+                      ],
+                      [
+                          0.48277491040319553,
+                          -0.9411213212102861,
+                          0.509236796436954,
+                          -0.5627655655697555,
+                          0.3736280346700273,
+                          -0.26869708583533597,
+                          0.1363846220540696
+                      ],
+                      [
+                          0.48278031179620823,
+                          -0.9932497065148421,
+                          0.5239985086283157,
+                          -0.5494311122217054,
+                          0.3722934095043913,
+                          -0.24551991229810533,
+                          0.1398488088753664
+                      ],
+                      [
+                          0.4827878692431457,
+                          -1.1638932119200183,
+                          0.5723213232636414,
+                          -0.5057804625755142,
+                          0.36792448431264446,
+                          -0.24550947222521394,
+                          0.15118890671504998
+                      ],
+                      [
+                          0.4827878692432616,
+                          -1.163893212157467,
+                          0.5723213240995326,
+                          -0.5057804619539625,
+                          0.36792448425608915,
+                          -0.24550947206564971,
+                          0.1511889068655277
+                      ],
+                      [
+                          0.4827749088697814,
+                          -1.1638932707071696,
+                          0.6402913304954352,
+                          -0.3178571749593426,
+                          0.3491155387244082,
+                          -0.2455168120418652,
+                          0.2000099082676239
+                      ],
+                      [
+                          0.4827749232686762,
+                          -1.1638932795109618,
+                          0.6855551419799724,
+                          -0.31212058426765393,
+                          0.39824224620479953,
+                          -0.2455189534952968,
+                          0.3305904642543222
+                      ],
+                      [
+                          0.5455897050363746,
+                          -1.1638932123258123,
+                          0.7755984793633893,
+                          -0.17559573547874188,
+                          0.7614971047829022,
+                          -0.22916293825057643,
+                          1.1167041213486524
+                      ],
+                      [
+                          0.5455897050950425,
+                          -1.1638932119200183,
+                          0.7755984794329545,
+                          -0.1755957353509901,
+                          0.7614971058364084,
+                          -0.22916293822942552,
+                          1.116704122466303
+                      ],
+                      [
+                          0.5455897050978444,
+                          -1.1638932119200183,
+                          0.7755984794352476,
+                          -0.17559573534403677,
+                          0.7614971053776456,
+                          -0.22916293822740802,
+                          1.1167041232768835
+                      ],
+                      [
+                          0.5455897052401174,
+                          -1.1638932129681545,
+                          0.7755984794142975,
+                          -0.1755957351168179,
+                          0.7614971054628805,
+                          -0.2291629381416998,
+                          1.1167041263659216
+                      ],
+                      [
+                          0.5455897057201134,
+                          -1.163893213381117,
+                          0.7755984798779687,
+                          -0.17559573501361228,
+                          0.7614971047829022,
+                          -0.22916293819869427,
+                          1.1167041267941515
+                      ],
+                      [
+                          0.5952876562080038,
+                          -1.3217321088017597,
+                          0.768067695761899,
+                          -0.08239295782395306,
+                          0.7566153581833555,
+                          -0.1892518155672116,
+                          1.1307149220565549
+                      ]
+                  ],
+    "cost":  0.5977706314971731,
+    "replay_source_report":  "D:\\新建文件夹\\jointspace_reliability_map_based_collision_aware_motion_planning\\results\\spatial7r\\intersection_slp_facet_1000_1500_primal_20261030\\union_hulls.json"
+}
