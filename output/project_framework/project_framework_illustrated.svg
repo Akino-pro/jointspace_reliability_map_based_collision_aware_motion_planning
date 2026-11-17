@@ -1,0 +1,221 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080"><rect width="1920" height="1080" fill="white"/>
+<text x='60' y='81' dominant-baseline='central' text-anchor='start' font-family='Arial, sans-serif' font-size='44' font-weight='700' fill='#172B46'>Reliability-Aware Motion Planning Framework</text>
+<rect x='385' y='195' width='1130' height='390' fill='#F2F6FC' stroke='#CBD9EC' stroke-width='1.5'/>
+<rect x='385' y='635' width='1130' height='275' fill='#F0F8F6' stroke='#C5E0D8' stroke-width='1.5'/>
+<text x='415' y='243' dominant-baseline='central' text-anchor='start' font-family='Arial, sans-serif' font-size='32' font-weight='700' fill='#28578A'>Pre-failure motion planning</text>
+<text x='415' y='683' dominant-baseline='central' text-anchor='start' font-family='Arial, sans-serif' font-size='32' font-weight='700' fill='#18745E'>Post-failure replanning</text>
+<rect x='40' y='310' width='270' height='380' fill='#F7F9FC' stroke='#D3DCE7' stroke-width='1.5'/>
+<text x='175' y='354' dominant-baseline='central' text-anchor='middle' font-family='Arial, sans-serif' font-size='25' font-weight='700' fill='#60758C'>INPUTS</text>
+<text x='175' y='422' dominant-baseline='central' text-anchor='middle' font-family='Arial, sans-serif' font-size='27' font-weight='400' fill='#172B46'>Task</text>
+<text x='175' y='489' dominant-baseline='central' text-anchor='middle' font-family='Arial, sans-serif' font-size='27' font-weight='400' fill='#172B46'>Environment</text>
+<text x='175' y='554' dominant-baseline='central' text-anchor='middle' font-family='Arial, sans-serif' font-size='26' font-weight='400' fill='#172B46'>Robot parameters</text>
+<text x='175' y='609.92' dominant-baseline='central' text-anchor='middle' font-family='Arial, sans-serif' font-size='26' font-weight='400' fill='#172B46'>Joint failure</text>
+<text x='175' y='640.08' dominant-baseline='central' text-anchor='middle' font-family='Arial, sans-serif' font-size='26' font-weight='400' fill='#172B46'>probabilities</text>
+<polyline points='310,500 345,500 345,370 420,370' fill='none' stroke='#60758C' stroke-width='2.5' />
+<polygon points='420,370 410.0951,374.7846 410.0951,365.2154' fill='#60758C'/>
+<polyline points='345,500 345,795 420,795' fill='none' stroke='#60758C' stroke-width='2.5' />
+<polygon points='420,795 410.0951,799.7846 410.0951,790.2154' fill='#60758C'/>
+<rect x='420' y='285' width='235' height='210' fill='#FFFFFF' stroke='#9CB7D7' stroke-width='1.5'/>
+<text x='432' y='307.5' dominant-baseline='central' text-anchor='start' font-family='Arial, sans-serif' font-size='19' font-weight='700' fill='#4975A3'>01</text>
+<text x='537.5' y='430.58' dominant-baseline='central' text-anchor='middle' font-family='Arial, sans-serif' font-size='24' font-weight='700' fill='#172B46'>Compute</text>
+<text x='537.5' y='458.42' dominant-baseline='central' text-anchor='middle' font-family='Arial, sans-serif' font-size='24' font-weight='700' fill='#172B46'>collision-free region</text>
+<rect x='695' y='285' width='235' height='210' fill='#FFFFFF' stroke='#9CB7D7' stroke-width='1.5'/>
+<text x='707' y='307.5' dominant-baseline='central' text-anchor='start' font-family='Arial, sans-serif' font-size='19' font-weight='700' fill='#4975A3'>02</text>
+<text x='812.5' y='430.58' dominant-baseline='central' text-anchor='middle' font-family='Arial, sans-serif' font-size='24' font-weight='700' fill='#172B46'>Compute joint-space</text>
+<text x='812.5' y='458.42' dominant-baseline='central' text-anchor='middle' font-family='Arial, sans-serif' font-size='24' font-weight='700' fill='#172B46'>reliability map</text>
+<rect x='970' y='285' width='235' height='210' fill='#FFFFFF' stroke='#9CB7D7' stroke-width='1.5'/>
+<text x='982' y='307.5' dominant-baseline='central' text-anchor='start' font-family='Arial, sans-serif' font-size='19' font-weight='700' fill='#4975A3'>03</text>
+<text x='1087.5' y='418.98' dominant-baseline='central' text-anchor='middle' font-family='Arial, sans-serif' font-size='22' font-weight='700' fill='#172B46'>Intersect region</text>
+<text x='1087.5' y='444.5' dominant-baseline='central' text-anchor='middle' font-family='Arial, sans-serif' font-size='22' font-weight='700' fill='#172B46'>and reliability map</text>
+<text x='1087.5' y='470.02' dominant-baseline='central' text-anchor='middle' font-family='Arial, sans-serif' font-size='22' font-weight='700' fill='#172B46'>to form graph</text>
+<rect x='1245' y='285' width='235' height='210' fill='#FFFFFF' stroke='#9CB7D7' stroke-width='1.5'/>
+<text x='1257' y='307.5' dominant-baseline='central' text-anchor='start' font-family='Arial, sans-serif' font-size='19' font-weight='700' fill='#4975A3'>04</text>
+<text x='1362.5' y='430.58' dominant-baseline='central' text-anchor='middle' font-family='Arial, sans-serif' font-size='24' font-weight='700' fill='#172B46'>Optimize</text>
+<text x='1362.5' y='458.42' dominant-baseline='central' text-anchor='middle' font-family='Arial, sans-serif' font-size='24' font-weight='700' fill='#172B46'>trajectory</text>
+<rect x='468' y='318' width='140' height='78' fill='#ECF3F9' stroke='#CAD8E6' stroke-width='1.5'/>
+<polyline points='488,318 488,396' fill='none' stroke='#DCE5EE' stroke-width='1' stroke-linecap='round' stroke-linejoin='round'/>
+<polyline points='508,318 508,396' fill='none' stroke='#DCE5EE' stroke-width='1' stroke-linecap='round' stroke-linejoin='round'/>
+<polyline points='528,318 528,396' fill='none' stroke='#DCE5EE' stroke-width='1' stroke-linecap='round' stroke-linejoin='round'/>
+<polyline points='548,318 548,396' fill='none' stroke='#DCE5EE' stroke-width='1' stroke-linecap='round' stroke-linejoin='round'/>
+<polyline points='568,318 568,396' fill='none' stroke='#DCE5EE' stroke-width='1' stroke-linecap='round' stroke-linejoin='round'/>
+<polyline points='588,318 588,396' fill='none' stroke='#DCE5EE' stroke-width='1' stroke-linecap='round' stroke-linejoin='round'/>
+<polyline points='468,338 608,338' fill='none' stroke='#DCE5EE' stroke-width='1' stroke-linecap='round' stroke-linejoin='round'/>
+<polyline points='468,358 608,358' fill='none' stroke='#DCE5EE' stroke-width='1' stroke-linecap='round' stroke-linejoin='round'/>
+<polyline points='468,378 608,378' fill='none' stroke='#DCE5EE' stroke-width='1' stroke-linecap='round' stroke-linejoin='round'/>
+<rect x='500' y='325' width='33' height='30' fill='#CCD3DC' stroke='#BCC6D2' stroke-width='1.5'/>
+<rect x='549' y='364' width='34' height='27' fill='#CCD3DC' stroke='#BCC6D2' stroke-width='1.5'/>
+<rect x='743' y='318' width='20' height='19.5' fill='#E9F3CF' stroke='#FFFFFF' stroke-width='1.5'/>
+<rect x='763' y='318' width='20' height='19.5' fill='#E9F3CF' stroke='#FFFFFF' stroke-width='1.5'/>
+<rect x='783' y='318' width='20' height='19.5' fill='#B8DEAE' stroke='#FFFFFF' stroke-width='1.5'/>
+<rect x='803' y='318' width='20' height='19.5' fill='#B8DEAE' stroke='#FFFFFF' stroke-width='1.5'/>
+<rect x='823' y='318' width='20' height='19.5' fill='#78C6B6' stroke='#FFFFFF' stroke-width='1.5'/>
+<rect x='843' y='318' width='20' height='19.5' fill='#78C6B6' stroke='#FFFFFF' stroke-width='1.5'/>
+<rect x='863' y='318' width='20' height='19.5' fill='#45A9B5' stroke='#FFFFFF' stroke-width='1.5'/>
+<rect x='743' y='337.5' width='20' height='19.5' fill='#E9F3CF' stroke='#FFFFFF' stroke-width='1.5'/>
+<rect x='763' y='337.5' width='20' height='19.5' fill='#B8DEAE' stroke='#FFFFFF' stroke-width='1.5'/>
+<rect x='783' y='337.5' width='20' height='19.5' fill='#B8DEAE' stroke='#FFFFFF' stroke-width='1.5'/>
+<rect x='803' y='337.5' width='20' height='19.5' fill='#78C6B6' stroke='#FFFFFF' stroke-width='1.5'/>
+<rect x='823' y='337.5' width='20' height='19.5' fill='#78C6B6' stroke='#FFFFFF' stroke-width='1.5'/>
+<rect x='843' y='337.5' width='20' height='19.5' fill='#45A9B5' stroke='#FFFFFF' stroke-width='1.5'/>
+<rect x='863' y='337.5' width='20' height='19.5' fill='#3486AC' stroke='#FFFFFF' stroke-width='1.5'/>
+<rect x='743' y='357' width='20' height='19.5' fill='#B8DEAE' stroke='#FFFFFF' stroke-width='1.5'/>
+<rect x='763' y='357' width='20' height='19.5' fill='#B8DEAE' stroke='#FFFFFF' stroke-width='1.5'/>
+<rect x='783' y='357' width='20' height='19.5' fill='#78C6B6' stroke='#FFFFFF' stroke-width='1.5'/>
+<rect x='803' y='357' width='20' height='19.5' fill='#78C6B6' stroke='#FFFFFF' stroke-width='1.5'/>
+<rect x='823' y='357' width='20' height='19.5' fill='#45A9B5' stroke='#FFFFFF' stroke-width='1.5'/>
+<rect x='843' y='357' width='20' height='19.5' fill='#3486AC' stroke='#FFFFFF' stroke-width='1.5'/>
+<rect x='863' y='357' width='20' height='19.5' fill='#3486AC' stroke='#FFFFFF' stroke-width='1.5'/>
+<rect x='743' y='376.5' width='20' height='19.5' fill='#B8DEAE' stroke='#FFFFFF' stroke-width='1.5'/>
+<rect x='763' y='376.5' width='20' height='19.5' fill='#78C6B6' stroke='#FFFFFF' stroke-width='1.5'/>
+<rect x='783' y='376.5' width='20' height='19.5' fill='#78C6B6' stroke='#FFFFFF' stroke-width='1.5'/>
+<rect x='803' y='376.5' width='20' height='19.5' fill='#45A9B5' stroke='#FFFFFF' stroke-width='1.5'/>
+<rect x='823' y='376.5' width='20' height='19.5' fill='#3486AC' stroke='#FFFFFF' stroke-width='1.5'/>
+<rect x='843' y='376.5' width='20' height='19.5' fill='#3486AC' stroke='#FFFFFF' stroke-width='1.5'/>
+<rect x='863' y='376.5' width='20' height='19.5' fill='#36669B' stroke='#FFFFFF' stroke-width='1.5'/>
+<polyline points='738,315 738,401 888,401' fill='none' stroke='#8DA2B9' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/>
+<rect x='1018' y='318' width='140' height='78' fill='#ECF3F9' stroke='#CAD8E6' stroke-width='1.5'/>
+<polyline points='1038,318 1038,396' fill='none' stroke='#DCE5EE' stroke-width='1' stroke-linecap='round' stroke-linejoin='round'/>
+<polyline points='1058,318 1058,396' fill='none' stroke='#DCE5EE' stroke-width='1' stroke-linecap='round' stroke-linejoin='round'/>
+<polyline points='1078,318 1078,396' fill='none' stroke='#DCE5EE' stroke-width='1' stroke-linecap='round' stroke-linejoin='round'/>
+<polyline points='1098,318 1098,396' fill='none' stroke='#DCE5EE' stroke-width='1' stroke-linecap='round' stroke-linejoin='round'/>
+<polyline points='1118,318 1118,396' fill='none' stroke='#DCE5EE' stroke-width='1' stroke-linecap='round' stroke-linejoin='round'/>
+<polyline points='1138,318 1138,396' fill='none' stroke='#DCE5EE' stroke-width='1' stroke-linecap='round' stroke-linejoin='round'/>
+<polyline points='1018,338 1158,338' fill='none' stroke='#DCE5EE' stroke-width='1' stroke-linecap='round' stroke-linejoin='round'/>
+<polyline points='1018,358 1158,358' fill='none' stroke='#DCE5EE' stroke-width='1' stroke-linecap='round' stroke-linejoin='round'/>
+<polyline points='1018,378 1158,378' fill='none' stroke='#DCE5EE' stroke-width='1' stroke-linecap='round' stroke-linejoin='round'/>
+<rect x='1050' y='325' width='33' height='30' fill='#CCD3DC' stroke='#BCC6D2' stroke-width='1.5'/>
+<rect x='1099' y='364' width='34' height='27' fill='#CCD3DC' stroke='#BCC6D2' stroke-width='1.5'/>
+<polyline points='1028,383 1050,365' fill='none' stroke='#4975A3' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/>
+<polyline points='1050,365 1087,360' fill='none' stroke='#4975A3' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/>
+<polyline points='1087,360 1103,335' fill='none' stroke='#4975A3' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/>
+<polyline points='1103,335 1144,330' fill='none' stroke='#4975A3' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/>
+<polyline points='1144,330 1142,358' fill='none' stroke='#4975A3' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/>
+<polyline points='1087,360 1142,358' fill='none' stroke='#4975A3' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/>
+<polyline points='1028,383 1082,386' fill='none' stroke='#4975A3' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/>
+<polyline points='1050,365 1082,386' fill='none' stroke='#4975A3' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/>
+<polyline points='1050,365 1032,332' fill='none' stroke='#4975A3' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/>
+<circle cx='1028' cy='383' r='4' fill='#4975A3' stroke='#FFFFFF' stroke-width='1.5'/>
+<circle cx='1050' cy='365' r='4' fill='#4975A3' stroke='#FFFFFF' stroke-width='1.5'/>
+<circle cx='1087' cy='360' r='4' fill='#4975A3' stroke='#FFFFFF' stroke-width='1.5'/>
+<circle cx='1103' cy='335' r='4' fill='#4975A3' stroke='#FFFFFF' stroke-width='1.5'/>
+<circle cx='1144' cy='330' r='4' fill='#4975A3' stroke='#FFFFFF' stroke-width='1.5'/>
+<circle cx='1142' cy='358' r='4' fill='#4975A3' stroke='#FFFFFF' stroke-width='1.5'/>
+<circle cx='1082' cy='386' r='4' fill='#4975A3' stroke='#FFFFFF' stroke-width='1.5'/>
+<circle cx='1032' cy='332' r='4' fill='#4975A3' stroke='#FFFFFF' stroke-width='1.5'/>
+<rect x='1293' y='318' width='140' height='78' fill='#ECF3F9' stroke='#CAD8E6' stroke-width='1.5'/>
+<polyline points='1313,318 1313,396' fill='none' stroke='#DCE5EE' stroke-width='1' stroke-linecap='round' stroke-linejoin='round'/>
+<polyline points='1333,318 1333,396' fill='none' stroke='#DCE5EE' stroke-width='1' stroke-linecap='round' stroke-linejoin='round'/>
+<polyline points='1353,318 1353,396' fill='none' stroke='#DCE5EE' stroke-width='1' stroke-linecap='round' stroke-linejoin='round'/>
+<polyline points='1373,318 1373,396' fill='none' stroke='#DCE5EE' stroke-width='1' stroke-linecap='round' stroke-linejoin='round'/>
+<polyline points='1393,318 1393,396' fill='none' stroke='#DCE5EE' stroke-width='1' stroke-linecap='round' stroke-linejoin='round'/>
+<polyline points='1413,318 1413,396' fill='none' stroke='#DCE5EE' stroke-width='1' stroke-linecap='round' stroke-linejoin='round'/>
+<polyline points='1293,338 1433,338' fill='none' stroke='#DCE5EE' stroke-width='1' stroke-linecap='round' stroke-linejoin='round'/>
+<polyline points='1293,358 1433,358' fill='none' stroke='#DCE5EE' stroke-width='1' stroke-linecap='round' stroke-linejoin='round'/>
+<polyline points='1293,378 1433,378' fill='none' stroke='#DCE5EE' stroke-width='1' stroke-linecap='round' stroke-linejoin='round'/>
+<rect x='1325' y='325' width='33' height='30' fill='#CCD3DC' stroke='#BCC6D2' stroke-width='1.5'/>
+<rect x='1374' y='364' width='34' height='27' fill='#CCD3DC' stroke='#BCC6D2' stroke-width='1.5'/>
+<path d='M 1303 383 C 1335 349, 1404 367, 1420 329' fill='none' stroke='#4975A3' stroke-width='4' stroke-linecap='round'/>
+<circle cx='1303' cy='383' r='5' fill='#4975A3' stroke='#FFFFFF' stroke-width='1.5'/>
+<circle cx='1420' cy='329' r='5' fill='#4975A3' stroke='#FFFFFF' stroke-width='1.5'/>
+<polyline points='655,380 695,380' fill='none' stroke='#4975A3' stroke-width='2.5' />
+<polygon points='695,380 685.0951,384.7846 685.0951,375.2154' fill='#4975A3'/>
+<polyline points='930,380 970,380' fill='none' stroke='#4975A3' stroke-width='2.5' />
+<polygon points='970,380 960.0951,384.7846 960.0951,375.2154' fill='#4975A3'/>
+<polyline points='1205,380 1245,380' fill='none' stroke='#4975A3' stroke-width='2.5' />
+<polygon points='1245,380 1235.095,384.7846 1235.095,375.2154' fill='#4975A3'/>
+<polyline points='537,495 537,550 1087,550 1087,495' fill='none' stroke='#4975A3' stroke-width='2.5' />
+<polygon points='1087,495 1091.785,504.9049 1082.215,504.9049' fill='#4975A3'/>
+<text x='815' y='567.5' dominant-baseline='central' text-anchor='middle' font-family='Arial, sans-serif' font-size='20' font-weight='400' fill='#4975A3'>Collision-free region</text>
+<rect x='420' y='730' width='235' height='165' fill='#FFFFFF' stroke='#8ABDAC' stroke-width='1.5'/>
+<polyline points='468,809 523,809' fill='none' stroke='#8294A8' stroke-width='5' stroke-linecap='round' stroke-linejoin='round'/>
+<polyline points='496,808 496,782 545,756 587,778' fill='none' stroke='#557790' stroke-width='8' stroke-linecap='round' stroke-linejoin='round'/>
+<circle cx='496' cy='782' r='7' fill='#FFFFFF' stroke='#557790' stroke-width='1.5'/>
+<circle cx='545' cy='756' r='10' fill='#FFF2E9' stroke='#D97C49' stroke-width='1.5'/>
+<polyline points='540,751 550,761' fill='none' stroke='#D97C49' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/>
+<polyline points='550,751 540,761' fill='none' stroke='#D97C49' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/>
+<polyline points='587,770 587,786 601,786' fill='none' stroke='#557790' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/>
+<text x='537.5' y='839.5' dominant-baseline='central' text-anchor='middle' font-family='Arial, sans-serif' font-size='25' font-weight='700' fill='#18694F'>Joint failure</text>
+<text x='537.5' y='868.5' dominant-baseline='central' text-anchor='middle' font-family='Arial, sans-serif' font-size='25' font-weight='700' fill='#18694F'>occurs</text>
+<rect x='805' y='730' width='295' height='165' fill='#FFFFFF' stroke='#8ABDAC' stroke-width='1.5'/>
+<rect x='882' y='740' width='140' height='78' fill='#ECF3F9' stroke='#CAD8E6' stroke-width='1.5'/>
+<polyline points='902,740 902,818' fill='none' stroke='#DCE5EE' stroke-width='1' stroke-linecap='round' stroke-linejoin='round'/>
+<polyline points='922,740 922,818' fill='none' stroke='#DCE5EE' stroke-width='1' stroke-linecap='round' stroke-linejoin='round'/>
+<polyline points='942,740 942,818' fill='none' stroke='#DCE5EE' stroke-width='1' stroke-linecap='round' stroke-linejoin='round'/>
+<polyline points='962,740 962,818' fill='none' stroke='#DCE5EE' stroke-width='1' stroke-linecap='round' stroke-linejoin='round'/>
+<polyline points='982,740 982,818' fill='none' stroke='#DCE5EE' stroke-width='1' stroke-linecap='round' stroke-linejoin='round'/>
+<polyline points='1002,740 1002,818' fill='none' stroke='#DCE5EE' stroke-width='1' stroke-linecap='round' stroke-linejoin='round'/>
+<polyline points='882,760 1022,760' fill='none' stroke='#DCE5EE' stroke-width='1' stroke-linecap='round' stroke-linejoin='round'/>
+<polyline points='882,780 1022,780' fill='none' stroke='#DCE5EE' stroke-width='1' stroke-linecap='round' stroke-linejoin='round'/>
+<polyline points='882,800 1022,800' fill='none' stroke='#DCE5EE' stroke-width='1' stroke-linecap='round' stroke-linejoin='round'/>
+<rect x='914' y='747' width='33' height='30' fill='#CCD3DC' stroke='#BCC6D2' stroke-width='1.5'/>
+<rect x='963' y='786' width='34' height='27' fill='#CCD3DC' stroke='#BCC6D2' stroke-width='1.5'/>
+<polyline points='892,805 914,787' fill='none' stroke='#27866D' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/>
+<polyline points='914,787 951,782' fill='none' stroke='#27866D' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/>
+<polyline points='951,782 967,757' fill='none' stroke='#27866D' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/>
+<polyline points='967,757 1008,752' fill='none' stroke='#27866D' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/>
+<polyline points='1008,752 1006,780' fill='none' stroke='#27866D' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/>
+<polyline points='951,782 1006,780' fill='none' stroke='#27866D' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/>
+<polyline points='892,805 946,808' fill='none' stroke='#27866D' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/>
+<polyline points='914,787 946,808' fill='none' stroke='#27866D' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/>
+<polyline points='914,787 896,754' fill='none' stroke='#27866D' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/>
+<circle cx='892' cy='805' r='4' fill='#27866D' stroke='#FFFFFF' stroke-width='1.5'/>
+<circle cx='914' cy='787' r='4' fill='#27866D' stroke='#FFFFFF' stroke-width='1.5'/>
+<circle cx='951' cy='782' r='4' fill='#27866D' stroke='#FFFFFF' stroke-width='1.5'/>
+<circle cx='967' cy='757' r='4' fill='#27866D' stroke='#FFFFFF' stroke-width='1.5'/>
+<circle cx='1008' cy='752' r='4' fill='#27866D' stroke='#FFFFFF' stroke-width='1.5'/>
+<circle cx='1006' cy='780' r='4' fill='#27866D' stroke='#FFFFFF' stroke-width='1.5'/>
+<circle cx='946' cy='808' r='4' fill='#27866D' stroke='#FFFFFF' stroke-width='1.5'/>
+<circle cx='896' cy='754' r='4' fill='#27866D' stroke='#FFFFFF' stroke-width='1.5'/>
+<text x='952.5' y='841.08' dominant-baseline='central' text-anchor='middle' font-family='Arial, sans-serif' font-size='24' font-weight='700' fill='#18694F'>Use collision-free</text>
+<text x='952.5' y='868.92' dominant-baseline='central' text-anchor='middle' font-family='Arial, sans-serif' font-size='24' font-weight='700' fill='#18694F'>region as graph</text>
+<rect x='1245' y='730' width='235' height='165' fill='#FFFFFF' stroke='#8ABDAC' stroke-width='1.5'/>
+<rect x='1293' y='740' width='140' height='78' fill='#ECF3F9' stroke='#CAD8E6' stroke-width='1.5'/>
+<polyline points='1313,740 1313,818' fill='none' stroke='#DCE5EE' stroke-width='1' stroke-linecap='round' stroke-linejoin='round'/>
+<polyline points='1333,740 1333,818' fill='none' stroke='#DCE5EE' stroke-width='1' stroke-linecap='round' stroke-linejoin='round'/>
+<polyline points='1353,740 1353,818' fill='none' stroke='#DCE5EE' stroke-width='1' stroke-linecap='round' stroke-linejoin='round'/>
+<polyline points='1373,740 1373,818' fill='none' stroke='#DCE5EE' stroke-width='1' stroke-linecap='round' stroke-linejoin='round'/>
+<polyline points='1393,740 1393,818' fill='none' stroke='#DCE5EE' stroke-width='1' stroke-linecap='round' stroke-linejoin='round'/>
+<polyline points='1413,740 1413,818' fill='none' stroke='#DCE5EE' stroke-width='1' stroke-linecap='round' stroke-linejoin='round'/>
+<polyline points='1293,760 1433,760' fill='none' stroke='#DCE5EE' stroke-width='1' stroke-linecap='round' stroke-linejoin='round'/>
+<polyline points='1293,780 1433,780' fill='none' stroke='#DCE5EE' stroke-width='1' stroke-linecap='round' stroke-linejoin='round'/>
+<polyline points='1293,800 1433,800' fill='none' stroke='#DCE5EE' stroke-width='1' stroke-linecap='round' stroke-linejoin='round'/>
+<rect x='1325' y='747' width='33' height='30' fill='#CCD3DC' stroke='#BCC6D2' stroke-width='1.5'/>
+<rect x='1374' y='786' width='34' height='27' fill='#CCD3DC' stroke='#BCC6D2' stroke-width='1.5'/>
+<path d='M 1303 805 C 1335 771, 1404 789, 1420 751' fill='none' stroke='#27866D' stroke-width='4' stroke-linecap='round'/>
+<circle cx='1303' cy='805' r='5' fill='#27866D' stroke='#FFFFFF' stroke-width='1.5'/>
+<circle cx='1420' cy='751' r='5' fill='#27866D' stroke='#FFFFFF' stroke-width='1.5'/>
+<text x='1362.5' y='839.5' dominant-baseline='central' text-anchor='middle' font-family='Arial, sans-serif' font-size='25' font-weight='700' fill='#18694F'>Optimize</text>
+<text x='1362.5' y='868.5' dominant-baseline='central' text-anchor='middle' font-family='Arial, sans-serif' font-size='25' font-weight='700' fill='#18694F'>trajectory</text>
+<polyline points='655,795 805,795' fill='none' stroke='#27866D' stroke-width='2.5' />
+<polygon points='805,795 795.0951,799.7846 795.0951,790.2154' fill='#27866D'/>
+<polyline points='1100,795 1245,795' fill='none' stroke='#27866D' stroke-width='2.5' />
+<polygon points='1245,795 1235.095,799.7846 1235.095,790.2154' fill='#27866D'/>
+<polyline points='537,550 537,614 952,614 952,730' fill='none' stroke='#27866D' stroke-width='2.5' stroke-dasharray='8 6'/>
+<polygon points='952,730 947.2154,720.0951 956.7846,720.0951' fill='#27866D'/>
+<rect x='671' y='594' width='300' height='40' fill='#FFFFFF' stroke='#FFFFFF' stroke-width='1.5'/>
+<text x='821' y='614' dominant-baseline='central' text-anchor='middle' font-family='Arial, sans-serif' font-size='21' font-weight='700' fill='#18745E'>Reuse collision-free region</text>
+<rect x='1595' y='410' width='285' height='350' fill='#EAF2FB' stroke='#90ABCA' stroke-width='1.5'/>
+<text x='1737.5' y='449.5' dominant-baseline='central' text-anchor='middle' font-family='Arial, sans-serif' font-size='24' font-weight='700' fill='#4975A3'>OUTPUT</text>
+<rect x='1668' y='488' width='140' height='78' fill='#ECF3F9' stroke='#CAD8E6' stroke-width='1.5'/>
+<polyline points='1688,488 1688,566' fill='none' stroke='#DCE5EE' stroke-width='1' stroke-linecap='round' stroke-linejoin='round'/>
+<polyline points='1708,488 1708,566' fill='none' stroke='#DCE5EE' stroke-width='1' stroke-linecap='round' stroke-linejoin='round'/>
+<polyline points='1728,488 1728,566' fill='none' stroke='#DCE5EE' stroke-width='1' stroke-linecap='round' stroke-linejoin='round'/>
+<polyline points='1748,488 1748,566' fill='none' stroke='#DCE5EE' stroke-width='1' stroke-linecap='round' stroke-linejoin='round'/>
+<polyline points='1768,488 1768,566' fill='none' stroke='#DCE5EE' stroke-width='1' stroke-linecap='round' stroke-linejoin='round'/>
+<polyline points='1788,488 1788,566' fill='none' stroke='#DCE5EE' stroke-width='1' stroke-linecap='round' stroke-linejoin='round'/>
+<polyline points='1668,508 1808,508' fill='none' stroke='#DCE5EE' stroke-width='1' stroke-linecap='round' stroke-linejoin='round'/>
+<polyline points='1668,528 1808,528' fill='none' stroke='#DCE5EE' stroke-width='1' stroke-linecap='round' stroke-linejoin='round'/>
+<polyline points='1668,548 1808,548' fill='none' stroke='#DCE5EE' stroke-width='1' stroke-linecap='round' stroke-linejoin='round'/>
+<rect x='1700' y='495' width='33' height='30' fill='#CCD3DC' stroke='#BCC6D2' stroke-width='1.5'/>
+<rect x='1749' y='534' width='34' height='27' fill='#CCD3DC' stroke='#BCC6D2' stroke-width='1.5'/>
+<path d='M 1678 553 C 1710 519, 1779 537, 1795 499' fill='none' stroke='#27866D' stroke-width='4' stroke-linecap='round'/>
+<circle cx='1678' cy='553' r='5' fill='#27866D' stroke='#FFFFFF' stroke-width='1.5'/>
+<circle cx='1795' cy='499' r='5' fill='#27866D' stroke='#FFFFFF' stroke-width='1.5'/>
+<text x='1737.5' y='625.36' dominant-baseline='central' text-anchor='middle' font-family='Arial, sans-serif' font-size='29' font-weight='700' fill='#172B46'>Collision-free</text>
+<text x='1737.5' y='659' dominant-baseline='central' text-anchor='middle' font-family='Arial, sans-serif' font-size='29' font-weight='700' fill='#172B46'>trajectory with</text>
+<text x='1737.5' y='692.64' dominant-baseline='central' text-anchor='middle' font-family='Arial, sans-serif' font-size='29' font-weight='700' fill='#172B46'>high reliability</text>
+<polyline points='1480,380 1545,380 1545,500 1595,500' fill='none' stroke='#4975A3' stroke-width='2.5' />
+<polygon points='1595,500 1585.095,504.7846 1585.095,495.2154' fill='#4975A3'/>
+<polyline points='1480,795 1545,795 1545,610 1595,610' fill='none' stroke='#27866D' stroke-width='2.5' />
+<polygon points='1595,610 1585.095,614.7846 1585.095,605.2154' fill='#27866D'/>
+</svg>

@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080"><rect width="1920" height="1080" fill="white"/>
+<text x='60' y='81' dominant-baseline='central' text-anchor='start' font-family='Arial, sans-serif' font-size='44' font-weight='700' fill='#172B46'>Reliability-Aware Motion Planning Framework</text>
+<rect x='385' y='195' width='1130' height='360' fill='#F2F6FC' stroke='#CBD9EC' stroke-width='1.5'/>
+<rect x='385' y='635' width='1130' height='275' fill='#F0F8F6' stroke='#C5E0D8' stroke-width='1.5'/>
+<text x='415' y='243' dominant-baseline='central' text-anchor='start' font-family='Arial, sans-serif' font-size='32' font-weight='700' fill='#28578A'>Pre-failure motion planning</text>
+<text x='415' y='683' dominant-baseline='central' text-anchor='start' font-family='Arial, sans-serif' font-size='32' font-weight='700' fill='#18745E'>Post-failure replanning</text>
+<rect x='40' y='310' width='270' height='380' fill='#F7F9FC' stroke='#D3DCE7' stroke-width='1.5'/>
+<text x='175' y='354' dominant-baseline='central' text-anchor='middle' font-family='Arial, sans-serif' font-size='25' font-weight='700' fill='#60758C'>INPUTS</text>
+<text x='175' y='422' dominant-baseline='central' text-anchor='middle' font-family='Arial, sans-serif' font-size='27' font-weight='400' fill='#172B46'>Task</text>
+<text x='175' y='489' dominant-baseline='central' text-anchor='middle' font-family='Arial, sans-serif' font-size='27' font-weight='400' fill='#172B46'>Environment</text>
+<text x='175' y='554' dominant-baseline='central' text-anchor='middle' font-family='Arial, sans-serif' font-size='26' font-weight='400' fill='#172B46'>Robot parameters</text>
+<text x='175' y='609.92' dominant-baseline='central' text-anchor='middle' font-family='Arial, sans-serif' font-size='26' font-weight='400' fill='#172B46'>Joint failure</text>
+<text x='175' y='640.08' dominant-baseline='central' text-anchor='middle' font-family='Arial, sans-serif' font-size='26' font-weight='400' fill='#172B46'>probabilities</text>
+<polyline points='310,500 345,500 345,370 420,370' fill='none' stroke='#60758C' stroke-width='2.5' />
+<polygon points='420,370 410.0951,374.7846 410.0951,365.2154' fill='#60758C'/>
+<polyline points='345,500 345,795 420,795' fill='none' stroke='#60758C' stroke-width='2.5' />
+<polygon points='420,795 410.0951,799.7846 410.0951,790.2154' fill='#60758C'/>
+<rect x='420' y='310' width='235' height='145' fill='#FFFFFF' stroke='#9CB7D7' stroke-width='1.5'/>
+<text x='432' y='332.5' dominant-baseline='central' text-anchor='start' font-family='Arial, sans-serif' font-size='19' font-weight='700' fill='#4975A3'>01</text>
+<text x='537.5' y='383.08' dominant-baseline='central' text-anchor='middle' font-family='Arial, sans-serif' font-size='24' font-weight='700' fill='#172B46'>Compute</text>
+<text x='537.5' y='410.92' dominant-baseline='central' text-anchor='middle' font-family='Arial, sans-serif' font-size='24' font-weight='700' fill='#172B46'>collision-free region</text>
+<rect x='695' y='310' width='235' height='145' fill='#FFFFFF' stroke='#9CB7D7' stroke-width='1.5'/>
+<text x='707' y='332.5' dominant-baseline='central' text-anchor='start' font-family='Arial, sans-serif' font-size='19' font-weight='700' fill='#4975A3'>02</text>
+<text x='812.5' y='383.08' dominant-baseline='central' text-anchor='middle' font-family='Arial, sans-serif' font-size='24' font-weight='700' fill='#172B46'>Compute joint-space</text>
+<text x='812.5' y='410.92' dominant-baseline='central' text-anchor='middle' font-family='Arial, sans-serif' font-size='24' font-weight='700' fill='#172B46'>reliability map</text>
+<rect x='970' y='310' width='235' height='145' fill='#FFFFFF' stroke='#9CB7D7' stroke-width='1.5'/>
+<text x='982' y='332.5' dominant-baseline='central' text-anchor='start' font-family='Arial, sans-serif' font-size='19' font-weight='700' fill='#4975A3'>03</text>
+<text x='1087.5' y='371.48' dominant-baseline='central' text-anchor='middle' font-family='Arial, sans-serif' font-size='22' font-weight='700' fill='#172B46'>Intersect region</text>
+<text x='1087.5' y='397' dominant-baseline='central' text-anchor='middle' font-family='Arial, sans-serif' font-size='22' font-weight='700' fill='#172B46'>and reliability map</text>
+<text x='1087.5' y='422.52' dominant-baseline='central' text-anchor='middle' font-family='Arial, sans-serif' font-size='22' font-weight='700' fill='#172B46'>to form graph</text>
+<rect x='1245' y='310' width='235' height='145' fill='#FFFFFF' stroke='#9CB7D7' stroke-width='1.5'/>
+<text x='1257' y='332.5' dominant-baseline='central' text-anchor='start' font-family='Arial, sans-serif' font-size='19' font-weight='700' fill='#4975A3'>04</text>
+<text x='1362.5' y='383.08' dominant-baseline='central' text-anchor='middle' font-family='Arial, sans-serif' font-size='24' font-weight='700' fill='#172B46'>Optimize</text>
+<text x='1362.5' y='410.92' dominant-baseline='central' text-anchor='middle' font-family='Arial, sans-serif' font-size='24' font-weight='700' fill='#172B46'>trajectory</text>
+<polyline points='655,380 695,380' fill='none' stroke='#4975A3' stroke-width='2.5' />
+<polygon points='695,380 685.0951,384.7846 685.0951,375.2154' fill='#4975A3'/>
+<polyline points='930,380 970,380' fill='none' stroke='#4975A3' stroke-width='2.5' />
+<polygon points='970,380 960.0951,384.7846 960.0951,375.2154' fill='#4975A3'/>
+<polyline points='1205,380 1245,380' fill='none' stroke='#4975A3' stroke-width='2.5' />
+<polygon points='1245,380 1235.095,384.7846 1235.095,375.2154' fill='#4975A3'/>
+<polyline points='537,455 537,515 1087,515 1087,455' fill='none' stroke='#4975A3' stroke-width='2.5' />
+<polygon points='1087,455 1091.785,464.9049 1082.215,464.9049' fill='#4975A3'/>
+<text x='815' y='533.5' dominant-baseline='central' text-anchor='middle' font-family='Arial, sans-serif' font-size='20' font-weight='400' fill='#4975A3'>Collision-free region</text>
+<rect x='420' y='740' width='235' height='115' fill='#FFFFFF' stroke='#8ABDAC' stroke-width='1.5'/>
+<text x='537.5' y='782.42' dominant-baseline='central' text-anchor='middle' font-family='Arial, sans-serif' font-size='26' font-weight='700' fill='#18694F'>Joint failure</text>
+<text x='537.5' y='812.58' dominant-baseline='central' text-anchor='middle' font-family='Arial, sans-serif' font-size='26' font-weight='700' fill='#18694F'>occurs</text>
+<rect x='805' y='740' width='295' height='115' fill='#FFFFFF' stroke='#8ABDAC' stroke-width='1.5'/>
+<text x='952.5' y='782.5' dominant-baseline='central' text-anchor='middle' font-family='Arial, sans-serif' font-size='25' font-weight='700' fill='#18694F'>Use collision-free</text>
+<text x='952.5' y='811.5' dominant-baseline='central' text-anchor='middle' font-family='Arial, sans-serif' font-size='25' font-weight='700' fill='#18694F'>region as graph</text>
+<rect x='1245' y='740' width='235' height='115' fill='#FFFFFF' stroke='#8ABDAC' stroke-width='1.5'/>
+<text x='1362.5' y='782.42' dominant-baseline='central' text-anchor='middle' font-family='Arial, sans-serif' font-size='26' font-weight='700' fill='#18694F'>Optimize</text>
+<text x='1362.5' y='812.58' dominant-baseline='central' text-anchor='middle' font-family='Arial, sans-serif' font-size='26' font-weight='700' fill='#18694F'>trajectory</text>
+<polyline points='655,795 805,795' fill='none' stroke='#27866D' stroke-width='2.5' />
+<polygon points='805,795 795.0951,799.7846 795.0951,790.2154' fill='#27866D'/>
+<polyline points='1100,795 1245,795' fill='none' stroke='#27866D' stroke-width='2.5' />
+<polygon points='1245,795 1235.095,799.7846 1235.095,790.2154' fill='#27866D'/>
+<polyline points='537,515 537,595 952,595 952,740' fill='none' stroke='#27866D' stroke-width='2.5' stroke-dasharray='8 6'/>
+<polygon points='952,740 947.2154,730.0951 956.7846,730.0951' fill='#27866D'/>
+<rect x='671' y='575' width='300' height='40' fill='#FFFFFF' stroke='#FFFFFF' stroke-width='1.5'/>
+<text x='821' y='595' dominant-baseline='central' text-anchor='middle' font-family='Arial, sans-serif' font-size='21' font-weight='700' fill='#18745E'>Reuse collision-free region</text>
+<rect x='1595' y='410' width='285' height='290' fill='#EAF2FB' stroke='#90ABCA' stroke-width='1.5'/>
+<text x='1737.5' y='449.5' dominant-baseline='central' text-anchor='middle' font-family='Arial, sans-serif' font-size='24' font-weight='700' fill='#4975A3'>OUTPUT</text>
+<text x='1737.5' y='521.36' dominant-baseline='central' text-anchor='middle' font-family='Arial, sans-serif' font-size='29' font-weight='700' fill='#172B46'>Collision-free</text>
+<text x='1737.5' y='555' dominant-baseline='central' text-anchor='middle' font-family='Arial, sans-serif' font-size='29' font-weight='700' fill='#172B46'>trajectory with</text>
+<text x='1737.5' y='588.64' dominant-baseline='central' text-anchor='middle' font-family='Arial, sans-serif' font-size='29' font-weight='700' fill='#172B46'>high reliability</text>
+<polyline points='1480,380 1545,380 1545,500 1595,500' fill='none' stroke='#4975A3' stroke-width='2.5' />
+<polygon points='1595,500 1585.095,504.7846 1585.095,495.2154' fill='#4975A3'/>
+<polyline points='1480,795 1545,795 1545,610 1595,610' fill='none' stroke='#27866D' stroke-width='2.5' />
+<polygon points='1595,610 1585.095,614.7846 1585.095,605.2154' fill='#27866D'/>
+</svg>

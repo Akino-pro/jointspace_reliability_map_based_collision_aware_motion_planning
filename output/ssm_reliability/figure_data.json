@@ -1,0 +1,169 @@
+{
+  "goal": [
+    1.5,
+    1.5
+  ],
+  "link_lengths": [
+    1,
+    1,
+    1
+  ],
+  "seed": 0,
+  "ssm_source": "scripts.planar3R_two_point_ssm_views.compute_ssms_for_target",
+  "bounds_rad": [
+    [
+      -0.42544627531183554,
+      1.996291870001916
+    ],
+    [
+      -1.9534184491089739,
+      1.9534050538256063
+    ],
+    [
+      -1.9541510991918452,
+      1.9519781370875373
+    ]
+  ],
+  "theta3_slice_rad": 0.0,
+  "joint_reliabilities": [
+    0.7,
+    0.5,
+    0.3
+  ],
+  "regions": [
+    {
+      "theta1_degrees": [
+        -180.0,
+        -24.37627598492905
+      ],
+      "theta2_degrees": [
+        -180.0,
+        -111.92263275693499
+      ],
+      "F": [
+        3
+      ],
+      "reliability": 0.7
+    },
+    {
+      "theta1_degrees": [
+        -180.0,
+        -24.37627598492905
+      ],
+      "theta2_degrees": [
+        -111.92263275693499,
+        111.92186526373264
+      ],
+      "F": [
+        2,
+        3
+      ],
+      "reliability": 0.9099999999999999
+    },
+    {
+      "theta1_degrees": [
+        -180.0,
+        -24.37627598492905
+      ],
+      "theta2_degrees": [
+        111.92186526373264,
+        180.0
+      ],
+      "F": [
+        3
+      ],
+      "reliability": 0.7
+    },
+    {
+      "theta1_degrees": [
+        -24.37627598492905,
+        114.37909882738859
+      ],
+      "theta2_degrees": [
+        -180.0,
+        -111.92263275693499
+      ],
+      "F": [
+        1,
+        3
+      ],
+      "reliability": 0.79
+    },
+    {
+      "theta1_degrees": [
+        -24.37627598492905,
+        114.37909882738859
+      ],
+      "theta2_degrees": [
+        -111.92263275693499,
+        111.92186526373264
+      ],
+      "F": [
+        1,
+        2,
+        3
+      ],
+      "reliability": 1.0
+    },
+    {
+      "theta1_degrees": [
+        -24.37627598492905,
+        114.37909882738859
+      ],
+      "theta2_degrees": [
+        111.92186526373264,
+        180.0
+      ],
+      "F": [
+        1,
+        3
+      ],
+      "reliability": 0.79
+    },
+    {
+      "theta1_degrees": [
+        114.37909882738859,
+        180.0
+      ],
+      "theta2_degrees": [
+        -180.0,
+        -111.92263275693499
+      ],
+      "F": [
+        3
+      ],
+      "reliability": 0.7
+    },
+    {
+      "theta1_degrees": [
+        114.37909882738859,
+        180.0
+      ],
+      "theta2_degrees": [
+        -111.92263275693499,
+        111.92186526373264
+      ],
+      "F": [
+        2,
+        3
+      ],
+      "reliability": 0.9099999999999999
+    },
+    {
+      "theta1_degrees": [
+        114.37909882738859,
+        180.0
+      ],
+      "theta2_degrees": [
+        111.92186526373264,
+        180.0
+      ],
+      "F": [
+        3
+      ],
+      "reliability": 0.7
+    }
+  ],
+  "color_source": "scripts.helper_functions.normalize_and_map_colors",
+  "black_curve": "Goal SSM projected onto theta1-theta2; background is theta3=0 slice"
+}

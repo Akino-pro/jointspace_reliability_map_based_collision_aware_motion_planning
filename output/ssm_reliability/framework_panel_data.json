@@ -1,0 +1,40 @@
+{
+  "theta3": 0,
+  "source_checkpoint": "data/iris/planar3R_iris_regions.npz",
+  "source_regions": 5,
+  "intersection_regions": 23,
+  "goal_position": [
+    1.5,
+    1.5
+  ],
+  "start_configuration": [
+    -2.972349782093813,
+    -2.26926174311021,
+    0
+  ],
+  "goal_configuration": [
+    -0.42403103949073945,
+    1.6961241579629642,
+    0
+  ],
+  "path": [
+    [
+      -2.972349782093813,
+      -2.26926174311021,
+      0.0
+    ],
+    [
+      -0.42544627531183554,
+      -1.9534184491089739,
+      0.0
+    ],
+    [
+      -0.42403103949073945,
+      1.6961241579629642,
+      0.0
+    ]
+  ],
+  "note": "New trajectory optimized in the displayed theta3=0 slice, not the original varying-theta3 experiment path.",
+  "collision_checked_samples": 160,
+  "objective": 7.31584682559393
+}
